@@ -10,7 +10,7 @@ FROM node:24-alpine
 WORKDIR /app
 RUN apk add --no-cache python3 make g++
 COPY package*.json ./
-RUN npm ci --omit=dev --ignore-scripts
+RUN npm ci --omit=dev
 # Install opencode CLI (needed by @opencode-ai/sdk to start the server)
 RUN npm install -g opencode-ai@latest --ignore-scripts
 COPY --from=builder /app/dist ./dist
