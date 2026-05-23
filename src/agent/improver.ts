@@ -1,0 +1,113 @@
+import { db } from "../knowledge/store.js";
+import { ask } from "../utils/ai.js";
+import { log } from "../utils/logger.js";
+
+const DEFAULT_SYSTEM_PROMPT = `You are an expert AI developer agent that writes high-quality technical articles
+about software development and AI. You learn from the latest research and news to continuously
+improve your output quality, writing style, and technical depth.`;
+
+const DEFAULT_SEARCH_KEYWORDS = [
+  "AI developer tools",
+  "LLM coding assistant",
+  "prompt engineering",
+  "TypeScript best practices",
+  "AI agents architecture",
+];
+
+export function getSystemPrompt(): string {
+  return db.getState("system_prompt") ?? DEFAULT_SYSTEM_PROMPT;
+}
+
+export function getSearchKeywords(): string[] {
+  try {
+    const raw = db.getState("search_keywords");
+    if (!raw) return DEFAULT_SEARCH_KEYWORDS;
+    return JSON.parse(raw) as string[];
+  } catch {
+    return DEFAULT_SEARCH_KEYWORDS;
+  }
+}
+
+export async function runImprovementCycle() {
+  log.info("Running self-improvement cycle...");
+  const recentArticles = db.getRecentArticles(20);
+  if (recentArticles.length === 0) {
+    log.info("No articles yet, skipping improvement cycle");
+    return;
+  }
+
+  const articleSummaries = recentArticles
+    .map((a) => `- [${a.source}] ${a.title}: ${a.summary.slice(0, 200)}`)
+    .join("\n");
+
+  const currentPrompt = getSystemPrompt();
+  const currentKeywords = getSearchKeywords().join(", ");
+
+  const systemPrompt = `You are a meta-AI that optimizes AI agent behavior based on observed data.
+You analyze recent news/papers and improve the agent's configuration.
+Always respond in valid JSON only.`;
+
+  const userPrompt = `Based on these recent articles from AI/dev sources:
+
+${articleSummaries}
+
+Current system prompt:
+${currentPrompt}
+
+Current search keywords: ${currentKeywords}
+
+Analyze what's trending and important. Return JSON with:
+{
+  "improved_system_prompt": "...",
+  "updated_keywords": ["kw1", "kw2", ...max 10],
+  "extra_sources": [],
+  "code_snippet": {
+    "title": "...",
+    "language": "typescript",
+    "code": "...",
+    "explanation": "..."
+  } | null,
+  "reasoning": "short explanation of changes"
+}
+
+The improved_system_prompt should incorporate lessons from the articles.
+The updated_keywords should reflect trending topics.
+code_snippet should be a useful TypeScript pattern learned from the content, or null.`;
+
+  const text = await ask(userPrompt, systemPrompt);
+
+  try {
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("No JSON found");
+    const result = JSON.parse(jsonMatch[0]) as {
+      improved_system_prompt: string;
+      updated_keywords: string[];
+      extra_sources: Array<{ name: string; url: string; tags: string[] }>;
+      code_snippet: {
+        title: string;
+        language: string;
+        code: string;
+        explanation: string;
+      } | null;
+      reasoning: string;
+    };
+
+    db.setState("system_prompt", result.improved_system_prompt);
+    db.setState("search_keywords", JSON.stringify(result.updated_keywords));
+    if (result.extra_sources?.length) {
+      db.setState("extra_sources", JSON.stringify(result.extra_sources));
+    }
+    if (result.code_snippet) {
+      db.saveSnippet({
+        ...result.code_snippet,
+        source_url: "self-improvement-cycle",
+      });
+    }
+
+    log.info(`Improvement cycle done. Reasoning: ${result.reasoning}`);
+  } catch (err) {
+    log.error(
+      `Failed to parse improvement response: ${(err as Error).message}`,
+    );
+  }
+}
