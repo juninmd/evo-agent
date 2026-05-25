@@ -119,8 +119,10 @@ async function fetchWithPlaywright(url: string): Promise<string> {
         return document.documentElement.outerHTML;
     });
     
-    const xmlMatch = content.match(/<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i);
-    return xmlMatch ? xmlMatch[0] : content;
+    const xmlMatch = content.match(/<\?xml[^>]*>[\s\S]*|<\!doctype[^>]*>[\s\S]*|<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i);
+    const finalXml = xmlMatch ? xmlMatch[0] : content;
+    log.info(`Fetched ${finalXml.length} bytes. Start: ${finalXml.slice(0, 100).replace(/\n/g, ' ')}`);
+    return finalXml;
   } finally {
     await browser.close();
   }
