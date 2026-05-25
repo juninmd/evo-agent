@@ -172,7 +172,7 @@ export function buildDefaultLayout() {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=3' | relative_url }}">
     <script>
       const savedTheme = localStorage.getItem("evo-agent-theme");
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -245,7 +245,7 @@ export function buildArticleLayout() {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=3' | relative_url }}">
     <script>
       const savedTheme = localStorage.getItem("evo-agent-theme");
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
