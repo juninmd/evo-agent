@@ -11,7 +11,7 @@ export async function sendMessage(text: string): Promise<void> {
       {
         chat_id: config.telegram.chatId,
         text,
-        parse_mode: "Markdown",
+        parse_mode: "HTML",
         disable_web_page_preview: false,
       },
       { timeout: 10000 },
@@ -29,9 +29,9 @@ export async function notifyNewArticle(
   sources: string[] = []
 ) {
   const sourcesText = sources.length > 0
-    ? `\n\n*Fontes originais:*\n${sources.map(s => `• ${s}`).join('\n')}`
+    ? `\n\n<b>Fontes originais:</b>\n${sources.map(s => `• ${s}`).join('\n')}`
     : '';
 
-  const msg = `*Novo Artigo — Evo Agent*\n\n*${title}*\n\n${summary}${sourcesText}\n\n[Ler artigo completo](${url})`;
+  const msg = `<b>Novo Artigo — Evo Agent</b>\n\n<b>${title}</b>\n\n${summary}${sourcesText}\n\n<a href="${url}">Ler artigo completo</a>`;
   await sendMessage(msg);
 }
