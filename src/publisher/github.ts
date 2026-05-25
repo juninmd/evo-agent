@@ -211,6 +211,16 @@ export function buildDefaultLayout() {
         block.textContent = block.textContent;
       });
       hljs.highlightAll();
+      document.querySelectorAll("div[class*=language-]").forEach(function(div) {
+        var match = div.className.match(/language-(\w+)/);
+        if (match && match[1] !== "plaintext") {
+          var label = document.createElement("span");
+          label.className = "language-label";
+          label.textContent = match[1];
+          var pre = div.querySelector("pre");
+          if (pre) pre.parentNode.insertBefore(label, pre);
+        }
+      });
       document.querySelectorAll("pre").forEach(function(pre) {
         var btn = document.createElement("button");
         btn.className = "copy-btn";
@@ -299,6 +309,16 @@ export function buildArticleLayout() {
         block.textContent = block.textContent;
       });
       hljs.highlightAll();
+      document.querySelectorAll("div[class*=language-]").forEach(function(div) {
+        var match = div.className.match(/language-(\w+)/);
+        if (match && match[1] !== "plaintext") {
+          var label = document.createElement("span");
+          label.className = "language-label";
+          label.textContent = match[1];
+          var pre = div.querySelector("pre");
+          if (pre) pre.parentNode.insertBefore(label, pre);
+        }
+      });
       document.querySelectorAll("pre").forEach(function(pre) {
         var btn = document.createElement("button");
         btn.className = "copy-btn";
@@ -601,33 +621,29 @@ main {
 
 .article-content { font-size: 1.08rem; }
 
+.article-content > h1 { display: none; }
+
+.article-content h2 {
+  border-bottom: 1px solid var(--line);
+  font-size: 1.55rem;
+  padding-bottom: 0.3em;
+}
+
+.article-content h3 { font-size: 1.2rem; }
+
 .article-content h2,
 .article-content h3 {
   line-height: 1.15;
   margin-top: 2.2em;
 }
 
-.article-content p,
-.article-content li { color: color-mix(in srgb, var(--text) 84%, var(--muted)); }
-
-.article-content img {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  display: block;
-  height: auto;
-  margin: 28px 0;
-  max-width: 100%;
+.article-content hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 36px 0;
 }
 
-.article-content code {
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
-  border-radius: 6px;
-  color: var(--accent);
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.9em;
-  padding: 0.15em 0.4em;
-}
+.article-content .highlight { margin: 28px 0; }
 
 .article-content pre {
   background: var(--code);
@@ -636,7 +652,7 @@ main {
   border-radius: 0 8px 8px 0;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 8%, transparent);
   line-height: 1.6;
-  margin: 28px 0;
+  margin: 0;
   overflow-x: auto;
   padding: 22px;
   position: relative;
