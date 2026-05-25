@@ -161,7 +161,7 @@ title: Evo Agent
 `;
 }
 
-function buildDefaultLayout() {
+export function buildDefaultLayout() {
   return `<!doctype html>
 <html lang="pt-BR">
   <head>
@@ -178,6 +178,7 @@ function buildDefaultLayout() {
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -204,11 +205,32 @@ function buildDefaultLayout() {
         setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
       });
     </script>
+    <script>
+      hljs.highlightAll();
+      document.querySelectorAll("pre").forEach(function(pre) {
+        var btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "Copiar";
+        btn.addEventListener("click", function() {
+          var code = pre.querySelector("code");
+          var text = code ? code.innerText : pre.innerText;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = "Copiado!";
+            btn.classList.add("copied");
+            setTimeout(function() {
+              btn.textContent = "Copiar";
+              btn.classList.remove("copied");
+            }, 1400);
+          }).catch(function() {});
+        });
+        pre.appendChild(btn);
+      });
+    </script>
   </body>
 </html>`;
 }
 
-function buildArticleLayout() {
+export function buildArticleLayout() {
   return `<!doctype html>
 <html lang="pt-BR">
   <head>
@@ -225,6 +247,7 @@ function buildArticleLayout() {
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -264,6 +287,27 @@ function buildArticleLayout() {
       setTheme(document.documentElement.dataset.theme || "dark");
       themeButton?.addEventListener("click", () => {
         setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+    </script>
+    <script>
+      hljs.highlightAll();
+      document.querySelectorAll("pre").forEach(function(pre) {
+        var btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "Copiar";
+        btn.addEventListener("click", function() {
+          var code = pre.querySelector("code");
+          var text = code ? code.innerText : pre.innerText;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = "Copiado!";
+            btn.classList.add("copied");
+            setTimeout(function() {
+              btn.textContent = "Copiar";
+              btn.classList.remove("copied");
+            }, 1400);
+          }).catch(function() {});
+        });
+        pre.appendChild(btn);
       });
     </script>
   </body>
@@ -321,7 +365,7 @@ a { color: inherit; }
 .site-header {
   align-items: center;
   backdrop-filter: blur(18px);
-  background: rgba(8, 10, 15, 0.74);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
   border-bottom: 1px solid var(--line);
   display: flex;
   justify-content: space-between;
@@ -587,6 +631,7 @@ main {
   margin: 28px 0;
   overflow-x: auto;
   padding: 22px;
+  position: relative;
   tab-size: 2;
   -moz-tab-size: 2;
 }
@@ -608,6 +653,41 @@ main {
   color: var(--muted);
   margin: 28px 0 28px 0;
   padding: 16px 18px;
+}
+
+.copy-btn {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0;
+  padding: 4px 8px;
+  position: absolute;
+  right: 8px;
+  text-transform: uppercase;
+  top: 8px;
+  transition: opacity 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+  z-index: 1;
+}
+
+pre:hover .copy-btn,
+.copy-btn:focus-visible {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.copy-btn.copied {
+  border-color: var(--accent);
+  color: var(--accent);
+  opacity: 1;
 }
 
 .article-content table {
@@ -643,6 +723,30 @@ main {
 .article-content tr:hover td {
   background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
+
+.hljs { color: var(--text); background: transparent; }
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-section,
+.hljs-title.class_ { color: var(--accent); }
+.hljs-string,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-addition { color: color-mix(in srgb, var(--hot) 90%, var(--text)); }
+.hljs-comment,
+.hljs-quote { color: var(--muted); font-style: italic; }
+.hljs-title.function_,
+.hljs-title { color: color-mix(in srgb, var(--accent) 85%, var(--text)); }
+.hljs-built_in,
+.hljs-literal,
+.hljs-type,
+.hljs-params { color: var(--hot); }
+.hljs-number,
+.hljs-attr,
+.hljs-attribute { color: var(--accent); }
+.hljs-meta,
+.hljs-tag { color: var(--muted); }
+.hljs-deletion { color: color-mix(in srgb, var(--hot) 60%, var(--bg)); }
 
 @media (max-width: 700px) {
   .site-header,
