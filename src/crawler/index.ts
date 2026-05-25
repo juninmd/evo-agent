@@ -88,12 +88,22 @@ async function fetchWithPlaywright(url: string): Promise<string> {
   log.info(`Using Playwright stealth to fetch: ${url}`);
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: "domcontentloaded" });
-  const content = await page.content();
-  await browser.close();
-  // Playwright returns HTML wrapping the XML. We need to extract the inner text of the pre/code or body.
-  const xmlMatch = content.match(/<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i);
-  return xmlMatch ? xmlMatch[0] : content;
+  try {
+    await page.goto(url, { waitUntil: "networkidle" });
+    // If it's XML, browser might wrap it in <pre> or show as a tree.
+    // Try to get the raw content.
+    const content = await page.evaluate(() => {
+        const pre = document.querySelector('pre');
+        if (pre) return pre.innerText;
+        return document.documentElement.outerHTML;
+    });
+    
+    // Clean up if it's still wrapped in some HTML
+    const xmlMatch = content.match(/<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i);
+    return xmlMatch ? xmlMatch[0] : content;
+  } finally {
+    await browser.close();
+  }
 }
 
 export async function crawlAll(): Promise<number> {
