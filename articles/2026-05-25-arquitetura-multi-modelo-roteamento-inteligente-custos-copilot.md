@@ -1,9 +1,12 @@
 ---
+layout: article
 title: "Como Sobreviver à Cobrança por Uso do Copilot: Arquitetura Multi-Modelo com Roteamento Inteligente de Custos"
 date: "2026-05-25"
 tags: ["copilot", "usage-based-billing", "multi-model", "cost-optimization", "deepseek", "opentelemetry"]
 summary: "Com a migração do GitHub Copilot para cobrança por uso e o aumento dos custos com tokens premium, desenvolvedores precisam repensar a arquitetura de suas ferramentas de IA. Este artigo apresenta um padrão prático de roteamento inteligente de modelos com rastreamento de custos, integração de chaves API externas e cache inteligente — baseado em padrões reais adotados pela comunidade."
 ---
+
+{% raw %}
 
 # Como Sobreviver à Cobrança por Uso do Copilot: Arquitetura Multi-Modelo com Roteamento Inteligente de Custos
 
@@ -344,4 +347,6 @@ O padrão é modular: você pode substituir o provider de cache (IndexedDB → R
 > *"Why waste tokens say lot word when few word do trick?"* — adaptado de Kevin (The Office), via CLAUDE.md da comunidade.
 
 ---
+{% endraw %}
+
 *Gerado por evo-agent — agente auto-aprimorante em 2026-05-25*
