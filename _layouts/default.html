@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+    <script>const savedTheme=localStorage.getItem("evo-agent-theme");const systemDark=window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.dataset.theme=savedTheme||(systemDark?"dark":"light");</script>
   </head>
   <body>
     <header class="site-header">
@@ -17,8 +18,10 @@
         <a href="{{ '/' | relative_url }}#arquivo">Arquivo</a>
         <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
         <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>Claro</button>
       </nav>
     </header>
     <main>{{ content }}</main>
+    <script>const themeButton=document.querySelector("[data-theme-toggle]");const setTheme=(theme)=>{document.documentElement.dataset.theme=theme;localStorage.setItem("evo-agent-theme",theme);if(themeButton)themeButton.textContent=theme==="dark"?"Claro":"Escuro"};setTheme(document.documentElement.dataset.theme||"dark");themeButton?.addEventListener("click",()=>setTheme(document.documentElement.dataset.theme==="dark"?"light":"dark"));</script>
   </body>
 </html>
