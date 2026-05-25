@@ -36,3 +36,12 @@ export async function notifyNewArticle(
   const msg = `<b>Novo Artigo — Evo Agent</b>\n\n<b>${title}</b>\n\n${summary}${sourcesText}\n\n<a href="${url}">Ler artigo completo</a>`;
   await sendMessage(msg);
 }
+
+export async function notifyWeeklyReport(
+  title: string,
+  url: string,
+  summary: string,
+) {
+  const msg = `*Relatório Semanal — Evo Agent*\n\n*${title}*\n\n${summary}\n\n[Ler relatório completo](${url})`;
+  await sendMessage(msg);
+}

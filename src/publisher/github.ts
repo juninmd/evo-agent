@@ -542,7 +542,7 @@ main {
 }
 
 .download-md:hover {
-  background: rgba(94, 234, 212, 0.12);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .article-content { font-size: 1.08rem; }
@@ -556,27 +556,45 @@ main {
 .article-content p,
 .article-content li { color: color-mix(in srgb, var(--text) 84%, var(--muted)); }
 
+.article-content img {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: block;
+  height: auto;
+  margin: 28px 0;
+  max-width: 100%;
+}
+
 .article-content code {
   background: color-mix(in srgb, var(--accent) 12%, transparent);
   border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
   border-radius: 6px;
   color: var(--accent);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.9em;
   padding: 0.12em 0.35em;
 }
 
 .article-content pre {
   background: var(--code);
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
   border-radius: 8px;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 6%, transparent);
+  line-height: 1.6;
+  margin: 28px 0;
   overflow-x: auto;
-  padding: 18px;
+  padding: 22px;
+  position: relative;
 }
 
 .article-content pre code {
   background: transparent;
   border: 0;
-  color: #f8f8f2;
+  color: color-mix(in srgb, var(--text) 92%, var(--accent));
+  display: block;
+  font-size: 0.92rem;
   padding: 0;
+  white-space: pre;
 }
 
 .article-content blockquote {
@@ -584,6 +602,34 @@ main {
   color: var(--muted);
   margin-left: 0;
   padding-left: 18px;
+}
+
+.article-content table {
+  border-collapse: collapse;
+  display: block;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 0.96rem;
+  margin: 28px 0;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.article-content th,
+.article-content td {
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.article-content th {
+  background: color-mix(in srgb, var(--panel-2) 86%, var(--accent) 14%);
+  color: var(--text);
+  font-weight: 700;
+}
+
+.article-content tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
 }
 
 @media (max-width: 700px) {

@@ -101,3 +101,93 @@ Return JSON:
   const result = JSON.parse(jsonMatch[0]) as Omit<GeneratedArticle, "date">;
   return { ...result, date: today };
 }
+
+export async function generateWeeklyReport(): Promise<GeneratedArticle> {
+  const lastWeek = new Date();
+  lastWeek.setDate(lastWeek.getDate() - 7);
+
+  const recentArticles = db.getRecentArticles(100).filter((a) => {
+    const crawledDate = new Date(a.crawled_at);
+    return crawledDate >= lastWeek;
+  });
+
+  const snippets = db.getSnippets(30).filter((s) => {
+    const createdDate = new Date(s.created_at);
+    return createdDate >= lastWeek;
+  });
+
+  if (recentArticles.length === 0) {
+    throw new Error(
+      "No articles crawled in the last 7 days to generate a weekly report",
+    );
+  }
+
+  const systemPrompt = `You are a Principal AI Architect and technical newsletter editor.
+You analyze a week's worth of crawled AI research, news, and code snippets, synthesizing them into a high-quality, comprehensive weekly technical report.
+Your output must be deeply technical, insightful, structured, and practical.
+Always write in Brazilian Portuguese (pt-BR).
+Always respond with valid JSON only.`;
+
+  const context = recentArticles
+    .map((a) => `- [${a.source}] ${a.title}: ${a.summary.slice(0, 250)}`)
+    .join("\n");
+
+  const snippetContext =
+    snippets.length > 0
+      ? `\n\nCode patterns/snippets learned this week:\n${snippets
+          .map(
+            (s) =>
+              `- Title: ${s.title}\n  Language: ${s.language}\n  Explanation: ${s.explanation}\n  Code:\n  \`\`\`${s.language}\n  ${s.code}\n  \`\`\``,
+          )
+          .join("\n\n")}`
+      : "";
+
+  const todayDate = new Date();
+  const lastWeekDate = new Date();
+  lastWeekDate.setDate(todayDate.getDate() - 7);
+
+  const formatDate = (d: Date) => {
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const periodStr = `${formatDate(lastWeekDate)} a ${formatDate(todayDate)}`;
+  const today = todayDate.toISOString().split("T")[0];
+
+  const userPrompt = `Based on everything crawled and learned over the last 7 days (Period: ${periodStr}):
+
+${context}${snippetContext}
+
+Write a comprehensive weekly technical report summarizing the main developments in LLM, AI, and Agent Harnesses.
+At the very top of the markdown "content" (before any other text), you MUST include:
+**Período:** ${periodStr}
+
+Structure the report using Markdown. Organize it into sections like:
+1. Resumo da Semana (Executive Summary)
+2. Grandes Lançamentos e Notícias (Key Releases & News)
+3. Análise de Arquitetura de Agentes (Deep analysis of Agent Harnesses / AI architecture trends based on content)
+4. Melhores Práticas e Padrões de Código (Highlights of the code snippets learned, explaining why they are useful)
+5. Conclusão e Próximos Passos (Future outlook)
+
+The report should be extensive, informative (1200-2000 words), and highly technical.
+
+Return JSON:
+{
+  "title": "Weekly Report title in pt-BR",
+  "slug": "weekly-friendly-slug",
+  "summary": "2-3 sentence summary of the weekly report in pt-BR",
+  "tags": ["weekly-report", "ai-agents", "llm"],
+  "content": "Full markdown report in pt-BR"
+}`;
+
+  log.info("Generating weekly report...");
+  const text = await ask(userPrompt, systemPrompt);
+
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error("No JSON in weekly report response");
+
+  const result = JSON.parse(jsonMatch[0]) as Omit<GeneratedArticle, "date">;
+  return { ...result, date: today };
+}

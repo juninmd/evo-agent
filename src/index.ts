@@ -1,10 +1,11 @@
 import cron from "node-cron";
 import { runImprovementCycle } from "./agent/improver.js";
-import { generateArticle } from "./agent/writer.js";
+import { generateArticle, generateWeeklyReport } from "./agent/writer.js";
 import { config } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
-import { notifyNewArticle } from "./notifier/telegram.js";
-import { publishArticle } from "./publisher/github.js";
+import { db } from "./knowledge/store.js";
+import { notifyNewArticle, notifyWeeklyReport } from "./notifier/telegram.js";
+import { publishArticle, publishWeeklyReport } from "./publisher/github.js";
 import { log } from "./utils/logger.js";
 
 async function learnCycle() {
@@ -28,6 +29,19 @@ async function articleCycle(type: "daily" | "weekly" = "daily") {
     log.info(`=== Article published: ${url} ===`);
   } catch (err) {
     log.error(`Article cycle failed: ${(err as Error).message}`);
+  }
+}
+
+async function weeklyReportCycle() {
+  log.info("=== Weekly report cycle start ===");
+  try {
+    const article = await generateWeeklyReport();
+    const url = await publishWeeklyReport(article);
+    await notifyWeeklyReport(article.title, url, article.summary);
+    db.setState("last_weekly_report_at", new Date().toISOString());
+    log.info(`=== Weekly report published: ${url} ===`);
+  } catch (err) {
+    log.error(`Weekly report cycle failed: ${(err as Error).message}`);
   }
 }
 
@@ -60,6 +74,15 @@ async function main() {
   // Run immediately on startup
   await learnCycle();
 
+  // Check if weekly report is due (or if it's Sunday and no report was generated today)
+  const lastWeeklyReport = db.getState("last_weekly_report_at");
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  if (!lastWeeklyReport || new Date(lastWeeklyReport) < sevenDaysAgo) {
+    log.info("Weekly report is due, running weekly report cycle...");
+    await weeklyReportCycle();
+  }
+
   // Schedule learn+improve every N minutes
   const learnInterval = `*/${config.crawlIntervalMinutes} * * * *`;
   cron.schedule(learnInterval, () => {
@@ -73,7 +96,17 @@ async function main() {
     );
   });
 
-  log.info(`Scheduled: learn=${learnInterval}, article=${config.articleCron}`);
+  // Schedule weekly report (Every Sunday at 6pm / 18:00)
+  const weeklyCron = "0 18 * * 0";
+  cron.schedule(weeklyCron, () => {
+    weeklyReportCycle().catch((e) =>
+      log.error(`Weekly report cycle error: ${e.message}`),
+    );
+  });
+
+  log.info(
+    `Scheduled: learn=${learnInterval}, article=${config.articleCron}, weekly=${weeklyCron}`,
+  );
 }
 
 main().catch((e) => {
