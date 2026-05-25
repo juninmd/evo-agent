@@ -18,7 +18,6 @@ tags: [${article.tags.map((t) => `"${t}"`).join(", ")}]
 summary: "${article.summary.replace(/"/g, '\\"')}"
 ---
 
-# ${article.title}
 ${sourcesMarkdown}
 
 ${article.content}
