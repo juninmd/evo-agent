@@ -407,29 +407,54 @@ pre:hover .copy-btn,
   background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
-.hljs { color: var(--text); background: transparent; }
+.hljs,
+.highlight .nx { color: var(--text); background: transparent; }
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-section,
-.hljs-title.class_ { color: var(--accent); }
+.hljs-title.class_,
+.highlight .kd,
+.highlight .kc,
+.highlight .kn { color: var(--accent); }
 .hljs-string,
 .hljs-selector-attr,
 .hljs-selector-pseudo,
-.hljs-addition { color: color-mix(in srgb, var(--hot) 90%, var(--text)); }
+.hljs-addition,
+.highlight .s1,
+.highlight .s2,
+.highlight .sr { color: color-mix(in srgb, var(--hot) 90%, var(--text)); }
 .hljs-comment,
-.hljs-quote { color: var(--muted); font-style: italic; }
+.hljs-quote,
+.highlight .c1,
+.highlight .cm { color: var(--muted); font-style: italic; }
 .hljs-title.function_,
-.hljs-title { color: color-mix(in srgb, var(--accent) 85%, var(--text)); }
+.hljs-title,
+.highlight .nf,
+.highlight .nc { color: color-mix(in srgb, var(--accent) 85%, var(--text)); }
 .hljs-built_in,
 .hljs-literal,
 .hljs-type,
-.hljs-params { color: var(--hot); }
+.hljs-params,
+.highlight .nb,
+.highlight .kt,
+.highlight .no { color: var(--hot); }
 .hljs-number,
 .hljs-attr,
-.hljs-attribute { color: var(--accent); }
+.hljs-attribute,
+.highlight .mi,
+.highlight .mh,
+.highlight .mf { color: var(--accent); }
 .hljs-meta,
-.hljs-tag { color: var(--muted); }
+.hljs-tag,
+.highlight .o,
+.highlight .p,
+.highlight .dl { color: var(--muted); }
 .hljs-deletion { color: color-mix(in srgb, var(--hot) 60%, var(--bg)); }
+.highlight .err { color: var(--hot); }
+.highlight .gh { color: var(--accent); font-weight: 700; }
+.highlight .gu { color: var(--accent); }
+.highlight .ge { font-style: italic; }
+.highlight .gs { font-weight: 700; }
 
 @media (max-width: 700px) {
   .site-header,
