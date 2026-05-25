@@ -27,11 +27,17 @@ export async function generateDailyArticle(): Promise<GeneratedArticle> {
       ? `\n\nRecently learned code patterns:\n${snippets.map((s) => `- ${s.title} (${s.language})`).join("\n")}`
       : "";
 
-  const today = new Date().toISOString().split("T")[0];
+  const todayDate = new Date();
+  const today = todayDate.toISOString().split("T")[0];
+
+  // Calculate week range (Sunday to Saturday)
+  const firstDay = new Date(todayDate.setDate(todayDate.getDate() - todayDate.getDay()));
+  const lastDay = new Date(todayDate.setDate(todayDate.getDate() - todayDate.getDay() + 6));
+  const weekRange = `${firstDay.toISOString().split("T")[0]} até ${lastDay.toISOString().split("T")[0]}`;
 
   const fullSystemPrompt = `${systemPrompt}
 
-Today is ${today}. Write in Brazilian Portuguese.
+Today is ${today}. The period of this report is from ${weekRange}. Write in Brazilian Portuguese.
 Always respond with valid JSON only.`;
 
   const userPrompt = `Based on these recent articles and developments:

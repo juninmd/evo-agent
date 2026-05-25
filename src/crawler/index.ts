@@ -3,7 +3,13 @@ import Parser from "rss-parser";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 
-const parser = new Parser({ timeout: 10000 });
+const parser = new Parser({
+  timeout: 10000,
+  headers: {
+    "User-Agent":
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 EvoAgent/1.0",
+  },
+});
 
 interface FeedSource {
   name: string;
@@ -36,6 +42,31 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "The GitHub Blog",
     url: "https://github.blog/feed/",
     tags: ["github", "developer", "ai"],
+  },
+  {
+    name: "Reddit: ClaudeAI",
+    url: "https://www.reddit.com/r/ClaudeAI/.rss",
+    tags: ["reddit", "claude", "ai"],
+  },
+  {
+    name: "Reddit: ClaudeCode",
+    url: "https://www.reddit.com/r/ClaudeCode/.rss",
+    tags: ["reddit", "claude", "coding", "ai"],
+  },
+  {
+    name: "Reddit: Claude",
+    url: "https://www.reddit.com/r/claude/.rss",
+    tags: ["reddit", "claude", "ai"],
+  },
+  {
+    name: "Reddit: VSCode",
+    url: "https://www.reddit.com/r/vscode/.rss",
+    tags: ["reddit", "vscode", "tools"],
+  },
+  {
+    name: "Reddit: GithubCopilot",
+    url: "https://www.reddit.com/r/GithubCopilot/.rss",
+    tags: ["reddit", "github", "copilot", "ai"],
   },
 ];
 
