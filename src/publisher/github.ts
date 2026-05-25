@@ -206,6 +206,10 @@ export function buildDefaultLayout() {
       });
     </script>
     <script>
+      hljs.configure({ cssSelector: "pre code" });
+      document.querySelectorAll("pre code").forEach(function(block) {
+        block.textContent = block.textContent;
+      });
       hljs.highlightAll();
       document.querySelectorAll("pre").forEach(function(pre) {
         var btn = document.createElement("button");
@@ -290,6 +294,10 @@ export function buildArticleLayout() {
       });
     </script>
     <script>
+      hljs.configure({ cssSelector: "pre code" });
+      document.querySelectorAll("pre code").forEach(function(block) {
+        block.textContent = block.textContent;
+      });
       hljs.highlightAll();
       document.querySelectorAll("pre").forEach(function(pre) {
         var btn = document.createElement("button");
