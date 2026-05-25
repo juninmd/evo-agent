@@ -3,8 +3,10 @@ dist/
 .env
 .DS_Store
 *.log
+*.tsbuildinfo
 .vscode/
 .idea/
 coverage/
 data/
+tmp/
 weekly-report.json

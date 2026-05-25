@@ -270,7 +270,7 @@ function buildArticleLayout() {
 </html>`;
 }
 
-function buildSiteCss() {
+export function buildSiteCss() {
   return `:root {
   color-scheme: dark;
   --bg: #080a0f;
