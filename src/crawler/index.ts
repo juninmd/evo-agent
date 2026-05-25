@@ -98,6 +98,11 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["huggingface", "ai", "models"],
   },
   {
+    name: "Lil'Log (Lilian Weng)",
+    url: "https://lilianweng.github.io/index.xml",
+    tags: ["ai", "ml", "research", "llm"],
+  },
+  {
     name: "LangChain Blog",
     url: "https://blog.langchain.dev/rss/",
     tags: ["langchain", "agents", "ai"],
