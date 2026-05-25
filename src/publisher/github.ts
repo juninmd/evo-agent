@@ -897,6 +897,28 @@ async function publishToGithub(
   await ensureBranchExists(owner, repo, branch);
   await ensureSiteScaffold(owner, repo, branch);
 
+  try {
+    const legacyIndex = await octokit.repos.getContent({
+      owner,
+      repo,
+      path: "index.html",
+      ref: branch,
+    });
+    if (!Array.isArray(legacyIndex.data) && "sha" in legacyIndex.data) {
+      await octokit.repos.deleteFile({
+        owner,
+        repo,
+        path: "index.html",
+        message: "fix: remove legacy index.html, index.md is the source",
+        branch,
+        sha: legacyIndex.data.sha,
+      });
+      log.info("Removed legacy index.html from gh-pages");
+    }
+  } catch {
+    // index.html doesn't exist — nothing to do
+  }
+
   const folder = isWeekly ? "reports" : "articles";
   const prefix = isWeekly ? "weekly-" : "";
   const filePath = `${folder}/${prefix}${article.date}-${article.slug}.md`;
