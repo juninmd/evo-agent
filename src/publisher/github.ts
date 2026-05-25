@@ -766,7 +766,39 @@ async function upsertTextFile(
   });
 }
 
+async function deleteOldFiles(owner: string, repo: string, branch: string) {
+  const oldPaths = [
+    "_layouts/default.html",
+    "_layouts/home.html",
+    "_layouts/article.html",
+  ];
+  for (const path of oldPaths) {
+    try {
+      const existing = await octokit.repos.getContent({
+        owner,
+        repo,
+        path,
+        ref: branch,
+      });
+      if (!Array.isArray(existing.data) && "sha" in existing.data) {
+        await octokit.repos.deleteFile({
+          owner,
+          repo,
+          path,
+          message: `chore: remove legacy ${path}`,
+          branch,
+          sha: existing.data.sha,
+        });
+        log.info(`Removed legacy ${path} from ${branch}`);
+      }
+    } catch {
+      // file doesn't exist
+    }
+  }
+}
+
 async function ensureSiteScaffold(owner: string, repo: string, branch: string) {
+  await deleteOldFiles(owner, repo, branch);
   for (const file of buildSiteFiles(owner, repo)) {
     await upsertTextFile(
       owner,
