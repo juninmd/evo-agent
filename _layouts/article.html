@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title }} | Evo Agent</title>
+    <meta name="description" content="{{ page.summary | default: site.description }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="{{ '/' | relative_url }}">Evo Agent</a>
+      <nav aria-label="Principal">
+        <a href="{{ '/' | relative_url }}">Arquivo</a>
+        <a href="{{ '/reports/' | relative_url }}">Relatorios</a>
+        <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
+      </nav>
+    </header>
+    <main>
+      <article class="article-shell">
+        <header class="article-hero">
+          <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}</p>
+          <h1>{{ page.title }}</h1>
+          {% if page.summary %}<p class="article-summary">{{ page.summary }}</p>{% endif %}
+          {% if page.tags %}<div class="chips">{% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}</div>{% endif %}
+        </header>
+        <div class="article-content">{{ content }}</div>
+      </article>
+    </main>
+  </body>
+</html>
