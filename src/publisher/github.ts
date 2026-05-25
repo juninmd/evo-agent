@@ -8,7 +8,7 @@ const octokit = new Octokit({ auth: config.github.token });
 
 function buildMarkdown(article: GeneratedArticle): string {
   const sourcesMarkdown = article.sources && article.sources.length > 0 
-    ? `\n\n### Fontes\n${article.sources.map(s => `- [${s}](${s})`).join('\n')}`
+    ? `\n**Fontes:** ${article.sources.map(s => `[${s}](${s})`).join(', ')}\n`
     : '';
 
   return `---
@@ -19,9 +19,9 @@ summary: "${article.summary.replace(/"/g, '\\"')}"
 ---
 
 # ${article.title}
+${sourcesMarkdown}
 
 ${article.content}
-${sourcesMarkdown}
 
 ---
 *Gerado por evo-agent — agente auto-aprimorante em ${article.date}*
