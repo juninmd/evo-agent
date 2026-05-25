@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>7</strong> artigos</span>
-    <span><strong>2</strong> relatorios</span>
+    <span><strong>3</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-monthly-report-2026-05-25">Relatório Mensal: Agentes, Custos e Arquiteturas Pós-Transição (Período 25/04/2026 a 25/05/2026)</a></h3>
+  <p>Mês de transformação no ecossistema de agentes de IA: GitHub Copilot migra para faturamento por uso, Anthropic enfrenta degradação do Opus 4.7 sob forte pressão da concorrência, Google lança Gemini 3.5 no I/O 2026, e a comunidade converge para padrões de arquitetura baseados em filesystem-backed memory, model routing consciente de custos, e supply chain security gates pós-incidente TanStack.</p>
+  <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span><span>copilot</span><span>claude</span><span>gemini</span><span>agent-architecture</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-weekly-report-2026-05-25">Relatório Semanal: Agentes, Custos e Arquiteturas — O Ecossistema de AI Agents Atinge a Maioridade (Período 18/05/2026 a 25/05/2026)</a></h3>
   <p>Semana marcada pela transição do GitHub Copilot para faturamento baseado em uso, degradação percebida do Opus 4.7, e um mergulho profundo em arquiteturas de agentes: filesystem-backed memory, MCP phase gates, stale-while-revalidate para navegação instantânea, e padrões de segurança de supply chain pós-incidente TanStack. Google I/O 2026 apresentou Gemini 3.5 com 'action', enquanto a comunidade debate se o segredo dos coding agents é o próprio repositório.</p>
-  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span><span>agent-harness</span><span>github-copilot</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
