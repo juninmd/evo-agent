@@ -99,6 +99,9 @@ async function fetchWithPlaywright(url: string): Promise<string> {
   const context = await browser.newContext({
     userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
     viewport: { width: 1280, height: 720 },
+    extraHTTPHeaders: {
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*'
+    }
   });
 
   const page = await context.newPage();
@@ -114,8 +117,14 @@ async function fetchWithPlaywright(url: string): Promise<string> {
     await page.waitForTimeout(2000);
 
     const content = await page.evaluate(() => {
+        // If the browser rendered the XML as a tree, it might be in a 'pre' tag
         const pre = document.querySelector('pre');
         if (pre) return pre.innerText;
+        
+        // Some browsers wrap raw XML in a specific structure
+        const webkitXml = document.querySelector('#webkit-xml-viewer-source-xml');
+        if (webkitXml) return webkitXml.innerHTML;
+
         return document.documentElement.outerHTML;
     });
     
