@@ -103,27 +103,49 @@ Return JSON:
 }
 
 export async function generateWeeklyReport(): Promise<GeneratedArticle> {
-  const lastWeek = new Date();
-  lastWeek.setDate(lastWeek.getDate() - 7);
+  return generatePeriodReport("weekly");
+}
 
-  const recentArticles = db.getRecentArticles(100).filter((a) => {
+export type ReportPeriod =
+  | "weekly"
+  | "biweekly"
+  | "monthly"
+  | "bimonthly"
+  | "semester";
+
+const PERIOD_CONFIG: Record<
+  ReportPeriod,
+  { days: number; label: string; wordCount: [number, number] }
+> = {
+  weekly: { days: 7, label: "semanal", wordCount: [1200, 2000] },
+  biweekly: { days: 14, label: "quinzenal", wordCount: [1500, 2500] },
+  monthly: { days: 30, label: "mensal", wordCount: [2000, 3000] },
+  bimonthly: { days: 60, label: "bimestral", wordCount: [2500, 4000] },
+  semester: { days: 180, label: "semestral", wordCount: [3500, 5000] },
+};
+
+export async function generatePeriodReport(
+  period: ReportPeriod,
+): Promise<GeneratedArticle> {
+  const cfg = PERIOD_CONFIG[period];
+  const since = new Date();
+  since.setDate(since.getDate() - cfg.days);
+
+  const recentArticles = db.getRecentArticles(200).filter((a) => {
     const crawledDate = new Date(a.crawled_at);
-    return crawledDate >= lastWeek;
+    return crawledDate >= since;
   });
 
-  const snippets = db.getSnippets(30).filter((s) => {
-    const createdDate = new Date(s.created_at);
-    return createdDate >= lastWeek;
-  });
+  const snippets = db.getSnippets(50);
 
   if (recentArticles.length === 0) {
     throw new Error(
-      "No articles crawled in the last 7 days to generate a weekly report",
+      `No articles crawled in the last ${cfg.days} days to generate a ${cfg.label} report`,
     );
   }
 
   const systemPrompt = `You are a Principal AI Architect and technical newsletter editor.
-You analyze a week's worth of crawled AI research, news, and code snippets, synthesizing them into a high-quality, comprehensive weekly technical report.
+You analyze crawled AI research, news, and code snippets, synthesizing them into a high-quality, comprehensive ${cfg.label} technical report.
 Your output must be deeply technical, insightful, structured, and practical.
 Always write in Brazilian Portuguese (pt-BR).
 Always respond with valid JSON only.`;
@@ -134,59 +156,67 @@ Always respond with valid JSON only.`;
 
   const snippetContext =
     snippets.length > 0
-      ? `\n\nCode patterns/snippets learned this week:\n${snippets
+      ? `\n\nCode patterns/snippets learned this period:\n${snippets
           .map(
             (s) =>
-              `- Title: ${s.title}\n  Language: ${s.language}\n  Explanation: ${s.explanation}\n  Code:\n  \`\`\`${s.language}\n  ${s.code}\n  \`\`\``,
+              `- Title: ${s.title}\n  Language: ${s.language}\n  Explanation: ${s.explanation.slice(0, 300)}\n  Code:\n  \`\`\`${s.language}\n  ${s.code.slice(0, 600)}\n  \`\`\``,
           )
           .join("\n\n")}`
       : "";
 
   const todayDate = new Date();
-  const lastWeekDate = new Date();
-  lastWeekDate.setDate(todayDate.getDate() - 7);
+  const sinceDate = new Date();
+  sinceDate.setDate(todayDate.getDate() - cfg.days);
 
-  const formatDate = (d: Date) => {
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day}/${month}/${year}`;
-  };
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const fmt = (d: Date) =>
+    `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
 
-  const periodStr = `${formatDate(lastWeekDate)} a ${formatDate(todayDate)}`;
+  const periodStr = `${fmt(sinceDate)} a ${fmt(todayDate)}`;
   const today = todayDate.toISOString().split("T")[0];
 
-  const userPrompt = `Based on everything crawled and learned over the last 7 days (Period: ${periodStr}):
+  const titleLabel =
+    period === "weekly"
+      ? "Relatório Semanal"
+      : period === "biweekly"
+        ? "Relatório Quinzenal"
+        : period === "monthly"
+          ? "Relatório Mensal"
+          : period === "bimonthly"
+            ? "Relatório Bimestral"
+            : "Relatório Semestral";
+
+  const userPrompt = `Based on everything crawled and learned over the last ${cfg.days} days (Period: ${periodStr}):
 
 ${context}${snippetContext}
 
-Write a comprehensive weekly technical report summarizing the main developments in LLM, AI, and Agent Harnesses.
+Write a comprehensive ${cfg.label} technical report summarizing the main developments in LLM, AI, and Agent Harnesses.
 At the very top of the markdown "content" (before any other text), you MUST include:
 **Período:** ${periodStr}
 
 Structure the report using Markdown. Organize it into sections like:
-1. Resumo da Semana (Executive Summary)
+1. Resumo do Período (Executive Summary)
 2. Grandes Lançamentos e Notícias (Key Releases & News)
-3. Análise de Arquitetura de Agentes (Deep analysis of Agent Harnesses / AI architecture trends based on content)
-4. Melhores Práticas e Padrões de Código (Highlights of the code snippets learned, explaining why they are useful)
+3. Análise de Arquitetura de Agentes (Deep analysis of Agent Harnesses / AI architecture trends)
+4. Melhores Práticas e Padrões de Código (Code patterns and best practices)
 5. Conclusão e Próximos Passos (Future outlook)
 
-The report should be extensive, informative (1200-2000 words), and highly technical.
+The report should be extensive, informative (${cfg.wordCount[0]}-${cfg.wordCount[1]} words), and highly technical.
 
 Return JSON:
 {
-  "title": "Weekly Report title in pt-BR",
-  "slug": "weekly-friendly-slug",
-  "summary": "2-3 sentence summary of the weekly report in pt-BR",
-  "tags": ["weekly-report", "ai-agents", "llm"],
+  "title": "${titleLabel}: [Short Catchy Title] (Período ${periodStr})",
+  "slug": "${period}-report-${today}",
+  "summary": "2-3 sentence summary of the ${cfg.label} report in pt-BR",
+  "tags": ["${period}-report", "ai-agents", "llm"],
   "content": "Full markdown report in pt-BR"
 }`;
 
-  log.info("Generating weekly report...");
+  log.info(`Generating ${cfg.label} report (${cfg.days}d period)...`);
   const text = await ask(userPrompt, systemPrompt);
 
   const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error("No JSON in weekly report response");
+  if (!jsonMatch) throw new Error("No JSON in report response");
 
   const result = JSON.parse(jsonMatch[0]) as Omit<GeneratedArticle, "date">;
   return { ...result, date: today };

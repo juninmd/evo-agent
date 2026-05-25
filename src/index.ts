@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { runImprovementCycle } from "./agent/improver.js";
-import { generateArticle, generateWeeklyReport } from "./agent/writer.js";
+import { generateArticle, generatePeriodReport } from "./agent/writer.js";
 import { config } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
 import { db, getDb } from "./knowledge/store.js";
@@ -41,16 +41,18 @@ async function articleCycle(type: "daily" | "weekly" = "daily") {
   }
 }
 
-async function weeklyReportCycle() {
-  log.info("=== Weekly report cycle start ===");
+async function reportCycle(
+  period: "weekly" | "biweekly" | "monthly" | "bimonthly" | "semester",
+) {
+  log.info(`=== ${period} report cycle start ===`);
   try {
-    const article = await generateWeeklyReport();
+    const article = await generatePeriodReport(period);
     const url = await publishWeeklyReport(article);
     await notifyWeeklyReport(article.title, url, article.summary);
-    db.setState("last_weekly_report_at", new Date().toISOString());
-    log.info(`=== Weekly report published: ${url} ===`);
+    db.setState(`last_${period}_report_at`, new Date().toISOString());
+    log.info(`=== ${period} report published: ${url} ===`);
   } catch (err) {
-    log.error(`Weekly report cycle failed: ${(err as Error).message}`);
+    log.error(`${period} report cycle failed: ${(err as Error).message}`);
   }
 }
 
@@ -71,7 +73,31 @@ async function main() {
 
   if (runMode === "WEEKLY") {
     log.info("Running in WEEKLY mode");
-    await articleCycle("weekly");
+    await reportCycle("weekly");
+    closeDbAndExit(0);
+  }
+
+  if (runMode === "BIWEEKLY") {
+    log.info("Running in BIWEEKLY mode");
+    await reportCycle("biweekly");
+    closeDbAndExit(0);
+  }
+
+  if (runMode === "MONTHLY") {
+    log.info("Running in MONTHLY mode");
+    await reportCycle("monthly");
+    closeDbAndExit(0);
+  }
+
+  if (runMode === "BIMONTHLY") {
+    log.info("Running in BIMONTHLY mode");
+    await reportCycle("bimonthly");
+    closeDbAndExit(0);
+  }
+
+  if (runMode === "SEMESTER") {
+    log.info("Running in SEMESTER mode");
+    await reportCycle("semester");
     closeDbAndExit(0);
   }
 
@@ -89,7 +115,7 @@ async function main() {
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
   if (!lastWeeklyReport || new Date(lastWeeklyReport) < sevenDaysAgo) {
     log.info("Weekly report is due, running weekly report cycle...");
-    await weeklyReportCycle();
+    await reportCycle("weekly");
   }
 
   // Schedule learn+improve every N minutes
@@ -108,7 +134,7 @@ async function main() {
   // Schedule weekly report (Every Sunday at 6pm / 18:00)
   const weeklyCron = "0 18 * * 0";
   cron.schedule(weeklyCron, () => {
-    weeklyReportCycle().catch((e) =>
+    reportCycle("weekly").catch((e) =>
       log.error(`Weekly report cycle error: ${errMsg(e)}`),
     );
   });
