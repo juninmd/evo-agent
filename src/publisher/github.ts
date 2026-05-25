@@ -7,8 +7,8 @@ import { log } from "../utils/logger.js";
 const octokit = new Octokit({ auth: config.github.token });
 
 function buildMarkdown(article: GeneratedArticle): string {
-  const sourcesMarkdown = article.sources.length > 0 
-    ? `\n\n### Fontes\n${article.sources.map(s => `- ${s}`).join('\n')}`
+  const sourcesMarkdown = article.sources && article.sources.length > 0 
+    ? `\n\n### Fontes\n${article.sources.map(s => `- [${s}](${s})`).join('\n')}`
     : '';
 
   return `---
