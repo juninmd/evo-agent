@@ -25,7 +25,7 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
   {
     name: "Anthropic News",
-    url: "https://www.anthropic.com/news/rss.xml",
+    url: "https://www.anthropic.com/index.xml",
     tags: ["anthropic", "claude", "ai"],
   },
   {
