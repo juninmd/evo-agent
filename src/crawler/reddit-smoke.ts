@@ -1,4 +1,4 @@
-process.env.DB_PATH ??= "data/reddit-comments-test.db";
+process.env.DB_PATH = "data/reddit-comments-test.db";
 
 const { crawlRedditCommunitySignals } = await import("./index.js");
 const { db } = await import("../knowledge/store.js");

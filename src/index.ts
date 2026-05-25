@@ -3,10 +3,19 @@ import { runImprovementCycle } from "./agent/improver.js";
 import { generateArticle, generateWeeklyReport } from "./agent/writer.js";
 import { config } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
-import { db } from "./knowledge/store.js";
+import { db, getDb } from "./knowledge/store.js";
 import { notifyNewArticle, notifyWeeklyReport } from "./notifier/telegram.js";
 import { publishArticle, publishWeeklyReport } from "./publisher/github.js";
 import { log } from "./utils/logger.js";
+
+function errMsg(e: unknown): string {
+  return e instanceof Error ? e.message : String(e);
+}
+
+function closeDbAndExit(code = 0) {
+  getDb().close();
+  process.exit(code);
+}
 
 async function learnCycle() {
   log.info("=== Learn cycle start ===");
@@ -51,19 +60,19 @@ async function main() {
   if (runMode === "CRAWL") {
     log.info("Running in CRAWL mode");
     await learnCycle();
-    process.exit(0);
+    closeDbAndExit(0);
   }
 
   if (runMode === "DAILY") {
     log.info("Running in DAILY mode");
     await articleCycle("daily");
-    process.exit(0);
+    closeDbAndExit(0);
   }
 
   if (runMode === "WEEKLY") {
     log.info("Running in WEEKLY mode");
     await articleCycle("weekly");
-    process.exit(0);
+    closeDbAndExit(0);
   }
 
   // Default DAEMON mode
@@ -86,13 +95,13 @@ async function main() {
   // Schedule learn+improve every N minutes
   const learnInterval = `*/${config.crawlIntervalMinutes} * * * *`;
   cron.schedule(learnInterval, () => {
-    learnCycle().catch((e) => log.error(`Learn cycle error: ${e.message}`));
+    learnCycle().catch((e) => log.error(`Learn cycle error: ${errMsg(e)}`));
   });
 
   // Schedule daily article
   cron.schedule(config.articleCron, () => {
     articleCycle("daily").catch((e) =>
-      log.error(`Article cycle error: ${e.message}`),
+      log.error(`Article cycle error: ${errMsg(e)}`),
     );
   });
 
@@ -100,16 +109,26 @@ async function main() {
   const weeklyCron = "0 18 * * 0";
   cron.schedule(weeklyCron, () => {
     weeklyReportCycle().catch((e) =>
-      log.error(`Weekly report cycle error: ${e.message}`),
+      log.error(`Weekly report cycle error: ${errMsg(e)}`),
     );
   });
 
   log.info(
     `Scheduled: learn=${learnInterval}, article=${config.articleCron}, weekly=${weeklyCron}`,
   );
+
+  process.on("SIGINT", () => {
+    log.info("SIGINT received, closing...");
+    closeDbAndExit(0);
+  });
+  process.on("SIGTERM", () => {
+    log.info("SIGTERM received, closing...");
+    closeDbAndExit(0);
+  });
 }
 
 main().catch((e) => {
-  log.error(`Fatal: ${e.message}`);
+  log.error(`Fatal: ${errMsg(e)}`);
+  getDb().close();
   process.exit(1);
 });

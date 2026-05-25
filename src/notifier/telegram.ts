@@ -42,6 +42,6 @@ export async function notifyWeeklyReport(
   url: string,
   summary: string,
 ) {
-  const msg = `*Relatório Semanal — Evo Agent*\n\n*${title}*\n\n${summary}\n\n[Ler relatório completo](${url})`;
+  const msg = `<b>Relatório Semanal — Evo Agent</b>\n\n<b>${title}</b>\n\n${summary}\n\n<a href="${url}">Ler relatório completo</a>`;
   await sendMessage(msg);
 }

@@ -1,4 +1,5 @@
 import { createOpencode } from "@opencode-ai/sdk";
+import { config } from "../config.js";
 import { log } from "./logger.js";
 
 // biome-ignore lint/suspicious/noExplicitAny: SDK types not exported
@@ -30,7 +31,8 @@ export async function ask(
 ): Promise<string> {
   const client = await getClient();
   const rawModel =
-    process.env.OPENCODE_MODEL ?? "opencode/deepseek-v4-flash-free";
+    process.env.OPENCODE_MODEL ??
+    `${config.opencode.provider}/${config.opencode.model}`;
   const { providerID, modelID } = parseProviderModel(rawModel);
 
   const sessionRes = await client.session.create({ body: {} });

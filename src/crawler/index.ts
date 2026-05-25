@@ -3,6 +3,7 @@ import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
 import Parser from "rss-parser";
 import { getSearchKeywords } from "../agent/improver.js";
+import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 
@@ -142,25 +143,20 @@ async function fetchWithPlaywright(url: string): Promise<string> {
   log.info(`Using Playwright stealth to fetch: ${url}`);
   const browser = await chromium.launch({
     headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-web-security",
-      "--disable-features=IsolateOrigins,site-per-process",
-    ],
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
 
-  const context = await browser.newContext({
-    userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    viewport: { width: 1280, height: 720 },
-    extraHTTPHeaders: {
-      Accept: "application/rss+xml, application/xml, text/xml, */*",
-    },
-  });
-
-  const page = await context.newPage();
   try {
+    const context = await browser.newContext({
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+      viewport: { width: 1280, height: 720 },
+      extraHTTPHeaders: {
+        Accept: "application/rss+xml, application/xml, text/xml, */*",
+      },
+    });
+
+    const page = await context.newPage();
     await page.addInitScript(() => {
       Object.defineProperty(navigator, "webdriver", { get: () => undefined });
     });
@@ -427,7 +423,7 @@ export async function crawlAll(): Promise<number> {
   for (const keyword of keywords) {
     try {
       const query = `(site:reddit.com OR site:x.com) "${keyword}"`;
-      const searxngUrl = `http://searxng.searxng.svc.cluster.local/search?q=${encodeURIComponent(query)}&format=json`;
+      const searxngUrl = `${config.searxngUrl}/search?q=${encodeURIComponent(query)}&format=json`;
       const response = await axios.get(searxngUrl, { timeout: 5000 });
       const results = response.data?.results ?? [];
       for (const result of results.slice(0, 5)) {

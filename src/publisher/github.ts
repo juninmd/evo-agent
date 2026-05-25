@@ -56,7 +56,9 @@ tags: [${article.tags.map((t) => `"${escapeYaml(t)}"`).join(", ")}]
 summary: "${escapeYaml(article.summary)}"
 ---
 
+{% raw %}
 ${article.content}
+{% endraw %}
 
 ---
 *Gerado por evo-agent - agente auto-aprimorante em ${article.date}.*
@@ -67,7 +69,7 @@ function formatMonth(date: string): string {
   const monthNames = [
     "Janeiro",
     "Fevereiro",
-    "Marco",
+    "Março",
     "Abril",
     "Maio",
     "Junho",
@@ -566,31 +568,33 @@ main {
 }
 
 .article-content code {
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
   border-radius: 6px;
   color: var(--accent);
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 0.9em;
-  padding: 0.12em 0.35em;
+  padding: 0.15em 0.4em;
 }
 
 .article-content pre {
   background: var(--code);
-  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
-  border-radius: 8px;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 8%, transparent);
   line-height: 1.6;
   margin: 28px 0;
   overflow-x: auto;
   padding: 22px;
-  position: relative;
+  tab-size: 2;
+  -moz-tab-size: 2;
 }
 
 .article-content pre code {
   background: transparent;
   border: 0;
-  color: color-mix(in srgb, var(--text) 92%, var(--accent));
+  color: color-mix(in srgb, var(--text) 94%, var(--accent));
   display: block;
   font-size: 0.92rem;
   padding: 0;
@@ -598,18 +602,22 @@ main {
 }
 
 .article-content blockquote {
-  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 6px 6px 0;
   color: var(--muted);
-  margin-left: 0;
-  padding-left: 18px;
+  margin: 28px 0 28px 0;
+  padding: 16px 18px;
 }
 
 .article-content table {
   border-collapse: collapse;
+  border-radius: 8px;
   display: block;
   font-family: "IBM Plex Sans", system-ui, sans-serif;
   font-size: 0.96rem;
   margin: 28px 0;
+  overflow: hidden;
   overflow-x: auto;
   width: 100%;
 }
@@ -617,19 +625,23 @@ main {
 .article-content th,
 .article-content td {
   border: 1px solid var(--line);
-  padding: 10px 12px;
+  padding: 12px 14px;
   text-align: left;
   vertical-align: top;
 }
 
 .article-content th {
-  background: color-mix(in srgb, var(--panel-2) 86%, var(--accent) 14%);
+  background: color-mix(in srgb, var(--panel-2) 78%, var(--accent) 22%);
   color: var(--text);
   font-weight: 700;
 }
 
 .article-content tr:nth-child(even) td {
-  background: color-mix(in srgb, var(--panel) 72%, transparent);
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+}
+
+.article-content tr:hover td {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 @media (max-width: 700px) {
