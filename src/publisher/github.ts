@@ -7,6 +7,10 @@ import { log } from "../utils/logger.js";
 const octokit = new Octokit({ auth: config.github.token });
 
 function buildMarkdown(article: GeneratedArticle): string {
+  const sourcesMarkdown = article.sources.length > 0 
+    ? `\n\n### Fontes\n${article.sources.map(s => `- ${s}`).join('\n')}`
+    : '';
+
   return `---
 title: "${article.title.replace(/"/g, '\\"')}"
 date: "${article.date}"
@@ -17,6 +21,7 @@ summary: "${article.summary.replace(/"/g, '\\"')}"
 # ${article.title}
 
 ${article.content}
+${sourcesMarkdown}
 
 ---
 *Gerado por evo-agent — agente auto-aprimorante em ${article.date}*

@@ -19,7 +19,7 @@ async function articleCycle() {
   try {
     const article = await generateDailyArticle();
     const url = await publishArticle(article);
-    await notifyNewArticle(article.title, url, article.summary);
+    await notifyNewArticle(article.title, url, article.summary, article.sources);
     log.info(`=== Article published: ${url} ===`);
   } catch (err) {
     log.error(`Article cycle failed: ${(err as Error).message}`);

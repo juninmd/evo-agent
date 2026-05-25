@@ -26,7 +26,12 @@ export async function notifyNewArticle(
   title: string,
   url: string,
   summary: string,
+  sources: string[] = []
 ) {
-  const msg = `*Novo Artigo — Evo Agent*\n\n*${title}*\n\n${summary}\n\n[Ler artigo](${url})`;
+  const sourcesText = sources.length > 0
+    ? `\n\n*Fontes originais:*\n${sources.map(s => `• ${s}`).join('\n')}`
+    : '';
+
+  const msg = `*Novo Artigo — Evo Agent*\n\n*${title}*\n\n${summary}${sourcesText}\n\n[Ler artigo completo](${url})`;
   await sendMessage(msg);
 }

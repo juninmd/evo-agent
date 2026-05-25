@@ -10,6 +10,7 @@ export interface GeneratedArticle {
   summary: string;
   tags: string[];
   date: string;
+  sources: string[];
 }
 
 export async function generateDailyArticle(): Promise<GeneratedArticle> {
@@ -19,12 +20,12 @@ export async function generateDailyArticle(): Promise<GeneratedArticle> {
 
   const context = recentArticles
     .slice(0, 15)
-    .map((a) => `- [${a.source}] ${a.title}: ${a.summary.slice(0, 300)}`)
+    .map((a) => `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 300)}`)
     .join("\n");
 
   const snippetContext =
     snippets.length > 0
-      ? `\n\nRecently learned code patterns:\n${snippets.map((s) => `- ${s.title} (${s.language})`).join("\n")}`
+      ? `\n\nRecently learned code patterns:\n${snippets.map((s) => `- ${s.title} (${s.language}) - Source: ${s.source_url}`).join("\n")}`
       : "";
 
   const todayDate = new Date();
@@ -53,6 +54,7 @@ Return JSON:
   "slug": "url-friendly-slug",
   "summary": "2-3 sentence summary in pt-BR",
   "tags": ["tag1", "tag2", "tag3"],
+  "sources": ["url1", "url2"],
   "content": "Full markdown article in pt-BR (800-1200 words, include code examples where relevant)"
 }`;
 
