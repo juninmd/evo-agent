@@ -14,6 +14,7 @@
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -53,6 +54,27 @@
       setTheme(document.documentElement.dataset.theme || "dark");
       themeButton?.addEventListener("click", () => {
         setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+    </script>
+    <script>
+      hljs.highlightAll();
+      document.querySelectorAll("pre").forEach(function(pre) {
+        var btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "Copiar";
+        btn.addEventListener("click", function() {
+          var code = pre.querySelector("code");
+          var text = code ? code.innerText : pre.innerText;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = "Copiado!";
+            btn.classList.add("copied");
+            setTimeout(function() {
+              btn.textContent = "Copiar";
+              btn.classList.remove("copied");
+            }, 1400);
+          }).catch(function() {});
+        });
+        pre.appendChild(btn);
       });
     </script>
   </body>
