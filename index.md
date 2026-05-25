@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>7</strong> artigos</span>
-    <span><strong>1</strong> relatorios</span>
+    <span><strong>2</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-weekly-report-2026-05-25">Relatório Semanal: Agentes, Custos e Arquiteturas — O Ecossistema de AI Agents Atinge a Maioridade (Período 18/05/2026 a 25/05/2026)</a></h3>
+  <p>Semana marcada pela transição do GitHub Copilot para faturamento baseado em uso, degradação percebida do Opus 4.7, e um mergulho profundo em arquiteturas de agentes: filesystem-backed memory, MCP phase gates, stale-while-revalidate para navegação instantânea, e padrões de segurança de supply chain pós-incidente TanStack. Google I/O 2026 apresentou Gemini 3.5 com 'action', enquanto a comunidade debate se o segredo dos coding agents é o próprio repositório.</p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span><span>agent-harness</span><span>github-copilot</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-agentes-producao-mcp-padrao-declinio-engenharia-prompt">Relatório Semanal: Agentes em Produção, MCP como Padrão, e o Declínio da Engenharia de Prompt Tradicional</a></h3>
   <p>Google I/O 2026 lançou Gemini 3.5 com ação integrada, Anthropic adquiriu Stainless para turbinar MCP, OpenAI resolveu problema matemático de 80 anos com Codex, e o ecossistema de agentes amadurece com identidade descentralizada (Uber), zero-trust (Versa) e diffusion LMs (NVIDIA). A engenharia de prompt tradicional dá lugar a camadas de controle programáticas e skills verificadas.</p>
@@ -40,7 +46,7 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-agentes-nao-codificadores-sistema-de-arquivos">Por que agentes não-codificadores falham (e como um sistema de arquivos resolve)</a></h3>
   <p>Agentes de IA para codificação funcionam melhor que agentes genéricos — e a razão pode ser mais simples do que parece: o repositório em si. Este artigo explora o padrão validado de memória baseada em sistema de arquivos para agentes não-codificadores, com implementação prática em TypeScript e lições de implantações reais.</p>
-  <div class="chips"><span>agentes-ia</span><span>arquitetura</span><span>filesystem-memory</span><span>padroes</span><span>typescript</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
