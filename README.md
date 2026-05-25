@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>7</strong> artigos</span>
-    <span><strong>3</strong> relatorios</span>
+    <span><strong>4</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-semester-report-2026-05-25">Relatório Semestral: Agentes, Harnesses e a Nova Economia dos Tokens (Período 26/11/2025 a 25/05/2026)</a></h3>
+  <p>Análise técnica aprofundada do ecossistema de LLMs e agentes autônomos entre nov/2025 e mai/2026. Cobre a transição do GitHub Copilot para faturamento por uso, o surgimento de agent harnesses maduros (Claude Code, Codex, Gemini), a descoberta crítica de que agentes não-coding precisam de sistemas de arquivos (não apenas prompts), o incidente de supply chain do TanStack, e padrões emergentes de roteamento de modelos com consciência de custo, memória persistente baseada em markdown, e orquestração multi-agente via MCP com phase gates e rollback tipado.</p>
+  <div class="chips"><span>semester-report</span><span>ai-agents</span><span>llm</span><span>agent-harnesses</span><span>supply-chain-security</span><span>cost-tracking</span><span>mcp</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-monthly-report-2026-05-25">Relatório Mensal: Agentes, Custos e Arquiteturas Pós-Transição (Período 25/04/2026 a 25/05/2026)</a></h3>
   <p>Mês de transformação no ecossistema de agentes de IA: GitHub Copilot migra para faturamento por uso, Anthropic enfrenta degradação do Opus 4.7 sob forte pressão da concorrência, Google lança Gemini 3.5 no I/O 2026, e a comunidade converge para padrões de arquitetura baseados em filesystem-backed memory, model routing consciente de custos, e supply chain security gates pós-incidente TanStack.</p>
-  <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span><span>copilot</span><span>claude</span><span>gemini</span><span>agent-architecture</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
