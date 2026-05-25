@@ -7,7 +7,7 @@ const parser = new Parser({
   timeout: 10000,
   headers: {
     "User-Agent":
-      "EvoAgentBot/1.0 (https://github.com/juninmd/evo-agent; automated news crawler for developer insights)",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
   },
 });
 
@@ -25,10 +25,9 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
   {
     name: "Anthropic News",
-    url: "https://www.anthropic.com/index.xml",
+    url: "https://www.anthropic.com/news/rss",
     tags: ["anthropic", "claude", "ai"],
-  },
-  {
+  },  {
     name: "OpenAI Blog",
     url: "https://openai.com/blog/rss.xml",
     tags: ["openai", "ai"],
