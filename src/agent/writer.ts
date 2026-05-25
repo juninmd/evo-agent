@@ -13,13 +13,14 @@ export interface GeneratedArticle {
   sources: string[];
 }
 
-export async function generateDailyArticle(): Promise<GeneratedArticle> {
-  const recentArticles = db.getRecentArticles(30);
-  const snippets = db.getSnippets(5);
+export async function generateArticle(type: 'daily' | 'weekly' = 'daily'): Promise<GeneratedArticle> {
+  const limit = type === 'weekly' ? 100 : 30;
+  const recentArticles = db.getRecentArticles(limit);
+  const snippets = db.getSnippets(type === 'weekly' ? 20 : 5);
   const systemPrompt = getSystemPrompt();
 
   const context = recentArticles
-    .slice(0, 15)
+    .slice(0, type === 'weekly' ? 50 : 15)
     .map((a) => `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 300)}`)
     .join("\n");
 
@@ -41,7 +42,7 @@ export async function generateDailyArticle(): Promise<GeneratedArticle> {
 Today is ${today}. The period of this report is from ${weekRange}. Write in Brazilian Portuguese.
 Always respond with valid JSON only.`;
 
-  const userPrompt = `Based on these recent articles and developments:
+  const userPromptDaily = `Based on these recent articles and developments:
 
 ${context}${snippetContext}
 
@@ -58,7 +59,30 @@ Return JSON:
   "content": "Full markdown article in pt-BR (800-1200 words, include code examples where relevant)"
 }`;
 
-  log.info("Generating daily article...");
+  const userPromptWeekly = `Based on the following content from the last 7 days:
+
+${context}${snippetContext}
+
+Write a comprehensive WEEKLY SUMMARY for developers. 
+The summary should:
+1. Identify the 3 most significant trends of the week.
+2. Provide a deep dive into the most technical advancement.
+3. Summarize the best code patterns or tools discovered.
+4. Conclude with a "What to watch next week" section.
+
+Return JSON:
+{
+  "title": "Weekly Report: [Short Catchy Title] (Period ${weekRange})",
+  "slug": "weekly-report-${today}",
+  "summary": "Brief overview of the week's tech landscape in pt-BR",
+  "tags": ["weekly", "summary", "trends"],
+  "sources": ["url1", "url2", "..."],
+  "content": "Full markdown report in pt-BR (1500-2000 words, well structured with headings)"
+}`;
+
+  const userPrompt = type === 'weekly' ? userPromptWeekly : userPromptDaily;
+
+  log.info(`Generating ${type} article...`);
   const text = await ask(userPrompt, fullSystemPrompt);
 
   const jsonMatch = text.match(/\{[\s\S]*\}/);

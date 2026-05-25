@@ -1,6 +1,6 @@
 import cron from "node-cron";
 import { runImprovementCycle } from "./agent/improver.js";
-import { generateDailyArticle } from "./agent/writer.js";
+import { generateArticle } from "./agent/writer.js";
 import { config } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
 import { notifyNewArticle } from "./notifier/telegram.js";
@@ -14,10 +14,10 @@ async function learnCycle() {
   log.info("=== Learn cycle done ===");
 }
 
-async function articleCycle() {
-  log.info("=== Article cycle start ===");
+async function articleCycle(type: 'daily' | 'weekly' = 'daily') {
+  log.info(`=== Article cycle start (${type}) ===`);
   try {
-    const article = await generateDailyArticle();
+    const article = await generateArticle(type);
     const url = await publishArticle(article);
     await notifyNewArticle(article.title, url, article.summary, article.sources);
     log.info(`=== Article published: ${url} ===`);
@@ -27,6 +27,27 @@ async function articleCycle() {
 }
 
 async function main() {
+  const runMode = process.env.RUN_MODE || 'DAEMON';
+
+  if (runMode === 'CRAWL') {
+    log.info("Running in CRAWL mode");
+    await learnCycle();
+    process.exit(0);
+  }
+
+  if (runMode === 'DAILY') {
+    log.info("Running in DAILY mode");
+    await articleCycle('daily');
+    process.exit(0);
+  }
+
+  if (runMode === 'WEEKLY') {
+    log.info("Running in WEEKLY mode");
+    await articleCycle('weekly');
+    process.exit(0);
+  }
+
+  // Default DAEMON mode
   log.info(
     `Evo Agent starting (learn every ${config.crawlIntervalMinutes}min)`,
   );
@@ -42,7 +63,7 @@ async function main() {
 
   // Schedule daily article
   cron.schedule(config.articleCron, () => {
-    articleCycle().catch((e) => log.error(`Article cycle error: ${e.message}`));
+    articleCycle('daily').catch((e) => log.error(`Article cycle error: ${e.message}`));
   });
 
   log.info(`Scheduled: learn=${learnInterval}, article=${config.articleCron}`);

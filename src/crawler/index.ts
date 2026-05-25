@@ -1,7 +1,11 @@
 import axios from "axios";
 import Parser from "rss-parser";
+import { chromium } from "playwright-extra";
+import stealth from "puppeteer-extra-plugin-stealth";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
+
+chromium.use(stealth());
 
 const parser = new Parser({
   timeout: 10000,
@@ -27,7 +31,8 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Anthropic News",
     url: "https://www.anthropic.com/news/rss",
     tags: ["anthropic", "claude", "ai"],
-  },  {
+  },
+  {
     name: "OpenAI Blog",
     url: "https://openai.com/blog/rss.xml",
     tags: ["openai", "ai"],
@@ -79,14 +84,41 @@ function getDynamicSources(): FeedSource[] {
   }
 }
 
+async function fetchWithPlaywright(url: string): Promise<string> {
+  log.info(`Using Playwright stealth to fetch: ${url}`);
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+  await page.goto(url, { waitUntil: "domcontentloaded" });
+  const content = await page.content();
+  await browser.close();
+  // Playwright returns HTML wrapping the XML. We need to extract the inner text of the pre/code or body.
+  const xmlMatch = content.match(/<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i);
+  return xmlMatch ? xmlMatch[0] : content;
+}
+
 export async function crawlAll(): Promise<number> {
   const sources = [...DEFAULT_SOURCES, ...getDynamicSources()].filter(s => s && s.url && s.name);
   let newCount = 0;
 
   for (const source of sources) {
     try {
-      const feed = await parser.parseURL(source.url);
-      for (const item of feed.items.slice(0, 10)) {
+      let feedData;
+      try {
+        // Try standard parser first
+        feedData = await parser.parseURL(source.url);
+      } catch (err: any) {
+        if (err.message && (err.message.includes("403") || err.message.includes("429"))) {
+          log.warn(`Standard fetch failed with ${err.message}. Attempting Playwright fallback for ${source.name}...`);
+          const rawXml = await fetchWithPlaywright(source.url);
+          feedData = await parser.parseString(rawXml);
+        } else {
+          throw err;
+        }
+      }
+
+      if (!feedData || !feedData.items) continue;
+
+      for (const item of feedData.items.slice(0, 10)) {
         if (!item.link || !item.title) continue;
         if (db.urlExists(item.link)) continue;
         db.saveArticle({
