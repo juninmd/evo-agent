@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
+    "smoke:reddit-comments": "tsx src/crawler/reddit-smoke.ts",
     "build": "tsc",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/"

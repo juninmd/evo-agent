@@ -14,12 +14,17 @@ async function learnCycle() {
   log.info("=== Learn cycle done ===");
 }
 
-async function articleCycle(type: 'daily' | 'weekly' = 'daily') {
+async function articleCycle(type: "daily" | "weekly" = "daily") {
   log.info(`=== Article cycle start (${type}) ===`);
   try {
     const article = await generateArticle(type);
     const url = await publishArticle(article);
-    await notifyNewArticle(article.title, url, article.summary, article.sources);
+    await notifyNewArticle(
+      article.title,
+      url,
+      article.summary,
+      article.sources,
+    );
     log.info(`=== Article published: ${url} ===`);
   } catch (err) {
     log.error(`Article cycle failed: ${(err as Error).message}`);
@@ -27,23 +32,23 @@ async function articleCycle(type: 'daily' | 'weekly' = 'daily') {
 }
 
 async function main() {
-  const runMode = process.env.RUN_MODE || 'DAEMON';
+  const runMode = process.env.RUN_MODE || "DAEMON";
 
-  if (runMode === 'CRAWL') {
+  if (runMode === "CRAWL") {
     log.info("Running in CRAWL mode");
     await learnCycle();
     process.exit(0);
   }
 
-  if (runMode === 'DAILY') {
+  if (runMode === "DAILY") {
     log.info("Running in DAILY mode");
-    await articleCycle('daily');
+    await articleCycle("daily");
     process.exit(0);
   }
 
-  if (runMode === 'WEEKLY') {
+  if (runMode === "WEEKLY") {
     log.info("Running in WEEKLY mode");
-    await articleCycle('weekly');
+    await articleCycle("weekly");
     process.exit(0);
   }
 
@@ -63,7 +68,9 @@ async function main() {
 
   // Schedule daily article
   cron.schedule(config.articleCron, () => {
-    articleCycle('daily').catch((e) => log.error(`Article cycle error: ${e.message}`));
+    articleCycle("daily").catch((e) =>
+      log.error(`Article cycle error: ${e.message}`),
+    );
   });
 
   log.info(`Scheduled: learn=${learnInterval}, article=${config.articleCron}`);

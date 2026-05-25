@@ -35,5 +35,5 @@ export const config = {
   },
   crawlIntervalMinutes: Number(process.env.CRAWL_INTERVAL_MINUTES ?? "40"),
   articleCron: process.env.ARTICLE_CRON ?? "0 8 * * *",
-  dbPath: join(process.cwd(), "data", "knowledge.db"),
+  dbPath: process.env.DB_PATH ?? join(process.cwd(), "data", "knowledge.db"),
 } as const;

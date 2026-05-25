@@ -13,15 +13,20 @@ export interface GeneratedArticle {
   sources: string[];
 }
 
-export async function generateArticle(type: 'daily' | 'weekly' = 'daily'): Promise<GeneratedArticle> {
-  const limit = type === 'weekly' ? 100 : 30;
+export async function generateArticle(
+  type: "daily" | "weekly" = "daily",
+): Promise<GeneratedArticle> {
+  const limit = type === "weekly" ? 100 : 30;
   const recentArticles = db.getRecentArticles(limit);
-  const snippets = db.getSnippets(type === 'weekly' ? 20 : 5);
+  const snippets = db.getSnippets(type === "weekly" ? 20 : 5);
   const systemPrompt = getSystemPrompt();
 
   const context = recentArticles
-    .slice(0, type === 'weekly' ? 50 : 15)
-    .map((a) => `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 300)}`)
+    .slice(0, type === "weekly" ? 50 : 15)
+    .map(
+      (a) =>
+        `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 300)}`,
+    )
     .join("\n");
 
   const snippetContext =
@@ -33,8 +38,12 @@ export async function generateArticle(type: 'daily' | 'weekly' = 'daily'): Promi
   const today = todayDate.toISOString().split("T")[0];
 
   // Calculate week range (Sunday to Saturday)
-  const firstDay = new Date(todayDate.setDate(todayDate.getDate() - todayDate.getDay()));
-  const lastDay = new Date(todayDate.setDate(todayDate.getDate() - todayDate.getDay() + 6));
+  const firstDay = new Date(
+    todayDate.setDate(todayDate.getDate() - todayDate.getDay()),
+  );
+  const lastDay = new Date(
+    todayDate.setDate(todayDate.getDate() - todayDate.getDay() + 6),
+  );
   const weekRange = `${firstDay.toISOString().split("T")[0]} até ${lastDay.toISOString().split("T")[0]}`;
 
   const fullSystemPrompt = `${systemPrompt}
@@ -81,7 +90,7 @@ Return JSON:
   "content": "Full markdown report in pt-BR (1500-2000 words, well structured with headings)"
 }`;
 
-  const userPrompt = type === 'weekly' ? userPromptWeekly : userPromptDaily;
+  const userPrompt = type === "weekly" ? userPromptWeekly : userPromptDaily;
 
   log.info(`Generating ${type} article...`);
   const text = await ask(userPrompt, fullSystemPrompt);
