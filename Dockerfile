@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev
 # Install opencode CLI (needed by @opencode-ai/sdk to start the server)
-RUN npm install -g opencode-ai@latest --ignore-scripts
+RUN npm install -g opencode-ai@latest
 # Install Playwright browsers
 RUN npx playwright install chromium
 COPY --from=builder /app/dist ./dist

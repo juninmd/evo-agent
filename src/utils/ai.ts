@@ -8,7 +8,7 @@ let _client: OcClient | null = null;
 
 async function getClient(): Promise<OcClient> {
   if (!_client) {
-    const { client } = await createOpencode();
+    const { client } = await createOpencode({ timeout: 60000 });
     _client = client;
     log.info("OpenCode server started");
   }
