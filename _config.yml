@@ -1,0 +1,5 @@
+title: Evo Agent
+description: Artigos e relatorios tecnicos gerados por um agente auto-aprimorante.
+github_owner: juninmd
+github_repo: evo-agent
+markdown: kramdown
