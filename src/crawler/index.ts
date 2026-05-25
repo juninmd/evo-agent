@@ -422,7 +422,8 @@ export async function crawlAll(): Promise<number> {
 
   for (const keyword of keywords) {
     try {
-      const query = `(site:reddit.com OR site:x.com) "${keyword}"`;
+      const cleanKeyword = keyword.slice(0, 60).trim();
+      const query = `(site:reddit.com OR site:x.com) "${cleanKeyword}"`;
       const searxngUrl = `${config.searxngUrl}/search?q=${encodeURIComponent(query)}&format=json`;
       const response = await axios.get(searxngUrl, { timeout: 5000 });
       const results = response.data?.results ?? [];
@@ -430,10 +431,10 @@ export async function crawlAll(): Promise<number> {
         if (!result.url || !result.title) continue;
         if (db.urlExists(result.url)) continue;
         const sourceName = result.url.includes("reddit.com")
-          ? `Reddit (${keyword})`
+          ? `Reddit (${cleanKeyword})`
           : result.url.includes("x.com")
-            ? `X/Twitter (${keyword})`
-            : `Web Search (${keyword})`;
+            ? `X/Twitter (${cleanKeyword})`
+            : `Web Search (${cleanKeyword})`;
         db.saveArticle({
           title: result.title,
           source: sourceName,
@@ -444,8 +445,8 @@ export async function crawlAll(): Promise<number> {
         newCount++;
       }
     } catch (err) {
-      log.info(
-        `SearXNG crawler skipped or failed for '${keyword}': ${(err as Error).message}`,
+      log.warn(
+        `SearXNG failed for '${keyword.slice(0, 40)}': ${(err as Error).message}`,
       );
     }
   }

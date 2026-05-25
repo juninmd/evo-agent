@@ -70,8 +70,8 @@ Analyze what's trending and important. Return JSON with:
   "reasoning": "short explanation of changes"
 }
 
+CRITICAL: updated_keywords must be short search-engine-friendly phrases (max 4 words each, max 60 characters each). Examples: "deepseek v4 latency", "token cost tracking", "agent harness MCP". Do NOT use full sentences or descriptions.
 The improved_system_prompt should incorporate lessons from the articles.
-The updated_keywords should reflect trending topics.
 code_snippet should be a useful TypeScript pattern learned from the content, or null.`;
 
   const text = await ask(userPrompt, systemPrompt);
@@ -92,8 +92,13 @@ code_snippet should be a useful TypeScript pattern learned from the content, or 
       reasoning: string;
     };
 
+    const keywords = result.updated_keywords
+      .map((k) => k.slice(0, 60).trim())
+      .filter((k) => k.length > 0 && k.split(" ").length <= 5)
+      .slice(0, 10);
+
     db.setState("system_prompt", result.improved_system_prompt);
-    db.setState("search_keywords", JSON.stringify(result.updated_keywords));
+    db.setState("search_keywords", JSON.stringify(keywords));
     if (result.extra_sources?.length) {
       db.setState("extra_sources", JSON.stringify(result.extra_sources));
     }
