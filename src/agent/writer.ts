@@ -40,7 +40,8 @@ export async function generateArticle(type: 'daily' | 'weekly' = 'daily'): Promi
   const fullSystemPrompt = `${systemPrompt}
 
 Today is ${today}. The period of this report is from ${weekRange}. Write in Brazilian Portuguese.
-Always respond with valid JSON only.`;
+Always respond with valid JSON only.
+CRITICAL: Ensure the JSON is perfectly formatted. Escape all quotes (\\"), newlines (\\n), and control characters inside the "content" field.`;
 
   const userPromptDaily = `Based on these recent articles and developments:
 
