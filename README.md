@@ -1,93 +1,135 @@
 # evo-agent
 
-Self-improving AI developer agent in TypeScript. It crawls AI/developer sources, learns from them, writes Portuguese technical articles, and publishes them to GitHub Pages.
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
+[![Node](https://img.shields.io/badge/Node-24-green)](https://nodejs.org/)
+[![Biome](https://img.shields.io/badge/Lint-Biome-60a5fa)](https://biomejs.dev/)
 
-## What It Does
+Self-improving AI publishing agent. Crawls AI/developer sources, learns from trends, and generates pt-BR technical articles published to GitHub Pages.
 
-- Crawls RSS feeds, Google News keyword searches, and optional community signals.
-- Stores articles, snippets, state, and publish history in SQLite.
-- Improves its own writing context with source trends and learned TypeScript snippets.
-- Generates daily articles and weekly reports in pt-BR.
-- Publishes Markdown to the `gh-pages` branch with a readable light/dark article site.
-- Sends Telegram notifications after publishing.
+---
 
-## Stack
+## Architecture
 
-- Node 24, TypeScript 5, ESM
-- SQLite via `better-sqlite3`
-- OpenCode SDK for article generation
-- `node-cron` for scheduling
-- `@octokit/rest` for GitHub Pages publishing
-- `rss-parser` and `axios` for source ingestion
+```mermaid
+flowchart TD
+    subgraph Crawler
+        RSS[RSS Feeds]
+        GN[Google News]
+        SX[SearXNG]
+        RC[Reddit Community Signals]
+    end
 
-## Main Commands
+    Crawler -->|articles, signals| SQLite[(SQLite)]
+    SQLite -->|context| Improver[Agent Improver]
+    Improver -->|system prompt, keywords| SQLite
+    SQLite -->|recent articles, snippets| Writer[Article Writer]
+    Writer -->|markdown content| Publisher[GitHub Pages Publisher]
+    Publisher -->|Jekyll assets, markdown| GH[gh-pages branch]
+    Publisher -->|published URL| Notifier[Telegram Notifier]
+```
+
+## Features
+
+- **Multi-source crawling**: 13 default RSS feeds + Google News keyword search + SearXNG for Reddit/X.com + Reddit community signal analysis
+- **Self-improvement loop**: System prompt and search keywords evolve from ingested content
+- **Article generation**: Daily articles (800-1200 words) and weekly reports (1500-2000 words) in pt-BR via LLM
+- **GitHub Pages publishing**: Auto-generated Jekyll site with light/dark theme toggle, year/month archive, and Markdown downloads
+- **Telegram notifications**: Instant alerts with article links after each publish
+- **Playwright stealth fallback**: Automatic browser-based fetch when RSS sources return 403/429
+
+## Quick Start
 
 ```bash
+git clone git@github.com:juninmd/evo-agent.git
+cd evo-agent
+cp .env.example .env
+# Edit .env with your credentials
+npm install
 npm run build
-npm run lint
-npm run smoke:reddit-comments
 ```
 
-`npm run smoke:reddit-comments` uses an isolated database by default: `data/reddit-comments-test.db`.
+## Environment Variables
 
-## Runtime Flow
+| Variable | Required | Default | Description |
+|---|---|---|---|
+| `OPENCODE_ZEN_API_KEY` | Yes | — | OpenCode Zen API key |
+| `OPENCODE_PROVIDER` | No | `opencode` | LLM provider ID |
+| `OPENCODE_MODEL` | No | `opencode/deepseek-v4-flash-free` | Model in `provider/model` format |
+| `TELEGRAM_BOT_TOKEN` | Yes | — | Telegram Bot API token |
+| `TELEGRAM_CHAT_ID` | Yes | — | Target Telegram chat/group ID |
+| `GITHUB_TOKEN` | Yes | — | GitHub PAT with repo write access |
+| `GITHUB_OWNER` | Yes | — | GitHub username or org |
+| `GITHUB_REPO` | Yes | — | Repository name for Pages |
+| `GITHUB_BRANCH` | No | `gh-pages` | Target branch for published content |
+| `CRAWL_INTERVAL_MINUTES` | No | `40` | Learn cycle frequency in daemon mode |
+| `ARTICLE_CRON` | No | `0 8 * * *` | Daily article cron expression |
+| `SEARXNG_URL` | No | `http://searxng.searxng.svc.cluster.local` | SearXNG instance URL |
+| `LOG_LEVEL` | No | `info` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
+| `DB_PATH` | No | `data/knowledge.db` | SQLite database path |
 
-1. `crawlAll()` collects source articles and dynamic search results.
-2. `runImprovementCycle()` updates agent state and learned snippets.
-3. `generateDailyArticle()` or `generateWeeklyReport()` creates Markdown content.
-4. `publishArticle()` or `publishWeeklyReport()` writes Markdown and site files to `gh-pages`.
-5. Telegram notifier sends the published URL.
+## Run Modes
 
-## GitHub Pages
+Set `RUN_MODE` env var to control execution:
 
-Published content uses generated Jekyll assets:
+| Mode | Behavior |
+|---|---|
+| `DAEMON` (default) | Runs learn cycle immediately, then schedules crawling + daily article + weekly report via cron |
+| `CRAWL` | Single crawl + improve cycle, then exits |
+| `DAILY` | Generates and publishes one daily article, then exits |
+| `WEEKLY` | Generates and publishes one weekly article, then exits |
 
-- `_layouts/default.html`
-- `_layouts/home.html`
-- `_layouts/article.html`
-- `assets/site.css`
-- `index.md`
-- `README.md`
+## Commands
 
-The article frontend supports:
+```bash
+npm run build                  # TypeScript compilation
+npm run lint                   # Biome static analysis
+npm run lint:fix               # Auto-fix lint issues
+npm run smoke:reddit-comments  # Test Reddit signal crawler with isolated DB
+npm run dev                    # Watch mode with tsx
+npm start                      # Run compiled output
+```
 
-- light and dark themes with a persisted toggle
-- year/month article grouping
-- report and article cards
-- readable editorial typography
-- embedded images/videos
+## Project Structure
+
+```
+src/
+  index.ts              # Entry point, cron scheduling, run modes
+  config.ts             # Env loading, validation, frozen config
+  crawler/
+    index.ts            # RSS, Google News, SearXNG, Reddit signal crawlers
+    reddit-smoke.ts     # Standalone Reddit community signal smoke test
+  knowledge/
+    store.ts            # SQLite persistence (articles, snippets, state, publish log)
+  agent/
+    improver.ts         # Self-improvement: updates prompt and keywords from recent sources
+    writer.ts           # LLM-powered article and weekly report generation
+  publisher/
+    github.ts           # GitHub Pages: Jekyll scaffold, CSS, index builder, API uploads
+  notifier/
+    telegram.ts         # Telegram Bot API notifications
+  utils/
+    ai.ts               # OpenCode SDK wrapper with session management
+    logger.ts           # Timestamped log levels via console
+```
+
+## Published Site
+
+Articles are available at `https://<GITHUB_OWNER>.github.io/<GITHUB_REPO>/` with:
+
+- Light and dark theme toggle (persisted in `localStorage`)
+- Article archive grouped by year and month
+- Weekly reports section
 - Markdown download button per article
+- Responsive typography (Source Serif 4 body, IBM Plex Mono code, IBM Plex Sans UI)
 
-## Environment
+## Deployment
 
-See `.env.example`.
+Docker image published at `ghcr.io/juninmd/evo-agent:latest`. Kubernetes manifests live in a separate `app-charts/evo-agent/` repository. Secrets are injected via environment — never commit `.env` or credentials to this repository.
 
-Required values:
+## Security
 
-```bash
-OPENCODE_API_KEY=...
-TELEGRAM_BOT_TOKEN=...
-TELEGRAM_CHAT_ID=...
-GITHUB_TOKEN=...
-GITHUB_OWNER=...
-GITHUB_REPO=...
-```
-
-Optional:
-
-```bash
-GITHUB_BRANCH=gh-pages
-CRAWL_INTERVAL_MINUTES=40
-ARTICLE_CRON=0 8 * * *
-DB_PATH=data/knowledge.db
-```
-
-## Deployment Notes
-
-The Docker image is expected at:
-
-```text
-ghcr.io/juninmd/evo-agent:latest
-```
-
-Kubernetes manifests live outside this repo in `app-charts/evo-agent/`. Do not put secrets in this repository.
+- `.env` excluded from version control
+- Tokens never logged or exposed
+- Browser sandbox enabled (no `--disable-web-security`)
+- Signal handlers close SQLite database gracefully on shutdown
+- Article content wrapped with `{% raw %}` to prevent Jekyll Liquid injection
