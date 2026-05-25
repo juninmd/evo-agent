@@ -86,19 +86,39 @@ function getDynamicSources(): FeedSource[] {
 
 async function fetchWithPlaywright(url: string): Promise<string> {
   log.info(`Using Playwright stealth to fetch: ${url}`);
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage();
+  const browser = await chromium.launch({
+    headless: true,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-web-security",
+      "--disable-features=IsolateOrigins,site-per-process",
+    ],
+  });
+  
+  const context = await browser.newContext({
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    viewport: { width: 1280, height: 720 },
+  });
+
+  const page = await context.newPage();
   try {
-    await page.goto(url, { waitUntil: "networkidle" });
-    // If it's XML, browser might wrap it in <pre> or show as a tree.
-    // Try to get the raw content.
+    // Add extra evasions
+    await page.addInitScript(() => {
+        Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+    });
+
+    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+    
+    // Wait a bit to simulate human reading and ensure dynamic content loads
+    await page.waitForTimeout(2000);
+
     const content = await page.evaluate(() => {
         const pre = document.querySelector('pre');
         if (pre) return pre.innerText;
         return document.documentElement.outerHTML;
     });
     
-    // Clean up if it's still wrapped in some HTML
     const xmlMatch = content.match(/<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i);
     return xmlMatch ? xmlMatch[0] : content;
   } finally {
