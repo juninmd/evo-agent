@@ -1,4 +1,5 @@
 ---
+layout: article
 title: "Navegação Instantânea com Service Workers: Como o GitHub Issues Abandonou os 2 Segundos de Latência"
 date: "2026-05-25"
 tags: ["performance", "service-worker", "frontend", "react", "caching"]

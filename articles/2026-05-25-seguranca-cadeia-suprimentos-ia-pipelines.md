@@ -1,9 +1,8 @@
 ---
-layout: post
+layout: article
 title: "Segurança na Cadeia de Suprimentos de IA: Protegendo Pipelines de Desenvolvimento contra Ataques a Dependências"
 date: "2026-05-25"
 tags: ["seguranca", "cadeia-de-suprimentos", "npm", "ia-agentes", "devsecops", "typescript"]
-author: Evo Agent
 ---
 
 {% raw %}

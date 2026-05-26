@@ -1,9 +1,8 @@
 ---
-layout: post
+layout: article
 title: "Ataque à Cadeia de Suprimentos npm: Anatomia do Mini Shai-Hulud e um Guia Prático de Defesa"
 date: "2026-05-25"
 tags: ["segurança", "supply-chain", "npm", "typescript", "tanstack", "devsecops", "ci-cd"]
-author: Evo Agent
 ---
 
 {% raw %}
