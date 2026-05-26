@@ -49,11 +49,11 @@ function escapeYaml(value: string): string {
 
 function buildMarkdown(article: GeneratedArticle): string {
   return `---
-layout: post
+layout: article
 title: "${escapeYaml(article.title)}"
 date: "${article.date}"
 tags: [${article.tags.map((t) => `"${escapeYaml(t)}"`).join(", ")}]
-author: Evo Agent
+summary: "${escapeYaml(article.summary)}"
 ---
 
 {% raw %}
@@ -127,7 +127,7 @@ function buildIndex(articles: PublishedItem[], weeklyReports: PublishedItem[]) {
     .join("\n");
 
   return `---
-layout: default
+layout: home
 title: Evo Agent
 ---
 
@@ -162,156 +162,304 @@ title: Evo Agent
 }
 
 export function buildDefaultLayout() {
-  // kept for backward compatibility
-  return "";
+  return `<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title }} | Evo Agent</title>
+    <meta name="description" content="{{ page.summary | default: site.description }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=3' | relative_url }}">
+    <script>
+      const savedTheme = localStorage.getItem("evo-agent-theme");
+      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="{{ '/' | relative_url }}">Evo Agent</a>
+      <nav aria-label="Principal">
+        <a href="{{ '/' | relative_url }}#arquivo">Arquivo</a>
+        <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
+        <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>Claro</button>
+      </nav>
+    </header>
+    <main>
+      {{ content }}
+    </main>
+    <script>
+      const themeButton = document.querySelector("[data-theme-toggle]");
+      const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem("evo-agent-theme", theme);
+        if (themeButton) themeButton.textContent = theme === "dark" ? "Claro" : "Escuro";
+      };
+      setTheme(document.documentElement.dataset.theme || "dark");
+      themeButton?.addEventListener("click", () => {
+        setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+    </script>
+    <script>
+      hljs.configure({ cssSelector: "pre code" });
+      document.querySelectorAll("pre code").forEach(function(block) {
+        block.textContent = block.textContent;
+      });
+      hljs.highlightAll();
+      document.querySelectorAll("div[class*=language-]").forEach(function(div) {
+        var match = div.className.match(/language-(\w+)/);
+        if (match && match[1] !== "plaintext") {
+          var label = document.createElement("span");
+          label.className = "language-label";
+          label.textContent = match[1];
+          var pre = div.querySelector("pre");
+          if (pre) pre.parentNode.insertBefore(label, pre);
+        }
+      });
+      document.querySelectorAll("pre").forEach(function(pre) {
+        var btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "Copiar";
+        btn.addEventListener("click", function() {
+          var code = pre.querySelector("code");
+          var text = code ? code.innerText : pre.innerText;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = "Copiado!";
+            btn.classList.add("copied");
+            setTimeout(function() {
+              btn.textContent = "Copiar";
+              btn.classList.remove("copied");
+            }, 1400);
+          }).catch(function() {});
+        });
+        pre.appendChild(btn);
+      });
+    </script>
+  </body>
+</html>`;
 }
 
 export function buildArticleLayout() {
-  // kept for backward compatibility
-  return "";
+  return `<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page.title }} | Evo Agent</title>
+    <meta name="description" content="{{ page.summary | default: site.description }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=3' | relative_url }}">
+    <script>
+      const savedTheme = localStorage.getItem("evo-agent-theme");
+      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="{{ '/' | relative_url }}">Evo Agent</a>
+      <nav aria-label="Principal">
+        <a href="{{ '/' | relative_url }}#arquivo">Arquivo</a>
+        <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
+        <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
+        <button class="theme-toggle" type="button" data-theme-toggle>Claro</button>
+      </nav>
+    </header>
+    <main>
+      <article class="article-shell">
+        <header class="article-hero">
+          <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}</p>
+          <h1>{{ page.title }}</h1>
+          {% if page.summary %}<p class="article-summary">{{ page.summary }}</p>{% endif %}
+          {% if page.tags %}
+          <div class="chips">
+            {% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}
+          </div>
+          {% endif %}
+          <a class="download-md" href="https://raw.githubusercontent.com/{{ site.github_owner }}/{{ site.github_repo }}/{{ site.github_branch | default: 'gh-pages' }}/{{ page.path }}" download>Baixar Markdown</a>
+        </header>
+        <div class="article-content">
+          {{ content }}
+        </div>
+      </article>
+    </main>
+    <script>
+      const themeButton = document.querySelector("[data-theme-toggle]");
+      const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+        localStorage.setItem("evo-agent-theme", theme);
+        if (themeButton) themeButton.textContent = theme === "dark" ? "Claro" : "Escuro";
+      };
+      setTheme(document.documentElement.dataset.theme || "dark");
+      themeButton?.addEventListener("click", () => {
+        setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+    </script>
+    <script>
+      hljs.configure({ cssSelector: "pre code" });
+      document.querySelectorAll("pre code").forEach(function(block) {
+        block.textContent = block.textContent;
+      });
+      hljs.highlightAll();
+      document.querySelectorAll("div[class*=language-]").forEach(function(div) {
+        var match = div.className.match(/language-(\w+)/);
+        if (match && match[1] !== "plaintext") {
+          var label = document.createElement("span");
+          label.className = "language-label";
+          label.textContent = match[1];
+          var pre = div.querySelector("pre");
+          if (pre) pre.parentNode.insertBefore(label, pre);
+        }
+      });
+      document.querySelectorAll("pre").forEach(function(pre) {
+        var btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.textContent = "Copiar";
+        btn.addEventListener("click", function() {
+          var code = pre.querySelector("code");
+          var text = code ? code.innerText : pre.innerText;
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = "Copiado!";
+            btn.classList.add("copied");
+            setTimeout(function() {
+              btn.textContent = "Copiar";
+              btn.classList.remove("copied");
+            }, 1400);
+          }).catch(function() {});
+        });
+        pre.appendChild(btn);
+      });
+    </script>
+  </body>
+</html>`;
 }
 
 export function buildSiteCss() {
-  return `/* Index page custom vars */
-:root {
-  --card-bg: #ffffff;
-  --card-border: #d0d7de;
-  --hero-text: #1f2328;
-  --hero-muted: #656d76;
-  --hero-accent: #0969da;
-  --hero-hot: #9a6700;
-  --hero-line: #d0d7de;
-  --panel: #f6f8fa;
-}
-
-:root[data-theme="dark"] {
-  --card-bg: #111723;
-  --card-border: #293346;
-  --hero-text: #f4f0e8;
-  --hero-muted: #a9b0bd;
-  --hero-accent: #5eead4;
-  --hero-hot: #ffbf69;
-  --hero-line: #293346;
+  return `:root {
+  color-scheme: dark;
+  --bg: #080a0f;
   --panel: #111723;
+  --panel-2: #182232;
+  --text: #f4f0e8;
+  --muted: #a9b0bd;
+  --line: #293346;
+  --accent: #5eead4;
+  --hot: #ffbf69;
+  --code: #0d1117;
+  --max: 1120px;
 }
 
-/* ====== DARK MODE OVERRIDES FOR MINIMA ====== */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --panel: #f6f8fa;
+  --panel-2: #eaeef2;
+  --text: #1f2328;
+  --muted: #656d76;
+  --line: #d0d7de;
+  --accent: #0969da;
+  --hot: #9a6700;
+  --code: #f6f8fa;
+}
+
 :root[data-theme="dark"] {
   color-scheme: dark;
 }
 
-:root[data-theme="dark"] body {
-  background-color: #080a0f;
-  color: #f4f0e8;
+:root[data-theme="light"] body {
+  background: var(--bg);
 }
 
-:root[data-theme="dark"] a { color: #5eead4; }
-:root[data-theme="dark"] a:hover { color: #8bf4e5; }
-
-:root[data-theme="dark"] .site-header {
-  background-color: #111723;
-  border-top-color: #293346;
-  border-bottom-color: #293346;
+:root[data-theme="light"] .story-card {
+  background: var(--panel);
 }
 
-:root[data-theme="dark"] .site-title,
-:root[data-theme="dark"] .site-title:visited {
-  color: #5eead4;
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 34rem),
+    radial-gradient(circle at 85% 12%, color-mix(in srgb, var(--hot) 14%, transparent), transparent 28rem),
+    var(--bg);
+  color: var(--text);
+  font-family: "Source Serif 4", Georgia, Cambria, "Times New Roman", serif;
+  line-height: 1.7;
 }
 
-:root[data-theme="dark"] .site-nav .page-link {
-  color: #a9b0bd;
+a { color: inherit; }
+
+.site-header {
+  align-items: center;
+  backdrop-filter: blur(18px);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 18px clamp(18px, 4vw, 52px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-:root[data-theme="dark"] .site-nav .page-link:hover {
-  color: #f4f0e8;
+.brand {
+  color: var(--accent);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
-:root[data-theme="dark"] .site-nav .menu-icon svg path {
-  fill: #a9b0bd;
+nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 0.78rem;
+  text-transform: uppercase;
 }
 
-:root[data-theme="dark"] .site-nav .nav-trigger:checked + label + .trigger {
-  background-color: #111723;
-  border-color: #293346;
+nav a {
+  color: var(--muted);
+  text-decoration: none;
 }
 
-:root[data-theme="dark"] .post-title { color: #f4f0e8; }
-:root[data-theme="dark"] .post-meta { color: #a9b0bd; }
+nav a:hover { color: var(--text); }
 
-:root[data-theme="dark"] .post-content,
-:root[data-theme="dark"] .page-content { color: #f4f0e8; }
-
-:root[data-theme="dark"] .post-content h1,
-:root[data-theme="dark"] .post-content h2,
-:root[data-theme="dark"] .post-content h3,
-:root[data-theme="dark"] .post-content h4 { color: #f4f0e8; }
-
-:root[data-theme="dark"] .post-content h2 {
-  border-bottom: 1px solid #293346;
-  padding-bottom: 0.3em;
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  padding: 6px 11px;
+  text-transform: uppercase;
 }
 
-:root[data-theme="dark"] .post-content code {
-  background-color: #182232;
-  color: #5eead4;
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-:root[data-theme="dark"] .post-content pre {
-  background-color: #0d1117;
-  border: 1px solid #293346;
+main {
+  margin: 0 auto;
+  max-width: var(--max);
+  padding: clamp(28px, 6vw, 72px) clamp(18px, 4vw, 44px);
 }
-
-:root[data-theme="dark"] .post-content pre code {
-  background-color: transparent;
-  color: #f4f0e8;
-}
-
-:root[data-theme="dark"] .post-content blockquote {
-  border-left-color: #5eead4;
-  color: #a9b0bd;
-}
-
-:root[data-theme="dark"] .post-content hr {
-  border-color: #293346;
-}
-
-:root[data-theme="dark"] .post-content table th,
-:root[data-theme="dark"] .post-content table td {
-  border-color: #293346;
-}
-
-:root[data-theme="dark"] .post-content table th {
-  background-color: #182232;
-}
-
-:root[data-theme="dark"] .post-content table tr:nth-child(even) td {
-  background-color: #111723;
-}
-
-:root[data-theme="dark"] .site-footer {
-  background-color: #111723;
-  border-top-color: #293346;
-}
-
-:root[data-theme="dark"] .site-footer,
-:root[data-theme="dark"] .site-footer a,
-:root[data-theme="dark"] .site-footer .footer-heading {
-  color: #a9b0bd;
-}
-
-:root[data-theme="dark"] .site-footer a:hover {
-  color: #f4f0e8;
-}
-
-:root[data-theme="dark"] .wrapper hr {
-  border-color: #293346;
-}
-
-/* ====== INDEX PAGE CUSTOM STYLES ====== */
 
 .hero {
-  border-bottom: 1px solid var(--hero-line);
+  border-bottom: 1px solid var(--line);
   margin-bottom: 48px;
   padding: 52px 0 44px;
 }
@@ -320,7 +468,7 @@ export function buildSiteCss() {
 .section-title p,
 .story-meta,
 .chips {
-  color: var(--hero-muted);
+  color: var(--muted);
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
   font-size: 0.78rem;
   text-transform: uppercase;
@@ -334,7 +482,7 @@ export function buildSiteCss() {
 }
 
 .lede {
-  color: var(--hero-muted);
+  color: var(--muted);
   font-size: clamp(1.05rem, 2vw, 1.35rem);
   max-width: 720px;
 }
@@ -348,13 +496,13 @@ export function buildSiteCss() {
 
 .hero-stats span,
 .chips span {
-  border: 1px solid var(--hero-line);
+  border: 1px solid var(--line);
   border-radius: 999px;
-  color: var(--hero-muted);
+  color: var(--muted);
   padding: 7px 12px;
 }
 
-.hero-stats strong { color: var(--hero-accent); }
+.hero-stats strong { color: var(--accent); }
 
 .section-title {
   align-items: end;
@@ -377,15 +525,15 @@ export function buildSiteCss() {
 }
 
 .story-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: linear-gradient(160deg, color-mix(in srgb, var(--panel-2) 86%, transparent), color-mix(in srgb, var(--panel) 94%, transparent));
+  border: 1px solid var(--line);
   border-radius: 8px;
   padding: 22px;
   transition: border-color 160ms ease, transform 160ms ease;
 }
 
 .story-card:hover {
-  border-color: var(--hero-accent);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
   transform: translateY(-2px);
 }
 
@@ -402,10 +550,10 @@ export function buildSiteCss() {
 }
 
 .story-card h3 a { text-decoration: none; }
-.story-card h3 a:hover { color: var(--hero-accent); }
+.story-card h3 a:hover { color: var(--accent); }
 
 .story-card p {
-  color: var(--hero-muted);
+  color: var(--muted);
   margin: 0 0 16px;
 }
 
@@ -416,7 +564,7 @@ export function buildSiteCss() {
 }
 
 .month-group {
-  border-top: 1px solid var(--hero-line);
+  border-top: 1px solid var(--line);
   padding: 28px 0;
 }
 
@@ -430,68 +578,135 @@ export function buildSiteCss() {
 
 .month-heading span,
 .month-heading strong {
-  color: var(--hero-hot);
+  color: var(--hot);
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 
 .empty-state {
-  border: 1px dashed var(--hero-line);
-  color: var(--hero-muted);
+  border: 1px dashed var(--line);
+  color: var(--muted);
   padding: 24px;
 }
 
-/* ====== THEME TOGGLE ====== */
+.article-shell {
+  margin: 0 auto;
+  max-width: 820px;
+}
 
-.theme-toggle {
-  background: transparent;
-  border: 1px solid var(--hero-line);
+.article-hero {
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 34px;
+  padding-bottom: 28px;
+}
+
+.article-hero h1 {
+  font-size: clamp(2.2rem, 5vw, 4.8rem);
+  line-height: 1;
+  margin: 12px 0;
+}
+
+.article-summary {
+  color: var(--muted);
+  font-size: 1.2rem;
+}
+
+.download-md {
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
   border-radius: 999px;
-  color: var(--hero-text);
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 0.75rem;
-  margin-left: 12px;
-  padding: 4px 10px;
-  text-transform: uppercase;
-  vertical-align: middle;
-}
-
-.theme-toggle:hover {
-  border-color: var(--hero-accent);
-  color: var(--hero-accent);
-}
-
-/* ====== HEADING ANCHORS ====== */
-
-.heading-anchor {
-  color: var(--hero-accent);
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.85em;
-  margin-left: 6px;
-  opacity: 0;
+  color: var(--accent);
+  display: inline-flex;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 24px;
+  padding: 10px 15px;
   text-decoration: none;
-  transition: opacity 0.15s ease;
 }
 
-.post-content h2:hover .heading-anchor,
-.post-content h3:hover .heading-anchor,
-.post-content h4:hover .heading-anchor {
-  opacity: 1;
+.download-md:hover {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
-.heading-anchor:hover {
-  opacity: 1 !important;
+.article-content { font-size: 1.08rem; }
+
+.article-content > h1 { display: none; }
+
+.article-content h2 {
+  border-bottom: 1px solid var(--line);
+  font-size: 1.55rem;
+  padding-bottom: 0.3em;
 }
 
-/* ====== COPY BUTTON ====== */
+.article-content h3 { font-size: 1.2rem; }
+
+.article-content h2,
+.article-content h3 {
+  line-height: 1.15;
+  margin-top: 2.2em;
+}
+
+.article-content hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 36px 0;
+}
+
+.article-content p,
+.article-content li { color: color-mix(in srgb, var(--text) 84%, var(--muted)); }
+
+.article-content img {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: block;
+  height: auto;
+  margin: 28px auto;
+  max-height: 70vh;
+  max-width: 100%;
+}
+
+.article-content .highlight { margin: 28px 0; }
+
+.article-content pre {
+  background: var(--code);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 8%, transparent);
+  line-height: 1.6;
+  margin: 0;
+  overflow-x: auto;
+  padding: 22px;
+  position: relative;
+  tab-size: 2;
+  -moz-tab-size: 2;
+}
+
+.article-content pre code {
+  background: transparent;
+  border: 0;
+  color: color-mix(in srgb, var(--text) 94%, var(--accent));
+  display: block;
+  font-size: 0.92rem;
+  padding: 0;
+  white-space: pre;
+}
+
+.article-content blockquote {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  color: var(--muted);
+  margin: 28px 0 28px 0;
+  padding: 16px 18px;
+}
 
 .copy-btn {
   background: var(--panel);
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--line);
   border-radius: 6px;
-  color: var(--hero-muted);
+  color: var(--muted);
   cursor: pointer;
-  font-family: system-ui, sans-serif;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
   opacity: 0;
@@ -510,86 +725,101 @@ pre:hover .copy-btn,
 }
 
 .copy-btn:hover {
-  border-color: var(--hero-accent);
-  color: var(--hero-accent);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .copy-btn.copied {
-  border-color: var(--hero-accent);
-  color: var(--hero-accent);
+  border-color: var(--accent);
+  color: var(--accent);
   opacity: 1;
 }
 
-pre {
-  position: relative;
+.article-content table {
+  border-collapse: collapse;
+  border-radius: 8px;
+  display: block;
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 0.96rem;
+  margin: 28px 0;
+  overflow: hidden;
+  overflow-x: auto;
+  width: 100%;
 }
 
-.language-label {
-  background: var(--panel);
-  border: 1px solid var(--card-border);
-  border-radius: 0 0 6px 6px;
-  color: var(--hero-muted);
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.65rem;
-  padding: 2px 10px;
-  position: absolute;
-  right: 12px;
-  text-transform: uppercase;
-  top: 0;
+.article-content th,
+.article-content td {
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
 }
 
-/* ====== SYNTAX HIGHLIGHTING (dark theme) ====== */
+.article-content th {
+  background: color-mix(in srgb, var(--panel-2) 78%, var(--accent) 22%);
+  color: var(--text);
+  font-weight: 700;
+}
 
-:root[data-theme="dark"] .hljs,
-:root[data-theme="dark"] .highlight .nx { color: #f4f0e8; background: transparent; }
-:root[data-theme="dark"] .hljs-keyword,
-:root[data-theme="dark"] .hljs-selector-tag,
-:root[data-theme="dark"] .hljs-section,
-:root[data-theme="dark"] .hljs-title.class_,
-:root[data-theme="dark"] .highlight .kd,
-:root[data-theme="dark"] .highlight .kc,
-:root[data-theme="dark"] .highlight .kn { color: #5eead4; }
-:root[data-theme="dark"] .hljs-string,
-:root[data-theme="dark"] .hljs-selector-attr,
-:root[data-theme="dark"] .hljs-selector-pseudo,
-:root[data-theme="dark"] .hljs-addition,
-:root[data-theme="dark"] .highlight .s1,
-:root[data-theme="dark"] .highlight .s2,
-:root[data-theme="dark"] .highlight .sr { color: #ffbf69; }
-:root[data-theme="dark"] .hljs-comment,
-:root[data-theme="dark"] .hljs-quote,
-:root[data-theme="dark"] .highlight .c1,
-:root[data-theme="dark"] .highlight .cm { color: #a9b0bd; font-style: italic; }
-:root[data-theme="dark"] .hljs-title.function_,
-:root[data-theme="dark"] .hljs-title,
-:root[data-theme="dark"] .highlight .nf,
-:root[data-theme="dark"] .highlight .nc { color: #8bf4e5; }
-:root[data-theme="dark"] .hljs-built_in,
-:root[data-theme="dark"] .hljs-literal,
-:root[data-theme="dark"] .hljs-type,
-:root[data-theme="dark"] .hljs-params,
-:root[data-theme="dark"] .highlight .nb,
-:root[data-theme="dark"] .highlight .kt,
-:root[data-theme="dark"] .highlight .no { color: #ffbf69; }
-:root[data-theme="dark"] .hljs-number,
-:root[data-theme="dark"] .hljs-attr,
-:root[data-theme="dark"] .hljs-attribute,
-:root[data-theme="dark"] .highlight .mi,
-:root[data-theme="dark"] .highlight .mh,
-:root[data-theme="dark"] .highlight .mf { color: #5eead4; }
-:root[data-theme="dark"] .hljs-meta,
-:root[data-theme="dark"] .hljs-tag,
-:root[data-theme="dark"] .highlight .o,
-:root[data-theme="dark"] .highlight .p,
-:root[data-theme="dark"] .highlight .dl { color: #a9b0bd; }
-:root[data-theme="dark"] .hljs-deletion { color: #bf7a3a; }
-:root[data-theme="dark"] .highlight .err { color: #ffbf69; }
-:root[data-theme="dark"] .highlight .gh { color: #5eead4; font-weight: 700; }
-:root[data-theme="dark"] .highlight .gu { color: #5eead4; }
-:root[data-theme="dark"] .highlight .ge { font-style: italic; }
-:root[data-theme="dark"] .highlight .gs { font-weight: 700; }
+.article-content tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+}
+
+.article-content tr:hover td {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.hljs,
+.highlight .nx { color: var(--text); background: transparent; }
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-section,
+.hljs-title.class_,
+.highlight .kd,
+.highlight .kc,
+.highlight .kn { color: var(--accent); }
+.hljs-string,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-addition,
+.highlight .s1,
+.highlight .s2,
+.highlight .sr { color: color-mix(in srgb, var(--hot) 90%, var(--text)); }
+.hljs-comment,
+.hljs-quote,
+.highlight .c1,
+.highlight .cm { color: var(--muted); font-style: italic; }
+.hljs-title.function_,
+.hljs-title,
+.highlight .nf,
+.highlight .nc { color: color-mix(in srgb, var(--accent) 85%, var(--text)); }
+.hljs-built_in,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.highlight .nb,
+.highlight .kt,
+.highlight .no { color: var(--hot); }
+.hljs-number,
+.hljs-attr,
+.hljs-attribute,
+.highlight .mi,
+.highlight .mh,
+.highlight .mf { color: var(--accent); }
+.hljs-meta,
+.hljs-tag,
+.highlight .o,
+.highlight .p,
+.highlight .dl { color: var(--muted); }
+.hljs-deletion { color: color-mix(in srgb, var(--hot) 60%, var(--bg)); }
+.highlight .err { color: var(--hot); }
+.highlight .gh { color: var(--accent); font-weight: 700; }
+.highlight .gu { color: var(--accent); }
+.highlight .ge { font-style: italic; }
+.highlight .gs { font-weight: 700; }
 
 @media (max-width: 700px) {
+  .site-header,
   .section-title {
     align-items: flex-start;
     flex-direction: column;
@@ -601,133 +831,21 @@ pre {
 }`;
 }
 
-function buildHeadInclude() {
-  return `<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {%- seo -%}
-  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/site.css?v=3' | relative_url }}">
-  {%- feed_meta -%}
-  {%- if jekyll.environment == 'production' and site.google_analytics -%}
-    {%- include google-analytics.html -%}
-  {%- endif -%}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-  <script>
-    const savedTheme = localStorage.getItem("evo-agent-theme");
-    const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
-  </script>
-</head>`;
-}
-
-function buildFooterInclude() {
-  return `<footer class="site-footer h-card">
-  <data class="u-url" href="{{ "/" | relative_url }}"></data>
-  <div class="wrapper">
-    <div class="footer-col-wrapper">
-      <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li class="p-name">{{ site.title | escape }}</li>
-        </ul>
-      </div>
-      <div class="footer-col footer-col-3">
-        <p>{{- site.description | escape -}}</p>
-      </div>
-    </div>
-  </div>
-</footer>
-<script>
-  (function() {
-    var toggle = document.createElement("button");
-    toggle.className = "theme-toggle";
-    toggle.type = "button";
-    toggle.setAttribute("data-theme-toggle", "");
-    var nav = document.querySelector(".site-nav") || document.querySelector(".trigger");
-    if (nav) {
-      nav.parentNode.insertBefore(toggle, nav);
-    } else {
-      document.querySelector(".wrapper").appendChild(toggle);
-    }
-    var setTheme = function(theme) {
-      document.documentElement.dataset.theme = theme;
-      localStorage.setItem("evo-agent-theme", theme);
-      toggle.textContent = theme === "dark" ? "Claro" : "Escuro";
-    };
-    setTheme(document.documentElement.dataset.theme || "dark");
-    toggle.addEventListener("click", function() {
-      setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
-    });
-  })();
-</script>
-<script>
-  hljs.configure({ cssSelector: "pre code" });
-  document.querySelectorAll("pre code").forEach(function(block) {
-    block.textContent = block.textContent;
-  });
-  hljs.highlightAll();
-  document.querySelectorAll("div[class*=language-]").forEach(function(div) {
-    var match = div.className.match(/language-(\\w+)/);
-    if (match && match[1] !== "plaintext") {
-      var label = document.createElement("span");
-      label.className = "language-label";
-      label.textContent = match[1];
-      var pre = div.querySelector("pre");
-      if (pre) pre.parentNode.insertBefore(label, pre);
-    }
-  });
-  document.querySelectorAll("pre").forEach(function(pre) {
-    var btn = document.createElement("button");
-    btn.className = "copy-btn";
-    btn.textContent = "Copiar";
-    btn.addEventListener("click", function() {
-      var code = pre.querySelector("code");
-      var text = code ? code.innerText : pre.innerText;
-      navigator.clipboard.writeText(text).then(function() {
-        btn.textContent = "Copiado!";
-        btn.classList.add("copied");
-        setTimeout(function() {
-          btn.textContent = "Copiar";
-          btn.classList.remove("copied");
-        }, 1400);
-      }).catch(function() {});
-    });
-    pre.appendChild(btn);
-  });
-  document.querySelectorAll(".post-content h2[id], .post-content h3[id], .post-content h4[id]").forEach(function(h) {
-    var a = document.createElement("a");
-    a.className = "heading-anchor";
-    a.href = "#" + h.id;
-    a.setAttribute("aria-label", "Copiar link para " + h.textContent);
-    a.textContent = "#";
-    a.addEventListener("click", function(e) {
-      e.preventDefault();
-      navigator.clipboard.writeText(window.location.href.split("#")[0] + "#" + h.id).then(function() {
-        a.textContent = "Copiado!";
-        setTimeout(function() { a.textContent = "#"; }, 1400);
-      }).catch(function() {});
-    });
-    h.appendChild(a);
-  });
-</script>`;
-}
-
 function buildSiteFiles(owner: string, repo: string): SiteFile[] {
   return [
     {
       path: "_config.yml",
       content: `title: Evo Agent
 description: Artigos e relatorios tecnicos gerados por um agente auto-aprimorante.
-theme: minima
 github_owner: ${owner}
 github_repo: ${repo}
 github_branch: gh-pages
 markdown: kramdown
 `,
     },
-    { path: "_includes/head.html", content: buildHeadInclude() },
-    { path: "_includes/footer.html", content: buildFooterInclude() },
+    { path: "_layouts/default.html", content: buildDefaultLayout() },
+    { path: "_layouts/home.html", content: buildDefaultLayout() },
+    { path: "_layouts/article.html", content: buildArticleLayout() },
     { path: "assets/site.css", content: buildSiteCss() },
   ];
 }
