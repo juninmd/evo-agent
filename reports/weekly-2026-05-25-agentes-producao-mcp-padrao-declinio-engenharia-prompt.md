@@ -1,4 +1,5 @@
 ---
+layout: article
 title: "Relatório Semanal: Agentes em Produção, MCP como Padrão, e o Declínio da Engenharia de Prompt Tradicional"
 date: "2026-05-25"
 tags: ["weekly-report", "ai-agents", "llm", "mcp", "gemini-3.5", "agent-architecture"]
