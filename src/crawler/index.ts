@@ -97,8 +97,8 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["google", "ai"],
   },
   {
-    name: "Anthropic News",
-    url: "https://www.anthropic.com/news/rss",
+    name: "Anthropic News (Legacy)",
+    url: "https://rsshub.app/anthropic/news",
     tags: ["anthropic", "claude", "ai"],
   },
   {
@@ -168,12 +168,12 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
   {
     name: "Anthropic",
-    url: "https://www.anthropic.com/index.xml",
+    url: "https://rsshub.app/anthropic/news",
     tags: ['ai frontier', 'anthropic', 'ai'],
   },
   {
     name: "Mistral AI",
-    url: "https://mistral.ai/news/index.xml",
+    url: "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_mistral.xml",
     tags: ['ai frontier', 'mistralai', 'ai'],
   },
   {
@@ -193,7 +193,7 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
   {
     name: "Pinecone",
-    url: "https://pinecone.io/blog/rss.xml",
+    url: "https://rsshub.app/pinecone/blog",
     tags: ['dev tools', 'pinecone', 'ai'],
   },
 ];
