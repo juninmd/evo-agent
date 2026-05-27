@@ -166,6 +166,36 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://www.v2ex.com/feed/tab/tech.xml",
     tags: ["v2ex", "chinese", "ai", "developer"],
   },
+  {
+    name: "Anthropic",
+    url: "https://www.anthropic.com/index.xml",
+    tags: ['ai frontier', 'anthropic', 'ai'],
+  },
+  {
+    name: "Mistral AI",
+    url: "https://mistral.ai/news/index.xml",
+    tags: ['ai frontier', 'mistralai', 'ai'],
+  },
+  {
+    name: "Together AI",
+    url: "https://www.together.ai/blog/rss.xml",
+    tags: ['ai frontier', 'togetherai', 'ai'],
+  },
+  {
+    name: "Google Research",
+    url: "https://research.google/blog/rss/",
+    tags: ['ai frontier', 'googleresearch', 'ai'],
+  },
+  {
+    name: "Google DeepMind",
+    url: "https://deepmind.google/blog/rss.xml",
+    tags: ['ai frontier', 'googledeepmind', 'ai'],
+  },
+  {
+    name: "Pinecone",
+    url: "https://pinecone.io/blog/rss.xml",
+    tags: ['dev tools', 'pinecone', 'ai'],
+  },
 ];
 
 function getDynamicSources(): FeedSource[] {
