@@ -66,6 +66,30 @@ const REDDIT_COMMENTS_PER_POST = 20;
 const REDDIT_MIN_COMMENT_SCORE = 3;
 const REDDIT_MIN_COMMENT_LENGTH = 80;
 
+const V2EX_AI_KEYWORDS = [
+  "ai",
+  "agent",
+  "claude",
+  "codex",
+  "copilot",
+  "gpt",
+  "llm",
+  "mimo",
+  "模型",
+  "智能体",
+  "deepseek",
+  "gemini",
+  "opus",
+  "qwen",
+  "cursor",
+  "opencode",
+  "vibecoding",
+  "vibe coding",
+  "向量",
+  "脱敏",
+  "屎山",
+];
+
 const DEFAULT_SOURCES: FeedSource[] = [
   {
     name: "Google AI Blog",
@@ -137,6 +161,11 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://www.reddit.com/search/.rss?q=claude+code&sort=new",
     tags: ["reddit", "claude", "coding", "ai", "search"],
   },
+  {
+    name: "V2EX Tech",
+    url: "https://www.v2ex.com/feed/tab/tech.xml",
+    tags: ["v2ex", "chinese", "ai", "developer"],
+  },
 ];
 
 function getDynamicSources(): FeedSource[] {
@@ -147,6 +176,141 @@ function getDynamicSources(): FeedSource[] {
   } catch {
     return [];
   }
+}
+
+const GITHUB_TRENDING_AI_KEYWORDS = [
+  "ai",
+  "agent",
+  "claude",
+  "codex",
+  "copilot",
+  "gpt",
+  "llm",
+  "llm",
+  "model",
+  "ml",
+  "deepseek",
+  "gemini",
+  "opus",
+  "qwen",
+  "cursor",
+  "opencode",
+  "mcp",
+  "rag",
+  "embedding",
+  "transformer",
+  "diffusion",
+  "neural",
+  "inference",
+  "fine-tun",
+  "openai",
+  "anthropic",
+  "huggingface",
+  "langchain",
+  "ollama",
+  "vllm",
+  "whisper",
+  "stable-diffusion",
+  "text-to-speech",
+  "speech-to-text",
+  "computer-vision",
+  "nlp",
+  "chatbot",
+  "prompt",
+  "tokenizer",
+];
+
+async function crawlGitHubTrending(): Promise<number> {
+  let newCount = 0;
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
+  try {
+    const context = await browser.newContext({
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+      viewport: { width: 1280, height: 720 },
+    });
+    const page = await context.newPage();
+
+    for (const range of ["daily", "weekly"] as const) {
+      try {
+        await page.goto(`https://github.com/trending?since=${range}`, {
+          waitUntil: "networkidle",
+          timeout: 30000,
+        });
+
+        const repos = await page.evaluate(() => {
+          const articles = document.querySelectorAll("article.Box-row");
+          return Array.from(articles)
+            .slice(0, 25)
+            .map((article) => {
+              const link = article.querySelector("h2 a");
+              const desc = article.querySelector("p");
+              const starsEl = article.querySelector('a[href$="/stargazers"]');
+              const langEl = article.querySelector(
+                '[itemprop="programmingLanguage"]',
+              );
+              return {
+                name: link?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+                url: link
+                  ? `https://github.com${link.getAttribute("href")}`
+                  : "",
+                description: desc?.textContent?.trim() ?? "",
+                stars: starsEl?.textContent?.trim() ?? "",
+                language: langEl?.textContent?.trim() ?? "",
+              };
+            });
+        });
+
+        for (const repo of repos) {
+          if (!repo.url || !repo.name) continue;
+          if (db.urlExists(repo.url)) continue;
+
+          const combined = `${repo.name} ${repo.description}`.toLowerCase();
+          const isAiRelevant = GITHUB_TRENDING_AI_KEYWORDS.some((kw) =>
+            combined.includes(kw),
+          );
+          if (!isAiRelevant) continue;
+
+          const summary = [
+            repo.description,
+            repo.stars ? `⭐ ${repo.stars}` : "",
+            repo.language ? `Lang: ${repo.language}` : "",
+          ]
+            .filter(Boolean)
+            .join(" | ")
+            .slice(0, 500);
+
+          db.saveArticle({
+            title: repo.name,
+            source: `GitHub Trending (${range})`,
+            url: repo.url,
+            summary,
+            tags: JSON.stringify([
+              "github",
+              "trending",
+              "ai",
+              range,
+              repo.language?.toLowerCase() ?? "unknown",
+            ]),
+          });
+          newCount++;
+        }
+      } catch (err) {
+        log.warn(
+          `GitHub Trending (${range}) failed: ${(err as Error).message}`,
+        );
+      }
+    }
+  } finally {
+    await browser.close();
+  }
+
+  log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
+  return newCount;
 }
 
 async function fetchWithPlaywright(url: string): Promise<string> {
@@ -199,6 +363,11 @@ async function fetchWithPlaywright(url: string): Promise<string> {
 
 function normalizeText(value: string): string {
   return value.replace(/\s+/g, " ").trim();
+}
+
+function isV2exAiRelevant(title: string): boolean {
+  const lower = title.toLowerCase();
+  return V2EX_AI_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
 function isUsefulComment(comment: RedditComment): boolean {
@@ -392,6 +561,8 @@ export async function crawlAll(): Promise<number> {
       for (const item of feedData.items.slice(0, 10)) {
         if (!item.link || !item.title) continue;
         if (db.urlExists(item.link)) continue;
+        if (source.name.startsWith("V2EX") && !isV2exAiRelevant(item.title))
+          continue;
         db.saveArticle({
           title: item.title,
           source: source.name,
@@ -459,6 +630,12 @@ export async function crawlAll(): Promise<number> {
         `SearXNG failed for '${keyword.slice(0, 40)}': ${(err as Error).message}`,
       );
     }
+  }
+
+  try {
+    newCount += await crawlGitHubTrending();
+  } catch (err) {
+    log.warn(`GitHub Trending crawler failed: ${(err as Error).message}`);
   }
 
   log.info(
