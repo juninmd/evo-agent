@@ -132,6 +132,11 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://www.reddit.com/r/GithubCopilot/.rss",
     tags: ["reddit", "github", "copilot", "ai"],
   },
+  {
+    name: "Reddit Search: claude code",
+    url: "https://www.reddit.com/search/.rss?q=claude+code&sort=new",
+    tags: ["reddit", "claude", "coding", "ai", "search"],
+  },
 ];
 
 function getDynamicSources(): FeedSource[] {
