@@ -181,11 +181,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://deepmind.google/blog/rss.xml",
     tags: ['ai frontier', 'googledeepmind', 'ai'],
   },
-  {
-    name: "LinkedIn AI Innovations",
-    url: "https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/",
-    tags: ["ai", "innovation", "linkedin", "trends"],
-  },
 ];
 
 function getDynamicSources(): FeedSource[] {
@@ -552,6 +547,58 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   return newCount;
 }
 
+
+async function crawlLinkedInTopContent(url: string): Promise<number> {
+  log.info(`Crawling LinkedIn Top Content: ${url}`);
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
+  let newCount = 0;
+  try {
+    const context = await browser.newContext({
+      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    });
+    const page = await context.newPage();
+    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+    
+    // Extract articles from LinkedIn Top Content page
+    // Based on typical LinkedIn Top Content structure (selectors might need updates)
+    const articles = await page.evaluate(() => {
+      const items = document.querySelectorAll('.top-content-card, [data-test-id="top-content-card"], article');
+      return Array.from(items).map(item => {
+        const titleEl = item.querySelector('h2, h3, .title');
+        const linkEl = item.querySelector('a');
+        return {
+          title: titleEl?.textContent?.trim() ?? "",
+          url: linkEl?.href ?? "",
+          summary: item.textContent?.replace(/\s+/g, ' ').trim().slice(0, 500) ?? ""
+        };
+      });
+    });
+
+    for (const article of articles) {
+      if (!article.url || !article.title) continue;
+      if (db.urlExists(article.url)) continue;
+
+      db.saveArticle({
+        title: article.title,
+        source: "LinkedIn AI Innovations",
+        url: article.url,
+        summary: article.summary,
+        tags: JSON.stringify(["ai", "innovation", "linkedin", "trends"]),
+      });
+      newCount++;
+    }
+  } catch (err) {
+    log.warn(`LinkedIn crawler failed: ${(err as Error).message}`);
+  } finally {
+    await browser.close();
+  }
+  return newCount;
+}
+
 export async function crawlAll(): Promise<number> {
   const sources = [...DEFAULT_SOURCES, ...getDynamicSources()].filter(
     (s) => s?.url && s.name,
@@ -653,6 +700,7 @@ export async function crawlAll(): Promise<number> {
   }
 
   try {
+    newCount += await crawlLinkedInTopContent("https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/");
     newCount += await crawlGitHubTrending();
   } catch (err) {
     log.warn(`GitHub Trending crawler failed: ${(err as Error).message}`);
