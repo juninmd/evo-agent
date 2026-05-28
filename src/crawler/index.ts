@@ -181,6 +181,11 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://deepmind.google/blog/rss.xml",
     tags: ['ai frontier', 'googledeepmind', 'ai'],
   },
+  {
+    name: "LinkedIn AI Innovations",
+    url: "https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/",
+    tags: ["ai", "innovation", "linkedin", "trends"],
+  },
 ];
 
 function getDynamicSources(): FeedSource[] {
