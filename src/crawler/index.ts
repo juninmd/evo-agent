@@ -127,11 +127,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["ai", "ml", "research", "llm"],
   },
   {
-    name: "LangChain Blog",
-    url: "https://blog.langchain.dev/rss/",
-    tags: ["langchain", "agents", "ai"],
-  },
-  {
     name: "Reddit: ClaudeAI",
     url: "https://www.reddit.com/r/ClaudeAI/.rss",
     tags: ["reddit", "claude", "ai"],
@@ -167,11 +162,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["v2ex", "chinese", "ai", "developer"],
   },
   {
-    name: "Anthropic",
-    url: "https://rsshub.app/anthropic/news",
-    tags: ['ai frontier', 'anthropic', 'ai'],
-  },
-  {
     name: "Mistral AI",
     url: "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_mistral.xml",
     tags: ['ai frontier', 'mistralai', 'ai'],
@@ -190,11 +180,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Google DeepMind",
     url: "https://deepmind.google/blog/rss.xml",
     tags: ['ai frontier', 'googledeepmind', 'ai'],
-  },
-  {
-    name: "Pinecone",
-    url: "https://rsshub.app/pinecone/blog",
-    tags: ['dev tools', 'pinecone', 'ai'],
   },
 ];
 
