@@ -12,7 +12,14 @@ let _selectedModel: { providerID: string; modelID: string } | null = null;
 
 async function getClient(): Promise<OcClient> {
   if (!_client) {
-    const { client } = await createOpencode({ timeout: 60000 });
+    const { client } = await createOpencode({
+      timeout: 60000,
+      config: {
+        // Use deepseek-v4-flash-free for title generation instead of the
+        // default gpt-5-nano which requires the restricted /zen endpoint.
+        small_model: "opencode/deepseek-v4-flash-free",
+      },
+    });
     _client = client;
     log.info("OpenCode server started");
   }
