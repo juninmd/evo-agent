@@ -1,9 +1,11 @@
 import { createOpencode } from "@opencode-ai/sdk";
-import { config } from "../config.js";
 import { log } from "./logger.js";
 
 // biome-ignore lint/suspicious/noExplicitAny: SDK types not exported
 type OcClient = any;
+
+// Provider priority: prefer opencode (uses OPENCODE_API_KEY) over others that need OAuth
+const PROVIDER_PRIORITY = ["opencode", "ollama", "opencode-go", "github-models", "github-copilot"];
 
 let _client: OcClient | null = null;
 let _selectedModel: { providerID: string; modelID: string } | null = null;
@@ -17,48 +19,56 @@ async function getClient(): Promise<OcClient> {
   return _client;
 }
 
-async function getAvailableModels(): Promise<Array<{ id: string; name: string; free?: boolean }>> {
-  try {
-    const client = await getClient();
-    // Try to list available models from OpenCode API
-    const modelsRes = await client.models?.list?.() ?? { data: [] };
-    return modelsRes.data || [];
-  } catch (err) {
-    log.warn(`Failed to fetch available models: ${err instanceof Error ? err.message : String(err)}`);
-    return [];
-  }
-}
-
 async function selectBestModel(): Promise<{ providerID: string; modelID: string }> {
-  // Check if explicit model is set
+  // Explicit override always wins
   const envModel = process.env.OPENCODE_MODEL;
   if (envModel) {
-    log.info(`Using explicit model from env: ${envModel}`);
-    return parseProviderModel(envModel);
+    const slash = envModel.indexOf("/");
+    const result = slash === -1
+      ? { providerID: "opencode", modelID: envModel }
+      : { providerID: envModel.slice(0, slash), modelID: envModel.slice(slash + 1) };
+    log.info(`Using explicit OPENCODE_MODEL: ${envModel}`);
+    return result;
   }
 
-  // Try to find a free model
-  const models = await getAvailableModels();
-  const freeModels = models.filter((m) => m.free === true);
+  const client = await getClient();
 
-  if (freeModels.length > 0) {
-    const selected = freeModels[0];
-    log.info(`Selected free model: ${selected.name} (${selected.id})`);
-    return parseProviderModel(selected.id);
+  try {
+    const res = await client.provider.list();
+    const data = res?.data ?? res;
+    const connected: string[] = data?.connected ?? [];
+    const all: any[] = data?.all ?? [];
+
+    log.info(`Connected providers: [${connected.join(", ")}]`);
+
+    // Sort connected providers by priority order
+    const sorted = [
+      ...PROVIDER_PRIORITY.filter((p) => connected.includes(p)),
+      ...connected.filter((p) => !PROVIDER_PRIORITY.includes(p)),
+    ];
+
+    for (const providerID of sorted) {
+      const providerDef = all.find((p: any) => p.id === providerID);
+      if (!providerDef?.models) continue;
+
+      const models = Object.values(providerDef.models) as any[];
+      // Prefer free (cost = 0), then any model
+      const freeModels = models.filter(
+        (m: any) => m.cost && m.cost.input === 0 && m.cost.output === 0,
+      );
+      const pick = freeModels[0] ?? models[0];
+      if (!pick) continue;
+
+      log.info(`Selected model: ${providerID}/${(pick as any).id} (free=${freeModels.length > 0})`);
+      return { providerID, modelID: (pick as any).id };
+    }
+  } catch (err) {
+    log.warn(`provider.list() failed: ${err instanceof Error ? err.message : String(err)}`);
   }
 
-  // Fallback to Gemini (usually free tier available)
-  log.info("No free model found, falling back to google/gemini-2.0-flash");
-  return { providerID: "google", modelID: "gemini-2.0-flash" };
-}
-
-function parseProviderModel(model: string): {
-  providerID: string;
-  modelID: string;
-} {
-  const slash = model.indexOf("/");
-  if (slash === -1) return { providerID: "opencode", modelID: model };
-  return { providerID: model.slice(0, slash), modelID: model.slice(slash + 1) };
+  // Hard fallback: opencode free model (OPENCODE_API_KEY is always set)
+  log.warn("Falling back to opencode/deepseek-v4-flash-free");
+  return { providerID: "opencode", modelID: "deepseek-v4-flash-free" };
 }
 
 export async function ask(
@@ -67,11 +77,11 @@ export async function ask(
 ): Promise<string> {
   const client = await getClient();
 
-  // Select best available model (free tier preferred)
   if (!_selectedModel) {
     _selectedModel = await selectBestModel();
   }
   const { providerID, modelID } = _selectedModel;
+  log.info(`Calling model: ${providerID}/${modelID}`);
 
   const sessionRes = await client.session.create({ body: {} });
   const sessionId: string = sessionRes.data?.id;
@@ -99,10 +109,15 @@ export async function ask(
 
     const parts: Array<{ type: string; text?: string }> =
       result.data?.parts ?? [];
-    return parts
+    const text = parts
       .filter((p) => p.type === "text" && p.text)
       .map((p) => p.text as string)
       .join("");
+
+    if (!text) {
+      log.warn(`Empty response from ${providerID}/${modelID}`);
+    }
+    return text;
   } finally {
     client.session.delete({ path: { id: sessionId } }).catch(() => {});
   }
