@@ -6,6 +6,7 @@ import { log } from "./logger.js";
 type OcClient = any;
 
 let _client: OcClient | null = null;
+let _selectedModel: { providerID: string; modelID: string } | null = null;
 
 async function getClient(): Promise<OcClient> {
   if (!_client) {
@@ -14,6 +15,41 @@ async function getClient(): Promise<OcClient> {
     log.info("OpenCode server started");
   }
   return _client;
+}
+
+async function getAvailableModels(): Promise<Array<{ id: string; name: string; free?: boolean }>> {
+  try {
+    const client = await getClient();
+    // Try to list available models from OpenCode API
+    const modelsRes = await client.models?.list?.() ?? { data: [] };
+    return modelsRes.data || [];
+  } catch (err) {
+    log.warn(`Failed to fetch available models: ${err instanceof Error ? err.message : String(err)}`);
+    return [];
+  }
+}
+
+async function selectBestModel(): Promise<{ providerID: string; modelID: string }> {
+  // Check if explicit model is set
+  const envModel = process.env.OPENCODE_MODEL;
+  if (envModel) {
+    log.info(`Using explicit model from env: ${envModel}`);
+    return parseProviderModel(envModel);
+  }
+
+  // Try to find a free model
+  const models = await getAvailableModels();
+  const freeModels = models.filter((m) => m.free === true);
+
+  if (freeModels.length > 0) {
+    const selected = freeModels[0];
+    log.info(`Selected free model: ${selected.name} (${selected.id})`);
+    return parseProviderModel(selected.id);
+  }
+
+  // Fallback to Gemini (usually free tier available)
+  log.info("No free model found, falling back to google/gemini-2.0-flash");
+  return { providerID: "google", modelID: "gemini-2.0-flash" };
 }
 
 function parseProviderModel(model: string): {
@@ -30,10 +66,12 @@ export async function ask(
   systemPrompt?: string,
 ): Promise<string> {
   const client = await getClient();
-  const rawModel =
-    process.env.OPENCODE_MODEL ??
-    `${config.opencode.provider}/${config.opencode.model}`;
-  const { providerID, modelID } = parseProviderModel(rawModel);
+
+  // Select best available model (free tier preferred)
+  if (!_selectedModel) {
+    _selectedModel = await selectBestModel();
+  }
+  const { providerID, modelID } = _selectedModel;
 
   const sessionRes = await client.session.create({ body: {} });
   const sessionId: string = sessionRes.data?.id;
