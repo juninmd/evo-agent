@@ -32,7 +32,7 @@ ok "Porta 4096 livre"
 log "STEP 1 — Extraindo credenciais do cluster"
 extract_secret() {
   kubectl get secret evo-agent-secret -n evo-agent \
-    -o jsonpath="{.data.$1}" 2>/dev/null | base64 -d
+    -o jsonpath="{.data.$1}" 2>/dev/null | base64 -d | tr -d '\n\r'
 }
 
 export OPENCODE_API_KEY=$(extract_secret OPENCODE_API_KEY)
