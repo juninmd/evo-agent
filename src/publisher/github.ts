@@ -1,5 +1,5 @@
 import { Octokit } from "@octokit/rest";
-import type { GeneratedArticle } from "../agent/writer.js";
+import type { GeneratedArticle, ReportPeriod } from "../agent/writer.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
@@ -905,15 +905,17 @@ export async function publishArticle(
 
 export async function publishWeeklyReport(
   article: GeneratedArticle,
+  period: ReportPeriod = article.reportPeriod ?? "weekly",
 ): Promise<string> {
-  return publishToGithub(article, true);
+  return publishToGithub(article, period);
 }
 
 async function publishToGithub(
   article: GeneratedArticle,
-  isWeekly: boolean,
+  reportPeriod: ReportPeriod | false,
 ): Promise<string> {
   const { owner, repo, branch } = config.github;
+  const isReport = reportPeriod !== false;
 
   await ensureBranchExists(owner, repo, branch);
   await ensureSiteScaffold(owner, repo, branch);
@@ -940,8 +942,8 @@ async function publishToGithub(
     // index.html doesn't exist — nothing to do
   }
 
-  const folder = isWeekly ? "reports" : "articles";
-  const prefix = isWeekly ? "weekly-" : "";
+  const folder = isReport ? "reports" : "articles";
+  const prefix = isReport ? `${reportPeriod}-` : "";
   const filePath = `${folder}/${prefix}${article.date}-${article.slug}.md`;
   const markdown = buildMarkdown(article);
 
@@ -951,16 +953,16 @@ async function publishToGithub(
     branch,
     filePath,
     markdown,
-    `${isWeekly ? "report" : "article"}: ${article.title}`,
+    `${isReport ? "report" : "article"}: ${article.title}`,
   );
 
   const articleUrl = `https://${owner}.github.io/${repo}/${folder}/${prefix}${article.date}-${article.slug}`;
 
-  await updateIndex(owner, repo, branch, article, articleUrl, isWeekly);
+  await updateIndex(owner, repo, branch, article, articleUrl, isReport);
 
   db.savePublished(article.slug, article.title, articleUrl);
   log.info(
-    `Published ${isWeekly ? "weekly report" : "article"}: ${articleUrl}`,
+    `Published ${isReport ? `${reportPeriod} report` : "article"}: ${articleUrl}`,
   );
   return articleUrl;
 }

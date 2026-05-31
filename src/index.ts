@@ -48,7 +48,7 @@ async function reportCycle(
   log.info(`=== ${period} report cycle start ===`);
   try {
     const article = await generatePeriodReport(period);
-    const url = await publishWeeklyReport(article);
+    const url = await publishWeeklyReport(article, period);
     await notifyWeeklyReport(article.title, url, article.summary);
     db.setState(`last_${period}_report_at`, new Date().toISOString());
     log.info(`=== ${period} report published: ${url} ===`);

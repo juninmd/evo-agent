@@ -55,6 +55,7 @@ npm run build
 | `LITELLM_API_BASE` | No | `http://localhost:4000/v1` | LiteLLM base URL |
 | `LITELLM_API_KEY` | No | `no-key` | LiteLLM API key |
 | `LITELLM_MODEL` | No | `local/qwen2.5` | Model name |
+| `LITELLM_TIMEOUT_MS` | No | `900000` | LiteLLM request timeout in milliseconds |
 | `TELEGRAM_BOT_TOKEN` | Yes | — | Telegram Bot API token |
 | `TELEGRAM_CHAT_ID` | Yes | — | Target Telegram chat/group ID |
 | `GITHUB_TOKEN` | Yes | — | GitHub PAT with repo write access |

@@ -16,6 +16,7 @@ export interface GeneratedArticle {
   tags: string[];
   date: string;
   sources: string[];
+  reportPeriod?: ReportPeriod;
 }
 
 function safeSlug(input: string): string {
@@ -42,7 +43,7 @@ function extractJsonObject(text: string): string | null {
 async function parseArticleJson(
   text: string,
   repairPrompt: string,
-): Promise<Omit<GeneratedArticle, "date">> {
+): Promise<Omit<GeneratedArticle, "date"> | null> {
   const json = extractJsonObject(text);
   if (json) {
     try {
@@ -63,19 +64,8 @@ async function parseArticleJson(
     if (!repairedJson) throw new Error("No JSON in repaired response");
     return JSON.parse(repairedJson) as Omit<GeneratedArticle, "date">;
   } catch (err) {
-    log.warn(
-      `Article JSON repair failed, using structured fallback: ${(err as Error).message}`,
-    );
-    const title = "Resumo técnico de IA para desenvolvedores";
-    return {
-      title,
-      slug: safeSlug(title),
-      summary:
-        "Resumo gerado a partir das fontes recentes após resposta de IA fora do contrato JSON.",
-      tags: ["ai", "developers", "fallback"],
-      sources: [],
-      content: text.trim() || "Sem conteúdo retornado pelo modelo.",
-    };
+    log.warn(`Article JSON repair failed: ${(err as Error).message}`);
+    return null;
   }
 }
 
@@ -93,6 +83,23 @@ function fallbackArticle(
     sources,
     content,
   };
+}
+
+function markdownTitle(markdown: string, fallback: string): string {
+  const heading = markdown.match(/^#\s+(.+)$/m)?.[1]?.trim();
+  return heading || fallback;
+}
+
+function withoutTopTitle(markdown: string): string {
+  return markdown.replace(/^#\s+.+\n+/, "").trim();
+}
+
+function markdownSummary(markdown: string, fallback: string): string {
+  const paragraph = withoutTopTitle(markdown)
+    .split(/\n{2,}/)
+    .map((part) => part.replace(/[#*_`>\-[\]()]/g, "").trim())
+    .find((part) => part.length > 80);
+  return (paragraph ?? fallback).slice(0, 280);
 }
 
 export async function generateArticle(
@@ -131,8 +138,7 @@ export async function generateArticle(
   const fullSystemPrompt = `${systemPrompt}
 
 Today is ${today}. The period of this report is from ${weekRange}. Write in Brazilian Portuguese.
-Always respond with valid JSON only.
-CRITICAL: Ensure the JSON is perfectly formatted. Escape all quotes (\\"), newlines (\\n), and control characters inside the "content" field.`;
+Return Markdown only. Do not return JSON, YAML front matter, or code fences around the full answer.`;
 
   const userPromptDaily = `Based on these recent articles and developments:
 
@@ -141,15 +147,11 @@ ${context}${snippetContext}
 Write a high-quality technical article for developers about an important topic from this content.
 The article should be insightful, practical, and showcase deep understanding.
 
-Return JSON:
-{
-  "title": "Article title in pt-BR",
-  "slug": "url-friendly-slug",
-  "summary": "2-3 sentence summary in pt-BR",
-  "tags": ["tag1", "tag2", "tag3"],
-  "sources": ["url1", "url2"],
-  "content": "Full markdown article in pt-BR (800-1200 words, include code examples where relevant)"
-}`;
+Return Markdown only.
+The first line must be a single H1 title in pt-BR, for example:
+# Titulo tecnico em pt-BR
+
+Then write the full article in pt-BR (800-1200 words), with practical sections and code examples where relevant.`;
 
   const userPromptWeekly = `Based on the following content from the last 7 days:
 
@@ -162,15 +164,11 @@ The summary should:
 3. Summarize the best code patterns or tools discovered.
 4. Conclude with a "What to watch next week" section.
 
-Return JSON:
-{
-  "title": "Weekly Report: [Short Catchy Title] (Period ${weekRange})",
-  "slug": "weekly-report-${today}",
-  "summary": "Brief overview of the week's tech landscape in pt-BR",
-  "tags": ["weekly", "summary", "trends"],
-  "sources": ["url1", "url2", "..."],
-  "content": "Full markdown report in pt-BR (1500-2000 words, well structured with headings)"
-}`;
+Return Markdown only.
+The first line must be a single H1 title in pt-BR, for example:
+# Relatorio semanal: titulo tecnico
+
+Then write the full weekly report in pt-BR (1500-2000 words), well structured with headings.`;
 
   const userPrompt = type === "weekly" ? userPromptWeekly : userPromptDaily;
 
@@ -204,12 +202,26 @@ Return JSON:
     };
   }
 
-  const result = await parseArticleJson(text, userPrompt);
+  const content = withoutTopTitle(text);
+  const title = markdownTitle(
+    text,
+    "Artigo tecnico de IA para desenvolvedores",
+  );
   return {
-    ...result,
-    content: withModelFooter(result.content),
-    slug: result.slug || safeSlug(result.title || `article-${today}`),
-    sources: result.sources ?? recentArticles.slice(0, 3).map((a) => a.url),
+    title,
+    slug: safeSlug(title || `article-${today}`),
+    summary: markdownSummary(
+      text,
+      "Artigo tecnico em pt-BR gerado a partir das fontes recentes.",
+    ),
+    tags:
+      type === "weekly"
+        ? ["weekly", "summary", "trends"]
+        : ["ai", "developers"],
+    sources: recentArticles
+      .slice(0, type === "weekly" ? 10 : 5)
+      .map((a) => a.url),
+    content: withModelFooter(content),
     date: today,
   };
 }
@@ -260,7 +272,7 @@ export async function generatePeriodReport(
 You analyze crawled AI research, news, and code snippets, synthesizing them into a high-quality, comprehensive ${cfg.label} technical report.
 Your output must be deeply technical, insightful, structured, and practical.
 Always write in Brazilian Portuguese (pt-BR).
-Always respond with valid JSON only.`;
+Return Markdown only. Do not return JSON, YAML front matter, or code fences around the full answer.`;
 
   const context = recentArticles
     .map((a) => `- [${a.source}] ${a.title}: ${a.summary.slice(0, 250)}`)
@@ -289,41 +301,38 @@ Always respond with valid JSON only.`;
 
   const titleLabel =
     period === "weekly"
-      ? "Relatório Semanal"
+      ? "Relatorio Semanal"
       : period === "biweekly"
-        ? "Relatório Quinzenal"
+        ? "Relatorio Quinzenal"
         : period === "monthly"
-          ? "Relatório Mensal"
+          ? "Relatorio Mensal"
           : period === "bimonthly"
-            ? "Relatório Bimestral"
-            : "Relatório Semestral";
+            ? "Relatorio Bimestral"
+            : "Relatorio Semestral";
 
   const userPrompt = `Based on everything crawled and learned over the last ${cfg.days} days (Period: ${periodStr}):
 
 ${context}${snippetContext}
 
 Write a comprehensive ${cfg.label} technical report summarizing the main developments in LLM, AI, and Agent Harnesses.
-At the very top of the markdown "content" (before any other text), you MUST include:
-**Período:** ${periodStr}
+At the very top of the markdown body (after the H1 title), include:
+**Periodo:** ${periodStr}
 
 Structure the report using Markdown. Organize it into sections like:
-1. Resumo do Período (Executive Summary)
-2. Grandes Lançamentos e Notícias (Key Releases & News)
-3. Análise de Arquitetura de Agentes (Deep analysis of Agent Harnesses / AI architecture trends)
-4. Melhores Práticas e Padrões de Código (Code patterns and best practices)
-5. Conclusão e Próximos Passos (Future outlook)
+1. Resumo do Periodo (Executive Summary)
+2. Grandes Lancamentos e Noticias (Key Releases & News)
+3. Analise de Arquitetura de Agentes (Deep analysis of Agent Harnesses / AI architecture trends)
+4. Melhores Praticas e Padroes de Codigo (Code patterns and best practices)
+5. Conclusao e Proximos Passos (Future outlook)
 
 The report should be extensive, informative (${cfg.wordCount[0]}-${cfg.wordCount[1]} words), and highly technical.
 
-Return JSON:
-{
-  "title": "${titleLabel}: [Short Catchy Title] (Período ${periodStr})",
-  "slug": "${period}-report-${today}",
-  "summary": "2-3 sentence summary of the ${cfg.label} report in pt-BR",
-  "tags": ["${period}-report", "ai-agents", "llm"],
-  "content": "Full markdown report in pt-BR"
-}`;
+Return Markdown only.
+The first line must be a single H1 title in pt-BR, for example:
+# ${titleLabel}: titulo tecnico do periodo
 
+Use only facts from Period ${periodStr}. Do not mention months or dates outside this period.
+Do not return JSON.`;
   log.info(`Generating ${cfg.label} report (${cfg.days}d period)...`);
   let text: string;
   try {
@@ -356,12 +365,23 @@ Return JSON:
     };
   }
 
-  const result = await parseArticleJson(text, userPrompt);
+  const contentWithoutTitle = withoutTopTitle(text);
+  const content = contentWithoutTitle.startsWith("**Per")
+    ? contentWithoutTitle
+    : `**Periodo:** ${periodStr}\n\n${contentWithoutTitle}`;
+  const title = `${titleLabel}: Panorama tecnico (${periodStr})`;
+
   return {
-    ...result,
-    content: withModelFooter(result.content),
-    slug: result.slug || safeSlug(result.title || `${period}-report-${today}`),
-    sources: result.sources ?? recentArticles.slice(0, 10).map((a) => a.url),
+    title,
+    slug: safeSlug(title),
+    summary: markdownSummary(
+      text,
+      `Relatorio ${cfg.label} em pt-BR gerado a partir das fontes recentes.`,
+    ),
+    tags: [`${period}-report`, "ai-agents", "llm"],
+    sources: recentArticles.slice(0, 10).map((a) => a.url),
+    content: withModelFooter(content),
     date: today,
+    reportPeriod: period,
   };
 }

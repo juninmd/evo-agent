@@ -1,5 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
+import { config } from "../config.js";
 import { log } from "./logger.js";
 
 export async function ask(
@@ -14,7 +15,7 @@ export async function ask(
     process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key";
   const modelName =
     process.env.LITELLM_MODEL ?? process.env.OPENCODE_MODEL ?? "z-ai/glm-4-32b";
-  const timeoutMs = Number(process.env.LITELLM_TIMEOUT_MS ?? "300000");
+  const timeoutMs = config.litellm.timeoutMs;
 
   log.info(`Calling LiteLLM model via AI SDK: ${modelName} via ${apiBase}`);
 
