@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>21</strong> artigos</span>
-    <span><strong>5</strong> relatorios</span>
+    <span><strong>6</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-resumo-tecnico-de-ia-para-desenvolvedores">Resumo técnico de IA para desenvolvedores</a></h3>
+  <p>Resumo gerado a partir das fontes recentes após resposta de IA fora do contrato JSON.</p>
+  <div class="chips"><span>ai</span><span>developers</span><span>fallback</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-relatorio-semanal-resumo-operacional-24-05-2026-a-31-05-2026">Relatório Semanal: Resumo operacional (24/05/2026 a 31/05/2026)</a></h3>
   <p>Resumo operacional do período 24/05/2026 a 31/05/2026 após timeout do modelo LiteLLM.</p>
@@ -64,7 +70,7 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-verificacao-blockchain-orquestracao-tempo-real-seguranca-eficacia-agentes-ia">Verificação Blockchain e Orquestração em Tempo Real: Segurança e Eficácia para Agentes de IA</a></h3>
   <p>Explora a integração de camadas de verificação blockchain e orquestração de privilégios em tempo real para agentes de IA, abordando governança de capacidades e segurança.</p>
-  <div class="chips"><span>IA Agente</span><span>Verificação Blockchain</span><span>Orquestração Tempo Real</span><span>Segurança</span><span>Governança de Capacidades</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
