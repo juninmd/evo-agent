@@ -30,7 +30,9 @@ export const config = {
     branch: process.env.GITHUB_BRANCH ?? "gh-pages",
   },
   litellm: {
-    apiBase: process.env.LITELLM_API_BASE ?? "https://openrouter.ai/api/v1",
+    apiBase:
+      process.env.LITELLM_API_BASE ??
+      "http://litellm.ai.svc.cluster.local:4000/v1",
     apiKey:
       process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key",
     model:

@@ -9,7 +9,7 @@ export async function ask(
   const apiBase =
     process.env.LITELLM_API_BASE ??
     process.env.OPENCODE_API_BASE ??
-    "https://openrouter.ai/api/v1";
+    "http://litellm.ai.svc.cluster.local:4000/v1";
   const apiKey =
     process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key";
   const modelName =
