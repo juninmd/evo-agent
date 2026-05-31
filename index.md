@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>21</strong> artigos</span>
-    <span><strong>9</strong> relatorios</span>
+    <span><strong>10</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-relatorio-semanal-panorama-tecnico-24-05-2026-a-31-05-2026">Relatorio Semanal: Panorama tecnico (24/05/2026 a 31/05/2026)</a></h3>
+  <p>No período de 24 a 31 de maio de 2026, observamos uma série de avanços significativos no campo dos modelos de linguagem de grande escala LLM, inteligência artificial IA e arquitetura de agentes. Notavelmente, a Anthropic lançou a versão Opus 4.8 do Claude Code, que introduziu rec</p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-weekly-report-2026-05-31-relatorio-semanal-panorama-tecnico-24-05-2026-a-31-05-2026">Relatorio Semanal: Panorama tecnico (24/05/2026 a 31/05/2026)</a></h3>
   <p>No período de 24/05/2026 a 31/05/2026, o cenário da inteligência artificial IA e dos grandes modelos de linguagem LLMs viu avanços significativos em arquiteturas de agentes, ferramentas de desenvolvimento para IA e lançamentos notáveis de modelos. O foco principal incluiu a intro</p>
-  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
