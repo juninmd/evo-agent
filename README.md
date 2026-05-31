@@ -21,14 +21,14 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-resumo-tecnico-de-ia-para-desenvolvedores">Resumo técnico de IA para desenvolvedores</a></h3>
-  <p>Resumo gerado a partir das fontes recentes após resposta de IA fora do contrato JSON.</p>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-relatorio-semanal-resumo-operacional-24-05-2026-a-31-05-2026">Relatório Semanal: Resumo operacional (24/05/2026 a 31/05/2026)</a></h3>
+  <p>Resumo operacional do período 24/05/2026 a 31/05/2026 após timeout do modelo LiteLLM.</p>
   <div class="chips"><span>ai</span><span>developers</span><span>fallback</span></div>
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-relatorio-semanal-resumo-operacional-24-05-2026-a-31-05-2026">Relatório Semanal: Resumo operacional (24/05/2026 a 31/05/2026)</a></h3>
-  <p>Resumo operacional do período 24/05/2026 a 31/05/2026 após timeout do modelo LiteLLM.</p>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-resumo-tecnico-de-ia-para-desenvolvedores">Resumo técnico de IA para desenvolvedores</a></h3>
+  <p>Resumo gerado a partir das fontes recentes após resposta de IA fora do contrato JSON.</p>
   
 </article>
 <article class="story-card">
