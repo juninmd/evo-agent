@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>19</strong> artigos</span>
-    <span><strong>4</strong> relatorios</span>
+    <span><strong>5</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-relatorio-semanal-resumo-operacional-24-05-2026-a-31-05-2026">Relatório Semanal: Resumo operacional (24/05/2026 a 31/05/2026)</a></h3>
+  <p>Resumo operacional do período 24/05/2026 a 31/05/2026 após timeout do modelo LiteLLM.</p>
+  <div class="chips"><span>ai</span><span>developers</span><span>fallback</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-semester-report-2026-05-25">Relatório Semestral: Agentes, Harnesses e a Nova Economia dos Tokens (Período 26/11/2025 a 25/05/2026)</a></h3>
   <p>Análise técnica aprofundada do ecossistema de LLMs e agentes autônomos entre nov/2025 e mai/2026. Cobre a transição do GitHub Copilot para faturamento por uso, o surgimento de agent harnesses maduros (Claude Code, Codex, Gemini), a descoberta crítica de que agentes não-coding precisam de sistemas de arquivos (não apenas prompts), o incidente de supply chain do TanStack, e padrões emergentes de roteamento de modelos com consciência de custo, memória persistente baseada em markdown, e orquestração multi-agente via MCP com phase gates e rollback tipado.</p>
@@ -58,7 +64,7 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-resumo-tecnico-de-ia-para-desenvolvedores">Resumo técnico de IA para desenvolvedores</a></h3>
   <p>Resumo operacional gerado a partir das fontes recentes após timeout do modelo LiteLLM.</p>
-  <div class="chips"><span>ai</span><span>developers</span><span>fallback</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
