@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>21</strong> artigos</span>
-    <span><strong>7</strong> relatorios</span>
+    <span><strong>8</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-weekly-report-2026-05-31-relatorio-semanal-avancos-em-llm-ia-e-arquitetura-de-agentes-setembro-2026">Relatório Semanal: Avanços em LLM, IA e Arquitetura de Agentes – Setembro 2026</a></h3>
+  <p>Este relatório aborda os desenvolvimentos significativos no campo dos Modelos de Linguagem de Grande Escala LLM, Inteligência Artificial IA e arquiteturas de agentes durante o período de 24 a 31 de maio de 2026. Durante esta semana, observamos o lançamento de novas versões de mod</p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-weekly-report-2026-05-31-relatorio-semanal-avancos-em-llm-ia-e-arquiteturas-de-agentes-24-05-2026-a-31-05">Relatório Semanal: Avanços em LLM, IA e Arquiteturas de Agentes - 24/05/2026 a 31/05/2026</a></h3>
   <p>Neste período, assistimos a um avanço significativo no domínio de LLMs Large Language Models, IA generativa e arquiteturas de agentes autónomos. A semana foi marcada por lançamentos notáveis, como a introdução da versão 4.8 do Claude Opus pela Anthropic, que trouxe capacidades ap</p>
-  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
