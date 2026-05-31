@@ -32,7 +32,7 @@ HEALTH=$(kubectl get app evo-agent -n argocd -o jsonpath='{.status.health.status
 
 # ── STEP 3: Secrets presentes no namespace ───────────────────────────────
 log "STEP 3 — Secrets evo-agent-secret"
-for key in OPENCODE_API_KEY TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID GITHUB_TOKEN GITHUB_OWNER GITHUB_REPO; do
+for key in LITELLM_API_KEY TELEGRAM_BOT_TOKEN TELEGRAM_CHAT_ID GITHUB_TOKEN GITHUB_OWNER GITHUB_REPO; do
   VAL=$(kubectl get secret evo-agent-secret -n $NS -o jsonpath="{.data.$key}" 2>/dev/null | base64 -d)
   [ -n "$VAL" ] && ok "$key presente" || fail "Secret $key ausente ou vazio"
 done

@@ -52,9 +52,9 @@ npm run build
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `OPENCODE_ZEN_API_KEY` | Yes | — | OpenCode Zen API key |
-| `OPENCODE_PROVIDER` | No | `opencode` | LLM provider ID |
-| `OPENCODE_MODEL` | No | `opencode/deepseek-v4-flash-free` | Model in `provider/model` format |
+| `LITELLM_API_BASE` | No | `http://localhost:4000/v1` | LiteLLM base URL |
+| `LITELLM_API_KEY` | No | `no-key` | LiteLLM API key |
+| `LITELLM_MODEL` | No | `local/qwen2.5` | Model name |
 | `TELEGRAM_BOT_TOKEN` | Yes | — | Telegram Bot API token |
 | `TELEGRAM_CHAT_ID` | Yes | — | Target Telegram chat/group ID |
 | `GITHUB_TOKEN` | Yes | — | GitHub PAT with repo write access |
@@ -108,7 +108,7 @@ src/
   notifier/
     telegram.ts         # Telegram Bot API notifications
   utils/
-    ai.ts               # OpenCode SDK wrapper with session management
+    ai.ts               # LiteLLM client wrapper for AI text generation
     logger.ts           # Timestamped log levels via console
 ```
 

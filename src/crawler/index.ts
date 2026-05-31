@@ -82,7 +82,7 @@ const V2EX_AI_KEYWORDS = [
   "opus",
   "qwen",
   "cursor",
-  "opencode",
+  "litellm",
   "vibecoding",
   "vibe coding",
   "向量",
@@ -164,22 +164,22 @@ const DEFAULT_SOURCES: FeedSource[] = [
   {
     name: "Mistral AI",
     url: "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_mistral.xml",
-    tags: ['ai frontier', 'mistralai', 'ai'],
+    tags: ["ai frontier", "mistralai", "ai"],
   },
   {
     name: "Together AI",
     url: "https://www.together.ai/blog/rss.xml",
-    tags: ['ai frontier', 'togetherai', 'ai'],
+    tags: ["ai frontier", "togetherai", "ai"],
   },
   {
     name: "Google Research",
     url: "https://research.google/blog/rss/",
-    tags: ['ai frontier', 'googleresearch', 'ai'],
+    tags: ["ai frontier", "googleresearch", "ai"],
   },
   {
     name: "Google DeepMind",
     url: "https://deepmind.google/blog/rss.xml",
-    tags: ['ai frontier', 'googledeepmind', 'ai'],
+    tags: ["ai frontier", "googledeepmind", "ai"],
   },
 ];
 
@@ -209,7 +209,7 @@ const GITHUB_TRENDING_AI_KEYWORDS = [
   "opus",
   "qwen",
   "cursor",
-  "opencode",
+  "litellm",
   "mcp",
   "rag",
   "embedding",
@@ -547,7 +547,6 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   return newCount;
 }
 
-
 async function crawlLinkedInTopContent(url: string): Promise<number> {
   log.info(`Crawling LinkedIn Top Content: ${url}`);
   const browser = await chromium.launch({
@@ -558,22 +557,26 @@ async function crawlLinkedInTopContent(url: string): Promise<number> {
   let newCount = 0;
   try {
     const context = await browser.newContext({
-      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
     });
     const page = await context.newPage();
     await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-    
+
     // Extract articles from LinkedIn Top Content page
     // Based on typical LinkedIn Top Content structure (selectors might need updates)
     const articles = await page.evaluate(() => {
-      const items = document.querySelectorAll('.top-content-card, [data-test-id="top-content-card"], article');
-      return Array.from(items).map(item => {
-        const titleEl = item.querySelector('h2, h3, .title');
-        const linkEl = item.querySelector('a');
+      const items = document.querySelectorAll(
+        '.top-content-card, [data-test-id="top-content-card"], article',
+      );
+      return Array.from(items).map((item) => {
+        const titleEl = item.querySelector("h2, h3, .title");
+        const linkEl = item.querySelector("a");
         return {
           title: titleEl?.textContent?.trim() ?? "",
           url: linkEl?.href ?? "",
-          summary: item.textContent?.replace(/\s+/g, ' ').trim().slice(0, 500) ?? ""
+          summary:
+            item.textContent?.replace(/\s+/g, " ").trim().slice(0, 500) ?? "",
         };
       });
     });
@@ -700,7 +703,9 @@ export async function crawlAll(): Promise<number> {
   }
 
   try {
-    newCount += await crawlLinkedInTopContent("https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/");
+    newCount += await crawlLinkedInTopContent(
+      "https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/",
+    );
     newCount += await crawlGitHubTrending();
   } catch (err) {
     log.warn(`GitHub Trending crawler failed: ${(err as Error).message}`);

@@ -38,6 +38,7 @@ async function articleCycle(type: "daily" | "weekly" = "daily") {
     log.info(`=== Article published: ${url} ===`);
   } catch (err) {
     log.error(`Article cycle failed: ${(err as Error).message}`);
+    throw err;
   }
 }
 
@@ -53,6 +54,7 @@ async function reportCycle(
     log.info(`=== ${period} report published: ${url} ===`);
   } catch (err) {
     log.error(`${period} report cycle failed: ${(err as Error).message}`);
+    throw err;
   }
 }
 

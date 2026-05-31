@@ -29,9 +29,14 @@ export const config = {
     repo: required("GITHUB_REPO"),
     branch: process.env.GITHUB_BRANCH ?? "gh-pages",
   },
-  opencode: {
-    provider: process.env.OPENCODE_PROVIDER ?? "google",
-    model: process.env.OPENCODE_MODEL ?? "google/gemini-2.0-flash",
+  litellm: {
+    apiBase: process.env.LITELLM_API_BASE ?? "http://localhost:4000/v1",
+    apiKey:
+      process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key",
+    model:
+      process.env.LITELLM_MODEL ??
+      process.env.OPENCODE_MODEL ??
+      "local/qwen2.5",
   },
   crawlIntervalMinutes: Number(process.env.CRAWL_INTERVAL_MINUTES ?? "40"),
   articleCron: process.env.ARTICLE_CRON ?? "0 8 * * *",

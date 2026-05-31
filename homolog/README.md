@@ -6,7 +6,7 @@ Dois estágios: **local** (rápido, debugável) → **cluster** (produção real
 ```bash
 bash homolog/01_local.sh
 ```
-Testa: credenciais → OpenCode SDK → provider list → model → artigo → GitHub → Telegram
+Testa: credenciais → LiteLLM via AI SDK → model → artigo → GitHub → Telegram
 
 ## Fase 2 — Cluster
 ```bash

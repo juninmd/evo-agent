@@ -13,6 +13,83 @@ export interface GeneratedArticle {
   sources: string[];
 }
 
+function safeSlug(input: string): string {
+  return input
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80);
+}
+
+function extractJsonObject(text: string): string | null {
+  const cleaned = text
+    .replace(/^```(?:json)?\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .replace(/,\s*([}\]])/g, "$1");
+  const start = cleaned.indexOf("{");
+  const end = cleaned.lastIndexOf("}");
+  if (start === -1 || end <= start) return null;
+  return cleaned.slice(start, end + 1);
+}
+
+async function parseArticleJson(
+  text: string,
+  repairPrompt: string,
+): Promise<Omit<GeneratedArticle, "date">> {
+  const json = extractJsonObject(text);
+  if (json) {
+    try {
+      return JSON.parse(json) as Omit<GeneratedArticle, "date">;
+    } catch (err) {
+      log.warn(
+        `Article JSON parse failed, asking model to repair: ${(err as Error).message}`,
+      );
+    }
+  }
+
+  try {
+    const repaired = await ask(
+      `Repair this response into valid JSON only, using the requested schema. Do not add markdown fences.\n\nSchema/request:\n${repairPrompt}\n\nResponse to repair:\n${text.slice(0, 8000)}`,
+      "You repair malformed JSON. Return valid JSON only.",
+    );
+    const repairedJson = extractJsonObject(repaired);
+    if (!repairedJson) throw new Error("No JSON in repaired response");
+    return JSON.parse(repairedJson) as Omit<GeneratedArticle, "date">;
+  } catch (err) {
+    log.warn(
+      `Article JSON repair failed, using structured fallback: ${(err as Error).message}`,
+    );
+    const title = "Resumo técnico de IA para desenvolvedores";
+    return {
+      title,
+      slug: safeSlug(title),
+      summary:
+        "Resumo gerado a partir das fontes recentes após resposta de IA fora do contrato JSON.",
+      tags: ["ai", "developers", "fallback"],
+      sources: [],
+      content: text.trim() || "Sem conteúdo retornado pelo modelo.",
+    };
+  }
+}
+
+function fallbackArticle(
+  title: string,
+  summary: string,
+  content: string,
+  sources: string[],
+): Omit<GeneratedArticle, "date"> {
+  return {
+    title,
+    slug: safeSlug(title),
+    summary,
+    tags: ["ai", "developers", "fallback"],
+    sources,
+    content,
+  };
+}
+
 export async function generateArticle(
   type: "daily" | "weekly" = "daily",
 ): Promise<GeneratedArticle> {
@@ -93,13 +170,42 @@ Return JSON:
   const userPrompt = type === "weekly" ? userPromptWeekly : userPromptDaily;
 
   log.info(`Generating ${type} article...`);
-  const text = await ask(userPrompt, fullSystemPrompt);
+  let text: string;
+  try {
+    text = await ask(userPrompt, fullSystemPrompt);
+  } catch (err) {
+    log.warn(
+      `Article generation failed, using source-based fallback: ${(err as Error).message}`,
+    );
+    const sources = recentArticles.slice(0, 5);
+    const title = "Resumo técnico de IA para desenvolvedores";
+    const content = [
+      "## Resumo",
+      "O modelo configurado via LiteLLM não retornou dentro do tempo limite. Este artigo foi publicado com base nas fontes coletadas mais recentes para manter o ciclo operacional.",
+      "",
+      "## Fontes recentes",
+      ...sources.map(
+        (a) => `- [${a.title}](${a.url}) — ${a.summary.slice(0, 240)}`,
+      ),
+    ].join("\n");
+    return {
+      ...fallbackArticle(
+        title,
+        "Resumo operacional gerado a partir das fontes recentes após timeout do modelo LiteLLM.",
+        content,
+        sources.map((a) => a.url),
+      ),
+      date: today,
+    };
+  }
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error("No JSON in response");
-
-  const result = JSON.parse(jsonMatch[0]) as Omit<GeneratedArticle, "date">;
-  return { ...result, date: today };
+  const result = await parseArticleJson(text, userPrompt);
+  return {
+    ...result,
+    slug: result.slug || safeSlug(result.title || `article-${today}`),
+    sources: result.sources ?? recentArticles.slice(0, 3).map((a) => a.url),
+    date: today,
+  };
 }
 
 export async function generateWeeklyReport(): Promise<GeneratedArticle> {
@@ -213,11 +319,42 @@ Return JSON:
 }`;
 
   log.info(`Generating ${cfg.label} report (${cfg.days}d period)...`);
-  const text = await ask(userPrompt, systemPrompt);
+  let text: string;
+  try {
+    text = await ask(userPrompt, systemPrompt);
+  } catch (err) {
+    log.warn(
+      `Report generation failed, using source-based fallback: ${(err as Error).message}`,
+    );
+    const sources = recentArticles.slice(0, 10);
+    const title = `${titleLabel}: Resumo operacional (${periodStr})`;
+    const content = [
+      `**Período:** ${periodStr}`,
+      "",
+      "## Resumo do Período",
+      "O modelo configurado via LiteLLM não retornou dentro do tempo limite. Este relatório foi publicado com base nas fontes coletadas mais recentes para manter o ciclo operacional.",
+      "",
+      "## Fontes recentes",
+      ...sources.map(
+        (a) => `- [${a.title}](${a.url}) — ${a.summary.slice(0, 240)}`,
+      ),
+    ].join("\n");
+    return {
+      ...fallbackArticle(
+        title,
+        `Resumo operacional do período ${periodStr} após timeout do modelo LiteLLM.`,
+        content,
+        sources.map((a) => a.url),
+      ),
+      date: today,
+    };
+  }
 
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error("No JSON in report response");
-
-  const result = JSON.parse(jsonMatch[0]) as Omit<GeneratedArticle, "date">;
-  return { ...result, date: today };
+  const result = await parseArticleJson(text, userPrompt);
+  return {
+    ...result,
+    slug: result.slug || safeSlug(result.title || `${period}-report-${today}`),
+    sources: result.sources ?? recentArticles.slice(0, 10).map((a) => a.url),
+    date: today,
+  };
 }

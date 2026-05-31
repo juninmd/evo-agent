@@ -13,8 +13,9 @@
     "lint:fix": "biome check --write src/"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.67",
     "@octokit/rest": "^21.0.0",
-    "@opencode-ai/sdk": "^1.15.5",
+    "ai": "^6.0.193",
     "axios": "^1.7.0",
     "better-sqlite3": "^11.0.0",
     "node-cron": "^3.0.3",
