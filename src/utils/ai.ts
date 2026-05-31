@@ -9,12 +9,12 @@ export async function ask(
   const apiBase =
     process.env.LITELLM_API_BASE ??
     process.env.OPENCODE_API_BASE ??
-    "http://localhost:4000/v1";
+    "http://litellm.ai.svc.cluster.local:4000/v1";
   const apiKey =
     process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key";
   const modelName =
-    process.env.LITELLM_MODEL ?? process.env.OPENCODE_MODEL ?? "local/qwen2.5";
-  const timeoutMs = Number(process.env.LITELLM_TIMEOUT_MS ?? "120000");
+    process.env.LITELLM_MODEL ?? process.env.OPENCODE_MODEL ?? "z-ai/glm-4-32b";
+  const timeoutMs = Number(process.env.LITELLM_TIMEOUT_MS ?? "300000");
 
   log.info(`Calling LiteLLM model via AI SDK: ${modelName} via ${apiBase}`);
 
@@ -30,7 +30,7 @@ export async function ask(
   while (true) {
     try {
       const { text } = await generateText({
-        model: openai(modelName),
+        model: openai.chat(modelName),
         system: systemPrompt,
         prompt: userPrompt,
         abortSignal: AbortSignal.timeout(timeoutMs),

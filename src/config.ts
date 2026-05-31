@@ -30,13 +30,15 @@ export const config = {
     branch: process.env.GITHUB_BRANCH ?? "gh-pages",
   },
   litellm: {
-    apiBase: process.env.LITELLM_API_BASE ?? "http://localhost:4000/v1",
+    apiBase:
+      process.env.LITELLM_API_BASE ??
+      "http://litellm.ai.svc.cluster.local:4000/v1",
     apiKey:
       process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key",
     model:
       process.env.LITELLM_MODEL ??
       process.env.OPENCODE_MODEL ??
-      "local/qwen2.5",
+      "z-ai/glm-4-32b",
   },
   crawlIntervalMinutes: Number(process.env.CRAWL_INTERVAL_MINUTES ?? "40"),
   articleCron: process.env.ARTICLE_CRON ?? "0 8 * * *",

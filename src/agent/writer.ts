@@ -1,7 +1,12 @@
+import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { log } from "../utils/logger.js";
 import { getSystemPrompt } from "./improver.js";
+
+function withModelFooter(content: string): string {
+  return `${content}\n\n---\n\n*Gerado por: ${config.litellm.model}*`;
+}
 
 export interface GeneratedArticle {
   title: string;
@@ -192,7 +197,7 @@ Return JSON:
       ...fallbackArticle(
         title,
         "Resumo operacional gerado a partir das fontes recentes após timeout do modelo LiteLLM.",
-        content,
+        withModelFooter(content),
         sources.map((a) => a.url),
       ),
       date: today,
@@ -202,6 +207,7 @@ Return JSON:
   const result = await parseArticleJson(text, userPrompt);
   return {
     ...result,
+    content: withModelFooter(result.content),
     slug: result.slug || safeSlug(result.title || `article-${today}`),
     sources: result.sources ?? recentArticles.slice(0, 3).map((a) => a.url),
     date: today,
@@ -343,7 +349,7 @@ Return JSON:
       ...fallbackArticle(
         title,
         `Resumo operacional do período ${periodStr} após timeout do modelo LiteLLM.`,
-        content,
+        withModelFooter(content),
         sources.map((a) => a.url),
       ),
       date: today,
@@ -353,6 +359,7 @@ Return JSON:
   const result = await parseArticleJson(text, userPrompt);
   return {
     ...result,
+    content: withModelFooter(result.content),
     slug: result.slug || safeSlug(result.title || `${period}-report-${today}`),
     sources: result.sources ?? recentArticles.slice(0, 10).map((a) => a.url),
     date: today,

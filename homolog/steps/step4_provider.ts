@@ -12,7 +12,7 @@ async function main() {
     const response = await Promise.race([
       ask("Say OK and nothing else."),
       new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error("timeout")), 120000)
+        setTimeout(() => reject(new Error("timeout")), 300000)
       ),
     ]);
 
