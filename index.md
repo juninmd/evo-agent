@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>23</strong> artigos</span>
-    <span><strong>11</strong> relatorios</span>
+    <span><strong>12</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-01">2026-06-01</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-06-01-relatorio-mensal-panorama-tecnico-02-05-2026-a-01-06-2026">Relatorio Mensal: Panorama tecnico (02/05/2026 a 01/06/2026)</a></h3>
+  <p>Neste período, o cenário do IA continuou a evoluir rapidamente, com foco em desafios de custos crescentes, segurança em block chain, otimização de tokens, e o desenvolvimento de agentes IA. A crescente adoção de IA em empresas levou a situações como um cliente que gastou $500M em</p>
+  <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-01">2026-06-01</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-06-01-relatorio-quinzenal-panorama-tecnico-18-05-2026-a-01-06-2026">Relatorio Quinzenal: Panorama tecnico (18/05/2026 a 01/06/2026)</a></h3>
   <p>, text/xml, or any other format. Only generate the structured, actionable content. Relatório Técnico Quinzenal de IA  Período: 18/05/2026 a 01/06/2026</p>
-  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
