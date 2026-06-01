@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>23</strong> artigos</span>
-    <span><strong>10</strong> relatorios</span>
+    <span><strong>11</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-01">2026-06-01</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-06-01-relatorio-quinzenal-panorama-tecnico-18-05-2026-a-01-06-2026">Relatorio Quinzenal: Panorama tecnico (18/05/2026 a 01/06/2026)</a></h3>
+  <p>, text/xml, or any other format. Only generate the structured, actionable content. Relatório Técnico Quinzenal de IA  Período: 18/05/2026 a 01/06/2026</p>
+  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-relatorio-semanal-panorama-tecnico-24-05-2026-a-31-05-2026">Relatorio Semanal: Panorama tecnico (24/05/2026 a 31/05/2026)</a></h3>
   <p>No período de 24 a 31 de maio de 2026, observamos uma série de avanços significativos no campo dos modelos de linguagem de grande escala LLM, inteligência artificial IA e arquitetura de agentes. Notavelmente, a Anthropic lançou a versão Opus 4.8 do Claude Code, que introduziu rec</p>
@@ -94,7 +100,7 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-06-01">2026-06-01</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-01-gerenciamento-de-orcamento-de-tokens-em-ia-estrategias-praticas-para-evitar-cust">Gerenciamento de Orçamento de Tokens em IA: Estratégias Práticas para Evitar Custo Excessivo</a></h3>
   <p>Em um cenário onde as empresas estão cada vez mais dependentes de inteligência artificial IA para suas operações, o controle de custos associados ao uso de tokens se tornou uma questão crítica. Recentemente, notícias destacaram casos extremos, como uma empresa gastando $500 milhõ</p>
-  <div class="chips"><span>ai</span><span>developers</span></div>
+  
 </article>
   </div>
 </section>
