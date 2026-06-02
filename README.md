@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>25</strong> artigos</span>
-    <span><strong>14</strong> relatorios</span>
+    <span><strong>15</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-02-relatorio-semanal-panorama-tecnico-26-05-2026-a-02-06-2026">Relatorio Semanal: Panorama tecnico (26/05/2026 a 02/06/2026)</a></h3>
+  <p>RAG e multimodalidade – o Google Gemini lançou a API de File Search multimodal e o Gemini Embedding 2 chegou com codificação nativa de imagens e vídeos, reduzindo custos de ingestão para pipelines de busca enterprise. O mesmo ritmo foi observado em esforços de multimodal RAG de p</p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-06-02-relatorio-mensal-panorama-tecnico-03-05-2026-a-02-06-2026">Relatorio Mensal: Panorama tecnico (03/05/2026 a 02/06/2026)</a></h3>
   <p>Nas últimas quatro semanas o ecossistema de grandes modelos de linguagem LLMs consolidou três linhas de evolução simultâneas:</p>
-  <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Relatorio</span></div>
