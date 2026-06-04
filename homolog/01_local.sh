@@ -40,7 +40,7 @@ export LITELLM_API_KEY=$(extract_secret LITELLM_API_KEY)
 if [ -z "$LITELLM_API_KEY" ]; then
   LITELLM_API_KEY=$(extract_secret OPENCODE_API_KEY)
 fi
-export LITELLM_MODEL=${LITELLM_MODEL:-local/qwen2.5}
+export LITELLM_MODEL=${LITELLM_MODEL:-cloud/llama-70b}
 export TELEGRAM_BOT_TOKEN=$(extract_secret TELEGRAM_BOT_TOKEN)
 export TELEGRAM_CHAT_ID=$(extract_secret TELEGRAM_CHAT_ID)
 export GITHUB_TOKEN=$(extract_secret GITHUB_TOKEN)

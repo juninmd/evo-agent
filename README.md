@@ -54,8 +54,10 @@ npm run build
 |---|---|---|---|
 | `LITELLM_API_BASE` | No | `http://localhost:4000/v1` | LiteLLM base URL |
 | `LITELLM_API_KEY` | No | `no-key` | LiteLLM API key |
-| `LITELLM_MODEL` | No | `local/qwen2.5` | Model name |
-| `LITELLM_TIMEOUT_MS` | No | `900000` | LiteLLM request timeout in milliseconds |
+| `LITELLM_MODEL` | No | `cloud/llama-70b` | Primary model name |
+| `LITELLM_FALLBACK_MODELS` | No | `cloud/maverick,cloud/llama-8b` | Comma-separated fallback models tried if the primary fails/times out/returns empty |
+| `LITELLM_MAX_OUTPUT_TOKENS` | No | `12000` | Max output tokens per request |
+| `LITELLM_TIMEOUT_MS` | No | `300000` | LiteLLM request timeout in milliseconds |
 | `TELEGRAM_BOT_TOKEN` | Yes | — | Telegram Bot API token |
 | `TELEGRAM_CHAT_ID` | Yes | — | Target Telegram chat/group ID |
 | `GITHUB_TOKEN` | Yes | — | GitHub PAT with repo write access |

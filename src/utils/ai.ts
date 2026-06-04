@@ -19,58 +19,80 @@ export async function ask(
     "http://litellm.ai.svc.cluster.local:4000/v1";
   const apiKey =
     process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key";
-  const modelName =
-    process.env.LITELLM_MODEL ?? process.env.OPENCODE_MODEL ?? "z-ai/glm-4-32b";
+  const primaryModel =
+    process.env.LITELLM_MODEL ??
+    process.env.OPENCODE_MODEL ??
+    config.litellm.model;
+  const modelChain = [primaryModel, ...config.litellm.fallbackModels].filter(
+    (m, i, arr) => m && arr.indexOf(m) === i,
+  );
   const timeoutMs = options?.timeoutMs ?? config.litellm.timeoutMs;
   const maxOutputTokens =
     options?.maxOutputTokens ?? config.litellm.maxOutputTokens;
-
-  log.info(`Calling LiteLLM model via AI SDK: ${modelName} via ${apiBase}`);
 
   const openai = createOpenAI({
     baseURL: apiBase,
     apiKey: apiKey,
   });
 
-  let attempt = 0;
-  const maxAttempts = 5;
-  let delay = 3000;
+  let lastErr: unknown;
 
-  while (true) {
-    try {
-      const { text } = await generateText({
-        model: openai.chat(modelName),
-        system: systemPrompt,
-        prompt: userPrompt,
-        abortSignal: AbortSignal.timeout(timeoutMs),
-        ...(maxOutputTokens ? { maxOutputTokens } : {}),
-      });
+  for (let mi = 0; mi < modelChain.length; mi++) {
+    const modelName = modelChain[mi];
+    const isLast = mi === modelChain.length - 1;
+    log.info(`Calling LiteLLM model via AI SDK: ${modelName} via ${apiBase}`);
 
-      if (!text) {
-        log.warn(`Empty response from LiteLLM model ${modelName}`);
-        return "";
-      }
-      return text;
-    } catch (err: unknown) {
-      attempt++;
-      const errMsg = err instanceof Error ? err.message : String(err);
-      const isRateLimit =
-        errMsg.includes("429") ||
-        errMsg.includes("RESOURCE_EXHAUSTED") ||
-        errMsg.includes("RateLimitError") ||
-        errMsg.includes("throttling_error");
+    let attempt = 0;
+    const maxAttempts = 5;
+    let delay = 3000;
 
-      if (isRateLimit && attempt < maxAttempts) {
+    while (true) {
+      try {
+        const { text } = await generateText({
+          model: openai.chat(modelName),
+          system: systemPrompt,
+          prompt: userPrompt,
+          abortSignal: AbortSignal.timeout(timeoutMs),
+          ...(maxOutputTokens ? { maxOutputTokens } : {}),
+        });
+
+        if (!text) {
+          log.warn(
+            `Empty response from model ${modelName}${isLast ? "" : ", trying fallback model"}`,
+          );
+          break;
+        }
+        return text;
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : String(err);
+        const isRateLimit =
+          errMsg.includes("429") ||
+          errMsg.includes("RESOURCE_EXHAUSTED") ||
+          errMsg.includes("RateLimitError") ||
+          errMsg.includes("throttling_error");
+
+        if (isRateLimit && attempt < maxAttempts) {
+          attempt++;
+          log.warn(
+            `Rate limit or quota hit on ${modelName}. Retrying attempt ${attempt}/${maxAttempts} in ${delay}ms...`,
+          );
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          delay *= 2;
+          continue;
+        }
+
+        lastErr = err;
         log.warn(
-          `Rate limit or quota hit. Retrying attempt ${attempt}/${maxAttempts} in ${delay}ms...`,
+          `Model ${modelName} failed: ${errMsg}${isLast ? "" : ", trying fallback model"}`,
         );
-        await new Promise((resolve) => setTimeout(resolve, delay));
-        delay *= 2;
-        continue;
+        break;
       }
-
-      log.error(`LiteLLM request failed after ${attempt} attempts: ${errMsg}`);
-      throw err;
     }
   }
+
+  log.error(
+    `All LiteLLM models failed (${modelChain.join(", ")}): ${lastErr instanceof Error ? lastErr.message : String(lastErr)}`,
+  );
+  if (lastErr) throw lastErr;
+  return "";
 }

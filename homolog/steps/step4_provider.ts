@@ -4,7 +4,7 @@ async function main() {
   const model =
     process.env.LITELLM_MODEL ??
     process.env.OPENCODE_MODEL ??
-    "local/qwen2.5";
+    "cloud/llama-70b";
 
   console.log(`Testando conexão com LiteLLM (modelo: ${model})...`);
 
