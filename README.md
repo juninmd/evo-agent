@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>30</strong> artigos</span>
-    <span><strong>15</strong> relatorios</span>
+    <span><strong>16</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-06-04-relatorio-mensal-panorama-tecnico-05-05-2026-a-04-06-2026">Relatorio Mensal: Panorama tecnico (05/05/2026 a 04/06/2026)</a></h3>
+  <p>Uber esgota orçamento IA 2026 – A Uber consumiu todo o orçamento destinado a IA em apenas quatro meses de 2026, provocando o COO a questionar o retorno do investimento. O caso ilustra o perigo de alocações excessivas sem monitoramento de custos operacionais. Uber burned through i</p>
+  <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-02-relatorio-semanal-panorama-tecnico-26-05-2026-a-02-06-2026">Relatorio Semanal: Panorama tecnico (26/05/2026 a 02/06/2026)</a></h3>
   <p>RAG e multimodalidade – o Google Gemini lançou a API de File Search multimodal e o Gemini Embedding 2 chegou com codificação nativa de imagens e vídeos, reduzindo custos de ingestão para pipelines de busca enterprise. O mesmo ritmo foi observado em esforços de multimodal RAG de p</p>
@@ -123,9 +129,8 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-04-digest-de-desenvolvimento-ai-31-05-06-06-2026">Digest de Desenvolvimento AI – 31/05‑06/06/2026</a></h3>
-  <p>Destaques
- Pool Corp – Pressão sobre pools compartilhados – A queda de 42 % nas ações da Pool Corp evidencia volatilidade nos ativos de pooling, refletindo preocupação dos investidores sobre liquidez e custo de participação. Essa dinâmica alerta desenvolvedores a monitorar o cust</p>
-  <div class="chips"><span>ai</span><span>developers</span></div>
+  
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Artigo</span></div>
