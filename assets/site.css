@@ -321,6 +321,15 @@ main {
 
 .article-content .highlight { margin: 28px 0; }
 
+.article-content pre.mermaid {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 28px 0;
+  padding: 0;
+  text-align: center;
+}
+
 .article-content pre {
   background: var(--code);
   border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
