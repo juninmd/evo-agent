@@ -29,6 +29,49 @@ function buildReferencesSection(articles: Article[]): string {
   return ["## Fontes e Referências", "", ...lines].join("\n");
 }
 
+function normTitle(title: string): string {
+  return title
+    .normalize("NFD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+// Coarse category so one channel (e.g. 6 Reddit feeds) can't dominate the digest.
+function sourceBucket(source: string): string {
+  if (/^reddit/i.test(source)) return "reddit";
+  if (/^google news/i.test(source)) return "google-news";
+  if (/^github trending/i.test(source)) return "github-trending";
+  if (/^(x\/twitter|web search)/i.test(source)) return "websearch";
+  return source.toLowerCase().split(/[:(]/)[0].trim();
+}
+
+// Drop empty summaries, de-duplicate by normalized title, and cap per category.
+function curateArticles(
+  articles: Article[],
+  opts: { perBucket?: number; max?: number } = {},
+): Article[] {
+  const perBucket = opts.perBucket ?? Number.POSITIVE_INFINITY;
+  const max = opts.max ?? Number.POSITIVE_INFINITY;
+  const seen = new Set<string>();
+  const bucketCount = new Map<string, number>();
+  const out: Article[] = [];
+  for (const a of articles) {
+    if (!a.summary || a.summary.trim().length === 0) continue;
+    const key = normTitle(a.title);
+    if (!key || seen.has(key)) continue;
+    const bucket = sourceBucket(a.source);
+    const bc = bucketCount.get(bucket) ?? 0;
+    if (bc >= perBucket) continue;
+    seen.add(key);
+    bucketCount.set(bucket, bc + 1);
+    out.push(a);
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
 export interface GeneratedArticle {
   title: string;
   slug: string;
@@ -126,12 +169,15 @@ function markdownSummary(markdown: string, fallback: string): string {
 export async function generateArticle(
   type: "daily" | "weekly" = "daily",
 ): Promise<GeneratedArticle> {
-  const limit = type === "weekly" ? 100 : 30;
+  const limit = type === "weekly" ? 150 : 60;
   const recentArticles = db.getRecentArticles(limit);
   const snippets = db.getSnippets(type === "weekly" ? 20 : 5);
   const systemPrompt = getSystemPrompt();
 
-  const usedArticles = recentArticles.slice(0, type === "weekly" ? 80 : 30);
+  const usedArticles = curateArticles(recentArticles, {
+    perBucket: type === "weekly" ? 25 : 10,
+    max: type === "weekly" ? 80 : 30,
+  });
   const context = clampContext(
     usedArticles
       .map(
@@ -313,11 +359,12 @@ function periodMeta(period: ReportPeriod) {
 }
 
 function loadPeriodArticles(cfg: PeriodConfig): Article[] {
-  const since = new Date();
-  since.setDate(since.getDate() - cfg.days);
-  return db
-    .getRecentArticles(200)
-    .filter((a) => new Date(a.crawled_at) >= since);
+  // Filter by date in SQL (indexed) and curate, instead of capping at the
+  // 200 most recent rows — that cap made long periods only ever see ~1-2 days.
+  return curateArticles(db.getArticlesSince(cfg.days), {
+    perBucket: 40,
+    max: 150,
+  });
 }
 
 function snippetContextFrom(

@@ -75,6 +75,9 @@ function migrate(db: Database.Database) {
       url TEXT NOT NULL,
       published_at TEXT DEFAULT (datetime('now'))
     );
+
+    CREATE INDEX IF NOT EXISTS idx_articles_crawled_at
+      ON articles(crawled_at);
   `);
 }
 
@@ -91,6 +94,14 @@ export const db = {
     return getDb()
       .prepare("SELECT * FROM articles ORDER BY crawled_at DESC LIMIT ?")
       .all(limit) as Article[];
+  },
+
+  getArticlesSince(days: number, limit = 2000): Article[] {
+    return getDb()
+      .prepare(
+        "SELECT * FROM articles WHERE crawled_at >= datetime('now', ?) ORDER BY crawled_at DESC LIMIT ?",
+      )
+      .all(`-${days} days`, limit) as Article[];
   },
 
   urlExists(url: string): boolean {
