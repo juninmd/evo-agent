@@ -172,7 +172,7 @@ export function buildDefaultLayout() {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=3' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=4' | relative_url }}">
     <script>
       const savedTheme = localStorage.getItem("evo-agent-theme");
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -205,15 +205,24 @@ export function buildDefaultLayout() {
         setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
       });
     </script>
-    <script>
-      hljs.configure({ cssSelector: "pre code" });
-      document.querySelectorAll("pre code").forEach(function(block) {
-        block.textContent = block.textContent;
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+      var isDark = document.documentElement.dataset.theme !== "light";
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default", securityLevel: "strict" });
+      // kramdown/rouge wraps fenced mermaid as <div class="language-mermaid ...">...<code>...; some engines as <code class="language-mermaid">. Handle both, hand mermaid the raw source.
+      document.querySelectorAll('[class*="language-mermaid"]').forEach(function(node) {
+        var codeEl = node.matches("code") ? node : node.querySelector("code");
+        var holder = document.createElement("pre");
+        holder.className = "mermaid";
+        holder.textContent = (codeEl ? codeEl.textContent : node.textContent);
+        node.replaceWith(holder);
       });
+      try { await mermaid.run({ querySelector: "pre.mermaid" }); } catch (e) {}
+      hljs.configure({ cssSelector: "pre code:not(.language-mermaid)" });
       hljs.highlightAll();
       document.querySelectorAll("div[class*=language-]").forEach(function(div) {
         var match = div.className.match(/language-(\w+)/);
-        if (match && match[1] !== "plaintext") {
+        if (match && match[1] !== "plaintext" && match[1] !== "mermaid") {
           var label = document.createElement("span");
           label.className = "language-label";
           label.textContent = match[1];
@@ -221,7 +230,7 @@ export function buildDefaultLayout() {
           if (pre) pre.parentNode.insertBefore(label, pre);
         }
       });
-      document.querySelectorAll("pre").forEach(function(pre) {
+      document.querySelectorAll("pre:not(.mermaid)").forEach(function(pre) {
         var btn = document.createElement("button");
         btn.className = "copy-btn";
         btn.textContent = "Copiar";
@@ -255,7 +264,7 @@ export function buildArticleLayout() {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=3' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=4' | relative_url }}">
     <script>
       const savedTheme = localStorage.getItem("evo-agent-theme");
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -303,15 +312,24 @@ export function buildArticleLayout() {
         setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
       });
     </script>
-    <script>
-      hljs.configure({ cssSelector: "pre code" });
-      document.querySelectorAll("pre code").forEach(function(block) {
-        block.textContent = block.textContent;
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+      var isDark = document.documentElement.dataset.theme !== "light";
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default", securityLevel: "strict" });
+      // kramdown/rouge wraps fenced mermaid as <div class="language-mermaid ...">...<code>...; some engines as <code class="language-mermaid">. Handle both, hand mermaid the raw source.
+      document.querySelectorAll('[class*="language-mermaid"]').forEach(function(node) {
+        var codeEl = node.matches("code") ? node : node.querySelector("code");
+        var holder = document.createElement("pre");
+        holder.className = "mermaid";
+        holder.textContent = (codeEl ? codeEl.textContent : node.textContent);
+        node.replaceWith(holder);
       });
+      try { await mermaid.run({ querySelector: "pre.mermaid" }); } catch (e) {}
+      hljs.configure({ cssSelector: "pre code:not(.language-mermaid)" });
       hljs.highlightAll();
       document.querySelectorAll("div[class*=language-]").forEach(function(div) {
         var match = div.className.match(/language-(\w+)/);
-        if (match && match[1] !== "plaintext") {
+        if (match && match[1] !== "plaintext" && match[1] !== "mermaid") {
           var label = document.createElement("span");
           label.className = "language-label";
           label.textContent = match[1];
@@ -319,7 +337,7 @@ export function buildArticleLayout() {
           if (pre) pre.parentNode.insertBefore(label, pre);
         }
       });
-      document.querySelectorAll("pre").forEach(function(pre) {
+      document.querySelectorAll("pre:not(.mermaid)").forEach(function(pre) {
         var btn = document.createElement("button");
         btn.className = "copy-btn";
         btn.textContent = "Copiar";
@@ -665,6 +683,15 @@ main {
 }
 
 .article-content .highlight { margin: 28px 0; }
+
+.article-content pre.mermaid {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 28px 0;
+  padding: 0;
+  text-align: center;
+}
 
 .article-content pre {
   background: var(--code);

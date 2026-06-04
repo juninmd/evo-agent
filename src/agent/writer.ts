@@ -1,4 +1,5 @@
 import { config } from "../config.js";
+import type { Article } from "../knowledge/store.js";
 import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { log } from "../utils/logger.js";
@@ -6,6 +7,26 @@ import { getSystemPrompt } from "./improver.js";
 
 function withModelFooter(content: string): string {
   return `${content}\n\n---\n\n*Gerado por: ${config.litellm.model}*`;
+}
+
+const askOpts = { maxOutputTokens: config.litellm.maxOutputTokens };
+
+const CURATION_GUIDANCE =
+  "Selecione APENAS os itens realmente interessantes/relevantes do período (lançamentos, mudanças de arquitetura, padrões, ferramentas, insights da comunidade). Resuma cada item em 2-4 frases densas — o que é e por que importa — sem encher linguiça e sem repetir. Priorize VARIEDADE de fontes e temas (largura) em vez de aprofundar um único tópico. Cada destaque deve citar a fonte como link [título](url) retirado da lista fornecida.";
+
+const MERMAID_GUIDANCE =
+  "Quando for ilustrar uma tendência, fluxo ou arquitetura, use UM diagrama Mermaid em bloco ```mermaid (flowchart, sequenceDiagram ou architecture), sintaticamente válido e autocontido (no máximo 2-3 diagramas no documento todo, só onde agregar). Inclua código apenas se for REAL e executável e agregar valor concreto. NUNCA escreva pseudocódigo — se não houver código real útil, use um diagrama ou texto.";
+
+function clampContext(s: string, max = 60000): string {
+  return s.length > max ? s.slice(0, max) : s;
+}
+
+function buildReferencesSection(articles: Article[]): string {
+  if (articles.length === 0) return "";
+  const lines = articles.map(
+    (a, i) => `${i + 1}. [${a.title}](${a.url}) — ${a.source}`,
+  );
+  return ["## Fontes e Referências", "", ...lines].join("\n");
 }
 
 export interface GeneratedArticle {
@@ -110,13 +131,15 @@ export async function generateArticle(
   const snippets = db.getSnippets(type === "weekly" ? 20 : 5);
   const systemPrompt = getSystemPrompt();
 
-  const context = recentArticles
-    .slice(0, type === "weekly" ? 50 : 15)
-    .map(
-      (a) =>
-        `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 300)}`,
-    )
-    .join("\n");
+  const usedArticles = recentArticles.slice(0, type === "weekly" ? 80 : 30);
+  const context = clampContext(
+    usedArticles
+      .map(
+        (a) =>
+          `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 350)}`,
+      )
+      .join("\n"),
+  );
 
   const snippetContext =
     snippets.length > 0
@@ -144,38 +167,50 @@ Return Markdown only. Do not return JSON, YAML front matter, or code fences arou
 
 ${context}${snippetContext}
 
-Write a high-quality technical article for developers about an important topic from this content.
-The article should be insightful, practical, and showcase deep understanding.
+Write a curated digest in pt-BR of the most interesting recent developments for developers (focus on AI, LLMs and agent harnesses).
 
 Return Markdown only.
 The first line must be a single H1 title in pt-BR, for example:
 # Titulo tecnico em pt-BR
 
-Then write the full article in pt-BR (800-1200 words), with practical sections and code examples where relevant.`;
+Structure the body:
+## Destaques
+- 8 to 12 bullet items. Each item: **nome/tema curto em negrito** followed by a 2-4 sentence dense summary (what it is, why it matters), ending with a source link [titulo](url) taken from the list above.
+## Tendências
+1-2 short paragraphs connecting the highlights; include ONE Mermaid diagram only if it genuinely clarifies a flow or architecture.
+
+${CURATION_GUIDANCE}
+
+${MERMAID_GUIDANCE}`;
 
   const userPromptWeekly = `Based on the following content from the last 7 days:
 
 ${context}${snippetContext}
 
-Write a comprehensive WEEKLY SUMMARY for developers. 
-The summary should:
-1. Identify the 3 most significant trends of the week.
-2. Provide a deep dive into the most technical advancement.
-3. Summarize the best code patterns or tools discovered.
-4. Conclude with a "What to watch next week" section.
+Write a curated WEEKLY digest in pt-BR for developers covering the most interesting developments in AI, LLMs and agent harnesses.
 
 Return Markdown only.
 The first line must be a single H1 title in pt-BR, for example:
 # Relatorio semanal: titulo tecnico
 
-Then write the full weekly report in pt-BR (1500-2000 words), well structured with headings.`;
+Structure the body:
+## Destaques da semana
+- 12 to 18 bullet items. Each item: **nome/tema curto em negrito** + a 2-4 sentence dense summary (what it is, why it matters) + source link [titulo](url) taken from the list above.
+## Tendências
+2-3 short paragraphs on the week's trends; include ONE Mermaid diagram where it clarifies a flow or architecture.
+## O que observar
+A few short bullets on what to watch next week.
+
+${CURATION_GUIDANCE}
+
+${MERMAID_GUIDANCE}`;
 
   const userPrompt = type === "weekly" ? userPromptWeekly : userPromptDaily;
 
   log.info(`Generating ${type} article...`);
   let text: string;
   try {
-    text = await ask(userPrompt, fullSystemPrompt);
+    text = await ask(userPrompt, fullSystemPrompt, askOpts);
   } catch (err) {
     log.warn(
       `Article generation failed, using source-based fallback: ${(err as Error).message}`,
@@ -203,6 +238,7 @@ Then write the full weekly report in pt-BR (1500-2000 words), well structured wi
   }
 
   const content = withoutTopTitle(text);
+  const references = buildReferencesSection(usedArticles);
   const title = markdownTitle(
     text,
     "Artigo tecnico de IA para desenvolvedores",
@@ -221,7 +257,9 @@ Then write the full weekly report in pt-BR (1500-2000 words), well structured wi
     sources: recentArticles
       .slice(0, type === "weekly" ? 10 : 5)
       .map((a) => a.url),
-    content: withModelFooter(content),
+    content: withModelFooter(
+      references ? `${content}\n\n${references}` : content,
+    ),
     date: today,
   };
 }
@@ -237,68 +275,30 @@ export type ReportPeriod =
   | "bimonthly"
   | "semester";
 
-const PERIOD_CONFIG: Record<
-  ReportPeriod,
-  { days: number; label: string; wordCount: [number, number] }
-> = {
-  weekly: { days: 7, label: "semanal", wordCount: [1200, 2000] },
-  biweekly: { days: 14, label: "quinzenal", wordCount: [1500, 2500] },
-  monthly: { days: 30, label: "mensal", wordCount: [2000, 3000] },
-  bimonthly: { days: 60, label: "bimestral", wordCount: [2500, 4000] },
-  semester: { days: 180, label: "semestral", wordCount: [3500, 5000] },
+interface PeriodConfig {
+  days: number;
+  label: string;
+  highlights: [number, number];
+}
+
+const PERIOD_CONFIG: Record<ReportPeriod, PeriodConfig> = {
+  weekly: { days: 7, label: "semanal", highlights: [12, 18] },
+  biweekly: { days: 14, label: "quinzenal", highlights: [15, 22] },
+  monthly: { days: 30, label: "mensal", highlights: [20, 30] },
+  bimonthly: { days: 60, label: "bimestral", highlights: [25, 35] },
+  semester: { days: 180, label: "semestral", highlights: [30, 45] },
 };
 
-export async function generatePeriodReport(
-  period: ReportPeriod,
-): Promise<GeneratedArticle> {
+function periodMeta(period: ReportPeriod) {
   const cfg = PERIOD_CONFIG[period];
-  const since = new Date();
-  since.setDate(since.getDate() - cfg.days);
-
-  const recentArticles = db.getRecentArticles(200).filter((a) => {
-    const crawledDate = new Date(a.crawled_at);
-    return crawledDate >= since;
-  });
-
-  const snippets = db.getSnippets(50);
-
-  if (recentArticles.length === 0) {
-    throw new Error(
-      `No articles crawled in the last ${cfg.days} days to generate a ${cfg.label} report`,
-    );
-  }
-
-  const systemPrompt = `You are a Principal AI Architect and technical newsletter editor.
-You analyze crawled AI research, news, and code snippets, synthesizing them into a high-quality, comprehensive ${cfg.label} technical report.
-Your output must be deeply technical, insightful, structured, and practical.
-Always write in Brazilian Portuguese (pt-BR).
-Return Markdown only. Do not return JSON, YAML front matter, or code fences around the full answer.`;
-
-  const context = recentArticles
-    .map((a) => `- [${a.source}] ${a.title}: ${a.summary.slice(0, 250)}`)
-    .join("\n");
-
-  const snippetContext =
-    snippets.length > 0
-      ? `\n\nCode patterns/snippets learned this period:\n${snippets
-          .map(
-            (s) =>
-              `- Title: ${s.title}\n  Language: ${s.language}\n  Explanation: ${s.explanation.slice(0, 300)}\n  Code:\n  \`\`\`${s.language}\n  ${s.code.slice(0, 600)}\n  \`\`\``,
-          )
-          .join("\n\n")}`
-      : "";
-
   const todayDate = new Date();
   const sinceDate = new Date();
   sinceDate.setDate(todayDate.getDate() - cfg.days);
-
   const pad = (n: number) => String(n).padStart(2, "0");
   const fmt = (d: Date) =>
     `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
-
   const periodStr = `${fmt(sinceDate)} a ${fmt(todayDate)}`;
   const today = todayDate.toISOString().split("T")[0];
-
   const titleLabel =
     period === "weekly"
       ? "Relatorio Semanal"
@@ -309,66 +309,141 @@ Return Markdown only. Do not return JSON, YAML front matter, or code fences arou
           : period === "bimonthly"
             ? "Relatorio Bimestral"
             : "Relatorio Semestral";
+  return { cfg, periodStr, today, titleLabel };
+}
 
-  const userPrompt = `Based on everything crawled and learned over the last ${cfg.days} days (Period: ${periodStr}):
+function loadPeriodArticles(cfg: PeriodConfig): Article[] {
+  const since = new Date();
+  since.setDate(since.getDate() - cfg.days);
+  return db
+    .getRecentArticles(200)
+    .filter((a) => new Date(a.crawled_at) >= since);
+}
+
+function snippetContextFrom(
+  snippets: ReturnType<typeof db.getSnippets>,
+): string {
+  return snippets.length > 0
+    ? `\n\nCode patterns/snippets learned this period:\n${snippets
+        .map(
+          (s) =>
+            `- Title: ${s.title}\n  Language: ${s.language}\n  Explanation: ${s.explanation.slice(0, 300)}`,
+        )
+        .join("\n")}`
+    : "";
+}
+
+function periodFallback(
+  period: ReportPeriod,
+  periodStr: string,
+  today: string,
+  titleLabel: string,
+  recentArticles: Article[],
+): GeneratedArticle {
+  const sources = recentArticles.slice(0, 10);
+  const title = `${titleLabel}: Resumo operacional (${periodStr})`;
+  const content = [
+    `**Período:** ${periodStr}`,
+    "",
+    "## Resumo do Período",
+    "O modelo configurado via LiteLLM não retornou dentro do tempo limite. Este relatório foi publicado com base nas fontes coletadas mais recentes para manter o ciclo operacional.",
+    "",
+    "## Fontes recentes",
+    ...sources.map(
+      (a) => `- [${a.title}](${a.url}) — ${a.summary.slice(0, 240)}`,
+    ),
+  ].join("\n");
+  return {
+    ...fallbackArticle(
+      title,
+      `Resumo operacional do período ${periodStr} após timeout do modelo LiteLLM.`,
+      withModelFooter(content),
+      sources.map((a) => a.url),
+    ),
+    date: today,
+    reportPeriod: period,
+  };
+}
+
+export async function generatePeriodReport(
+  period: ReportPeriod,
+): Promise<GeneratedArticle> {
+  if (period === "monthly" || period === "bimonthly" || period === "semester") {
+    return generatePeriodReportMultiPass(period);
+  }
+  return generatePeriodReportSinglePass(period);
+}
+
+async function generatePeriodReportSinglePass(
+  period: ReportPeriod,
+): Promise<GeneratedArticle> {
+  const { cfg, periodStr, today, titleLabel } = periodMeta(period);
+  const recentArticles = loadPeriodArticles(cfg);
+  if (recentArticles.length === 0) {
+    throw new Error(
+      `No articles crawled in the last ${cfg.days} days to generate a ${cfg.label} report`,
+    );
+  }
+  const snippets = db.getSnippets(50);
+
+  const systemPrompt = `You are a Principal AI Architect and technical newsletter editor.
+You curate crawled AI research, news, and code snippets into a high-signal ${cfg.label} digest of only the most interesting developments.
+Always write in Brazilian Portuguese (pt-BR).
+Return Markdown only. Do not return JSON, YAML front matter, or code fences around the full answer.`;
+
+  const context = clampContext(
+    recentArticles
+      .map(
+        (a) =>
+          `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 300)}`,
+      )
+      .join("\n"),
+  );
+  const snippetContext = snippetContextFrom(snippets);
+
+  const userPrompt = `Based on everything crawled over the last ${cfg.days} days (Period: ${periodStr}):
 
 ${context}${snippetContext}
 
-Write a comprehensive ${cfg.label} technical report summarizing the main developments in LLM, AI, and Agent Harnesses.
+Write a curated ${cfg.label} digest in pt-BR of the most interesting developments in LLM, AI, and Agent Harnesses.
 At the very top of the markdown body (after the H1 title), include:
 **Periodo:** ${periodStr}
 
-Structure the report using Markdown. Organize it into sections like:
-1. Resumo do Periodo (Executive Summary)
-2. Grandes Lancamentos e Noticias (Key Releases & News)
-3. Analise de Arquitetura de Agentes (Deep analysis of Agent Harnesses / AI architecture trends)
-4. Melhores Praticas e Padroes de Codigo (Code patterns and best practices)
-5. Conclusao e Proximos Passos (Future outlook)
-
-The report should be extensive, informative (${cfg.wordCount[0]}-${cfg.wordCount[1]} words), and highly technical.
+Structure the body:
+## Destaques do período
+- ${cfg.highlights[0]} to ${cfg.highlights[1]} bullet items. Each item: **nome/tema curto em negrito** + a 2-4 sentence dense summary (what it is, why it matters) + source link [titulo](url) taken from the list above.
+## Tendências
+2-3 short paragraphs on the period's trends; include ONE Mermaid diagram where it clarifies a flow or architecture.
 
 Return Markdown only.
 The first line must be a single H1 title in pt-BR, for example:
 # ${titleLabel}: titulo tecnico do periodo
 
 Use only facts from Period ${periodStr}. Do not mention months or dates outside this period.
-Do not return JSON.`;
-  log.info(`Generating ${cfg.label} report (${cfg.days}d period)...`);
+
+${CURATION_GUIDANCE}
+
+${MERMAID_GUIDANCE}`;
+
+  log.info(
+    `Generating ${cfg.label} report (single-pass, ${cfg.days}d period)...`,
+  );
   let text: string;
   try {
-    text = await ask(userPrompt, systemPrompt);
+    text = await ask(userPrompt, systemPrompt, askOpts);
   } catch (err) {
     log.warn(
       `Report generation failed, using source-based fallback: ${(err as Error).message}`,
     );
-    const sources = recentArticles.slice(0, 10);
-    const title = `${titleLabel}: Resumo operacional (${periodStr})`;
-    const content = [
-      `**Período:** ${periodStr}`,
-      "",
-      "## Resumo do Período",
-      "O modelo configurado via LiteLLM não retornou dentro do tempo limite. Este relatório foi publicado com base nas fontes coletadas mais recentes para manter o ciclo operacional.",
-      "",
-      "## Fontes recentes",
-      ...sources.map(
-        (a) => `- [${a.title}](${a.url}) — ${a.summary.slice(0, 240)}`,
-      ),
-    ].join("\n");
-    return {
-      ...fallbackArticle(
-        title,
-        `Resumo operacional do período ${periodStr} após timeout do modelo LiteLLM.`,
-        withModelFooter(content),
-        sources.map((a) => a.url),
-      ),
-      date: today,
-    };
+    return periodFallback(period, periodStr, today, titleLabel, recentArticles);
   }
 
   const contentWithoutTitle = withoutTopTitle(text);
-  const content = contentWithoutTitle.startsWith("**Per")
+  const body = contentWithoutTitle.startsWith("**Per")
     ? contentWithoutTitle
     : `**Periodo:** ${periodStr}\n\n${contentWithoutTitle}`;
+  const references = buildReferencesSection(recentArticles.slice(0, 60));
+  const content = references ? `${body}\n\n${references}` : body;
   const title = `${titleLabel}: Panorama tecnico (${periodStr})`;
 
   return {
@@ -381,6 +456,166 @@ Do not return JSON.`;
     tags: [`${period}-report`, "ai-agents", "llm"],
     sources: recentArticles.slice(0, 10).map((a) => a.url),
     content: withModelFooter(content),
+    date: today,
+    reportPeriod: period,
+  };
+}
+
+interface HighlightGroup {
+  theme: string;
+  itemIdx: number[];
+}
+
+async function selectHighlightGroups(
+  cfg: PeriodConfig,
+  periodStr: string,
+  indexedContext: string,
+): Promise<HighlightGroup[]> {
+  const systemPrompt =
+    "You are a technical news curator. Return valid JSON only.";
+  const userPrompt = `From the indexed sources below (Period: ${periodStr}), select the most interesting developments and cluster them into 4-7 thematic groups for a ${cfg.label} digest.
+
+Sources (each line is "[index] [source] title (url): summary"):
+${indexedContext}
+
+Return JSON only, no markdown fences:
+{ "groups": [ { "theme": "short pt-BR theme title", "itemIdx": [0, 3, 7] } ] }
+
+Pick only genuinely interesting items. Aim to cover ${cfg.highlights[0]}-${cfg.highlights[1]} items total across all groups. Use only indices that exist in the list above; never invent indices.`;
+  const text = await ask(userPrompt, systemPrompt, askOpts);
+  const match = text.match(/\{[\s\S]*\}/);
+  if (!match) return [];
+  try {
+    const parsed = JSON.parse(match[0]) as { groups?: HighlightGroup[] };
+    return (parsed.groups ?? []).filter(
+      (g) => g?.theme && Array.isArray(g.itemIdx),
+    );
+  } catch {
+    return [];
+  }
+}
+
+async function summarizeGroup(
+  group: HighlightGroup,
+  periodStr: string,
+  articles: Article[],
+): Promise<string> {
+  const items = group.itemIdx
+    .filter((i) => Number.isInteger(i) && i >= 0 && i < articles.length)
+    .map((i) => articles[i]);
+  if (items.length === 0) return "";
+  const list = items
+    .map(
+      (a) =>
+        `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 350)}`,
+    )
+    .join("\n");
+  const systemPrompt =
+    "You write concise pt-BR technical digest sections. Return Markdown only.";
+  const userPrompt = `Period: ${periodStr}. Theme: "${group.theme}".
+Summarize ONLY the following sources into a digest section:
+${list}
+
+Return Markdown starting with the heading:
+## ${group.theme}
+Then one bullet per item: **nome/tema curto em negrito** + a 2-4 sentence dense summary (what it is, why it matters) + source link [titulo](url). Be concise; no filler.
+
+${MERMAID_GUIDANCE}`;
+  return ask(userPrompt, systemPrompt, askOpts);
+}
+
+async function buildTrendsSection(
+  groups: HighlightGroup[],
+  periodStr: string,
+): Promise<string> {
+  const themes = groups.map((g) => g.theme).join("; ");
+  const systemPrompt =
+    'You write a concise pt-BR "Tendências" section. Return Markdown only.';
+  const userPrompt = `Period: ${periodStr}. Themes covered in this digest: ${themes}.
+Write a "## Tendências" section: 2-3 short paragraphs connecting these themes, and include ONE Mermaid diagram (flowchart or architecture) only if it clarifies a flow or architecture.
+
+${MERMAID_GUIDANCE}`;
+  return ask(userPrompt, systemPrompt, askOpts);
+}
+
+async function generatePeriodReportMultiPass(
+  period: ReportPeriod,
+): Promise<GeneratedArticle> {
+  const { cfg, periodStr, today, titleLabel } = periodMeta(period);
+  const recentArticles = loadPeriodArticles(cfg);
+  if (recentArticles.length === 0) {
+    throw new Error(
+      `No articles crawled in the last ${cfg.days} days to generate a ${cfg.label} report`,
+    );
+  }
+
+  log.info(
+    `Generating ${cfg.label} report (multi-pass, ${cfg.days}d period)...`,
+  );
+  const indexedContext = clampContext(
+    recentArticles
+      .map(
+        (a, i) =>
+          `[${i}] [${a.source}] ${a.title} (${a.url}): ${a.summary.slice(0, 300)}`,
+      )
+      .join("\n"),
+  );
+
+  const groupSections: string[] = [];
+  let trends = "";
+  try {
+    const groups = await selectHighlightGroups(cfg, periodStr, indexedContext);
+    if (groups.length === 0) {
+      log.warn(
+        "Multi-pass clustering returned no groups; falling back to single-pass digest",
+      );
+      return generatePeriodReportSinglePass(period);
+    }
+    for (const group of groups) {
+      try {
+        const section = await summarizeGroup(group, periodStr, recentArticles);
+        if (section.trim()) groupSections.push(section.trim());
+      } catch (err) {
+        log.warn(`Group "${group.theme}" failed: ${(err as Error).message}`);
+        groupSections.push(
+          `## ${group.theme}\n\n_(seção indisponível nesta edição)_`,
+        );
+      }
+    }
+    try {
+      trends = (await buildTrendsSection(groups, periodStr)).trim();
+    } catch (err) {
+      log.warn(`Trends section failed: ${(err as Error).message}`);
+    }
+  } catch (err) {
+    log.warn(
+      `Multi-pass report failed, using source-based fallback: ${(err as Error).message}`,
+    );
+    return periodFallback(period, periodStr, today, titleLabel, recentArticles);
+  }
+
+  if (groupSections.length === 0) {
+    return periodFallback(period, periodStr, today, titleLabel, recentArticles);
+  }
+
+  const references = buildReferencesSection(recentArticles.slice(0, 60));
+  const content = withModelFooter(
+    [`**Periodo:** ${periodStr}`, "", ...groupSections, trends, references]
+      .filter(Boolean)
+      .join("\n\n"),
+  );
+  const title = `${titleLabel}: Panorama tecnico (${periodStr})`;
+
+  return {
+    title,
+    slug: safeSlug(title),
+    summary: markdownSummary(
+      content,
+      `Relatorio ${cfg.label} em pt-BR gerado a partir das fontes recentes.`,
+    ),
+    tags: [`${period}-report`, "ai-agents", "llm"],
+    sources: recentArticles.slice(0, 10).map((a) => a.url),
+    content,
     date: today,
     reportPeriod: period,
   };

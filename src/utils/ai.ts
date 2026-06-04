@@ -3,9 +3,15 @@ import { generateText } from "ai";
 import { config } from "../config.js";
 import { log } from "./logger.js";
 
+export interface AskOptions {
+  maxOutputTokens?: number;
+  timeoutMs?: number;
+}
+
 export async function ask(
   userPrompt: string,
   systemPrompt?: string,
+  options?: AskOptions,
 ): Promise<string> {
   const apiBase =
     process.env.LITELLM_API_BASE ??
@@ -15,7 +21,9 @@ export async function ask(
     process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key";
   const modelName =
     process.env.LITELLM_MODEL ?? process.env.OPENCODE_MODEL ?? "z-ai/glm-4-32b";
-  const timeoutMs = config.litellm.timeoutMs;
+  const timeoutMs = options?.timeoutMs ?? config.litellm.timeoutMs;
+  const maxOutputTokens =
+    options?.maxOutputTokens ?? config.litellm.maxOutputTokens;
 
   log.info(`Calling LiteLLM model via AI SDK: ${modelName} via ${apiBase}`);
 
@@ -35,6 +43,7 @@ export async function ask(
         system: systemPrompt,
         prompt: userPrompt,
         abortSignal: AbortSignal.timeout(timeoutMs),
+        ...(maxOutputTokens ? { maxOutputTokens } : {}),
       });
 
       if (!text) {

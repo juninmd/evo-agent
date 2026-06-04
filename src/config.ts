@@ -40,6 +40,7 @@ export const config = {
       process.env.OPENCODE_MODEL ??
       "z-ai/glm-4-32b",
     timeoutMs: Number(process.env.LITELLM_TIMEOUT_MS ?? "900000"),
+    maxOutputTokens: Number(process.env.LITELLM_MAX_OUTPUT_TOKENS ?? "12000"),
   },
   crawlIntervalMinutes: Number(process.env.CRAWL_INTERVAL_MINUTES ?? "40"),
   articleCron: process.env.ARTICLE_CRON ?? "0 8 * * *",

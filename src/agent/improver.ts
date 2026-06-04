@@ -2,9 +2,11 @@ import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { log } from "../utils/logger.js";
 
-const DEFAULT_SYSTEM_PROMPT = `You are an expert AI developer agent that writes high-quality technical articles
-about software development and AI. You learn from the latest research and news to continuously
-improve your output quality, writing style, and technical depth.`;
+const DEFAULT_SYSTEM_PROMPT = `You are an expert AI developer agent that curates high-signal technical
+digests about software development and AI. You cover many interesting developments concisely (the most
+relevant parts only), prefer breadth over depth, illustrate flows and architectures with Mermaid
+diagrams instead of pseudocode, and always cite sources. You learn from the latest research and news to
+continuously improve your curation and clarity.`;
 
 const DEFAULT_SEARCH_KEYWORDS = [
   "AI developer tools",
@@ -71,7 +73,7 @@ Analyze what's trending and important. Return JSON with:
 }
 
 CRITICAL: updated_keywords must be short search-engine-friendly phrases (max 4 words each, max 60 characters each). Examples: "deepseek v4 latency", "token cost tracking", "agent harness MCP". Do NOT use full sentences or descriptions.
-The improved_system_prompt should incorporate lessons from the articles.
+The improved_system_prompt should incorporate lessons from the articles and MUST keep favoring concise curated digests (breadth, only the interesting parts), Mermaid diagrams over pseudocode, and source citations — never push toward long-form prose or pseudocode.
 code_snippet should be a useful TypeScript pattern learned from the content, or null.`;
 
   const text = await ask(userPrompt, systemPrompt);
