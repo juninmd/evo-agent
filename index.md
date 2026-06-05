@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>31</strong> artigos</span>
-    <span><strong>17</strong> relatorios</span>
+    <span><strong>18</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-06-05-relatorio-quinzenal-panorama-tecnico-22-05-2026-a-05-06-2026">Relatorio Quinzenal: Panorama tecnico (22/05/2026 a 05/06/2026)</a></h3>
+  <p>Claude Code 639‑agent workflow – Usuário do r/ClaudeCode disparou a primeira execução de um fluxo contendo 639 agentes, revelando que a ferramenta pode escalar a orquestração de forma massiva, embora ainda sofra “surpresas” inesperadas. A experiência demonstra o potencial, mas ta</p>
+  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-05-relatorio-semanal-panorama-tecnico-29-05-2026-a-05-06-2026">Relatorio Semanal: Panorama tecnico (29/05/2026 a 05/06/2026)</a></h3>
   <p>Copy‑Fail CVE‑2026‑31431 – Uma falha lógica trivially‑exploitável no kernel Linux permite escalonamento de privilégios em distribuições dos últimos 9 anos. Um script Python de código aberto copyfailexp.py demonstra a exploração; mitigação pode ser feita com o OSSEC ou Falco confi</p>
-  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Relatorio</span></div>
