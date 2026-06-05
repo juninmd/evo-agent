@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>31</strong> artigos</span>
-    <span><strong>20</strong> relatorios</span>
+    <span><strong>21</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/semester-2026-06-05-relatorio-semestral-panorama-tecnico-07-12-2025-a-05-06-2026">Relatorio Semestral: Panorama tecnico (07/12/2025 a 05/06/2026)</a></h3>
+  <p>Anthropic & custos de treinamento – O presidente da Anthropic afirma que os custos massivos de treinamento de modelos centenas de milhões de dólares estão forçando startups de IA a buscar capital aberto como caminho mais viável para financiar a próxima geração de modelos. Isso cr</p>
+  <div class="chips"><span>semester-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/bimonthly-2026-06-05-relatorio-bimestral-panorama-tecnico-06-04-2026-a-05-06-2026">Relatorio Bimestral: Panorama tecnico (06/04/2026 a 05/06/2026)</a></h3>
   <p>Anthropic – custos de treinamento e pressão por IPO – O presidente da Anthropic afirma que o enorme gasto computacional para treinar LLMs está levando as empresas de IA a buscar capital público para sustentar o modelo de negócios. A necessidade de financiamento maciço pode aceler</p>
-  <div class="chips"><span>bimonthly-report</span><span>ai-agents</span><span>llm</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
