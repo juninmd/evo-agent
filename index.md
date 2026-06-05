@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>31</strong> artigos</span>
-    <span><strong>18</strong> relatorios</span>
+    <span><strong>19</strong> relatorios</span>
   </div>
 </section>
 
@@ -21,9 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-06-05-relatorio-mensal-panorama-tecnico-06-05-2026-a-05-06-2026">Relatorio Mensal: Panorama tecnico (06/05/2026 a 05/06/2026)</a></h3>
+  <p>Anthropic – custos de treinamento – O presidente da Anthropic afirma que os gastos massivos para treinar modelos centenas de milhões de dólares estão forçando a empresa a buscar capital aberto para sustentar a expansão. Esse ponto destaca como o CAPEX de treinamento define a nece</p>
+  <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-06-05-relatorio-quinzenal-panorama-tecnico-22-05-2026-a-05-06-2026">Relatorio Quinzenal: Panorama tecnico (22/05/2026 a 05/06/2026)</a></h3>
   <p>Claude Code 639‑agent workflow – Usuário do r/ClaudeCode disparou a primeira execução de um fluxo contendo 639 agentes, revelando que a ferramenta pode escalar a orquestração de forma massiva, embora ainda sofra “surpresas” inesperadas. A experiência demonstra o potencial, mas ta</p>
-  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
