@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>34</strong> artigos</span>
-    <span><strong>21</strong> relatorios</span>
+    <span><strong>22</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,13 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-07">2026-06-07</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-07-relatorio-semanal-panorama-tecnico-31-05-2026-a-07-06-2026">Relatorio Semanal: Panorama tecnico (31/05/2026 a 07/06/2026)</a></h3>
+  <p>Destaques do período
+ turbovec – Biblioteca Rust com bindings Python que cria índices vetoriais sobre o motor TurboQuant, oferecendo latências sub‑ms para buscas em grandes bases de embeddings. Ideal para aplicações de recomendações e RAG on‑premises. RyanCodrai / turbovechttps:/</p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/semester-2026-06-05-relatorio-semestral-panorama-tecnico-07-12-2025-a-05-06-2026">Relatorio Semestral: Panorama tecnico (07/12/2025 a 05/06/2026)</a></h3>
   <p>Anthropic & custos de treinamento – O presidente da Anthropic afirma que os custos massivos de treinamento de modelos centenas de milhões de dólares estão forçando startups de IA a buscar capital aberto como caminho mais viável para financiar a próxima geração de modelos. Isso cr</p>
@@ -159,9 +166,8 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-07">2026-06-07</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-07-principais-novidades-em-ia-llms-e-orquestracao-de-agentes-07-13-jun-2026">Principais novidades em IA, LLMs e orquestração de agentes (07‑13 Jun 2026)</a></h3>
-  <p>Destaques
- Acesso Remoto Resiliente – Soluções de acesso seguro que mantêm a conexão mesmo durante interrupções de rede, reduzindo downtime em infraestruturas críticas. Critical Infrastructure Operators Gain Secure Remote Access That Survives Network Disruptionshttps://news.googl</p>
-  <div class="chips"><span>ai</span><span>developers</span></div>
+  
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-06">2026-06-06</time><span>Artigo</span></div>
