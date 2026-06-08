@@ -295,29 +295,10 @@ ${MERMAID_GUIDANCE}`;
   try {
     text = await ask(userPrompt, fullSystemPrompt, askOpts);
   } catch (err) {
-    log.warn(
-      `Article generation failed, using source-based fallback: ${(err as Error).message}`,
+    log.error(`Article generation failed: ${(err as Error).message}`);
+    throw new Error(
+      `LiteLLM generation failed - no fallback allowed: ${(err as Error).message}`,
     );
-    const sources = recentArticles.slice(0, 5);
-    const title = "Resumo técnico de IA para desenvolvedores";
-    const content = [
-      "## Resumo",
-      "O modelo configurado via LiteLLM não retornou dentro do tempo limite. Este artigo foi publicado com base nas fontes coletadas mais recentes para manter o ciclo operacional.",
-      "",
-      "## Fontes recentes",
-      ...sources.map(
-        (a) => `- [${a.title}](${a.url}) — ${a.summary.slice(0, 240)}`,
-      ),
-    ].join("\n");
-    return {
-      ...fallbackArticle(
-        title,
-        "Resumo operacional gerado a partir das fontes recentes após timeout do modelo LiteLLM.",
-        withModelFooter(content),
-        sources.map((a) => a.url),
-      ),
-      date: today,
-    };
   }
 
   const content = withoutTopTitle(text);
@@ -516,10 +497,10 @@ ${MERMAID_GUIDANCE}`;
   try {
     text = await ask(userPrompt, systemPrompt, askOpts);
   } catch (err) {
-    log.warn(
-      `Report generation failed, using source-based fallback: ${(err as Error).message}`,
+    log.error(`Report generation failed: ${(err as Error).message}`);
+    throw new Error(
+      `LiteLLM generation failed - no fallback allowed: ${(err as Error).message}`,
     );
-    return periodFallback(period, periodStr, today, titleLabel, recentArticles);
   }
 
   const contentWithoutTitle = withoutTopTitle(text);
@@ -672,14 +653,16 @@ async function generatePeriodReportMultiPass(
       log.warn(`Trends section failed: ${(err as Error).message}`);
     }
   } catch (err) {
-    log.warn(
-      `Multi-pass report failed, using source-based fallback: ${(err as Error).message}`,
+    log.error(`Multi-pass report failed: ${(err as Error).message}`);
+    throw new Error(
+      `LiteLLM generation failed - no fallback allowed: ${(err as Error).message}`,
     );
-    return periodFallback(period, periodStr, today, titleLabel, recentArticles);
   }
 
   if (groupSections.length === 0) {
-    return periodFallback(period, periodStr, today, titleLabel, recentArticles);
+    throw new Error(
+      "No valid groups generated - LiteLLM failed to produce content",
+    );
   }
 
   const references = buildReferencesSection(recentArticles.slice(0, 60));
