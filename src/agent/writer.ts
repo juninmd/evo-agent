@@ -12,7 +12,7 @@ function withModelFooter(content: string): string {
 const askOpts = { maxOutputTokens: config.litellm.maxOutputTokens };
 
 const CURATION_GUIDANCE =
-  "Selecione APENAS os itens realmente interessantes/relevantes do período (lançamentos, mudanças de arquitetura, padrões, ferramentas, insights da comunidade). Resuma cada item em 2-4 frases densas — o que é e por que importa — sem encher linguiça e sem repetir. Priorize VARIEDADE de fontes e temas (largura) em vez de aprofundar um único tópico. Cada destaque DEVE citar a fonte como link [título](url) retirado da lista fornecida. TODAS as fontes relevantes fornecidas devem aparecer pelo menos uma vez no artigo.";
+  "Selecione APENAS os itens realmente interessantes/relevantes do período (lançamentos, mudanças de arquitetura, padrões, ferramentas, insights da comunidade). Resuma cada item em 2-4 frases densas — o que é e por que importa — sem encher linguiça e sem repetir. Priorize VARIEDADE de fontes e temas (largura) em vez de aprofundar um único tópico. CADA fonte distinta da lista fornecida DEVE aparecer COM PELO MENOS UM RESUMO (bullet point). Não omita nenhuma fonte — se a fonte está na lista, ela deve ter seu destaque. Cite a fonte como link [título](url) retirado da lista fornecida.";
 
 const MERMAID_GUIDANCE =
   "Quando for ilustrar uma tendência, fluxo ou arquitetura, use EXATAMENTE UM diagrama Mermaid em bloco ```mermaid (flowchart TD, sequenceDiagram ou graph LR), sintaticamente válido e autocontido. Regras obrigatórias: (1) use apenas TD ou LR como direção, (2) IDs dos nós sem espaços nem acentos (ex: NodeA, NodeB), (3) labels entre aspas duplas se tiverem espaços, (4) sem subgrafos aninhados complexos, (5) teste mental: o diagrama deve renderizar no mermaid.live. NUNCA escreva pseudocódigo — se não houver código real útil, use um diagrama simples ou texto.";
@@ -212,8 +212,8 @@ export async function generateArticle(
   const systemPrompt = getSystemPrompt();
 
   const usedArticles = curateArticles(recentArticles, {
-    perBucket: type === "weekly" ? 50 : 20,
-    max: type === "weekly" ? 120 : 50,
+    perBucket: type === "weekly" ? 200 : 100,
+    max: type === "weekly" ? 500 : 200,
   });
   const context = clampContext(
     usedArticles
@@ -258,7 +258,7 @@ The first line must be a single H1 title in pt-BR, for example:
 
 Structure the body:
 ## Destaques
-- 8 to 12 bullet items. Each item: **nome/tema curto em negrito** followed by a 2-4 sentence dense summary (what it is, why it matters), ending with a source link [titulo](url) taken from the list above.
+- **UM bullet point PARA CADA FONTE DISTINTA da lista acima.** Cada item: **nome/tema curto em negrito** + 2-4 frases densas (o que é, por que importa) + link da fonte [título](url). NÃO OMITA NENHUMA FONTE — se está na lista, deve ter seu destaque.
 ## Tendências
 1-2 short paragraphs connecting the highlights; include ONE Mermaid diagram only if it genuinely clarifies a flow or architecture.
 
@@ -278,7 +278,7 @@ The first line must be a single H1 title in pt-BR, for example:
 
 Structure the body:
 ## Destaques da semana
-- 12 to 18 bullet items. Each item: **nome/tema curto em negrito** + a 2-4 sentence dense summary (what it is, why it matters) + source link [titulo](url) taken from the list above.
+- **UM bullet point PARA CADA FONTE DISTINTA da lista acima.** Cada item: **nome/tema curto em negrito** + 2-4 frases densas (o que é, por que importa) + link da fonte [título](url). NÃO OMITA NENHUMA FONTE — se está na lista, deve ter seu destaque.
 ## Tendências
 2-3 short paragraphs on the week's trends; include ONE Mermaid diagram where it clarifies a flow or architecture.
 ## O que observar
@@ -380,8 +380,8 @@ function loadPeriodArticles(cfg: PeriodConfig): Article[] {
   // Filter by date in SQL (indexed) and curate, instead of capping at the
   // 200 most recent rows — that cap made long periods only ever see ~1-2 days.
   return curateArticles(db.getArticlesSince(cfg.days), {
-    perBucket: 80,
-    max: 200,
+    perBucket: 200,
+    max: 500,
   });
 }
 
@@ -476,7 +476,7 @@ At the very top of the markdown body (after the H1 title), include:
 
 Structure the body:
 ## Destaques do período
-- ${cfg.highlights[0]} to ${cfg.highlights[1]} bullet items. Each item: **nome/tema curto em negrito** + a 2-4 sentence dense summary (what it is, why it matters) + source link [titulo](url) taken from the list above.
+- **UM bullet point PARA CADA FONTE DISTINTA da lista acima.** Cada item: **nome/tema curto em negrito** + 2-4 frases densas (o que é, por que importa) + link da fonte [título](url). NÃO OMITA NENHUMA FONTE — se está na lista, deve ter seu destaque.
 ## Tendências
 2-3 short paragraphs on the period's trends; include ONE Mermaid diagram where it clarifies a flow or architecture.
 
