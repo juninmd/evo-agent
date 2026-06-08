@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>36</strong> artigos</span>
-    <span><strong>22</strong> relatorios</span>
+    <span><strong>23</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-08-relatorio-semanal-resumo-operacional-01-06-2026-a-08-06-2026">Relatorio Semanal: Resumo operacional (01/06/2026 a 08/06/2026)</a></h3>
+  <p>Resumo operacional do período 01/06/2026 a 08/06/2026 após timeout do modelo LiteLLM.</p>
+  <div class="chips"><span>ai</span><span>developers</span><span>fallback</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-06-07">2026-06-07</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-07-relatorio-semanal-panorama-tecnico-31-05-2026-a-07-06-2026">Relatorio Semanal: Panorama tecnico (31/05/2026 a 07/06/2026)</a></h3>
   
@@ -166,7 +172,7 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-resumo-tecnico-de-ia-para-desenvolvedores">Resumo técnico de IA para desenvolvedores</a></h3>
   <p>Resumo operacional gerado a partir das fontes recentes após timeout do modelo LiteLLM.</p>
-  <div class="chips"><span>ai</span><span>developers</span><span>fallback</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
