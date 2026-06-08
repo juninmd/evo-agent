@@ -3,43 +3,39 @@ layout: article
 title: "Relatorio Semanal: Panorama tecnico (01/06/2026 a 08/06/2026)"
 date: "2026-06-08"
 tags: ["weekly-report", "ai-agents", "llm"]
-summary: "ECC: O sistema de otimização de desempenho de agentes ECC foi lançado no GitHub, com mais de 210 mil estrelas. Ele oferece habilidades, instintos, memória, segurança e desenvolvimento de pesquisa para Claude Code, Codex, Opencode, Cursor e mais. ECChttps://github.com/affaanm/ECC
-"
+summary: "Destaques do período
+ ECC: O sistema de otimização de desempenho de agentes ECC foi lançado, permitindo que os desenvolvedores criem agentes mais eficientes e escaláveis. ECChttps://github.com/affaanm/ECC
+ HermesAgent: O agente HermesAgent foi lançado, permitindo que os desenvolv"
 ---
 
 {% raw %}
 **Periodo:** 01/06/2026 a 08/06/2026
 
 ## Destaques do período
-
-* **ECC**: O sistema de otimização de desempenho de agentes ECC foi lançado no GitHub, com mais de 210 mil estrelas. Ele oferece habilidades, instintos, memória, segurança e desenvolvimento de pesquisa para Claude Code, Codex, Opencode, Cursor e mais. [ECC](https://github.com/affaan-m/ECC)
-* **Hermes-Agent**: O agente Hermes-Agent foi lançado no GitHub, com mais de 186 mil estrelas. Ele é um agente que cresce com você e oferece uma variedade de habilidades e funcionalidades. [Hermes-Agent](https://github.com/NousResearch/hermes-agent)
-* **MoneyPrinterTurbo**: O projeto MoneyPrinterTurbo foi lançado no GitHub, com mais de 81 mil estrelas. Ele permite gerar vídeos em alta definição com um clique, utilizando modelos de linguagem grandes. [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo)
-* **Mempalace**: O sistema de memória de IA Mempalace foi lançado no GitHub, com mais de 54 mil estrelas. Ele é considerado o melhor sistema de memória de IA aberto e gratuito. [Mempalace](https://github.com/MemPalace/mempalace)
-* **Career-Ops**: O sistema de busca de emprego Career-Ops foi lançado no GitHub, com mais de 50 mil estrelas. Ele é um sistema de busca de emprego impulsionado por IA, construído em cima do Claude Code. [Career-Ops](https://github.com/santifer/career-ops)
-* **Goose**: O agente Goose foi lançado no GitHub, com mais de 47 mil estrelas. Ele é um agente de código aberto e extensível que vai além das sugestões de código. [Goose](https://github.com/aaif-goose/goose)
-* **Taste-Skill**: O projeto Taste-Skill foi lançado no GitHub, com mais de 38 mil estrelas. Ele dá um bom gosto ao seu agente de IA, evitando a geração de conteúdo genérico e chato. [Taste-Skill](https://github.com/Leonxlnx/taste-skill)
-* **Trivy**: O projeto Trivy foi lançado no GitHub, com mais de 36 mil estrelas. Ele é uma ferramenta de segurança que encontra vulnerabilidades, misconfigurações, segredos e mais em contêineres, Kubernetes, repositórios de código, nuvens e mais. [Trivy](https://github.com/aquasecurity/trivy)
-* **Impeccable**: O projeto Impeccable foi lançado no GitHub, com mais de 36 mil estrelas. Ele é uma linguagem de design que torna o seu agente de IA melhor em design. [Impeccable](https://github.com/pbakaus/impeccable)
-* **Claude-Howto**: O guia Claude-Howto foi lançado no GitHub, com mais de 35 mil estrelas. Ele é um guia visual e baseado em exemplos para o Claude Code, desde conceitos básicos até agentes avançados. [Claude-Howto](https://github.com/luongnv89/claude-howto)
-* **CopilotKit**: O projeto CopilotKit foi lançado no GitHub, com mais de 33 mil estrelas. Ele é uma pilha de frontend para agentes e UIs gerativas. [CopilotKit](https://github.com/CopilotKit/CopilotKit)
-* **Last30Days-Skill**: O agente Last30Days-Skill foi lançado no GitHub, com mais de 33 mil estrelas. Ele é um agente de IA que pesquisa qualquer tópico em Reddit, X, YouTube, HN, Polymarket e a web, e então sintetiza um resumo fundamentado. [Last30Days-Skill](https://github.com/mvanhorn/last30days-skill)
-* **Supermemory**: O motor de memória Supermemory foi lançado no GitHub, com mais de 26 mil estrelas. Ele é um motor de memória extremamente rápido e escalável, considerado a API de memória para a era de IA. [Supermemory](https://github.com/supermemoryai/supermemory)
-* **Agent-Reach**: O agente Agent-Reach foi lançado no GitHub, com mais de 23 mil estrelas. Ele dá ao seu agente de IA olhos para ver a internet inteira, permitindo ler e buscar em Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu e mais. [Agent-Reach](https://github.com/Panniantong/Agent-Reach)
+* **ECC**: O sistema de otimização de desempenho de agentes ECC foi lançado, permitindo que os desenvolvedores criem agentes mais eficientes e escaláveis. [ECC](https://github.com/affaan-m/ECC)
+* **Hermes-Agent**: O agente Hermes-Agent foi lançado, permitindo que os desenvolvedores criem agentes que crescem e se adaptam às necessidades dos usuários. [Hermes-Agent](https://github.com/NousResearch/hermes-agent)
+* **MoneyPrinterTurbo**: O projeto MoneyPrinterTurbo foi lançado, permitindo que os desenvolvedores criem vídeos em alta definição usando modelos de linguagem grandes. [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo)
+* **Mempalace**: O sistema de memória aberto Mempalace foi lançado, permitindo que os desenvolvedores criem agentes que aprendem e se lembram de informações de forma eficiente. [Mempalace](https://github.com/MemPalace/mempalace)
+* **Career-Ops**: O sistema de busca de empregos Career-Ops foi lançado, permitindo que os desenvolvedores criem agentes que ajudam os usuários a encontrar empregos. [Career-Ops](https://github.com/santifer/career-ops)
+* **Goose**: O agente Goose foi lançado, permitindo que os desenvolvedores criem agentes que podem instalar, executar, editar e testar modelos de linguagem grandes. [Goose](https://github.com/aaif-goose/goose)
+* **Taste-Skill**: O projeto Taste-Skill foi lançado, permitindo que os desenvolvedores criem agentes que têm "bom gosto" e podem gerar conteúdo interessante. [Taste-Skill](https://github.com/Leonxlnx/taste-skill)
+* **Trivy**: O projeto Trivy foi lançado, permitindo que os desenvolvedores criem agentes que podem encontrar vulnerabilidades e problemas de segurança em contêineres e código. [Trivy](https://github.com/aquasecurity/trivy)
+* **Impeccable**: O projeto Impeccable foi lançado, permitindo que os desenvolvedores criem agentes que podem criar designs de alta qualidade. [Impeccable](https://github.com/pbakaus/impeccable)
+* **Claude-Howto**: O guia Claude-Howto foi lançado, permitindo que os desenvolvedores criem agentes que podem aprender e se adaptar às necessidades dos usuários. [Claude-Howto](https://github.com/luongnv89/claude-howto)
+* **CopilotKit**: O kit de desenvolvimento CopilotKit foi lançado, permitindo que os desenvolvedores criem agentes que podem criar interfaces de usuário de alta qualidade. [CopilotKit](https://github.com/CopilotKit/CopilotKit)
+* **Last30Days-Skill**: O projeto Last30Days-Skill foi lançado, permitindo que os desenvolvedores criem agentes que podem aprender e se lembrar de informações de forma eficiente. [Last30Days-Skill](https://github.com/mvanhorn/last30days-skill)
+* **Supermemory**: O projeto Supermemory foi lançado, permitindo que os desenvolvedores criem agentes que podem aprender e se lembrar de informações de forma eficiente. [Supermemory](https://github.com/supermemoryai/supermemory)
 
 ## Tendências
-
-As tendências do período mostram um aumento no desenvolvimento de agentes de IA e ferramentas de suporte, com foco em melhorar a eficiência e a escalabilidade. Além disso, há um crescimento no uso de modelos de linguagem grandes e na aplicação de IA em diversas áreas, como busca de emprego e design.
-
+A tendência atual é a criação de agentes que podem aprender e se adaptar às necessidades dos usuários, utilizando modelos de linguagem grandes e técnicas de aprendizado de máquina. Além disso, há um aumento no desenvolvimento de ferramentas e projetos que permitem que os desenvolvedores criem agentes que podem criar conteúdo de alta qualidade, como designs e vídeos.
 ```mermaid
 graph LR
-    A[Agente de IA] -->|usa|> B[Modelo de Linguagem Grande]
-    B -->|processa|> C[Dados]
-    C -->|gera|> D[Resposta]
-    D -->|envia|> A
+    A[Desenvolvedor] -->|Cria agente|> B[Agente]
+    B -->|Aprende e se adapta|> C[Usuário]
+    C -->|Fornece feedback|> B
+    B -->|Cria conteúdo de alta qualidade|> D[Conteúdo]
 ```
-
-Essa tendência é refletida nos projetos lançados no GitHub, que mostram uma variedade de aplicações e ferramentas para agentes de IA, desde otimização de desempenho até design e busca de emprego. Além disso, a comunidade de desenvolvedores está cada vez mais ativa, com muitos projetos e ferramentas sendo compartilhados e discutidos.
+Essa tendência é impulsionada pela necessidade de criar agentes que possam aprender e se adaptar às necessidades dos usuários, e que possam criar conteúdo de alta qualidade de forma eficiente. Além disso, há um aumento no desenvolvimento de ferramentas e projetos que permitem que os desenvolvedores criem agentes que possam aprender e se lembrar de informações de forma eficiente.
 
 ## Fontes e Referências
 
