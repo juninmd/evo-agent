@@ -176,20 +176,20 @@ title: Evo Agent
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-em-ia-e-tecnologia">Desenvolvimentos em IA e Tecnologia</a></h3>
-  <p>Resumo executivo do período cobrindo 60 fontes (TabNews (30), Hacker News (24), GitHub Trending (6)). Destaques. Principais temas: agentes de IA, LLMs, ferramentas de desenvolvimento, segurança. Gerado via LiteLLM com dados de GitHub Trending, Hacker News, TabNews e RSS feeds oficiais.</p>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-em-ia-e-software">Desenvolvimentos em IA e Software</a></h3>
+  <p>Resumo executivo do período cobrindo 60 fontes (TabNews (30), Hacker News (24), GitHub Trending (6)). resumo técnico. Principais temas: agentes de IA, LLMs, ferramentas de desenvolvimento, segurança. Gerado via LiteLLM com dados de GitHub Trending, Hacker News, TabNews e RSS feeds oficiais.</p>
   <div class="chips"><span>github-trending</span><span>hacker-news</span><span>tabnews</span><span>python</span><span>go</span><span>javascript</span><span>typescript</span><span></span><span>html</span><span>ml</span><span>br</span></div>
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-em-inteligencia-artificial-e-software">Desenvolvimentos em Inteligência Artificial e Software</a></h3>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-em-ia-e-tecnologia">Desenvolvimentos em IA e Tecnologia</a></h3>
   <p>Resumo executivo do período cobrindo 60 fontes (TabNews (30), Hacker News (24), GitHub Trending (6)). Destaques. Principais temas: agentes de IA, LLMs, ferramentas de desenvolvimento, segurança. Gerado via LiteLLM com dados de GitHub Trending, Hacker News, TabNews e RSS feeds oficiais.</p>
   
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-em-ia-e-software">Desenvolvimentos em IA e Software</a></h3>
-  <p>Os destaques do período incluem várias ferramentas e técnicas inovadoras em IA e desenvolvimento de software. Aqui estão os principais pontos:</p>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-em-inteligencia-artificial-e-software">Desenvolvimentos em Inteligência Artificial e Software</a></h3>
+  <p>Resumo executivo do período cobrindo 60 fontes (TabNews (30), Hacker News (24), GitHub Trending (6)). Destaques. Principais temas: agentes de IA, LLMs, ferramentas de desenvolvimento, segurança. Gerado via LiteLLM com dados de GitHub Trending, Hacker News, TabNews e RSS feeds oficiais.</p>
   
 </article>
 <article class="story-card">
