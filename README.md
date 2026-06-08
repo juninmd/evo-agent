@@ -22,8 +22,9 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-08-relatorio-semanal-panorama-tecnico-01-06-2026-a-08-06-2026">Relatorio Semanal: Panorama tecnico (01/06/2026 a 08/06/2026)</a></h3>
-  
-  
+  <p>ECC: O sistema de otimização de desempenho de agentes ECC foi lançado no GitHub, com mais de 210 mil estrelas. Ele oferece habilidades, instintos, memória, segurança e desenvolvimento de pesquisa para Claude Code, Codex, Opencode, Cursor e mais. ECChttps://github.com/affaanm/ECC
+</p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
@@ -177,9 +178,8 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-recentes-em-inteligencia-artificial-e-agentes">Desenvolvimentos Recentes em Inteligência Artificial e Agentes</a></h3>
-  <p>Destaques
- HermesAgent: Um agente que cresce com o usuário, permitindo uma maior personalização e adaptação às necessidades do usuário. Isso é importante porque possibilita uma experiência mais personalizada e eficaz. NousResearch/hermesagenthttps://github.com/NousResearch/hermes</p>
-  <div class="chips"><span>ai</span><span>developers</span></div>
+  
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
