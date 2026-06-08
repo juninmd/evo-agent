@@ -3,41 +3,43 @@ layout: article
 title: "Relatorio Semanal: Panorama tecnico (01/06/2026 a 08/06/2026)"
 date: "2026-06-08"
 tags: ["weekly-report", "ai-agents", "llm"]
-summary: "Destaques do período
- NVIDIA Nemotron 3 Ultra: A NVIDIA lançou o Nemotron 3 Ultra, uma plataforma de processamento de linguagem natural que oferece uma forma mais rápida e eficiente de processamento de linguagem natural para agentes de longo prazo. NVIDIA Technical Bloghttps://ne"
+summary: "ECC: O sistema de otimização de desempenho de agentes ECC foi lançado no GitHub, com mais de 210 mil estrelas. Ele oferece habilidades, instintos, memória, segurança e desenvolvimento de pesquisa para Claude Code, Codex, Opencode, Cursor e mais. ECChttps://github.com/affaanm/ECC
+"
 ---
 
 {% raw %}
 **Periodo:** 01/06/2026 a 08/06/2026
 
 ## Destaques do período
-* **NVIDIA Nemotron 3 Ultra**: A NVIDIA lançou o Nemotron 3 Ultra, uma plataforma de processamento de linguagem natural que oferece uma forma mais rápida e eficiente de processamento de linguagem natural para agentes de longo prazo. [NVIDIA Technical Blog](https://news.google.com/rss/articles/CBMivgFBVV95cUxQZG44Sk9ETHdMUUE1T1MtN2xoNjZ1bi1ubUUzbkhLdG9mM3I5eFY5QnMyWGpud3REZk5fMWFtWTM2WDJZdVVGclJNbVhpMlVyV2lVU1FTUjlVTllUcnpwQVEtN3VRekxmZ2l3MGMxcUlYamRuOTNwak5QS3lQdFhoT2JPMDZfT0RydG9wQldVYTFtMlVNMlVVMHo3dm5SOFBMSDZzMjNpMm13WXFKM1RPaTZ0SVh2ZTgyaHFHNXVB?oc=5)
-* **SAP’s AI-Native North Star Architecture**: A SAP apresentou sua arquitetura AI-Native North Star, um conjunto de princípios e padrões para o desenvolvimento de sistemas de inteligência artificial. [SAP News Center](https://news.google.com/rss/articles/CBMirAFBVV95cUxQaXRpT2t4S0h4Y1ZkTElWczlOcUJvTl94OTF4eENqeGg3RjRrYTV1X3J0S1UtWk82WkRDM3FIQnBjTDFkb19BbHpyQ3JmakFzMFdxUHZualRodC02Z09BT3d1R2NZcTZlZ25ZanF5djYtSEViSTB2Zk0wbl94VDk2aEFSOE9KYy1Dc3hvTFlIYkh0WlhIT19aZnlwdUk3cno0TzZ3TE5wY1FISFM0?oc=5)
-* **Agent Development Kit para TypeScript**: O Google lançou o Agent Development Kit para TypeScript, uma ferramenta para desenvolver agentes de inteligência artificial com a linguagem TypeScript. [blog.google](https://news.google.com/rss/articles/CBMi1gFBVV95cUxNak9mT19tcEtkNGs3R3JkUE5DYXFYSmlDYWU5a2tJYU90VW42RFFmcXhWeFlqakQxSXhYTDdDR0R6cU1DQTExdTJwT1I2ZDhud09oRmt0bC1RRFVXN1VZNUZLM0tXaFV5cTY1V3Y3dHExeUIzQVVJeUdfVXJ2ek5Jd0dva1lPSGszOGs2MUtpeTIwX1Q1SVZwZVRUNW5EVnhpaDBfQ1VxdU82LTI5MEpYWjNxMUt1dU9IaENvbFdxZ0hURktvaVFhZ1lhVXE1bTZYRXd4LWh3?oc=5)
-* **Gemini Enterprise Agent Platform**: A Google lançou a Gemini Enterprise Agent Platform, uma plataforma para desenvolver e implantar agentes de inteligência artificial em larga escala. [Google Research](https://research.google/blog/unlocking-dependable-responses-with-gemini-enterprise-agent-platforms-agentic-rag/)
-* **Together AI**: A Together AI lançou uma série de ferramentas e recursos para desenvolver e implantar agentes de inteligência artificial, incluindo a plataforma de inferência Gemma-4-31B-it-pearl. [Together AI](https://www.together.ai/blog/together-ai-partners-with-pearl-research-labs)
-* **Mistral AI**: A Mistral AI lançou a versão 4 de seu modelo de linguagem natural, o Mistral Small 4, que oferece melhorias significativas em termos de desempenho e eficiência. [Mistral AI](https://mistral.ai/news/mistral-small-4)
-* **NVIDIA e Mistral AI**: A NVIDIA e a Mistral AI anunciaram uma parceria para acelerar o desenvolvimento de modelos de linguagem natural de fronteira aberta. [Mistral AI](https://mistral.ai/news/mistral-ai-and-nvidia-partner-to-accelerate-open-frontier-models)
-* **Violin**: A Together AI lançou o Violin, uma ferramenta de tradução de vídeo que combina reconhecimento de fala, tradução de linguagem natural e síntese de fala para tornar o conteúdo de vídeo acessível em diferentes idiomas. [Together AI](https://www.together.ai/blog/violin-open-source-translation-skill)
-* **Leanstral**: A Mistral AI lançou o Leanstral, uma fundação de código aberto para codificação de vibrações confiáveis. [Mistral AI](https://mistral.ai/news/leanstral)
-* **Supabase**: A Supabase levantou $500 milhões para acelerar o crescimento de suas ferramentas de codificação de inteligência artificial. [SiliconANGLE](https://news.google.com/rss/articles/CBMingFBVV95cUxOYTBnSnpOQW5CNXRTbmNmRVlwRFNkLVNNVXZHWFRiaFUzTWVHTThPTXpaM3ctSGx5SmtBdnZ6RnVEMXhFMFVPUFprSWhKTThhS1B1cVAzRk1yTWowZkdKQUZ4UUZqSmliMmZnaTFremNZRmN6TFh2bkxDbS1aOWJ3OFU1VU80ai1heEc1TjVsYVF6azJhSmtMVGVKUk14Zw?oc=5)
-* **Cloudflare**: A Cloudflare adquiriu a VoidZero para expandir suas ferramentas de desenvolvimento de inteligência artificial. [IT Pro](https://news.google.com/rss/articles/CBMiqwFBVV95cUxNSUFzVWlNR2ZBRExzb3UxNG9zVzV4Qk9FcDlLMjJHdFdLWkFCSVJ2VXFCMWNKSmNxc0hqWjhSUFBlNmJLdHNhbC1Kam8tYjB3ekliRmNJeWhaRE9VcGtMX1lNbWwycFVHMEdFYkRCN2pUdzhDRlBHOEg5b0hNeVFuQ0U0bG1sWUhiSVlwQUg1ZmxRcVFoeXpRVEdlTDlUeHhkSE1QN00wZlVUdTg?oc=5)
-* **Kaggle**: A Kaggle lançou uma ferramenta para criar benchmarks de inteligência artificial de forma eficiente. [blog.google](https://research.google/blog/kaggle-is-making-ai-benchmark-creation-effortless/)
+
+* **ECC**: O sistema de otimização de desempenho de agentes ECC foi lançado no GitHub, com mais de 210 mil estrelas. Ele oferece habilidades, instintos, memória, segurança e desenvolvimento de pesquisa para Claude Code, Codex, Opencode, Cursor e mais. [ECC](https://github.com/affaan-m/ECC)
+* **Hermes-Agent**: O agente Hermes-Agent foi lançado no GitHub, com mais de 186 mil estrelas. Ele é um agente que cresce com você e oferece uma variedade de habilidades e funcionalidades. [Hermes-Agent](https://github.com/NousResearch/hermes-agent)
+* **MoneyPrinterTurbo**: O projeto MoneyPrinterTurbo foi lançado no GitHub, com mais de 81 mil estrelas. Ele permite gerar vídeos em alta definição com um clique, utilizando modelos de linguagem grandes. [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo)
+* **Mempalace**: O sistema de memória de IA Mempalace foi lançado no GitHub, com mais de 54 mil estrelas. Ele é considerado o melhor sistema de memória de IA aberto e gratuito. [Mempalace](https://github.com/MemPalace/mempalace)
+* **Career-Ops**: O sistema de busca de emprego Career-Ops foi lançado no GitHub, com mais de 50 mil estrelas. Ele é um sistema de busca de emprego impulsionado por IA, construído em cima do Claude Code. [Career-Ops](https://github.com/santifer/career-ops)
+* **Goose**: O agente Goose foi lançado no GitHub, com mais de 47 mil estrelas. Ele é um agente de código aberto e extensível que vai além das sugestões de código. [Goose](https://github.com/aaif-goose/goose)
+* **Taste-Skill**: O projeto Taste-Skill foi lançado no GitHub, com mais de 38 mil estrelas. Ele dá um bom gosto ao seu agente de IA, evitando a geração de conteúdo genérico e chato. [Taste-Skill](https://github.com/Leonxlnx/taste-skill)
+* **Trivy**: O projeto Trivy foi lançado no GitHub, com mais de 36 mil estrelas. Ele é uma ferramenta de segurança que encontra vulnerabilidades, misconfigurações, segredos e mais em contêineres, Kubernetes, repositórios de código, nuvens e mais. [Trivy](https://github.com/aquasecurity/trivy)
+* **Impeccable**: O projeto Impeccable foi lançado no GitHub, com mais de 36 mil estrelas. Ele é uma linguagem de design que torna o seu agente de IA melhor em design. [Impeccable](https://github.com/pbakaus/impeccable)
+* **Claude-Howto**: O guia Claude-Howto foi lançado no GitHub, com mais de 35 mil estrelas. Ele é um guia visual e baseado em exemplos para o Claude Code, desde conceitos básicos até agentes avançados. [Claude-Howto](https://github.com/luongnv89/claude-howto)
+* **CopilotKit**: O projeto CopilotKit foi lançado no GitHub, com mais de 33 mil estrelas. Ele é uma pilha de frontend para agentes e UIs gerativas. [CopilotKit](https://github.com/CopilotKit/CopilotKit)
+* **Last30Days-Skill**: O agente Last30Days-Skill foi lançado no GitHub, com mais de 33 mil estrelas. Ele é um agente de IA que pesquisa qualquer tópico em Reddit, X, YouTube, HN, Polymarket e a web, e então sintetiza um resumo fundamentado. [Last30Days-Skill](https://github.com/mvanhorn/last30days-skill)
+* **Supermemory**: O motor de memória Supermemory foi lançado no GitHub, com mais de 26 mil estrelas. Ele é um motor de memória extremamente rápido e escalável, considerado a API de memória para a era de IA. [Supermemory](https://github.com/supermemoryai/supermemory)
+* **Agent-Reach**: O agente Agent-Reach foi lançado no GitHub, com mais de 23 mil estrelas. Ele dá ao seu agente de IA olhos para ver a internet inteira, permitindo ler e buscar em Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu e mais. [Agent-Reach](https://github.com/Panniantong/Agent-Reach)
 
 ## Tendências
-A semana foi marcada por uma série de lançamentos e parcerias importantes no setor de inteligência artificial. A NVIDIA lançou o Nemotron 3 Ultra, uma plataforma de processamento de linguagem natural que oferece uma forma mais rápida e eficiente de processamento de linguagem natural para agentes de longo prazo. A SAP apresentou sua arquitetura AI-Native North Star, um conjunto de princípios e padrões para o desenvolvimento de sistemas de inteligência artificial.
 
-A Together AI lançou uma série de ferramentas e recursos para desenvolver e implantar agentes de inteligência artificial, incluindo a plataforma de inferência Gemma-4-31B-it-pearl. A Mistral AI lançou a versão 4 de seu modelo de linguagem natural, o Mistral Small 4, que oferece melhorias significativas em termos de desempenho e eficiência.
-
-A parceria entre a NVIDIA e a Mistral AI para acelerar o desenvolvimento de modelos de linguagem natural de fronteira aberta é um exemplo da tendência de colaboração entre as principais empresas de tecnologia para avançar no setor de inteligência artificial.
+As tendências do período mostram um aumento no desenvolvimento de agentes de IA e ferramentas de suporte, com foco em melhorar a eficiência e a escalabilidade. Além disso, há um crescimento no uso de modelos de linguagem grandes e na aplicação de IA em diversas áreas, como busca de emprego e design.
 
 ```mermaid
 graph LR
-    A[NVIDIA] -->|parceria|> B[Mistral AI]
-    B -->|desenvolvimento|> C[Modelos de Linguagem Natural]
-    C -->|aplicações|> D[Inteligência Artificial]
+    A[Agente de IA] -->|usa|> B[Modelo de Linguagem Grande]
+    B -->|processa|> C[Dados]
+    C -->|gera|> D[Resposta]
+    D -->|envia|> A
 ```
-Essa tendência de colaboração e desenvolvimento de tecnologias de inteligência artificial é esperada para continuar nos próximos anos, com empresas e instituições de pesquisa trabalhando juntas para criar soluções inovadoras e eficazes para uma variedade de aplicações.
+
+Essa tendência é refletida nos projetos lançados no GitHub, que mostram uma variedade de aplicações e ferramentas para agentes de IA, desde otimização de desempenho até design e busca de emprego. Além disso, a comunidade de desenvolvedores está cada vez mais ativa, com muitos projetos e ferramentas sendo compartilhados e discutidos.
 
 ## Fontes e Referências
 
