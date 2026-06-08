@@ -10,6 +10,7 @@ export interface Article {
   url: string;
   summary: string;
   tags: string;
+  engagement_score: number;
   crawled_at: string;
 }
 
@@ -49,6 +50,7 @@ function migrate(db: Database.Database) {
       url TEXT UNIQUE NOT NULL,
       summary TEXT,
       tags TEXT DEFAULT '[]',
+      engagement_score INTEGER DEFAULT 0,
       crawled_at TEXT DEFAULT (datetime('now'))
     );
 
@@ -78,16 +80,34 @@ function migrate(db: Database.Database) {
 
     CREATE INDEX IF NOT EXISTS idx_articles_crawled_at
       ON articles(crawled_at);
+    CREATE INDEX IF NOT EXISTS idx_articles_engagement
+      ON articles(engagement_score DESC);
   `);
 }
 
+export interface SaveArticleInput {
+  title: string;
+  source: string;
+  url: string;
+  summary: string;
+  tags: string;
+  engagement_score?: number;
+}
+
 export const db = {
-  saveArticle(a: Omit<Article, "id" | "crawled_at">) {
+  saveArticle(a: SaveArticleInput) {
     const stmt = getDb().prepare(
-      `INSERT OR IGNORE INTO articles (title, source, url, summary, tags)
-       VALUES (@title, @source, @url, @summary, @tags)`,
+      `INSERT OR IGNORE INTO articles (title, source, url, summary, tags, engagement_score)
+       VALUES (@title, @source, @url, @summary, @tags, @engagement_score)`,
     );
-    return stmt.run(a);
+    return stmt.run({
+      title: a.title,
+      source: a.source,
+      url: a.url,
+      summary: a.summary,
+      tags: a.tags,
+      engagement_score: a.engagement_score ?? 0,
+    });
   },
 
   getRecentArticles(limit = 50): Article[] {

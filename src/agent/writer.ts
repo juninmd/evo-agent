@@ -38,16 +38,42 @@ function normTitle(title: string): string {
     .trim();
 }
 
+// Cross-source deduplication: merge articles about the same story
+// by normalizing titles and keeping the one with the highest engagement.
+function deduplicateByStory(articles: Article[]): Article[] {
+  const seen = new Map<string, Article>();
+  for (const a of articles) {
+    const key = normTitle(a.title);
+    if (!key) continue;
+    const existing = seen.get(key);
+    if (!existing) {
+      seen.set(key, a);
+    } else {
+      // Keep the one with higher engagement_score; break ties by recency
+      const existingScore = existing.engagement_score ?? 0;
+      const newScore = a.engagement_score ?? 0;
+      if (newScore > existingScore) {
+        seen.set(key, a);
+      }
+    }
+  }
+  return [...seen.values()];
+}
+
 // Coarse category so one channel (e.g. 6 Reddit feeds) can't dominate the digest.
 function sourceBucket(source: string): string {
   if (/^reddit/i.test(source)) return "reddit";
   if (/^google news/i.test(source)) return "google-news";
   if (/^github trending/i.test(source)) return "github-trending";
   if (/^(x\/twitter|web search)/i.test(source)) return "websearch";
+  if (/^hacker news/i.test(source)) return "hackernews";
+  if (/^tabnews/i.test(source)) return "tabnews";
+  if (/^searxng/i.test(source)) return "websearch";
   return source.toLowerCase().split(/[:(]/)[0].trim();
 }
 
 // Drop empty summaries, de-duplicate by normalized title, and cap per category.
+// Sort by engagement_score descending so high-signal items surface first.
 function curateArticles(
   articles: Article[],
   opts: { perBucket?: number; max?: number } = {},
@@ -57,7 +83,18 @@ function curateArticles(
   const seen = new Set<string>();
   const bucketCount = new Map<string, number>();
   const out: Article[] = [];
-  for (const a of articles) {
+
+  // Sort by engagement_score descending, then by crawled_at descending
+  const sorted = [...articles].sort((a, b) => {
+    const scoreDiff = (b.engagement_score ?? 0) - (a.engagement_score ?? 0);
+    if (scoreDiff !== 0) return scoreDiff;
+    return b.crawled_at.localeCompare(a.crawled_at);
+  });
+
+  // Cross-source dedup: same story from different sources → keep highest engagement
+  const deduped = deduplicateByStory(sorted);
+
+  for (const a of deduped) {
     if (!a.summary || a.summary.trim().length === 0) continue;
     const key = normTitle(a.title);
     if (!key || seen.has(key)) continue;

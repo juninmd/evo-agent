@@ -58,6 +58,16 @@ const REDDIT_COMMUNITY_SUBREDDITS = [
   "ClaudeAI",
   "ChatGPTCoding",
   "LLMDevs",
+  "artificial",
+  "MachineLearning",
+  "singularity",
+  "ChatGPT",
+  "ArtificialIntelligence",
+  "deeplearning",
+  "StableDiffusion",
+  "Cursor",
+  "CursorIDE",
+  "vibecoding",
 ];
 
 const REDDIT_USER_AGENT = "evo-agent/1.0 community-signals";
@@ -181,6 +191,21 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://deepmind.google/blog/rss.xml",
     tags: ["ai frontier", "googledeepmind", "ai"],
   },
+  {
+    name: "Hacker News: AI",
+    url: "https://hnrss.org/newest?q=AI+OR+LLM+OR+GPT+OR+Claude+OR+agent&count=15",
+    tags: ["hackernews", "ai", "developer"],
+  },
+  {
+    name: "Hacker News: Machine Learning",
+    url: "https://hnrss.org/newest?q=machine+learning+OR+deep+learning+OR+transformer&count=15",
+    tags: ["hackernews", "ml", "research"],
+  },
+  {
+    name: "TabNews: Relevantes",
+    url: "https://www.tabnews.com.br/api/v1/contents?strategy=relevant&per_page=30",
+    tags: ["tabnews", "br", "developer", "ai"],
+  },
 ];
 
 function getDynamicSources(): FeedSource[] {
@@ -299,6 +324,8 @@ async function crawlGitHubTrending(): Promise<number> {
             .join(" | ")
             .slice(0, 500);
 
+          const starCount =
+            Number.parseInt(repo.stars.replace(/[^0-9]/g, ""), 10) || 0;
           db.saveArticle({
             title: repo.name,
             source: `GitHub Trending (${range})`,
@@ -311,6 +338,7 @@ async function crawlGitHubTrending(): Promise<number> {
               range,
               repo.language?.toLowerCase() ?? "unknown",
             ]),
+            engagement_score: starCount,
           });
           newCount++;
         }
@@ -522,6 +550,7 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
         const comments = await getRedditComments(post.url);
         if (comments.length === 0) continue;
 
+        const topScore = comments.length > 0 ? comments[0].score : 0;
         db.saveArticle({
           title: `Discussao: ${post.title}`,
           source: `Reddit Community Signals (${post.subreddit})`,
@@ -533,6 +562,7 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
             "experimental",
             post.subreddit.toLowerCase(),
           ]),
+          engagement_score: topScore,
         });
         newCount++;
       } catch (err) {
@@ -544,6 +574,99 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   }
 
   log.info(`Crawled Reddit community signals, ${newCount} new digests`);
+  return newCount;
+}
+
+async function crawlHackerNewsAlgolia(): Promise<number> {
+  let newCount = 0;
+  const queries = [
+    { tag: "ai", query: "AI OR LLM OR GPT OR Claude OR agent" },
+    { tag: "ml", query: "machine learning OR deep learning OR transformer" },
+  ];
+
+  for (const { tag, query } of queries) {
+    try {
+      const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=story&hitsPerPage=20&numericFilters=points>5`;
+      const response = await axios.get(url, { timeout: 10000 });
+      const hits = response.data?.hits ?? [];
+
+      for (const hit of hits) {
+        const storyUrl =
+          hit.url || `https://news.ycombinator.com/item?id=${hit.objectID}`;
+        if (!hit.title || db.urlExists(storyUrl)) continue;
+
+        const points = hit.points ?? 0;
+        const numComments = hit.num_comments ?? 0;
+        const summary = [
+          hit.title,
+          points ? `⬆ ${points} points` : "",
+          numComments ? `💬 ${numComments} comments` : "",
+          hit.author ? `by ${hit.author}` : "",
+        ]
+          .filter(Boolean)
+          .join(" | ")
+          .slice(0, 500);
+
+        db.saveArticle({
+          title: hit.title,
+          source: "Hacker News",
+          url: storyUrl,
+          summary,
+          tags: JSON.stringify(["hackernews", tag, "ai"]),
+          engagement_score: points + numComments * 2,
+        });
+        newCount++;
+      }
+    } catch (err) {
+      log.warn(
+        `Hacker News Algolia (${tag}) failed: ${(err as Error).message}`,
+      );
+    }
+  }
+
+  log.info(`Crawled Hacker News Algolia, ${newCount} new stories`);
+  return newCount;
+}
+
+async function crawlTabNews(): Promise<number> {
+  let newCount = 0;
+  try {
+    const url =
+      "https://www.tabnews.com.br/api/v1/contents?strategy=relevant&per_page=30";
+    const response = await axios.get(url, { timeout: 15000 });
+    const contents = response.data ?? [];
+
+    for (const item of contents) {
+      if (!item.title || !item.slug || item.status !== "published") continue;
+
+      const postUrl = `https://www.tabnews.com.br/${item.owner_username}/${item.slug}`;
+      if (db.urlExists(postUrl)) continue;
+
+      const tabcoins = item.tabcoins ?? 0;
+      const comments = item.children_deep_count ?? 0;
+      const summary = item.body
+        ? item.body
+            .replace(/[#*`\[\]()>]/g, "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .slice(0, 400)
+        : "Sem conteúdo";
+
+      db.saveArticle({
+        title: item.title,
+        source: "TabNews",
+        url: postUrl,
+        summary,
+        tags: JSON.stringify(["tabnews", "br", "developer"]),
+        engagement_score: tabcoins + comments * 2,
+      });
+      newCount++;
+    }
+  } catch (err) {
+    log.warn(`TabNews failed: ${(err as Error).message}`);
+  }
+
+  log.info(`Crawled TabNews, ${newCount} new posts`);
   return newCount;
 }
 
@@ -591,6 +714,7 @@ async function crawlLinkedInTopContent(url: string): Promise<number> {
         url: article.url,
         summary: article.summary,
         tags: JSON.stringify(["ai", "innovation", "linkedin", "trends"]),
+        engagement_score: 0,
       });
       newCount++;
     }
@@ -639,6 +763,7 @@ export async function crawlAll(): Promise<number> {
           url: item.link,
           summary: item.contentSnippet?.slice(0, 500) ?? "",
           tags: JSON.stringify(source.tags),
+          engagement_score: 0,
         });
         newCount++;
       }
@@ -661,6 +786,7 @@ export async function crawlAll(): Promise<number> {
           url: item.link,
           summary: item.contentSnippet?.slice(0, 500) ?? "",
           tags: JSON.stringify(["google-news", keyword]),
+          engagement_score: 0,
         });
         newCount++;
       }
@@ -692,6 +818,7 @@ export async function crawlAll(): Promise<number> {
           url: result.url,
           summary: result.content?.slice(0, 500) ?? "",
           tags: JSON.stringify(["searxng", keyword]),
+          engagement_score: 0,
         });
         newCount++;
       }
@@ -707,6 +834,8 @@ export async function crawlAll(): Promise<number> {
       "https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/",
     );
     newCount += await crawlGitHubTrending();
+    newCount += await crawlHackerNewsAlgolia();
+    newCount += await crawlTabNews();
   } catch (err) {
     log.warn(`GitHub Trending crawler failed: ${(err as Error).message}`);
   }
@@ -716,3 +845,5 @@ export async function crawlAll(): Promise<number> {
   );
   return newCount;
 }
+
+export { crawlHackerNewsAlgolia, crawlTabNews };

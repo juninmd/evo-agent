@@ -10,7 +10,9 @@
     "smoke:reddit-comments": "tsx src/crawler/reddit-smoke.ts",
     "build": "tsc",
     "lint": "biome check src/",
-    "lint:fix": "biome check --write src/"
+    "lint:fix": "biome check --write src/",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.67",
@@ -30,6 +32,7 @@
     "@types/node": "^22.0.0",
     "@types/node-cron": "^3.0.11",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.8"
   }
 }
