@@ -201,11 +201,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://hnrss.org/newest?q=machine+learning+OR+deep+learning+OR+transformer&count=15",
     tags: ["hackernews", "ml", "research"],
   },
-  {
-    name: "TabNews: Relevantes",
-    url: "https://www.tabnews.com.br/api/v1/contents?strategy=relevant&per_page=30",
-    tags: ["tabnews", "br", "developer", "ai"],
-  },
 ];
 
 function getDynamicSources(): FeedSource[] {
