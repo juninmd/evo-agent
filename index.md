@@ -22,8 +22,9 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-08-relatorio-semanal-panorama-tecnico-01-06-2026-a-08-06-2026">Relatorio Semanal: Panorama tecnico (01/06/2026 a 08/06/2026)</a></h3>
-  
-  
+  <p>Destaques do período
+ GitHub Trending: O repositório ECC do usuário affaanm alcançou 210.499 estrelas, apresentando um sistema de otimização de desempenho para agentes, com habilidades, instintos, memória, segurança e desenvolvimento orientado a pesquisa para Claude Code, Codex, </p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
@@ -177,10 +178,8 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-recentes-em-inteligencia-artificial-e-agentes">Desenvolvimentos Recentes em Inteligência Artificial e Agentes</a></h3>
-  <p>Destaques
- HermesAgent: Um agente que cresce com o usuário, desenvolvido em Python, com 186.995 estrelas no GitHub, demonstra a crescente importância de agentes personalizados em aplicações de IA. NousResearch/hermesagenthttps://github.com/NousResearch/hermesagent
- Trivy: Uma fer</p>
-  <div class="chips"><span>ai</span><span>developers</span></div>
+  
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
