@@ -22,10 +22,8 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-08-relatorio-semanal-panorama-tecnico-01-06-2026-a-08-06-2026">Relatorio Semanal: Panorama tecnico (01/06/2026 a 08/06/2026)</a></h3>
-  <p>Destaques do período
- ECC: O sistema de otimização de desempenho de agentes ECC foi lançado, permitindo que os desenvolvedores criem agentes mais eficientes e escaláveis. ECChttps://github.com/affaanm/ECC
- HermesAgent: O agente HermesAgent foi lançado, permitindo que os desenvolv</p>
-  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+  
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
@@ -179,8 +177,9 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-recentes-em-ai-llms-e-agentes">Desenvolvimentos Recentes em AI, LLMs e Agentes</a></h3>
-  
-  
+  <p>Destaques
+ HermesAgent: Um agente que cresce com o usuário, permitindo personalização e adaptação às necessidades do desenvolvedor. Isso é importante porque permite que os desenvolvedores trabalhem de forma mais eficiente e personalizada. NousResearch/hermesagenthttps://github.co</p>
+  <div class="chips"><span>ai</span><span>developers</span></div>
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
