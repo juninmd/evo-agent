@@ -4,38 +4,35 @@ title: "Relatorio Semanal: Panorama tecnico (01/06/2026 a 08/06/2026)"
 date: "2026-06-08"
 tags: ["weekly-report", "ai-agents", "llm"]
 summary: "Destaques do período
- ECC: O sistema de otimização de desempenho de agentes ECC foi lançado, permitindo que os desenvolvedores criem agentes mais eficientes e escaláveis. ECChttps://github.com/affaanm/ECC
- HermesAgent: O agente HermesAgent foi lançado, permitindo que os desenvolv"
+ GitHub Trending: O repositório ECC do usuário affaanm alcançou 210.499 estrelas, apresentando um sistema de otimização de desempenho para agentes, com habilidades, instintos, memória, segurança e desenvolvimento orientado a pesquisa para Claude Code, Codex, "
 ---
 
 {% raw %}
 **Periodo:** 01/06/2026 a 08/06/2026
 
 ## Destaques do período
-* **ECC**: O sistema de otimização de desempenho de agentes ECC foi lançado, permitindo que os desenvolvedores criem agentes mais eficientes e escaláveis. [ECC](https://github.com/affaan-m/ECC)
-* **Hermes-Agent**: O agente Hermes-Agent foi lançado, permitindo que os desenvolvedores criem agentes que crescem e se adaptam às necessidades dos usuários. [Hermes-Agent](https://github.com/NousResearch/hermes-agent)
-* **MoneyPrinterTurbo**: O projeto MoneyPrinterTurbo foi lançado, permitindo que os desenvolvedores criem vídeos em alta definição usando modelos de linguagem grandes. [MoneyPrinterTurbo](https://github.com/harry0703/MoneyPrinterTurbo)
-* **Mempalace**: O sistema de memória aberto Mempalace foi lançado, permitindo que os desenvolvedores criem agentes que aprendem e se lembram de informações de forma eficiente. [Mempalace](https://github.com/MemPalace/mempalace)
-* **Career-Ops**: O sistema de busca de empregos Career-Ops foi lançado, permitindo que os desenvolvedores criem agentes que ajudam os usuários a encontrar empregos. [Career-Ops](https://github.com/santifer/career-ops)
-* **Goose**: O agente Goose foi lançado, permitindo que os desenvolvedores criem agentes que podem instalar, executar, editar e testar modelos de linguagem grandes. [Goose](https://github.com/aaif-goose/goose)
-* **Taste-Skill**: O projeto Taste-Skill foi lançado, permitindo que os desenvolvedores criem agentes que têm "bom gosto" e podem gerar conteúdo interessante. [Taste-Skill](https://github.com/Leonxlnx/taste-skill)
-* **Trivy**: O projeto Trivy foi lançado, permitindo que os desenvolvedores criem agentes que podem encontrar vulnerabilidades e problemas de segurança em contêineres e código. [Trivy](https://github.com/aquasecurity/trivy)
-* **Impeccable**: O projeto Impeccable foi lançado, permitindo que os desenvolvedores criem agentes que podem criar designs de alta qualidade. [Impeccable](https://github.com/pbakaus/impeccable)
-* **Claude-Howto**: O guia Claude-Howto foi lançado, permitindo que os desenvolvedores criem agentes que podem aprender e se adaptar às necessidades dos usuários. [Claude-Howto](https://github.com/luongnv89/claude-howto)
-* **CopilotKit**: O kit de desenvolvimento CopilotKit foi lançado, permitindo que os desenvolvedores criem agentes que podem criar interfaces de usuário de alta qualidade. [CopilotKit](https://github.com/CopilotKit/CopilotKit)
-* **Last30Days-Skill**: O projeto Last30Days-Skill foi lançado, permitindo que os desenvolvedores criem agentes que podem aprender e se lembrar de informações de forma eficiente. [Last30Days-Skill](https://github.com/mvanhorn/last30days-skill)
-* **Supermemory**: O projeto Supermemory foi lançado, permitindo que os desenvolvedores criem agentes que podem aprender e se lembrar de informações de forma eficiente. [Supermemory](https://github.com/supermemoryai/supermemory)
+* **GitHub Trending**: O repositório ECC do usuário affaan-m alcançou 210.499 estrelas, apresentando um sistema de otimização de desempenho para agentes, com habilidades, instintos, memória, segurança e desenvolvimento orientado a pesquisa para Claude Code, Codex, Opencode, Cursor e outros. [ECC](https://github.com/affaan-m/ECC)
+* **Hacker News**: O artigo "Show HN: AI agents play SimCity through a REST API" apresentou uma abordagem inovadora para a interação entre agentes de IA e jogos, demonstrando como os agentes podem aprender e jogar SimCity por meio de uma API REST. [Show HN: AI agents play SimCity through a REST API](https://hallucinatingsplines.com)
+* **Google AI Blog**: O blog da Google AI apresentou um resumo dos 100 principais anúncios feitos durante a conferência I/O 2026, incluindo lançamentos e atualizações em IA, como o Gemini Omni e o Gemini 3.5 Flash. [100 things we announced at I/O 2026](https://blog.google/innovation-and-ai/technology/ai/google-io-2026-all-our-announcements/)
+* **OpenAI Blog**: A OpenAI apresentou um plano de ação para a resiliência biológica impulsionada por IA, abordando a importância da segurança e da governança na era da inteligência artificial. [Biodefense in the Intelligence Age](https://openai.com/index/biodefense-in-the-intelligence-age)
+* **Lil'Log (Lilian Weng)**: A autora Lilian Weng discutiu sobre a importância da engenharia de prompts para modelos de linguagem grandes, destacando a necessidade de uma abordagem empírica para melhorar a comunicação entre humanos e modelos de IA. [Prompt Engineering](https://lilianweng.github.io/posts/2023-03-15-prompt-engineering/)
+* **Reddit**: A comunidade do Reddit discutiu sobre as limitações e desafios dos modelos de linguagem grandes, como o Claude Code, e a importância de uma abordagem mais transparente e responsável no desenvolvimento de IA. [r/ClaudeCode](https://www.reddit.com/r/ClaudeCode/)
+* **VSCode Updates**: A equipe do VS Code apresentou atualizações e melhorias na integração com o GitHub Copilot, incluindo a capacidade de controle remoto de sessões do Copilot. [Take your local GitHub sessions anywhere](https://github.blog/news-insights/product-news/take-your-local-github-sessions-anywhere/)
+* **Mistral AI**: A Mistral AI apresentou uma parceria com a NVIDIA para acelerar o desenvolvimento de modelos de IA abertos e fronteiras. [Mistral AI partners with NVIDIA to accelerate open frontier models](https://mistral.ai/news/mistral-ai-and-nvidia-partner-to-accelerate-open-frontier-models)
+* **Together AI**: A Together AI discutiu sobre a importância da eficiência e escalabilidade nos modelos de IA, apresentando soluções para otimizar a inferência e reduzir os custos. [Serving DeepSeek-V4: why million-token context is an inference systems problem](https://www.together.ai/blog/serving-deepseek-v4-why-million-token-context-is-an-inference-systems-problem)
 
 ## Tendências
-A tendência atual é a criação de agentes que podem aprender e se adaptar às necessidades dos usuários, utilizando modelos de linguagem grandes e técnicas de aprendizado de máquina. Além disso, há um aumento no desenvolvimento de ferramentas e projetos que permitem que os desenvolvedores criem agentes que podem criar conteúdo de alta qualidade, como designs e vídeos.
+O período viu um aumento significativo no desenvolvimento e aplicação de modelos de linguagem grandes, com foco em melhorias na engenharia de prompts, eficiência e escalabilidade. A comunidade de IA está se movendo em direção a uma abordagem mais responsável e transparente no desenvolvimento de modelos de IA.
+
 ```mermaid
 graph LR
-    A[Desenvolvedor] -->|Cria agente|> B[Agente]
-    B -->|Aprende e se adapta|> C[Usuário]
-    C -->|Fornece feedback|> B
-    B -->|Cria conteúdo de alta qualidade|> D[Conteúdo]
+    A[Modelos de Linguagem Grandes] -->|Engenharia de Prompts|> B[Melhorias na Comunicação]
+    B -->|Eficiência e Escalabilidade|> C[Aplicações Práticas]
+    C -->|Transparência e Responsabilidade|> D[Desenvolvimento de IA Ético]
 ```
-Essa tendência é impulsionada pela necessidade de criar agentes que possam aprender e se adaptar às necessidades dos usuários, e que possam criar conteúdo de alta qualidade de forma eficiente. Além disso, há um aumento no desenvolvimento de ferramentas e projetos que permitem que os desenvolvedores criem agentes que possam aprender e se lembrar de informações de forma eficiente.
+A tendência também mostra um aumento na adoção de modelos de IA em diversas áreas, como a indústria de jogos, a educação e a saúde. A parceria entre a Mistral AI e a NVIDIA é um exemplo disso, demonstrando a importância da colaboração entre empresas e instituições de pesquisa para impulsionar o desenvolvimento de IA.
+
+Além disso, a comunidade do Reddit está discutindo sobre as limitações e desafios dos modelos de linguagem grandes, como o Claude Code, e a importância de uma abordagem mais transparente e responsável no desenvolvimento de IA. Isso destaca a necessidade de uma abordagem mais ética e responsável no desenvolvimento de IA, considerando os impactos sociais e éticos dos modelos de IA.
 
 ## Fontes e Referências
 
