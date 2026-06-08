@@ -12,12 +12,12 @@ function withModelFooter(content: string): string {
 const askOpts = { maxOutputTokens: config.litellm.maxOutputTokens };
 
 const CURATION_GUIDANCE =
-  "Selecione APENAS os itens realmente interessantes/relevantes do período (lançamentos, mudanças de arquitetura, padrões, ferramentas, insights da comunidade). Resuma cada item em 2-4 frases densas — o que é e por que importa — sem encher linguiça e sem repetir. Priorize VARIEDADE de fontes e temas (largura) em vez de aprofundar um único tópico. Cada destaque deve citar a fonte como link [título](url) retirado da lista fornecida.";
+  "Selecione APENAS os itens realmente interessantes/relevantes do período (lançamentos, mudanças de arquitetura, padrões, ferramentas, insights da comunidade). Resuma cada item em 2-4 frases densas — o que é e por que importa — sem encher linguiça e sem repetir. Priorize VARIEDADE de fontes e temas (largura) em vez de aprofundar um único tópico. Cada destaque DEVE citar a fonte como link [título](url) retirado da lista fornecida. TODAS as fontes relevantes fornecidas devem aparecer pelo menos uma vez no artigo.";
 
 const MERMAID_GUIDANCE =
-  "Quando for ilustrar uma tendência, fluxo ou arquitetura, use UM diagrama Mermaid em bloco ```mermaid (flowchart, sequenceDiagram ou architecture), sintaticamente válido e autocontido (no máximo 2-3 diagramas no documento todo, só onde agregar). Inclua código apenas se for REAL e executável e agregar valor concreto. NUNCA escreva pseudocódigo — se não houver código real útil, use um diagrama ou texto.";
+  "Quando for ilustrar uma tendência, fluxo ou arquitetura, use EXATAMENTE UM diagrama Mermaid em bloco ```mermaid (flowchart TD, sequenceDiagram ou graph LR), sintaticamente válido e autocontido. Regras obrigatórias: (1) use apenas TD ou LR como direção, (2) IDs dos nós sem espaços nem acentos (ex: NodeA, NodeB), (3) labels entre aspas duplas se tiverem espaços, (4) sem subgrafos aninhados complexos, (5) teste mental: o diagrama deve renderizar no mermaid.live. NUNCA escreva pseudocódigo — se não houver código real útil, use um diagrama simples ou texto.";
 
-function clampContext(s: string, max = 60000): string {
+function clampContext(s: string, max = 120000): string {
   return s.length > max ? s.slice(0, max) : s;
 }
 
@@ -212,8 +212,8 @@ export async function generateArticle(
   const systemPrompt = getSystemPrompt();
 
   const usedArticles = curateArticles(recentArticles, {
-    perBucket: type === "weekly" ? 25 : 10,
-    max: type === "weekly" ? 80 : 30,
+    perBucket: type === "weekly" ? 50 : 20,
+    max: type === "weekly" ? 120 : 50,
   });
   const context = clampContext(
     usedArticles
@@ -380,8 +380,8 @@ function loadPeriodArticles(cfg: PeriodConfig): Article[] {
   // Filter by date in SQL (indexed) and curate, instead of capping at the
   // 200 most recent rows — that cap made long periods only ever see ~1-2 days.
   return curateArticles(db.getArticlesSince(cfg.days), {
-    perBucket: 40,
-    max: 150,
+    perBucket: 80,
+    max: 200,
   });
 }
 
