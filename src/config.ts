@@ -45,7 +45,7 @@ export const config = {
       .split(",")
       .map((m) => m.trim())
       .filter(Boolean),
-    timeoutMs: Number(process.env.LITELLM_TIMEOUT_MS ?? "300000"),
+    timeoutMs: Number(process.env.LITELLM_TIMEOUT_MS ?? "600000"),
     maxOutputTokens: Number(process.env.LITELLM_MAX_OUTPUT_TOKENS ?? "12000"),
   },
   crawlIntervalMinutes: Number(process.env.CRAWL_INTERVAL_MINUTES ?? "40"),
