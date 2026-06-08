@@ -4,33 +4,32 @@ title: "Desenvolvimentos Recentes em AI, LLMs e Agentes"
 date: "2026-06-08"
 tags: ["ai", "developers"]
 summary: "Destaques
- HermesAgent: Um agente que cresce com você, com 186.995 estrelas no GitHub, é um projeto em Python que permite a criação de agentes personalizados para diversas tarefas NousResearch/hermesagenthttps://github.com/NousResearch/hermesagent.
- Trivy: Uma ferramenta de segur"
+ HermesAgent: Um agente que cresce com o usuário, permitindo personalização e adaptação às necessidades do desenvolvedor. Isso é importante porque permite que os desenvolvedores trabalhem de forma mais eficiente e personalizada. NousResearch/hermesagenthttps://github.co"
 ---
 
 {% raw %}
 ## Destaques
-* **Hermes-Agent**: Um agente que cresce com você, com 186.995 estrelas no GitHub, é um projeto em Python que permite a criação de agentes personalizados para diversas tarefas [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent).
-* **Trivy**: Uma ferramenta de segurança para encontrar vulnerabilidades, misconfigurações, segredos e SBOM em contêineres, Kubernetes, repositórios de código, nuvens e mais, com 36.155 estrelas no GitHub [aquasecurity/trivy](https://github.com/aquasecurity/trivy).
-* **Impeccable**: Uma linguagem de design que melhora a capacidade de design de agentes de IA, com 36.095 estrelas no GitHub [pbakaus/impeccable](https://github.com/pbakaus/impeccable).
-* **Oh-My-Pi**: Um agente de codificação de IA para terminal, com recursos como edição ancorada por hash, ferramentas otimizadas, LSP, Python, navegador e subagentes, com 11.227 estrelas no GitHub [can1357/oh-my-pi](https://github.com/can1357/oh-my-pi).
-* **Stop-Slop**: Um arquivo de habilidade para remover tells de IA de prosa, com 9.412 estrelas no GitHub [hardikpandya/stop-slop](https://github.com/hardikpandya/stop-slop).
-* **Gambit**: Um conjunto de ferramentas de agente de código aberto para construir agentes de IA confiáveis, com 91 pontos no Hacker News [Gambit, an open-source agent harness for building reliable AI agents](https://github.com/bolt-foundry/gambit).
-* **Statewright**: Máquinas de estado visuais que tornam agentes de IA confiáveis, com 126 pontos no Hacker News [Statewright – Visual state machines that make AI agents reliable](https://github.com/statewright/statewright).
-* **Context Gateway**: Um gateway de contexto que comprime o contexto do agente antes que ele atinja o LLM, com 97 pontos no Hacker News [Context Gateway – Compress agent context before it hits the LLM](https://github.com/Compresr-ai/Context-Gateway).
-* **Dari-docs**: Uma ferramenta para otimizar documentos usando agentes de codificação paralelos, com 23 pontos no Hacker News [Dari-docs – Optimize your docs using parallel coding agents](https://github.com/mupt-ai/dari-docs).
-* **Spine AI**: Um espaço de trabalho visual para pensar em múltiplos modelos de IA, com 11 pontos no Hacker News [Spine AI – Visual workspace to think across multiple AI models](https://app.getspine.ai/guest).
+* **Hermes-Agent**: Um agente que cresce com o usuário, permitindo personalização e adaptação às necessidades do desenvolvedor. Isso é importante porque permite que os desenvolvedores trabalhem de forma mais eficiente e personalizada. [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent)
+* **Trivy**: Uma ferramenta de segurança que encontra vulnerabilidades, misconfigurações, segredos e SBOM em contêineres, Kubernetes, repositórios de código, nuvens e mais. Isso é importante porque ajuda a garantir a segurança dos sistemas e aplicativos. [aquasecurity/trivy](https://github.com/aquasecurity/trivy)
+* **Impeccable**: Uma linguagem de design que melhora a capacidade de design dos agentes de IA. Isso é importante porque permite que os agentes de IA criem designs mais eficazes e atraentes. [pbakaus/impeccable](https://github.com/pbakaus/impeccable)
+* **Oh-My-Pi**: Um agente de codificação de IA para terminal que oferece edição ancorada por hash, ferramentas otimizadas, LSP, Python, navegador e subagentes. Isso é importante porque fornece uma ferramenta poderosa para desenvolvedores trabalharem com IA no terminal. [can1357/oh-my-pi](https://github.com/can1357/oh-my-pi)
+* **Stop-Slop**: Um arquivo de habilidade para remover tells de IA de prosa. Isso é importante porque ajuda a melhorar a qualidade da prosa gerada por IA. [hardikpandya/stop-slop](https://github.com/hardikpandya/stop-slop)
+* **Harness**: Uma habilidade meta que projeta equipes de agentes específicos de domínio, define agentes especializados e gera as habilidades que eles usam. Isso é importante porque permite que os desenvolvedores criem equipes de agentes personalizadas para atender às suas necessidades. [revfactory/harness](https://github.com/revfactory/harness)
+* **Gambit**: Um agente de harness de código aberto para construir agentes de IA confiáveis. Isso é importante porque fornece uma ferramenta para desenvolvedores criarem agentes de IA confiáveis e personalizados. [bolt-foundry/gambit](https://github.com/bolt-foundry/gambit)
+* **Hyperbrowser MCP Server**: Um servidor que conecta agentes de IA à web por meio de navegadores. Isso é importante porque permite que os agentes de IA acessem e interajam com a web de forma mais fácil e eficiente. [hyperbrowserai/mcp](https://github.com/hyperbrowserai/mcp)
+* **Dedalus Labs**: Uma plataforma que oferece uma forma fácil de programar robôs para casa, semelhante à programação de agentes de IA. Isso é importante porque permite que os usuários criem robôs personalizados para suas necessidades domésticas. [Dedalus Labs](https://news.ycombinator.com/item?id=45054040)
+* **Voker**: Uma ferramenta de análise para agentes de IA que ajuda a entender e melhorar o desempenho dos agentes. Isso é importante porque fornece uma forma de medir e melhorar a eficácia dos agentes de IA. [Voker](https://voker.ai)
 
 ## Tendências
-A comunidade de desenvolvedores de IA e LLMs está cada vez mais focada em criar ferramentas e agentes que possam ser personalizados e escaláveis. Isso é evidente nos projetos como o Hermes-Agent e o Oh-My-Pi, que permitem a criação de agentes personalizados para diversas tarefas. Além disso, a segurança é um tema importante, com ferramentas como o Trivy e o Stop-Slop que ajudam a encontrar vulnerabilidades e remover tells de IA de prosa.
+Os desenvolvimentos recentes em AI, LLMs e agentes estão focados em melhorar a eficiência, personalização e segurança dos sistemas e aplicativos. As ferramentas como Trivy e Gambit estão ajudando a garantir a segurança e confiabilidade dos agentes de IA, enquanto as linguagens de design como Impeccable estão melhorando a capacidade de design dos agentes. Além disso, as plataformas como Dedalus Labs e Voker estão oferecendo formas fáceis de programar robôs e analisar o desempenho dos agentes de IA.
 ```mermaid
 graph LR
-    A[Agente de IA] -->|Personalização|> B[Agentes Personalizados]
-    B -->|Escalabilidade|> C[Agentes Escaláveis]
-    C -->|Segurança|> D[Trivy]
-    D -->|Remoção de Tells|> E[Stop-Slop]
-    E -->|Otimização|> F[Dari-docs]
-    F -->|Visualização|> G[Spine AI]
+    A[Desenvolvedor] -->|Cria|> B[Agente de IA]
+    B -->|Interage|> C[Hyperbrowser MCP Server]
+    C -->|Acessa|> D[Web]
+    D -->|Fornece|> E[Dados]
+    E -->|Analisados|> F[Voker]
+    F -->|Melhora|> B
 ```
 
 ## Fontes e Referências
@@ -80,7 +79,21 @@ graph LR
 43. [WSL - Onde estão os arquivos?](https://www.tabnews.com.br/AnselmoBD/wsl-onde-estao-os-arquivos) — TabNews
 44. [Show HN: Spine AI – Visual workspace to think across multiple AI models](https://app.getspine.ai/guest) — Hacker News
 45. [Get paid to do you own ML research (Cat's grant)](https://news.ycombinator.com/item?id=40346716) — Hacker News
-46. [Colab PDF Reader & Translator  | Projeto Open Source](https://www.tabnews.com.br/rodrigocoa/colab-pdf-reader-e-translator-projeto-open-source) — TabNews
+46. [Show HN: Pomerium Agentic Access Gateway – dynamic auth for AI agents](https://news.ycombinator.com/item?id=43887439) — Hacker News
+47. [Colab PDF Reader & Translator  | Projeto Open Source](https://www.tabnews.com.br/rodrigocoa/colab-pdf-reader-e-translator-projeto-open-source) — TabNews
+48. [Como um deficiente visual hacker usa o computador? Mostrei na prática!](https://www.tabnews.com.br/JuanMathewsRebelloSantos/como-um-deficiente-visual-hacker-usa-o-computador-mostrei-na-pratica) — TabNews
+49. [Show HN: Max – a federated data query layer for AI agents (and humans)](https://max.cloud) — Hacker News
+50. [Get paid to do your own ML research (Cat's grant)](https://news.ycombinator.com/item?id=40346743) — Hacker News
+51. [NPM, PNPM, Yarn e Bun: qual a diferença afinal?](https://www.tabnews.com.br/codevjuan/npm-pnpm-yarn-e-bun-qual-a-diferenca-afinal) — TabNews
+52. [Show HN: Agent – A Local Computer-Use Operator for macOS](https://github.com/trycua/cua) — Hacker News
+53. [Agente de código precisa de contrato de trabalho, não de mais prompt](https://www.tabnews.com.br/Centelha/agente-de-codigo-precisa-de-contrato-de-trabalho-nao-de-mais-prompt) — TabNews
+54. [Claude Chat me fez perder tempo e eu tive que corrigir até a lista de erros dele](https://www.tabnews.com.br/danieldia/claude-chat-me-fez-perder-tempo-e-eu-tive-que-corrigir-ate-a-lista-de-erros-dele) — TabNews
+55. [Poderiam me ajudar falando em que posição meu site aparece para vocês nas buscas orgânicas do Google?](https://www.tabnews.com.br/Nageysiel/poderiam-me-ajudar-falando-em-que-posicao-meu-site-aparece-para-voces-nas-buscas-organicas-do-google) — TabNews
+56. [Como criar um emulador de NES - Arquitetura do NES](https://www.tabnews.com.br/odevzin/como-criar-um-emulador-de-nes-arquitetura-do-nes) — TabNews
+57. [Dividir para proteger](https://www.tabnews.com.br/Silva97/dividir-para-proteger) — TabNews
+58. [SSR vs CSR: Quando Cada Abordagem Faz Sentido](https://www.tabnews.com.br/mrmsoares/ssr-vs-csr-quando-cada-abordagem-faz-sentido) — TabNews
+59. [WebSockets na Prática: Sistema de Notificações em Tempo Real com Node.js e React](https://www.tabnews.com.br/mrmsoares/websockets-na-pratica-sistema-de-notificacoes-em-tempo-real-com-node-js-e-react) — TabNews
+60. [Google pagará 920 milhões de dólares mensais à SpaceX por capacidade de computação para IA](https://www.tabnews.com.br/NewsletterOficial/google-pagara-920-milhoes-de-dolares-mensais-a-spacex-por-capacidade-de-computacao-para-ia) — TabNews
 
 ---
 
