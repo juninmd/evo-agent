@@ -176,14 +176,15 @@ title: Evo Agent
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-recentes-em-ai-llms-e-agentes">Desenvolvimentos Recentes em AI, LLMs e Agentes</a></h3>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-recentes-em-inteligencia-artificial-e-agentes">Desenvolvimentos Recentes em Inteligência Artificial e Agentes</a></h3>
   <p>Destaques
- HermesAgent: Um agente que cresce com o usuário, permitindo personalização e adaptação às necessidades do desenvolvedor. Isso é importante porque permite que os desenvolvedores trabalhem de forma mais eficiente e personalizada. NousResearch/hermesagenthttps://github.co</p>
+ HermesAgent: Um agente que cresce com o usuário, desenvolvido em Python, com 186.995 estrelas no GitHub, demonstra a crescente importância de agentes personalizados em aplicações de IA. NousResearch/hermesagenthttps://github.com/NousResearch/hermesagent
+ Trivy: Uma fer</p>
   <div class="chips"><span>ai</span><span>developers</span></div>
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-recentes-em-inteligencia-artificial-e-agentes">Desenvolvimentos Recentes em Inteligência Artificial e Agentes</a></h3>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-recentes-em-ai-llms-e-agentes">Desenvolvimentos Recentes em AI, LLMs e Agentes</a></h3>
   
   
 </article>
