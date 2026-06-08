@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>37</strong> artigos</span>
-    <span><strong>23</strong> relatorios</span>
+    <span><strong>24</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,13 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-08-relatorio-semanal-panorama-tecnico-01-06-2026-a-08-06-2026">Relatorio Semanal: Panorama tecnico (01/06/2026 a 08/06/2026)</a></h3>
+  <p>Destaques do período
+ NVIDIA Nemotron 3 Ultra: A NVIDIA lançou o Nemotron 3 Ultra, uma plataforma de processamento de linguagem natural que oferece uma forma mais rápida e eficiente de processamento de linguagem natural para agentes de longo prazo. NVIDIA Technical Bloghttps://ne</p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-08-relatorio-semanal-resumo-operacional-01-06-2026-a-08-06-2026">Relatorio Semanal: Resumo operacional (01/06/2026 a 08/06/2026)</a></h3>
   <p>Resumo operacional do período 01/06/2026 a 08/06/2026 após timeout do modelo LiteLLM.</p>
@@ -171,10 +178,8 @@ title: Evo Agent
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-desenvolvimentos-recentes-em-ai-llms-e-agentes">Desenvolvimentos Recentes em AI, LLMs e Agentes</a></h3>
-  <p>Destaques
- HermesAgent: Um agente que cresce com o usuário, com 186.995 estrelas no GitHub. É um projeto em Python que permite a criação de agentes personalizados para várias tarefas. NousResearch/hermesagenthttps://github.com/NousResearch/hermesagent
- Trivy: Uma ferramenta de se</p>
-  <div class="chips"><span>ai</span><span>developers</span></div>
+  
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
