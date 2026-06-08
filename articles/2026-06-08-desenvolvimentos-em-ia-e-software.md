@@ -2,42 +2,46 @@
 layout: article
 title: "Desenvolvimentos em IA e Software"
 date: "2026-06-08"
-tags: ["ai", "developers"]
-summary: "Os destaques do período incluem várias ferramentas e técnicas inovadoras em IA e desenvolvimento de software. Aqui estão os principais pontos:"
+tags: ["github-trending", "hacker-news", "tabnews", "python", "go", "javascript", "typescript", "", "html", "ml", "br"]
+summary: "Resumo executivo do período cobrindo 60 fontes (TabNews (30), Hacker News (24), GitHub Trending (6)). resumo técnico. Principais temas: agentes de IA, LLMs, ferramentas de desenvolvimento, segurança. Gerado via LiteLLM com dados de GitHub Trending, Hacker News, TabNews e RSS feeds oficiais."
 ---
 
 {% raw %}
-Os destaques do período incluem várias ferramentas e técnicas inovadoras em IA e desenvolvimento de software. Aqui estão os principais pontos:
+Nesta semana, vários desenvolvimentos interessantes foram destacados nas fontes de tecnologia. Abaixo, segue um resumo dos principais pontos:
 
-## Destaques
-### GitHub Trending
-* **NousResearch / hermes-agent**: Um agente que cresce com você, com 186.995 estrelas. [link](https://github.com/NousResearch/hermes-agent)
-* **aquasecurity / trivy**: Uma ferramenta para encontrar vulnerabilidades, misconfigurações, segredos e SBOM em contêineres, Kubernetes, repositórios de código, nuvens e mais. [link](https://github.com/aquasecurity/trivy)
-* **pbakaus / impeccable**: Uma linguagem de design que melhora a capacidade de design de agentes de IA. [link](https://github.com/pbakaus/impeccable)
-* **can1357 / oh-my-pi**: Um agente de codificação de IA para terminal com recursos como edição ancorada em hash, ferramenta otimizada, LSP, Python, navegador, subagentes e mais. [link](https://github.com/can1357/oh-my-pi)
-* **hardikpandya / stop-slop**: Um arquivo de habilidade para remover tells de IA de prosa. [link](https://github.com/hardikpandya/stop-slop)
-* **revfactory / harness**: Uma meta-habilidade que projeta equipes de agentes específicos de domínio, define agentes especializados e gera as habilidades que eles usam. [link](https://github.com/revfactory/harness)
+* **NousResearch / hermes-agent**: Um agente que cresce com o usuário, com 186.995 estrelas no GitHub, é um projeto notável que demonstra o crescimento da inteligência artificial aplicada a agentes autônomos. [link](https://github.com/NousResearch/hermes-agent)
+* **aquasecurity / trivy**: Uma ferramenta para encontrar vulnerabilidades, misconfigurações, segredos e SBOM em contêineres, Kubernetes, repositórios de código, nuvens e mais, com 36.155 estrelas no GitHub. [link](https://github.com/aquasecurity/trivy)
+* **pbakaus / impeccable**: Uma linguagem de design que melhora a capacidade de design dos agentes de IA, com 36.095 estrelas no GitHub. [link](https://github.com/pbakaus/impeccable)
+* **can1357 / oh-my-pi**: Um agente de codificação de IA para terminal, com 11.227 estrelas no GitHub, que oferece edição ancorada em hash, ferramentas otimizadas, LSP, Python, navegador, subagentes e mais. [link](https://github.com/can1357/oh-my-pi)
+* **hardikpandya / stop-slop**: Um arquivo de habilidade para remover tells de IA de prosa, com 9.412 estrelas no GitHub. [link](https://github.com/hardikpandya/stop-slop)
+* **revfactory / harness**: Uma meta-habilidade que projeta equipes de agentes específicos de domínio, define agentes especializados e gera as habilidades que eles usam, com 6.517 estrelas no GitHub. [link](https://github.com/revfactory/harness)
 
-### Hacker News
-* **Show HN: AI agents play SimCity through a REST API**: Agentes de IA jogam SimCity por meio de uma API REST. [link](https://hallucinatingsplines.com)
-* **Launch HN: Innate (YC F24) – Home robots as easy to program as AI agents**: Robôs domésticos fáceis de programar como agentes de IA. [link](https://news.ycombinator.com/item?id=42451707)
-* **Ask HN: How to learn AI from first principles?**: Como aprender IA a partir de princípios fundamentais? [link](https://news.ycombinator.com/item?id=42827913)
+No que diz respeito a notícias e discussões na comunidade, alguns pontos destacados incluem:
 
-### TabNews
-* **Pitch: Como estruturamos um SaaS no Edge para custar quase R$ 0 de infra no lançamento**: Como estruturar um SaaS no Edge para custar quase R$ 0 de infra no lançamento. [link](https://www.tabnews.com.br/Dorvo/como-estruturamos-um-saas-no-edge-para-custar-quase-r-0-de-infra-no-lancamento)
-* **AI me tirou uma parte da programação que eu gostava**: Como a IA afetou a programação. [link](https://www.tabnews.com.br/danieldia/ai-me-tirou-uma-parte-da-programacao-que-eu-gostava)
-* **Eu criei minhas próprias funções da libc do "zero"!**: Como criar funções da libc do zero. [link](https://www.tabnews.com.br/ciproterona/eu-criei-minhas-proprias-funcoes-da-libc-do-zero)
+* **Show HN: AI agents play SimCity through a REST API**: Uma demonstração de agentes de IA jogando SimCity por meio de uma API REST, com 216 pontos e 72 comentários no Hacker News. [link](https://hallucinatingsplines.com)
+* **Launch HN: Innate (YC F24) – Home robots as easy to program as AI agents**: Um lançamento de robôs domésticos fáceis de programar quanto agentes de IA, com 165 pontos e 77 comentários no Hacker News. [link](https://news.ycombinator.com/item?id=42451707)
+* **Ask HN: How to learn AI from first principles?**: Uma pergunta sobre como aprender IA a partir de princípios fundamentais, com 145 pontos e 56 comentários no Hacker News. [link](https://news.ycombinator.com/item?id=42827913)
 
-## Tendências
+Além disso, foram destacados vários artigos e projetos no TabNews, incluindo:
+
+* **Pitch: Como estruturamos um SaaS no Edge para custar quase R$ 0 de infra no lançamento**: Um artigo sobre como estruturar um SaaS no Edge para custar quase R$ 0 de infra no lançamento. [link](https://www.tabnews.com.br/Dorvo/como-estruturamos-um-saas-no-edge-para-custar-quase-r-0-de-infra-no-lancamento)
+* **AI me tirou uma parte da programação que eu gostava**: Um artigo sobre como a IA afetou a programação de um desenvolvedor. [link](https://www.tabnews.com.br/danieldia/ai-me-tirou-uma-parte-da-programacao-que-eu-gostava)
+* **Eu criei minhas próprias funções da libc do "zero"!**: Um artigo sobre como criar funções da libc do zero. [link](https://www.tabnews.com.br/ciproterona/eu-criei-minhas-proprias-funcoes-da-libc-do-zero)
+
+Um diagrama que ilustra a relação entre as fontes e os temas principais é o seguinte:
 ```mermaid
 graph LR
-    A[IA] -->|aprendizado|> B[Machine Learning]
-    B -->|aplicação|> C[Desenvolvimento de Software]
-    C -->|ferramentas|> D[GitHub Trending]
-    D -->|ferramentas|> E[Hacker News]
-    E -->|ferramentas|> F[TabNews]
+    A[GitHub Trending] -->|6 fontes|> B[Python]
+    A -->|6 fontes|> C[Go]
+    A -->|6 fontes|> D[JavaScript]
+    E[Hacker News] -->|24 fontes|> B
+    E -->|24 fontes|> C
+    E -->|24 fontes|> D
+    F[TabNews] -->|30 fontes|> B
+    F -->|30 fontes|> C
+    F -->|30 fontes|> D
 ```
-Essas tendências mostram como a IA está sendo aplicada em diferentes áreas, incluindo o desenvolvimento de software, e como as ferramentas e técnicas estão sendo compartilhadas e discutidas em diferentes plataformas.
+Esse diagrama mostra a relação entre as fontes (GitHub Trending, Hacker News e TabNews) e os temas principais (Python, Go e JavaScript). Cada fonte está conectada aos temas principais, indicando a variedade de tópicos abordados em cada uma delas.
 
 ## Fontes e Referências
 
