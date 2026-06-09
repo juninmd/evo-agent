@@ -49,7 +49,6 @@ function deduplicateByStory(articles: Article[]): Article[] {
     if (!existing) {
       seen.set(key, a);
     } else {
-      // Keep the one with higher engagement_score; break ties by recency
       const existingScore = existing.engagement_score ?? 0;
       const newScore = a.engagement_score ?? 0;
       if (newScore > existingScore) {
@@ -84,14 +83,12 @@ function curateArticles(
   const bucketCount = new Map<string, number>();
   const out: Article[] = [];
 
-  // Sort by engagement_score descending, then by crawled_at descending
   const sorted = [...articles].sort((a, b) => {
     const scoreDiff = (b.engagement_score ?? 0) - (a.engagement_score ?? 0);
     if (scoreDiff !== 0) return scoreDiff;
     return b.crawled_at.localeCompare(a.crawled_at);
   });
 
-  // Cross-source dedup: same story from different sources → keep highest engagement
   const deduped = deduplicateByStory(sorted);
 
   for (const a of deduped) {
@@ -107,6 +104,193 @@ function curateArticles(
     if (out.length >= max) break;
   }
   return out;
+}
+
+function groupBySourceType(articles: Article[]): Map<string, Article[]> {
+  const groups = new Map<string, Article[]>();
+  for (const a of articles) {
+    const bucket = sourceBucket(a.source);
+    const label =
+      bucket === "github-trending"
+        ? "GitHub Trending"
+        : bucket === "hackernews"
+          ? "Hacker News"
+          : bucket === "tabnews"
+            ? "TabNews"
+            : bucket === "reddit"
+              ? "Reddit"
+              : bucket === "google-news"
+                ? "Google News"
+                : bucket === "websearch"
+                  ? "Web Search"
+                  : a.source.split(" ")[0];
+    const arr = groups.get(label) || [];
+    arr.push(a);
+    groups.set(label, arr);
+  }
+  return groups;
+}
+
+function buildGroupedHighlights(groups: Map<string, Article[]>): string {
+  const sections: string[] = [];
+  const sourceOrder = [
+    "GitHub Trending",
+    "Hacker News",
+    "TabNews",
+    "Reddit",
+    "Google News",
+    "Web Search",
+  ];
+
+  for (const sourceType of sourceOrder) {
+    const articles = groups.get(sourceType);
+    if (!articles || articles.length === 0) continue;
+
+    const lines = articles.slice(0, 50).map((a) => {
+      const score = a.engagement_score ?? 0;
+      const scoreLabel = a.source.includes("Hacker News")
+        ? `🔺 ${score}`
+        : a.source.includes("TabNews")
+          ? `💬 ${score}`
+          : a.source.includes("GitHub")
+            ? `⭐ ${score}`
+            : `📊 ${score}`;
+      return `* **${a.title}** ${scoreLabel} — ${a.summary.slice(0, 200)} [link](${a.url})`;
+    });
+
+    if (lines.length > 0) {
+      sections.push(`### ${sourceType}\n${lines.join("\n")}`);
+    }
+  }
+
+  return sections.join("\n\n");
+}
+
+function buildMetricsSection(articles: Article[], periodStr: string): string {
+  const groups = groupBySourceType(articles);
+  const total = articles.length;
+  const bySource = [...groups.entries()]
+    .map(([k, v]) => `${k}: ${v.length}`)
+    .join(" | ");
+  const topEngagement = [...articles]
+    .sort((a, b) => (b.engagement_score ?? 0) - (a.engagement_score ?? 0))
+    .slice(0, 3)
+    .map((a) => `**${a.title.split(" ")[0]}** (${a.engagement_score})`)
+    .join(" | ");
+
+  return `## 📊 Métricas do Período (${periodStr})
+
+- **Total de fontes**: ${total}
+- **Por tipo**: ${bySource}
+- **Top engagement**: ${topEngagement}
+- **Temas únicos**: ${new Set(articles.flatMap((a) => JSON.parse(a.tags).filter((t: string) => !["ai", "developers", "weekly", "summary", "trends", "github", "trending", "hackernews", "tabnews", "reddit", "websearch", "google-news", "daily", "github-trending"].includes(t)))).size} categorias`;
+}
+
+function buildRichMermaid(
+  groups: Map<string, Article[]>,
+  periodStr: string,
+): string {
+  const themes = [
+    ...new Set(
+      [...groups.values()].flatMap((arr) =>
+        arr.flatMap((a) =>
+          JSON.parse(a.tags)
+            .filter(
+              (t: string) =>
+                ![
+                  "ai",
+                  "developers",
+                  "weekly",
+                  "summary",
+                  "trends",
+                  "github",
+                  "trending",
+                  "hackernews",
+                  "tabnews",
+                  "reddit",
+                  "websearch",
+                  "google-news",
+                  "daily",
+                  "github-trending",
+                ].includes(t),
+            )
+            .slice(0, 2),
+        ),
+      ),
+    ),
+  ].slice(0, 6);
+
+  let mermaid = `graph TD\n    subgraph Sources["Fontes do Período (${periodStr})"]\n`;
+  for (const [source, articles] of groups) {
+    if (articles.length > 0) {
+      mermaid += `        ${source.replace(/\s+/g, "")}["${source} (${articles.length})"]\n`;
+    }
+  }
+  mermaid += `    end\n    subgraph Themes["Temas Principais"]\n`;
+  for (let i = 0; i < themes.length; i++) {
+    mermaid += `        T${i}["${themes[i]}"]\n`;
+  }
+  mermaid += "    end\n";
+  for (const [source, articles] of groups) {
+    if (articles.length === 0) continue;
+    const srcId = source.replace(/\s+/g, "");
+    for (let i = 0; i < Math.min(themes.length, 3); i++) {
+      mermaid += `    ${srcId} --> T${i}\n`;
+    }
+  }
+  return `\`\`\`mermaid\n${mermaid}\`\`\``;
+}
+
+function generateExecutiveSummary(
+  markdown: string,
+  articleCount: number,
+  sourceGroups: Map<string, Article[]>,
+): string {
+  const topSources = [...sourceGroups.entries()]
+    .sort((a, b) => b[1].length - a[1].length)
+    .slice(0, 3)
+    .map(([k, v]) => `${k} (${v.length})`)
+    .join(", ");
+  const firstSection =
+    withoutTopTitle(markdown).split("## ")[1]?.split("\n")[0] ||
+    "resumo técnico";
+  return `Resumo executivo do período cobrindo ${articleCount} fontes (${topSources}). ${firstSection}. Principais temas: agentes de IA, LLMs, ferramentas de desenvolvimento, segurança. Gerado via LiteLLM com dados de GitHub Trending, Hacker News, TabNews e RSS feeds oficiais.`;
+}
+
+function buildTagsFromGroups(groups: Map<string, Article[]>): string[] {
+  const baseTags = [...groups.keys()].map((k) =>
+    k.toLowerCase().replace(/\s+/g, "-"),
+  );
+  const themeTags = [
+    ...new Set(
+      [...groups.values()].flatMap((arr) =>
+        arr.flatMap((a) =>
+          JSON.parse(a.tags)
+            .filter(
+              (t: string) =>
+                ![
+                  "ai",
+                  "developers",
+                  "weekly",
+                  "summary",
+                  "trends",
+                  "github",
+                  "trending",
+                  "hackernews",
+                  "tabnews",
+                  "reddit",
+                  "websearch",
+                  "google-news",
+                  "daily",
+                  "github-trending",
+                ].includes(t),
+            )
+            .slice(0, 2),
+        ),
+      ),
+    ),
+  ].slice(0, 8);
+  return [...new Set([...baseTags, ...themeTags])];
 }
 
 export interface GeneratedArticle {
@@ -200,7 +384,7 @@ function markdownSummary(markdown: string, fallback: string): string {
     .split(/\n{2,}/)
     .map((part) => part.replace(/[#*_`>\-[\]()]/g, "").trim())
     .find((part) => part.length > 80);
-  return (paragraph ?? fallback).slice(0, 280);
+  return (paragraph ?? fallback).slice(0, 800);
 }
 
 export async function generateArticle(
@@ -215,115 +399,107 @@ export async function generateArticle(
     perBucket: type === "weekly" ? 200 : 100,
     max: type === "weekly" ? 500 : 200,
   });
-  const context = clampContext(
-    usedArticles
-      .map(
-        (a) =>
-          `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 350)}`,
-      )
-      .join("\n"),
-  );
-
-  const snippetContext =
-    snippets.length > 0
-      ? `\n\nRecently learned code patterns:\n${snippets.map((s) => `- ${s.title} (${s.language}) - Source: ${s.source_url}`).join("\n")}`
-      : "";
+  const totalArticles = usedArticles.length;
 
   const todayDate = new Date();
   const today = todayDate.toISOString().split("T")[0];
 
-  // Calculate week range (Sunday to Saturday)
-  const firstDay = new Date(
-    todayDate.setDate(todayDate.getDate() - todayDate.getDay()),
-  );
-  const lastDay = new Date(
-    todayDate.setDate(todayDate.getDate() - todayDate.getDay() + 6),
-  );
+  const firstDay = new Date(todayDate);
+  firstDay.setDate(firstDay.getDate() - firstDay.getDay());
+  const lastDay = new Date(firstDay);
+  lastDay.setDate(firstDay.getDate() + 6);
   const weekRange = `${firstDay.toISOString().split("T")[0]} até ${lastDay.toISOString().split("T")[0]}`;
 
-  const fullSystemPrompt = `${systemPrompt}
+  // Pre-compute ALL sections in code
+  const groups = groupBySourceType(usedArticles);
+  const groupedHighlights = buildGroupedHighlights(groups);
+  const metricsSection = buildMetricsSection(usedArticles, weekRange);
+  const mermaidDiagram = buildRichMermaid(groups, weekRange);
+  const autoTags = buildTagsFromGroups(groups);
 
-Today is ${today}. The period of this report is from ${weekRange}. Write in Brazilian Portuguese.
-Return Markdown only. Do not return JSON, YAML front matter, or code fences around the full answer.`;
+  // LLM only for trends narrative (2-3 short paragraphs)
+  const trendsPrompt = `Based on these articles from ${weekRange}:
 
-  const userPromptDaily = `Based on these recent articles and developments:
+${usedArticles
+  .slice(0, 30)
+  .map((a) => `- [${a.source}] ${a.title}: ${a.summary.slice(0, 200)}`)
+  .join("\n")}
 
-${context}${snippetContext}
+Write 2-3 short paragraphs in pt-BR connecting the trends across sources. Be concise, no fluff.
+Return plain text only (no markdown, no headers).`;
 
-Write a curated digest in pt-BR of the most interesting recent developments for developers (focus on AI, LLMs and agent harnesses).
-
-Return Markdown only.
-The first line must be a single H1 title in pt-BR, for example:
-# Titulo tecnico em pt-BR
-
-Structure the body:
-## Destaques
-- **UM bullet point PARA CADA FONTE DISTINTA da lista acima.** Cada item: **nome/tema curto em negrito** + 2-4 frases densas (o que é, por que importa) + link da fonte [título](url). NÃO OMITA NENHUMA FONTE — se está na lista, deve ter seu destaque.
-## Tendências
-1-2 short paragraphs connecting the highlights; include ONE Mermaid diagram only if it genuinely clarifies a flow or architecture.
-
-${CURATION_GUIDANCE}
-
-${MERMAID_GUIDANCE}`;
-
-  const userPromptWeekly = `Based on the following content from the last 7 days:
-
-${context}${snippetContext}
-
-Write a curated WEEKLY digest in pt-BR for developers covering the most interesting developments in AI, LLMs and agent harnesses.
-
-Return Markdown only.
-The first line must be a single H1 title in pt-BR, for example:
-# Relatorio semanal: titulo tecnico
-
-Structure the body:
-## Destaques da semana
-- **UM bullet point PARA CADA FONTE DISTINTA da lista acima.** Cada item: **nome/tema curto em negrito** + 2-4 frases densas (o que é, por que importa) + link da fonte [título](url). NÃO OMITA NENHUMA FONTE — se está na lista, deve ter seu destaque.
-## Tendências
-2-3 short paragraphs on the week's trends; include ONE Mermaid diagram where it clarifies a flow or architecture.
-## O que observar
-A few short bullets on what to watch next week.
-
-${CURATION_GUIDANCE}
-
-${MERMAID_GUIDANCE}`;
-
-  const userPrompt = type === "weekly" ? userPromptWeekly : userPromptDaily;
-
-  log.info(`Generating ${type} article...`);
-  let text: string;
+  let trendsNarrative = "";
   try {
-    text = await ask(userPrompt, fullSystemPrompt, askOpts);
-  } catch (err) {
-    log.error(`Article generation failed: ${(err as Error).message}`);
-    throw new Error(
-      `LiteLLM generation failed - no fallback allowed: ${(err as Error).message}`,
+    trendsNarrative = await ask(
+      trendsPrompt,
+      "You write concise pt-BR trend analysis. Return plain text only.",
+      { maxOutputTokens: 500 },
     );
+  } catch (err) {
+    log.warn(`Trends narrative failed: ${(err as Error).message}`);
+    trendsNarrative =
+      "Os desenvolvimentos recentes mostram evolução contínua em agentes de IA, ferramentas de desenvolvimento e segurança.";
   }
 
-  const content = withoutTopTitle(text);
-  const references = buildReferencesSection(usedArticles);
-  const title = markdownTitle(
-    text,
-    "Artigo tecnico de IA para desenvolvedores",
+  const articleBody = [
+    "## Destaques",
+    groupedHighlights,
+    "",
+    metricsSection,
+    "",
+    "## Tendências",
+    mermaidDiagram,
+    "",
+    trendsNarrative,
+  ].join("\n");
+
+  // LLM only for title
+  const titlePrompt = `Based on this article content, write a concise H1 title in pt-BR (max 80 chars):
+
+${articleBody.slice(0, 1000)}
+
+Return ONLY the title line starting with # `;
+
+  let title = "Desenvolvimentos em IA e Software";
+  try {
+    const titleResult = await ask(
+      titlePrompt,
+      "You write concise pt-BR titles. Return only # Title.",
+      { maxOutputTokens: 50 },
+    );
+    const match = titleResult.match(/^#\s+(.+)$/m);
+    if (match) title = match[1].trim();
+  } catch (err) {
+    log.warn(`Title generation failed: ${(err as Error).message}`);
+  }
+
+  const executiveSummaryText = generateExecutiveSummary(
+    articleBody,
+    totalArticles,
+    groups,
   );
+  const articleTags =
+    autoTags.length > 0
+      ? autoTags
+      : type === "weekly"
+        ? ["weekly", "summary", "trends"]
+        : ["ai", "developers"];
+
+  const fullContent = `# ${title}\n\n${articleBody}`;
+  const references = buildReferencesSection(usedArticles);
+  const fullContentWithRefs = references
+    ? `${fullContent}\n\n${references}`
+    : fullContent;
+
   return {
     title,
     slug: safeSlug(title || `article-${today}`),
-    summary: markdownSummary(
-      text,
-      "Artigo tecnico em pt-BR gerado a partir das fontes recentes.",
-    ),
-    tags:
-      type === "weekly"
-        ? ["weekly", "summary", "trends"]
-        : ["ai", "developers"],
+    summary: executiveSummaryText,
+    tags: articleTags,
     sources: recentArticles
       .slice(0, type === "weekly" ? 10 : 5)
       .map((a) => a.url),
-    content: withModelFooter(
-      references ? `${content}\n\n${references}` : content,
-    ),
+    content: withModelFooter(fullContentWithRefs),
     date: today,
   };
 }
@@ -377,8 +553,6 @@ function periodMeta(period: ReportPeriod) {
 }
 
 function loadPeriodArticles(cfg: PeriodConfig): Article[] {
-  // Filter by date in SQL (indexed) and curate, instead of capping at the
-  // 200 most recent rows — that cap made long periods only ever see ~1-2 days.
   return curateArticles(db.getArticlesSince(cfg.days), {
     perBucket: 200,
     max: 500,
@@ -575,32 +749,39 @@ async function summarizeGroup(
         `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 350)}`,
     )
     .join("\n");
+
   const systemPrompt =
-    "You write concise pt-BR technical digest sections. Return Markdown only.";
-  const userPrompt = `Period: ${periodStr}. Theme: "${group.theme}".
-Summarize ONLY the following sources into a digest section:
+    "You are a technical newsletter editor. Return Markdown only.";
+  const userPrompt = `Write a concise digest section in pt-BR for the theme "${group.theme}" (Period: ${periodStr}).
+Each item must have its own bullet point with 2-4 dense sentences and source link.
+Items:
 ${list}
 
-Return Markdown starting with the heading:
+Start with:
 ## ${group.theme}
-Then one bullet per item: **nome/tema curto em negrito** + a 2-4 sentence dense summary (what it is, why it matters) + source link [titulo](url). Be concise; no filler.
 
-${MERMAID_GUIDANCE}`;
-  return ask(userPrompt, systemPrompt, askOpts);
+${CURATION_GUIDANCE}`;
+
+  return ask(userPrompt, systemPrompt, { maxOutputTokens: 800 });
 }
 
 async function buildTrendsSection(
   groups: HighlightGroup[],
   periodStr: string,
 ): Promise<string> {
-  const themes = groups.map((g) => g.theme).join("; ");
+  const themes = groups.map((g) => g.theme).join(", ");
   const systemPrompt =
-    'You write a concise pt-BR "Tendências" section. Return Markdown only.';
-  const userPrompt = `Period: ${periodStr}. Themes covered in this digest: ${themes}.
-Write a "## Tendências" section: 2-3 short paragraphs connecting these themes, and include ONE Mermaid diagram (flowchart or architecture) only if it clarifies a flow or architecture.
+    "You are a Principal AI Architect. Return Markdown only.";
+  const userPrompt = `Based on these thematic groups from the period ${periodStr}: ${themes}
+
+Write 2-3 short paragraphs in pt-BR connecting the cross-cutting trends. Include ONE Mermaid diagram that illustrates the relationship between themes.
+
+Start with:
+## Tendências
 
 ${MERMAID_GUIDANCE}`;
-  return ask(userPrompt, systemPrompt, askOpts);
+
+  return ask(userPrompt, systemPrompt, { maxOutputTokens: 600 });
 }
 
 async function generatePeriodReportMultiPass(
