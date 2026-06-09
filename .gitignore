@@ -19,3 +19,4 @@ check_providers*.ts
 homolog.ts
 test-*.ts
 temp/
+dump_*.json
