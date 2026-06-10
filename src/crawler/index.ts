@@ -107,8 +107,8 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["google", "ai"],
   },
   {
-    name: "Anthropic News (Legacy)",
-    url: "https://rsshub.app/anthropic/news",
+    name: "Anthropic News",
+    url: "https://www.anthropic.com/news",
     tags: ["anthropic", "claude", "ai"],
   },
   {
@@ -721,6 +721,70 @@ async function crawlLinkedInTopContent(url: string): Promise<number> {
   return newCount;
 }
 
+async function crawlAnthropicNewsDirect(source: FeedSource): Promise<number> {
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
+  let newCount = 0;
+  try {
+    const context = await browser.newContext({
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    });
+    const page = await context.newPage();
+    await page.goto(source.url, { waitUntil: "networkidle", timeout: 30000 });
+
+    const articles = await page.evaluate(() => {
+      const links = document.querySelectorAll('a[href^="/news/"]');
+      return Array.from(links)
+        .map((a) => {
+          const href = a.getAttribute("href") ?? "";
+          const titleEl = a.querySelector('h2, h3, h4, [class*="title"]');
+          const title = titleEl
+            ? titleEl.textContent?.trim()
+            : a.textContent?.trim();
+          const descEl = a.querySelector("p");
+          const summary = descEl ? descEl.textContent?.trim() : "";
+          return {
+            title: title ?? "",
+            url: href.startsWith("http")
+              ? href
+              : `https://www.anthropic.com${href}`,
+            summary: summary ?? "",
+          };
+        })
+        .filter(
+          (item) =>
+            item.title &&
+            item.url &&
+            item.url !== "https://www.anthropic.com/news",
+        );
+    });
+
+    for (const article of articles.slice(0, 10)) {
+      if (!article.url || !article.title) continue;
+      if (db.urlExists(article.url)) continue;
+
+      db.saveArticle({
+        title: article.title,
+        source: source.name,
+        url: article.url,
+        summary: article.summary,
+        tags: JSON.stringify(source.tags),
+        engagement_score: 0,
+      });
+      newCount++;
+    }
+  } catch (err) {
+    log.warn(`Anthropic crawler failed: ${(err as Error).message}`);
+  } finally {
+    await browser.close();
+  }
+  return newCount;
+}
+
 export async function crawlAll(): Promise<number> {
   const sources = [...DEFAULT_SOURCES, ...getDynamicSources()].filter(
     (s) => s?.url && s.name,
@@ -729,6 +793,12 @@ export async function crawlAll(): Promise<number> {
 
   for (const source of sources) {
     try {
+      if (source.url === "https://www.anthropic.com/news") {
+        log.info(`Scraping Anthropic News directly from: ${source.url}`);
+        const count = await crawlAnthropicNewsDirect(source);
+        newCount += count;
+        continue;
+      }
       let feedData: Awaited<ReturnType<typeof parser.parseURL>>;
       try {
         feedData = await parser.parseURL(source.url);
