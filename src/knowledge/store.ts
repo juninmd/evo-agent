@@ -41,7 +41,7 @@ export function getDb(): Database.Database {
   return _db;
 }
 
-function migrate(db: Database.Database) {
+export function migrate(db: Database.Database) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS articles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -80,6 +80,20 @@ function migrate(db: Database.Database) {
 
     CREATE INDEX IF NOT EXISTS idx_articles_crawled_at
       ON articles(crawled_at);
+  `);
+
+  // Databases created before engagement_score existed need the column added;
+  // CREATE TABLE IF NOT EXISTS is a no-op for them.
+  const articleColumns = db
+    .prepare("PRAGMA table_info(articles)")
+    .all() as Array<{ name: string }>;
+  if (!articleColumns.some((c) => c.name === "engagement_score")) {
+    db.exec(
+      "ALTER TABLE articles ADD COLUMN engagement_score INTEGER DEFAULT 0",
+    );
+  }
+
+  db.exec(`
     CREATE INDEX IF NOT EXISTS idx_articles_engagement
       ON articles(engagement_score DESC);
   `);

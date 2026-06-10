@@ -2,10 +2,13 @@ import { mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import Database from "better-sqlite3";
-import { beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
 
 // We test the DB schema and operations directly, bypassing the singleton
 // which depends on config.ts (env vars).
+vi.mock("../config.js", () => ({
+  config: { dbPath: join(tmpdir(), "evo-test-config-unused.db") },
+}));
 
 let db: Database.Database;
 const testDbPath = join(tmpdir(), `evo-test-${Date.now()}.db`);
@@ -169,6 +172,42 @@ describe("Database - agent_state", () => {
       .get("search_keywords") as { value: string };
 
     expect(row.value).toBe('["updated"]');
+  });
+});
+
+describe("migrate - legacy database without engagement_score", () => {
+  it("adds the engagement_score column to pre-existing databases", async () => {
+    const { migrate } = await import("../knowledge/store.js");
+    const legacyDbPath = join(tmpdir(), `evo-test-legacy-${Date.now()}.db`);
+    const legacyDb = new Database(legacyDbPath);
+    // Old production schema: articles table without engagement_score
+    legacyDb.exec(`
+      CREATE TABLE articles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        source TEXT NOT NULL,
+        url TEXT UNIQUE NOT NULL,
+        summary TEXT,
+        tags TEXT DEFAULT '[]',
+        crawled_at TEXT DEFAULT (datetime('now'))
+      );
+    `);
+    legacyDb
+      .prepare("INSERT INTO articles (title, source, url) VALUES (?, ?, ?)")
+      .run("Old Article", "RSS", "https://legacy.test/1");
+
+    migrate(legacyDb);
+
+    const row = legacyDb
+      .prepare("SELECT engagement_score FROM articles WHERE url = ?")
+      .get("https://legacy.test/1") as { engagement_score: number };
+    expect(row.engagement_score).toBe(0);
+
+    // Idempotent: running again must not throw
+    migrate(legacyDb);
+
+    legacyDb.close();
+    rmSync(legacyDbPath, { force: true });
   });
 });
 
