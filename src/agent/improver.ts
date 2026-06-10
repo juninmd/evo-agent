@@ -87,7 +87,9 @@ code_snippet should be a useful TypeScript pattern learned from the content, or 
   try {
     text = await ask(userPrompt, systemPrompt);
   } catch (err) {
-    log.error(`Improvement cycle LLM call failed: ${(err as Error).message}`);
+    log.error(
+      `Improvement cycle LLM call failed: ${err instanceof Error ? err.message : String(err)}`,
+    );
     return;
   }
 
@@ -111,6 +113,26 @@ code_snippet should be a useful TypeScript pattern learned from the content, or 
       .map((k) => k.slice(0, 60).trim())
       .filter((k) => k.length > 0 && k.split(" ").length <= 5)
       .slice(0, 10);
+
+    if (
+      typeof result.improved_system_prompt !== "string" ||
+      result.improved_system_prompt.trim().length === 0 ||
+      result.improved_system_prompt.length > 10000
+    ) {
+      log.warn(
+        "Improvement cycle: invalid improved_system_prompt, skipping persistence",
+      );
+      return;
+    }
+    if (
+      !Array.isArray(result.updated_keywords) ||
+      !result.updated_keywords.every((k) => typeof k === "string")
+    ) {
+      log.warn(
+        "Improvement cycle: invalid updated_keywords shape, skipping persistence",
+      );
+      return;
+    }
 
     db.setState("system_prompt", result.improved_system_prompt);
     db.setState("search_keywords", JSON.stringify(keywords));

@@ -59,7 +59,6 @@ const REDDIT_COMMUNITY_SUBREDDITS = [
   "ChatGPTCoding",
   "LLMDevs",
   "artificial",
-  "MachineLearning",
   "singularity",
   "ChatGPT",
   "ArtificialIntelligence",
@@ -203,6 +202,38 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
 ];
 
+// Circuit breaker: track consecutive failures per source name.
+// After CIRCUIT_OPEN_THRESHOLD failures, skip the source for CIRCUIT_SKIP_CYCLES crawl cycles.
+const CIRCUIT_OPEN_THRESHOLD = 3;
+const CIRCUIT_SKIP_CYCLES = 5;
+const sourceConsecutiveFailures = new Map<string, number>();
+const sourceSkipRemaining = new Map<string, number>();
+
+function circuitAllow(name: string): boolean {
+  const skip = sourceSkipRemaining.get(name) ?? 0;
+  if (skip > 0) {
+    sourceSkipRemaining.set(name, skip - 1);
+    return false;
+  }
+  return true;
+}
+
+function circuitSuccess(name: string) {
+  sourceConsecutiveFailures.delete(name);
+}
+
+function circuitFailure(name: string) {
+  const failures = (sourceConsecutiveFailures.get(name) ?? 0) + 1;
+  sourceConsecutiveFailures.set(name, failures);
+  if (failures >= CIRCUIT_OPEN_THRESHOLD) {
+    sourceSkipRemaining.set(name, CIRCUIT_SKIP_CYCLES);
+    sourceConsecutiveFailures.delete(name);
+    log.warn(
+      `Circuit breaker opened for "${name}" after ${failures} consecutive failures — skipping next ${CIRCUIT_SKIP_CYCLES} cycles`,
+    );
+  }
+}
+
 function getDynamicSources(): FeedSource[] {
   try {
     const raw = db.getState("extra_sources");
@@ -220,7 +251,6 @@ const GITHUB_TRENDING_AI_KEYWORDS = [
   "codex",
   "copilot",
   "gpt",
-  "llm",
   "llm",
   "model",
   "ml",
@@ -790,20 +820,28 @@ export async function crawlAll(): Promise<number> {
     (s) => s?.url && s.name,
   );
   let newCount = 0;
+  const metrics: Record<string, { saved: number; failed: boolean }> = {};
 
   for (const source of sources) {
+    if (!circuitAllow(source.name)) {
+      log.debug(`Circuit breaker: skipping "${source.name}"`);
+      continue;
+    }
+    metrics[source.name] = { saved: 0, failed: false };
     try {
       if (source.url === "https://www.anthropic.com/news") {
         log.info(`Scraping Anthropic News directly from: ${source.url}`);
         const count = await crawlAnthropicNewsDirect(source);
         newCount += count;
+        metrics[source.name].saved = count;
+        circuitSuccess(source.name);
         continue;
       }
       let feedData: Awaited<ReturnType<typeof parser.parseURL>>;
       try {
         feedData = await parser.parseURL(source.url);
       } catch (err) {
-        const message = (err as Error).message;
+        const message = err instanceof Error ? err.message : String(err);
         if (message.includes("403") || message.includes("429")) {
           log.warn(
             `Standard fetch failed with ${message}. Attempting Playwright fallback for ${source.name}...`,
@@ -831,13 +869,20 @@ export async function crawlAll(): Promise<number> {
           engagement_score: 0,
         });
         newCount++;
+        metrics[source.name].saved++;
       }
+      circuitSuccess(source.name);
     } catch (err) {
-      log.warn(`Crawler failed for ${source.name}: ${(err as Error).message}`);
+      metrics[source.name].failed = true;
+      circuitFailure(source.name);
+      log.warn(
+        `Crawler failed for ${source.name}: ${err instanceof Error ? err.message : String(err)}`,
+      );
     }
   }
 
   const keywords = getSearchKeywords();
+  let googleNewsSaved = 0;
   for (const keyword of keywords) {
     try {
       const queryUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keyword)}&hl=en-US&gl=US&ceid=US:en`;
@@ -854,14 +899,17 @@ export async function crawlAll(): Promise<number> {
           engagement_score: 0,
         });
         newCount++;
+        googleNewsSaved++;
       }
     } catch (err) {
       log.warn(
-        `Google News search crawler failed for '${keyword}': ${(err as Error).message}`,
+        `Google News search crawler failed for '${keyword}': ${err instanceof Error ? err.message : String(err)}`,
       );
     }
   }
+  metrics["Google News (keywords)"] = { saved: googleNewsSaved, failed: false };
 
+  let searxngSaved = 0;
   for (const keyword of keywords) {
     try {
       const cleanKeyword = keyword.slice(0, 60).trim();
@@ -886,27 +934,56 @@ export async function crawlAll(): Promise<number> {
           engagement_score: 0,
         });
         newCount++;
+        searxngSaved++;
       }
     } catch (err) {
       log.warn(
-        `SearXNG failed for '${keyword.slice(0, 40)}': ${(err as Error).message}`,
+        `SearXNG failed for '${keyword.slice(0, 40)}': ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
+  }
+  metrics["SearXNG (keywords)"] = { saved: searxngSaved, failed: false };
+
+  const extras: Array<{ name: string; fn: () => Promise<number> }> = [
+    {
+      name: "LinkedIn AI Trends",
+      fn: () =>
+        crawlLinkedInTopContent(
+          "https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/",
+        ),
+    },
+    { name: "GitHub Trending", fn: crawlGitHubTrending },
+    { name: "Hacker News Algolia", fn: crawlHackerNewsAlgolia },
+    { name: "TabNews", fn: crawlTabNews },
+  ];
+  for (const extra of extras) {
+    if (!circuitAllow(extra.name)) {
+      log.debug(`Circuit breaker: skipping "${extra.name}"`);
+      continue;
+    }
+    try {
+      const count = await extra.fn();
+      newCount += count;
+      metrics[extra.name] = { saved: count, failed: false };
+      circuitSuccess(extra.name);
+    } catch (err) {
+      metrics[extra.name] = { saved: 0, failed: true };
+      circuitFailure(extra.name);
+      log.warn(
+        `${extra.name} crawler failed: ${err instanceof Error ? err.message : String(err)}`,
       );
     }
   }
 
-  try {
-    newCount += await crawlLinkedInTopContent(
-      "https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/",
-    );
-    newCount += await crawlGitHubTrending();
-    newCount += await crawlHackerNewsAlgolia();
-    newCount += await crawlTabNews();
-  } catch (err) {
-    log.warn(`GitHub Trending crawler failed: ${(err as Error).message}`);
-  }
-
+  const failed = Object.entries(metrics)
+    .filter(([, v]) => v.failed)
+    .map(([k]) => k);
+  const summary = Object.entries(metrics)
+    .filter(([, v]) => !v.failed && v.saved > 0)
+    .map(([k, v]) => `${k}:${v.saved}`)
+    .join(", ");
   log.info(
-    `Crawled ${sources.length} sources and dynamic searches, ${newCount} new articles`,
+    `Crawl complete — ${newCount} new articles. Saved by source: [${summary || "none"}]${failed.length ? `. Failed: [${failed.join(", ")}]` : ""}`,
   );
   return newCount;
 }

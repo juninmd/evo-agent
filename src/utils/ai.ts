@@ -13,16 +13,9 @@ export async function ask(
   systemPrompt?: string,
   options?: AskOptions,
 ): Promise<string> {
-  const apiBase =
-    process.env.LITELLM_API_BASE ??
-    process.env.OPENCODE_API_BASE ??
-    "http://litellm.ai.svc.cluster.local:4000/v1";
-  const apiKey =
-    process.env.LITELLM_API_KEY ?? process.env.OPENCODE_API_KEY ?? "no-key";
-  const primaryModel =
-    process.env.LITELLM_MODEL ??
-    process.env.OPENCODE_MODEL ??
-    config.litellm.model;
+  const apiBase = config.litellm.apiBase;
+  const apiKey = config.litellm.apiKey;
+  const primaryModel = config.litellm.model;
   const modelChain = [primaryModel, ...config.litellm.fallbackModels].filter(
     (m, i, arr) => m && arr.indexOf(m) === i,
   );

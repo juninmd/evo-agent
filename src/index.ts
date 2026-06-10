@@ -37,7 +37,7 @@ async function articleCycle(type: "daily" | "weekly" = "daily") {
     );
     log.info(`=== Article published: ${url} ===`);
   } catch (err) {
-    log.error(`Article cycle failed: ${(err as Error).message}`);
+    log.error(`Article cycle failed: ${errMsg(err)}`);
     throw err;
   }
 }
@@ -53,7 +53,7 @@ async function reportCycle(
     db.setState(`last_${period}_report_at`, new Date().toISOString());
     log.info(`=== ${period} report published: ${url} ===`);
   } catch (err) {
-    log.error(`${period} report cycle failed: ${(err as Error).message}`);
+    log.error(`${period} report cycle failed: ${errMsg(err)}`);
     throw err;
   }
 }
@@ -124,6 +124,16 @@ async function main() {
   const learnInterval = `*/${config.crawlIntervalMinutes} * * * *`;
   cron.schedule(learnInterval, () => {
     learnCycle().catch((e) => log.error(`Learn cycle error: ${errMsg(e)}`));
+  });
+
+  // Vacuum SQLite once a day to reclaim space
+  cron.schedule("0 3 * * *", () => {
+    try {
+      getDb().exec("VACUUM");
+      log.info("SQLite VACUUM complete");
+    } catch (e) {
+      log.warn(`SQLite VACUUM failed: ${errMsg(e)}`);
+    }
   });
 
   // Schedule daily article

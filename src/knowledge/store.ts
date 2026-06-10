@@ -108,6 +108,15 @@ export interface SaveArticleInput {
   engagement_score?: number;
 }
 
+let _urlExistsStmt: ReturnType<Database.Database["prepare"]> | null = null;
+
+function urlExistsStmt() {
+  if (!_urlExistsStmt) {
+    _urlExistsStmt = getDb().prepare("SELECT 1 FROM articles WHERE url = ?");
+  }
+  return _urlExistsStmt;
+}
+
 export const db = {
   saveArticle(a: SaveArticleInput) {
     const stmt = getDb().prepare(
@@ -139,10 +148,7 @@ export const db = {
   },
 
   urlExists(url: string): boolean {
-    const row = getDb()
-      .prepare("SELECT 1 FROM articles WHERE url = ?")
-      .get(url);
-    return !!row;
+    return !!urlExistsStmt().get(url);
   },
 
   saveSnippet(s: Omit<Snippet, "id" | "created_at">) {
@@ -174,6 +180,10 @@ export const db = {
          ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')`,
       )
       .run(key, value);
+  },
+
+  vacuum() {
+    getDb().exec("VACUUM");
   },
 
   savePublished(slug: string, title: string, url: string) {
