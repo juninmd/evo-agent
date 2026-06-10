@@ -93,6 +93,9 @@ export async function ask(
   log.error(
     `All LiteLLM models failed (${modelChain.join(", ")}): ${lastErr instanceof Error ? lastErr.message : String(lastErr)}`,
   );
-  if (lastErr) throw lastErr;
-  return "";
+  throw lastErr instanceof Error
+    ? lastErr
+    : new Error(
+        `All LiteLLM models returned empty responses (${modelChain.join(", ")})`,
+      );
 }

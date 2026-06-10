@@ -2,6 +2,7 @@ import { config } from "../config.js";
 import type { Article } from "../knowledge/store.js";
 import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
+import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 import { getSystemPrompt } from "./improver.js";
 
@@ -314,62 +315,6 @@ function safeSlug(input: string): string {
     .slice(0, 80);
 }
 
-function extractJsonObject(text: string): string | null {
-  const cleaned = text
-    .replace(/^```(?:json)?\s*/i, "")
-    .replace(/\s*```$/i, "")
-    .replace(/,\s*([}\]])/g, "$1");
-  const start = cleaned.indexOf("{");
-  const end = cleaned.lastIndexOf("}");
-  if (start === -1 || end <= start) return null;
-  return cleaned.slice(start, end + 1);
-}
-
-async function parseArticleJson(
-  text: string,
-  repairPrompt: string,
-): Promise<Omit<GeneratedArticle, "date"> | null> {
-  const json = extractJsonObject(text);
-  if (json) {
-    try {
-      return JSON.parse(json) as Omit<GeneratedArticle, "date">;
-    } catch (err) {
-      log.warn(
-        `Article JSON parse failed, asking model to repair: ${(err as Error).message}`,
-      );
-    }
-  }
-
-  try {
-    const repaired = await ask(
-      `Repair this response into valid JSON only, using the requested schema. Do not add markdown fences.\n\nSchema/request:\n${repairPrompt}\n\nResponse to repair:\n${text.slice(0, 8000)}`,
-      "You repair malformed JSON. Return valid JSON only.",
-    );
-    const repairedJson = extractJsonObject(repaired);
-    if (!repairedJson) throw new Error("No JSON in repaired response");
-    return JSON.parse(repairedJson) as Omit<GeneratedArticle, "date">;
-  } catch (err) {
-    log.warn(`Article JSON repair failed: ${(err as Error).message}`);
-    return null;
-  }
-}
-
-function fallbackArticle(
-  title: string,
-  summary: string,
-  content: string,
-  sources: string[],
-): Omit<GeneratedArticle, "date"> {
-  return {
-    title,
-    slug: safeSlug(title),
-    summary,
-    tags: ["ai", "developers", "fallback"],
-    sources,
-    content,
-  };
-}
-
 function markdownTitle(markdown: string, fallback: string): string {
   const heading = markdown.match(/^#\s+(.+)$/m)?.[1]?.trim();
   return heading || fallback;
@@ -422,7 +367,10 @@ export async function generateArticle(
 
 ${usedArticles
   .slice(0, 30)
-  .map((a) => `- [${a.source}] ${a.title}: ${a.summary.slice(0, 200)}`)
+  .map(
+    (a) =>
+      `- [${a.source}] ${sanitizeForPrompt(a.title, 200)}: ${sanitizeForPrompt(a.summary, 200)}`,
+  )
   .join("\n")}
 
 Write 2-3 short paragraphs in pt-BR connecting the trends across sources. Be concise, no fluff.
@@ -572,38 +520,6 @@ function snippetContextFrom(
     : "";
 }
 
-function periodFallback(
-  period: ReportPeriod,
-  periodStr: string,
-  today: string,
-  titleLabel: string,
-  recentArticles: Article[],
-): GeneratedArticle {
-  const sources = recentArticles.slice(0, 10);
-  const title = `${titleLabel}: Resumo operacional (${periodStr})`;
-  const content = [
-    `**Período:** ${periodStr}`,
-    "",
-    "## Resumo do Período",
-    "O modelo configurado via LiteLLM não retornou dentro do tempo limite. Este relatório foi publicado com base nas fontes coletadas mais recentes para manter o ciclo operacional.",
-    "",
-    "## Fontes recentes",
-    ...sources.map(
-      (a) => `- [${a.title}](${a.url}) — ${a.summary.slice(0, 240)}`,
-    ),
-  ].join("\n");
-  return {
-    ...fallbackArticle(
-      title,
-      `Resumo operacional do período ${periodStr} após timeout do modelo LiteLLM.`,
-      withModelFooter(content),
-      sources.map((a) => a.url),
-    ),
-    date: today,
-    reportPeriod: period,
-  };
-}
-
 export async function generatePeriodReport(
   period: ReportPeriod,
 ): Promise<GeneratedArticle> {
@@ -634,7 +550,7 @@ Return Markdown only. Do not return JSON, YAML front matter, or code fences arou
     recentArticles
       .map(
         (a) =>
-          `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 300)}`,
+          `- [${a.source}] ${sanitizeForPrompt(a.title, 200)} (URL: ${a.url}): ${sanitizeForPrompt(a.summary, 300)}`,
       )
       .join("\n"),
   );
@@ -746,7 +662,7 @@ async function summarizeGroup(
   const list = items
     .map(
       (a) =>
-        `- [${a.source}] ${a.title} (URL: ${a.url}): ${a.summary.slice(0, 350)}`,
+        `- [${a.source}] ${sanitizeForPrompt(a.title, 200)} (URL: ${a.url}): ${sanitizeForPrompt(a.summary, 350)}`,
     )
     .join("\n");
 
@@ -802,7 +718,7 @@ async function generatePeriodReportMultiPass(
     recentArticles
       .map(
         (a, i) =>
-          `[${i}] [${a.source}] ${a.title} (${a.url}): ${a.summary.slice(0, 300)}`,
+          `[${i}] [${a.source}] ${sanitizeForPrompt(a.title, 200)} (${a.url}): ${sanitizeForPrompt(a.summary, 300)}`,
       )
       .join("\n"),
   );

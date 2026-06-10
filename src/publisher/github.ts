@@ -2,6 +2,7 @@ import { Octokit } from "@octokit/rest";
 import type { GeneratedArticle, ReportPeriod } from "../agent/writer.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
+import { escapeHtml } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 
 const octokit = new Octokit({ auth: config.github.token });
@@ -95,13 +96,13 @@ function groupByYearMonth(items: PublishedItem[]) {
 
 function buildItemCard(item: PublishedItem, kind: "Artigo" | "Relatorio") {
   const tags = item.tags?.length
-    ? `<div class="chips">${item.tags.map((tag) => `<span>${tag}</span>`).join("")}</div>`
+    ? `<div class="chips">${item.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>`
     : "";
-  const summary = item.summary ? `<p>${item.summary}</p>` : "";
+  const summary = item.summary ? `<p>${escapeHtml(item.summary)}</p>` : "";
 
   return `<article class="story-card">
   <div class="story-meta"><time datetime="${item.date}">${item.date}</time><span>${kind}</span></div>
-  <h3><a href="${item.url}">${item.title}</a></h3>
+  <h3><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></h3>
   ${summary}
   ${tags}
 </article>`;

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { config } from "../config.js";
+import { escapeHtml } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 
 const BASE = `https://api.telegram.org/bot${config.telegram.botToken}`;
@@ -30,10 +31,10 @@ export async function notifyNewArticle(
 ) {
   const sourcesText =
     sources.length > 0
-      ? `\n\n<b>Fontes originais:</b>\n${sources.map((s) => `• ${s}`).join("\n")}`
+      ? `\n\n<b>Fontes originais:</b>\n${sources.map((s) => `• ${escapeHtml(s)}`).join("\n")}`
       : "";
 
-  const msg = `<b>Novo Artigo — Evo Agent</b>\n\n<b>${title}</b>\n\n${summary}${sourcesText}\n\n<a href="${url}">Ler artigo completo</a>`;
+  const msg = `<b>Novo Artigo — Evo Agent</b>\n\n<b>${escapeHtml(title)}</b>\n\n${escapeHtml(summary)}${sourcesText}\n\n<a href="${escapeHtml(url)}">Ler artigo completo</a>`;
   await sendMessage(msg);
 }
 
@@ -42,6 +43,6 @@ export async function notifyWeeklyReport(
   url: string,
   summary: string,
 ) {
-  const msg = `<b>Relatório Semanal — Evo Agent</b>\n\n<b>${title}</b>\n\n${summary}\n\n<a href="${url}">Ler relatório completo</a>`;
+  const msg = `<b>Relatório Semanal — Evo Agent</b>\n\n<b>${escapeHtml(title)}</b>\n\n${escapeHtml(summary)}\n\n<a href="${escapeHtml(url)}">Ler relatório completo</a>`;
   await sendMessage(msg);
 }
