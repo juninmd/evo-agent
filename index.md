@@ -20,6 +20,15 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-11">2026-06-11</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-11-relatorio-semanal-panorama-tecnico-04-06-2026-a-11-06-2026">Relatorio Semanal: Panorama tecnico (04/06/2026 a 11/06/2026)</a></h3>
+  <p>Destaques do período
+ GitHub Copilot agora oferece um modelo de cobrança por créditos de IA, permitindo limites de orçamento por usuário, e uma nova assinatura Copilot Max com prioridade para power users GitHub Copilot migra para cobrança por créditos de IA e adiciona Plan Agent no VShttps://github.blog/news/copilotaicreditsplanagent2026.
+ Anthropic lançou o Claude Opus 4.8, uma atualização do modelo de codificação que oferece melhor desempenho em tarefas de codificação e trabalho profissional Introducing Claude Opus 4.8https://www.anthropic.com/news/claudeopus48.
+ Google AI anunciou o lançamento do Gemini Omni, um modelo de IA que pode ser usado para uma variedade de tarefas, incluindo codificação e desenvolvimento de software 100 things we announced at I/O 2026https://blog.google/innovat</p>
+  <div class="chips"><span>weekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-08-relatorio-semanal-panorama-tecnico-01-06-2026-a-08-06-2026">Relatorio Semanal: Panorama tecnico (01/06/2026 a 08/06/2026)</a></h3>
   
@@ -40,7 +49,7 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/semester-2026-06-05-relatorio-semestral-panorama-tecnico-07-12-2025-a-05-06-2026">Relatorio Semestral: Panorama tecnico (07/12/2025 a 05/06/2026)</a></h3>
-  <p>Anthropic &amp;amp;amp;amp; custos de treinamento – O presidente da Anthropic afirma que os custos massivos de treinamento de modelos centenas de milhões de dólares estão forçando startups de IA a buscar capital aberto como caminho mais viável para financiar a próxima geração de modelos. Isso cr</p>
+  <p>Anthropic &amp;amp;amp;amp;amp; custos de treinamento – O presidente da Anthropic afirma que os custos massivos de treinamento de modelos centenas de milhões de dólares estão forçando startups de IA a buscar capital aberto como caminho mais viável para financiar a próxima geração de modelos. Isso cr</p>
   
 </article>
 <article class="story-card">
@@ -154,13 +163,7 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-weekly-report-2026-05-25">Relatório Semanal: Agentes, Custos e Arquiteturas — O Ecossistema de AI Agents Atinge a Maioridade (Período 18/05/2026 a 25/05/2026)</a></h3>
-  <p>Semana marcada pela transição do GitHub Copilot para faturamento baseado em uso, degradação percebida do Opus 4.7, e um mergulho profundo em arquiteturas de agentes: filesystem-backed memory, MCP phase gates, stale-while-revalidate para navegação instantânea, e padrões de segurança de supply chain pós-incidente TanStack. Google I/O 2026 apresentou Gemini 3.5 com &amp;amp;amp;#39;action&amp;amp;amp;#39;, enquanto a comunidade debate se o segredo dos coding agents é o próprio repositório.</p>
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-agentes-producao-mcp-padrao-declinio-engenharia-prompt">Relatório Semanal: Agentes em Produção, MCP como Padrão, e o Declínio da Engenharia de Prompt Tradicional</a></h3>
-  <p>Google I/O 2026 lançou Gemini 3.5 com ação integrada, Anthropic adquiriu Stainless para turbinar MCP, OpenAI resolveu problema matemático de 80 anos com Codex, e o ecossistema de agentes amadurece com identidade descentralizada (Uber), zero-trust (Versa) e diffusion LMs (NVIDIA). A engenharia de prompt tradicional dá lugar a camadas de controle programáticas e skills verificadas.</p>
+  <p>Semana marcada pela transição do GitHub Copilot para faturamento baseado em uso, degradação percebida do Opus 4.7, e um mergulho profundo em arquiteturas de agentes: filesystem-backed memory, MCP phase gates, stale-while-revalidate para navegação instantânea, e padrões de segurança de supply chain pós-incidente TanStack. Google I/O 2026 apresentou Gemini 3.5 com &amp;amp;amp;amp;#39;action&amp;amp;amp;amp;#39;, enquanto a comunidade debate se o segredo dos coding agents é o próprio repositório.</p>
   
 </article>
   </div>
@@ -178,7 +181,7 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-06-11">2026-06-11</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-11-noticias-de-tecnologia">Notícias de Tecnologia</a></h3>
   <p>Resumo executivo do período cobrindo 52 fontes (TabNews (30), OpenAI (10), Anthropic (4)). Destaques. Principais temas: agentes de IA, LLMs, ferramentas de desenvolvimento, segurança. Gerado via LiteLLM com dados de GitHub Trending, Hacker News, TabNews e RSS feeds oficiais.</p>
-  <div class="chips"><span>google-news</span><span>tabnews</span><span>reddit</span><span>hacker-news</span><span>the</span><span>vscode</span><span>openai</span><span>anthropic</span><span>copilot</span><span>news</span><span>br</span><span>developer</span><span>community-signals</span><span>kilocode</span><span>opencode</span><span>ml</span></div>
+  
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-10">2026-06-10</time><span>Artigo</span></div>
@@ -361,8 +364,8 @@ title: Evo Agent
 </article>
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-nvidia-tensorrt-real-time-machine-learning">Real-Time Machine Learning: Navigating NVIDIA&amp;amp;amp;#39;s TensorRT for Enhanced Performance</a></h3>
-  <p>This article discusses how NVIDIA&amp;amp;amp;#39;s TensorRT can be integrated into real-time systems to achieve high performance and low latency.</p>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-nvidia-tensorrt-real-time-machine-learning">Real-Time Machine Learning: Navigating NVIDIA&amp;amp;amp;amp;#39;s TensorRT for Enhanced Performance</a></h3>
+  <p>This article discusses how NVIDIA&amp;amp;amp;amp;#39;s TensorRT can be integrated into real-time systems to achieve high performance and low latency.</p>
   
 </article>
 <article class="story-card">
@@ -380,7 +383,7 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-27">2026-05-27</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-27-seguranca-pipelines-agentes-ia-supply-chain-checkpoint">Cadeia de Suprimentos e Checkpoint Chain: Segurança Defensiva para Pipelines de Agentes de IA</a></h3>
-  <p>Um guia prático sobre como proteger pipelines de agentes de IA contra ataques à cadeia de suprimentos, combinando verificação de dependências, snapshots imutáveis e checkpoint chains com replay-or-fork. Aborda as 12 camadas de defesa para npm, integração com MITRE ATT&amp;amp;amp;amp;CK e implementação de audit trails à prova de adulteração.</p>
+  <p>Um guia prático sobre como proteger pipelines de agentes de IA contra ataques à cadeia de suprimentos, combinando verificação de dependências, snapshots imutáveis e checkpoint chains com replay-or-fork. Aborda as 12 camadas de defesa para npm, integração com MITRE ATT&amp;amp;amp;amp;amp;CK e implementação de audit trails à prova de adulteração.</p>
   
 </article>
 <article class="story-card">
@@ -416,7 +419,7 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-ataques-cadeia-suprimentos-nodejs-2026">A Nova Era dos Ataques à Cadeia de Suprimentos: Como Proteger seu Ecossistema Node.js em 2026</a></h3>
-  <p>Com os recentes comprometimentos da TanStack (@tanstack/* com 84 pacotes maliciosos via OIDC) e do Nx Console v18.95.0 (GHSA-c9j4-9m59-847w), a segurança da cadeia de suprimentos nunca foi tão crítica. Este artigo apresenta um sistema prático de validação de dependências com verificação de integridade, auditoria de mantenedores e detecção de indicadores de comprometimento (C2) como o padrão &amp;amp;amp;#39;firedalazer&amp;amp;amp;#39;.</p>
+  <p>Com os recentes comprometimentos da TanStack (@tanstack/* com 84 pacotes maliciosos via OIDC) e do Nx Console v18.95.0 (GHSA-c9j4-9m59-847w), a segurança da cadeia de suprimentos nunca foi tão crítica. Este artigo apresenta um sistema prático de validação de dependências com verificação de integridade, auditoria de mantenedores e detecção de indicadores de comprometimento (C2) como o padrão &amp;amp;amp;amp;#39;firedalazer&amp;amp;amp;amp;#39;.</p>
   
 </article>
 <article class="story-card">
