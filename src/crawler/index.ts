@@ -67,9 +67,12 @@ const REDDIT_COMMUNITY_SUBREDDITS = [
   "Cursor",
   "CursorIDE",
   "vibecoding",
+  "kilocode",
+  "opencode",
 ];
 
-const REDDIT_USER_AGENT = "evo-agent/1.0 community-signals";
+const REDDIT_USER_AGENT =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 const REDDIT_POSTS_PER_SUBREDDIT = 5;
 const REDDIT_COMMENTS_PER_POST = 20;
 const REDDIT_MIN_COMMENT_SCORE = 3;
@@ -159,6 +162,16 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Reddit: GithubCopilot",
     url: "https://www.reddit.com/r/GithubCopilot/.rss",
     tags: ["reddit", "github", "copilot", "ai"],
+  },
+  {
+    name: "Reddit: KiloCode",
+    url: "https://www.reddit.com/r/kilocode/.rss",
+    tags: ["reddit", "kilocode", "coding"],
+  },
+  {
+    name: "Reddit: OpenCode",
+    url: "https://www.reddit.com/r/opencode/.rss",
+    tags: ["reddit", "opencode", "coding"],
   },
   {
     name: "Reddit Search: claude code",
