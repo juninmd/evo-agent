@@ -21,6 +21,9 @@ jobs:
       - run: npm run lint
       - run: npm run build
       - run: npm test
+      - run: npm run benchmark:editorial
+      - run: npm run test:coverage
+      - run: npm audit --omit=dev --audit-level=moderate
 
   gitleaks:
     runs-on: ubuntu-latest

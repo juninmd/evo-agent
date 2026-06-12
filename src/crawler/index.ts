@@ -6,6 +6,7 @@ import { getSearchKeywords } from "../agent/improver.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
+import { isSafeExternalUrl } from "../utils/url.js";
 
 chromium.use(stealth());
 
@@ -219,39 +220,47 @@ const DEFAULT_SOURCES: FeedSource[] = [
 // After CIRCUIT_OPEN_THRESHOLD failures, skip the source for CIRCUIT_SKIP_CYCLES crawl cycles.
 const CIRCUIT_OPEN_THRESHOLD = 3;
 const CIRCUIT_SKIP_CYCLES = 5;
-const sourceConsecutiveFailures = new Map<string, number>();
-const sourceSkipRemaining = new Map<string, number>();
-
 function circuitAllow(name: string): boolean {
-  const skip = sourceSkipRemaining.get(name) ?? 0;
-  if (skip > 0) {
-    sourceSkipRemaining.set(name, skip - 1);
+  const health = db.getSourceHealth(name);
+  if ((health?.skip_remaining ?? 0) > 0) {
+    db.setSourceHealth(
+      name,
+      health?.consecutive_failures ?? 0,
+      (health?.skip_remaining ?? 0) - 1,
+    );
     return false;
   }
   return true;
 }
 
 function circuitSuccess(name: string) {
-  sourceConsecutiveFailures.delete(name);
+  db.setSourceHealth(name, 0, 0);
 }
 
 function circuitFailure(name: string) {
-  const failures = (sourceConsecutiveFailures.get(name) ?? 0) + 1;
-  sourceConsecutiveFailures.set(name, failures);
+  const failures = (db.getSourceHealth(name)?.consecutive_failures ?? 0) + 1;
   if (failures >= CIRCUIT_OPEN_THRESHOLD) {
-    sourceSkipRemaining.set(name, CIRCUIT_SKIP_CYCLES);
-    sourceConsecutiveFailures.delete(name);
+    db.setSourceHealth(name, 0, CIRCUIT_SKIP_CYCLES);
     log.warn(
       `Circuit breaker opened for "${name}" after ${failures} consecutive failures — skipping next ${CIRCUIT_SKIP_CYCLES} cycles`,
     );
+    return;
   }
+  db.setSourceHealth(name, failures, 0);
 }
 
 function getDynamicSources(): FeedSource[] {
   try {
     const raw = db.getState("extra_sources");
     if (!raw) return [];
-    return JSON.parse(raw) as FeedSource[];
+    const parsed = JSON.parse(raw) as FeedSource[];
+    return parsed.filter(
+      (source) =>
+        source &&
+        typeof source.name === "string" &&
+        Array.isArray(source.tags) &&
+        isSafeExternalUrl(source.url),
+    );
   } catch {
     return [];
   }
@@ -362,8 +371,7 @@ async function crawlGitHubTrending(): Promise<number> {
             .join(" | ")
             .slice(0, 500);
 
-          const starCount =
-            Number.parseInt(repo.stars.replace(/[^0-9]/g, ""), 10) || 0;
+          const starCount = parseGitHubStarCount(repo.stars);
           db.saveArticle({
             title: repo.name,
             source: `GitHub Trending (${range})`,
@@ -392,6 +400,22 @@ async function crawlGitHubTrending(): Promise<number> {
 
   log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
   return newCount;
+}
+
+export function parseGitHubStarCount(value: string): number {
+  const normalized = value.trim().toLowerCase().replace(/,/g, "");
+  const match = normalized.match(/^(\d+(?:\.\d+)?)\s*([km])?$/);
+  if (!match) return 0;
+  const multiplier =
+    match[2] === "m" ? 1_000_000 : match[2] === "k" ? 1_000 : 1;
+  return Math.round(Number(match[1]) * multiplier);
+}
+
+export function hackerNewsEngagement(
+  points: number | null | undefined,
+  comments: number | null | undefined,
+): number {
+  return (points ?? 0) + (comments ?? 0) * 2;
 }
 
 async function fetchWithPlaywright(url: string): Promise<string> {
@@ -451,7 +475,7 @@ function isV2exAiRelevant(title: string): boolean {
   return V2EX_AI_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
-function isUsefulComment(comment: RedditComment): boolean {
+export function isUsefulComment(comment: RedditComment): boolean {
   const body = comment.body.toLowerCase();
   return (
     comment.score >= REDDIT_MIN_COMMENT_SCORE &&
@@ -651,7 +675,7 @@ async function crawlHackerNewsAlgolia(): Promise<number> {
           url: storyUrl,
           summary,
           tags: JSON.stringify(["hackernews", tag, "ai"]),
-          engagement_score: points + numComments * 2,
+          engagement_score: hackerNewsEngagement(points, numComments),
         });
         newCount++;
       }
@@ -672,23 +696,44 @@ async function crawlTabNews(): Promise<number> {
     const url =
       "https://www.tabnews.com.br/api/v1/contents?strategy=relevant&per_page=30";
     const response = await axios.get(url, { timeout: 15000 });
-    const contents = response.data ?? [];
+    const contents = (response.data ?? [])
+      .filter(
+        (item: { title?: string; slug?: string; status?: string }) =>
+          item.title && item.slug && item.status === "published",
+      )
+      .sort(
+        (
+          left: { tabcoins?: number; children_deep_count?: number },
+          right: { tabcoins?: number; children_deep_count?: number },
+        ) =>
+          (right.tabcoins ?? 0) +
+          (right.children_deep_count ?? 0) * 2 -
+          ((left.tabcoins ?? 0) + (left.children_deep_count ?? 0) * 2),
+      )
+      .slice(0, 20);
 
     for (const item of contents) {
-      if (!item.title || !item.slug || item.status !== "published") continue;
-
       const postUrl = `https://www.tabnews.com.br/${item.owner_username}/${item.slug}`;
       if (db.urlExists(postUrl)) continue;
 
       const tabcoins = item.tabcoins ?? 0;
       const comments = item.children_deep_count ?? 0;
-      const summary = item.body
-        ? item.body
-            .replace(/[#*`\[\]()>]/g, "")
-            .replace(/\s+/g, " ")
-            .trim()
-            .slice(0, 400)
-        : "Sem conteúdo";
+      let body = item.body ?? "";
+      if (!body) {
+        try {
+          const detail = await axios.get(
+            `https://www.tabnews.com.br/api/v1/contents/${item.owner_username}/${item.slug}`,
+            { timeout: 8000 },
+          );
+          body = detail.data?.body ?? "";
+        } catch (err) {
+          log.debug(
+            `TabNews detail skipped for ${item.slug}: ${(err as Error).message}`,
+          );
+        }
+      }
+      const summary = summarizeSourceContent(body);
+      if (summary.length < 80) continue;
 
       db.saveArticle({
         title: item.title,
@@ -706,6 +751,18 @@ async function crawlTabNews(): Promise<number> {
 
   log.info(`Crawled TabNews, ${newCount} new posts`);
   return newCount;
+}
+
+export function summarizeSourceContent(value: string, maxLength = 800): string {
+  return value
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[#*`_>|~]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLength);
 }
 
 async function crawlLinkedInTopContent(url: string): Promise<number> {
@@ -828,7 +885,13 @@ async function crawlAnthropicNewsDirect(source: FeedSource): Promise<number> {
   return newCount;
 }
 
-export async function crawlAll(): Promise<number> {
+export interface CrawlReport {
+  totalSaved: number;
+  sources: Record<string, { saved: number; failed: boolean }>;
+  failedSources: string[];
+}
+
+export async function crawlAll(): Promise<CrawlReport> {
   const sources = [...DEFAULT_SOURCES, ...getDynamicSources()].filter(
     (s) => s?.url && s.name,
   );
@@ -998,7 +1061,7 @@ export async function crawlAll(): Promise<number> {
   log.info(
     `Crawl complete — ${newCount} new articles. Saved by source: [${summary || "none"}]${failed.length ? `. Failed: [${failed.join(", ")}]` : ""}`,
   );
-  return newCount;
+  return { totalSaved: newCount, sources: metrics, failedSources: failed };
 }
 
 export { crawlHackerNewsAlgolia, crawlTabNews };

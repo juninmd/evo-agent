@@ -32,9 +32,14 @@ flowchart TD
 
 - **Multi-source crawling**: 13 default RSS feeds + Google News keyword search + SearXNG for Reddit/X.com + Reddit community signal analysis
 - **Self-improvement loop**: System prompt and search keywords evolve from ingested content
+- **Reliable orchestration**: Overlapping cycles are skipped and every run is recorded in SQLite
+- **Editorial scoring**: Recency, engagement, source authority, diversity, and cross-source evidence shape selection
+- **Evidence provenance**: Every selected highlight preserves source URL, title, and supporting excerpt
+- **Guarded self-improvement**: Prompt candidates are scored, versioned, promoted only without regression, and rollback-capable
 - **Article generation**: Daily articles (800-1200 words) and weekly reports (1500-2000 words) in pt-BR via LLM
-- **GitHub Pages publishing**: Auto-generated Jekyll site with light/dark theme toggle, year/month archive, and Markdown downloads
-- **Telegram notifications**: Instant alerts with article links after each publish
+- **Atomic GitHub Pages publishing**: Article, layouts, and indexes land in one Git commit
+- **Telegram outbox**: Failed delivery retries with exponential backoff and dead-letter isolation
+- **Operational health**: Structured logs, persistent metrics, primary-source alerts, and a machine-readable health command
 - **Playwright stealth fallback**: Automatic browser-based fetch when RSS sources return 403/429
 
 ## Quick Start
@@ -68,6 +73,7 @@ npm run build
 | `ARTICLE_CRON` | No | `0 8 * * *` | Daily article cron expression |
 | `SEARXNG_URL` | No | `http://searxng.searxng.svc.cluster.local` | SearXNG instance URL |
 | `LOG_LEVEL` | No | `info` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
+| `LOG_FORMAT` | No | `json` | Structured `json` logs or local `text` output |
 | `DB_PATH` | No | `data/knowledge.db` | SQLite database path |
 
 ## Run Modes
@@ -80,6 +86,10 @@ Set `RUN_MODE` env var to control execution:
 | `CRAWL` | Single crawl + improve cycle, then exits |
 | `DAILY` | Generates and publishes one daily article, then exits |
 | `WEEKLY` | Generates and publishes one weekly article, then exits |
+| `BIWEEKLY` | Generates and publishes one biweekly report, then exits |
+| `MONTHLY` | Generates and publishes one monthly report, then exits |
+| `BIMONTHLY` | Generates and publishes one bimonthly report, then exits |
+| `SEMESTER` | Generates and publishes one semester report, then exits |
 
 ## Commands
 
@@ -88,6 +98,10 @@ npm run build                  # TypeScript compilation
 npm run lint                   # Biome static analysis
 npm run lint:fix               # Auto-fix lint issues
 npm run smoke:reddit-comments  # Test Reddit signal crawler with isolated DB
+npm run benchmark:editorial    # Run deterministic editorial regression corpus
+npm run test:coverage          # Enforce repository coverage floors
+npm run health                 # Emit operational health JSON
+npm run prompt:rollback        # Restore the previous promoted system prompt
 npm run dev                    # Watch mode with tsx
 npm start                      # Run compiled output
 ```
@@ -106,10 +120,16 @@ src/
   agent/
     improver.ts         # Self-improvement: updates prompt and keywords from recent sources
     writer.ts           # LLM-powered article and weekly report generation
+    editorial-renderer.ts # Deterministic article rendering and citations
+    prompt-policy.ts    # Prompt promotion and rollback policy
   publisher/
-    github.ts           # GitHub Pages: Jekyll scaffold, CSS, index builder, API uploads
+    github.ts           # Atomic GitHub API transaction and publication
+    site-renderer.ts    # Jekyll scaffold, layouts, CSS, and index rendering
   notifier/
     telegram.ts         # Telegram Bot API notifications
+    outbox.ts           # Retry and dead-letter policy
+  observability/
+    health.ts           # Operational health evaluation
   utils/
     ai.ts               # LiteLLM client wrapper for AI text generation
     logger.ts           # Timestamped log levels via console
@@ -136,3 +156,6 @@ Docker image published at `ghcr.io/juninmd/evo-agent:latest`. Kubernetes manifes
 - Browser sandbox enabled (no `--disable-web-security`)
 - Signal handlers close SQLite database gracefully on shutdown
 - Article content wrapped with `{% raw %}` to prevent Jekyll Liquid injection
+
+Operational details and SLO-style checks are documented in
+[`docs/OPERATIONS.md`](docs/OPERATIONS.md).

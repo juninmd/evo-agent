@@ -191,6 +191,13 @@ describe("migrate - legacy database without engagement_score", () => {
         tags TEXT DEFAULT '[]',
         crawled_at TEXT DEFAULT (datetime('now'))
       );
+      CREATE TABLE published_articles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        slug TEXT UNIQUE NOT NULL,
+        title TEXT NOT NULL,
+        url TEXT NOT NULL,
+        published_at TEXT DEFAULT (datetime('now'))
+      );
     `);
     legacyDb
       .prepare("INSERT INTO articles (title, source, url) VALUES (?, ?, ?)")
@@ -202,6 +209,34 @@ describe("migrate - legacy database without engagement_score", () => {
       .prepare("SELECT engagement_score FROM articles WHERE url = ?")
       .get("https://legacy.test/1") as { engagement_score: number };
     expect(row.engagement_score).toBe(0);
+    const tables = legacyDb
+      .prepare(
+        "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name",
+      )
+      .all() as Array<{ name: string }>;
+    expect(tables.map((table) => table.name)).toEqual(
+      expect.arrayContaining([
+        "cycle_runs",
+        "metric_events",
+        "prompt_versions",
+        "published_evidence",
+        "source_health",
+      ]),
+    );
+    const publishedColumns = legacyDb
+      .prepare("PRAGMA table_info(published_articles)")
+      .all() as Array<{ name: string }>;
+    expect(publishedColumns.map((column) => column.name)).toEqual(
+      expect.arrayContaining([
+        "date",
+        "kind",
+        "notification_status",
+        "notification_attempts",
+        "next_notification_at",
+        "notification_error",
+        "editorial_metrics",
+      ]),
+    );
 
     // Idempotent: running again must not throw
     migrate(legacyDb);

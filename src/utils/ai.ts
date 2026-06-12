@@ -8,6 +8,18 @@ export interface AskOptions {
   timeoutMs?: number;
 }
 
+type MetricRecorder = (
+  name: string,
+  value: number,
+  labels?: Record<string, string | number | boolean>,
+) => void;
+
+let metricRecorder: MetricRecorder = () => undefined;
+
+export function setAiMetricRecorder(recorder: MetricRecorder) {
+  metricRecorder = recorder;
+}
+
 export async function ask(
   userPrompt: string,
   systemPrompt?: string,
@@ -40,13 +52,25 @@ export async function ask(
     let delay = 3000;
 
     while (true) {
+      const startedAt = Date.now();
       try {
-        const { text } = await generateText({
+        const result = await generateText({
           model: openai.chat(modelName),
           system: systemPrompt,
           prompt: userPrompt,
           abortSignal: AbortSignal.timeout(timeoutMs),
           ...(maxOutputTokens ? { maxOutputTokens } : {}),
+        });
+        const { text } = result;
+        metricRecorder("llm.latency_ms", Date.now() - startedAt, {
+          model: modelName,
+          outcome: text ? "success" : "empty",
+        });
+        metricRecorder("llm.input_tokens", result.usage?.inputTokens ?? 0, {
+          model: modelName,
+        });
+        metricRecorder("llm.output_tokens", result.usage?.outputTokens ?? 0, {
+          model: modelName,
         });
 
         if (!text) {
@@ -57,6 +81,11 @@ export async function ask(
         }
         return text;
       } catch (err: unknown) {
+        metricRecorder("llm.latency_ms", Date.now() - startedAt, {
+          model: modelName,
+          outcome: "error",
+        });
+        metricRecorder("llm.errors", 1, { model: modelName });
         const errMsg = err instanceof Error ? err.message : String(err);
         const isRateLimit =
           errMsg.includes("429") ||

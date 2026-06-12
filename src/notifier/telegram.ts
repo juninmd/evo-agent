@@ -5,7 +5,7 @@ import { log } from "../utils/logger.js";
 
 const BASE = `https://api.telegram.org/bot${config.telegram.botToken}`;
 
-export async function sendMessage(text: string): Promise<void> {
+export async function sendMessage(text: string): Promise<boolean> {
   try {
     await axios.post(
       `${BASE}/sendMessage`,
@@ -18,8 +18,10 @@ export async function sendMessage(text: string): Promise<void> {
       { timeout: 10000 },
     );
     log.info("Telegram message sent");
+    return true;
   } catch (err) {
     log.error(`Telegram failed: ${(err as Error).message}`);
+    return false;
   }
 }
 
@@ -28,21 +30,21 @@ export async function notifyNewArticle(
   url: string,
   summary: string,
   sources: string[] = [],
-) {
+): Promise<boolean> {
   const sourcesText =
     sources.length > 0
       ? `\n\n<b>Fontes originais:</b>\n${sources.map((s) => `• ${escapeHtml(s)}`).join("\n")}`
       : "";
 
   const msg = `<b>Novo Artigo — Evo Agent</b>\n\n<b>${escapeHtml(title)}</b>\n\n${escapeHtml(summary)}${sourcesText}\n\n<a href="${escapeHtml(url)}">Ler artigo completo</a>`;
-  await sendMessage(msg);
+  return sendMessage(msg);
 }
 
 export async function notifyWeeklyReport(
   title: string,
   url: string,
   summary: string,
-) {
+): Promise<boolean> {
   const msg = `<b>Relatório Semanal — Evo Agent</b>\n\n<b>${escapeHtml(title)}</b>\n\n${escapeHtml(summary)}\n\n<a href="${escapeHtml(url)}">Ler relatório completo</a>`;
-  await sendMessage(msg);
+  return sendMessage(msg);
 }
