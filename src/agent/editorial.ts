@@ -174,6 +174,18 @@ export function parseEditorialDraft(
   if (!Array.isArray(draft.highlights)) {
     throw new Error("Editorial response has invalid highlights");
   }
+  const seenSources = new Set<number>();
+  draft.highlights = draft.highlights.filter((highlight) => {
+    if (
+      !Number.isInteger(highlight.sourceIndex) ||
+      !sources[highlight.sourceIndex] ||
+      seenSources.has(highlight.sourceIndex)
+    ) {
+      return false;
+    }
+    seenSources.add(highlight.sourceIndex);
+    return true;
+  });
   for (const highlight of draft.highlights) {
     const source = sources[highlight.sourceIndex];
     if (

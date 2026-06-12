@@ -105,4 +105,32 @@ describe("editorial contracts", () => {
 
     expect(draft.highlights[0].evidence).toBe(sources[0].summary);
   });
+
+  it("normalizes duplicate source selections before validation", () => {
+    const sources = [
+      article("2026-06-12T08:00:00Z", "https://anthropic.com/news/claude"),
+    ];
+    const highlight = {
+      sourceIndex: 0,
+      headline: "Claude melhora tarefas longas",
+      whatHappened:
+        "A Anthropic descreveu melhorias de consistência em tarefas longas de codificação.",
+      whyItMatters:
+        "Equipes podem rever supervisão, retomadas e limites de execução.",
+      evidence: sources[0].summary,
+    };
+    const draft = parseEditorialDraft(
+      JSON.stringify({
+        title: "Claude reforça consistência em tarefas longas",
+        dek: "A atualização altera decisões de arquitetura para fluxos extensos e exige nova avaliação operacional.",
+        highlights: [highlight, highlight],
+        synthesis:
+          "A mudança aproxima confiabilidade do desenho operacional dos agentes e oferece um critério concreto para revisar fluxos extensos.",
+      }),
+      sources,
+      8,
+    );
+
+    expect(draft.highlights).toHaveLength(1);
+  });
 });
