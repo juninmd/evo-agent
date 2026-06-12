@@ -223,6 +223,14 @@ export function migrate(db: Database.Database) {
         kind = CASE WHEN url LIKE '%/reports/%' THEN 'report' ELSE kind END,
         next_notification_at = COALESCE(next_notification_at, published_at, datetime('now'))
     WHERE date = '' OR kind = 'article' OR next_notification_at IS NULL;
+
+    UPDATE published_articles
+    SET notification_status = 'delivered',
+        notification_error = 'legacy record migrated without notification state'
+    WHERE notification_status = 'pending'
+      AND notification_attempts = 0
+      AND summary = ''
+      AND editorial_metrics = '{}';
   `);
 
   db.exec(`
@@ -392,7 +400,12 @@ export const db = {
           (SELECT count(*) FROM published_articles
            WHERE notification_status = 'dead_letter') AS deadLetterNotifications,
           (SELECT count(*) FROM cycle_runs
-           WHERE status = 'failed' AND started_at >= datetime('now', '-24 hours'))
+           WHERE status = 'failed'
+             AND started_at >= datetime('now', '-24 hours')
+             AND started_at > COALESCE(
+               (SELECT max(started_at) FROM cycle_runs WHERE status = 'succeeded'),
+               '1970-01-01'
+             ))
             AS failedCycles24h,
           (SELECT count(*) FROM cycle_runs
            WHERE status = 'succeeded' AND started_at >= datetime('now', '-24 hours'))

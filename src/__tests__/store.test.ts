@@ -202,6 +202,11 @@ describe("migrate - legacy database without engagement_score", () => {
     legacyDb
       .prepare("INSERT INTO articles (title, source, url) VALUES (?, ?, ?)")
       .run("Old Article", "RSS", "https://legacy.test/1");
+    legacyDb
+      .prepare(
+        "INSERT INTO published_articles (slug, title, url) VALUES (?, ?, ?)",
+      )
+      .run("legacy-article", "Legacy Article", "https://legacy.test/article");
 
     migrate(legacyDb);
 
@@ -237,6 +242,18 @@ describe("migrate - legacy database without engagement_score", () => {
         "editorial_metrics",
       ]),
     );
+    const legacyPublished = legacyDb
+      .prepare(
+        "SELECT notification_status, notification_error FROM published_articles WHERE slug = ?",
+      )
+      .get("legacy-article") as {
+      notification_status: string;
+      notification_error: string;
+    };
+    expect(legacyPublished).toEqual({
+      notification_status: "delivered",
+      notification_error: "legacy record migrated without notification state",
+    });
 
     // Idempotent: running again must not throw
     migrate(legacyDb);
