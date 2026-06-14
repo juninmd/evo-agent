@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>47</strong> artigos</span>
-    <span><strong>15</strong> relatorios</span>
+    <span><strong>16</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-14">2026-06-14</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-14-bloqueio-do-claude-fable-5-custos-duplos-e-estrategias-de-arquitetura-autonoma">Bloqueio do Claude Fable 5, custos duplos e estratégias de arquitetura autônoma</a></h3>
+  <p>O governo dos EUA impôs restrição ao acesso público ao Claude Fable 5, elevando o preço do modelo em até 2×. Ao mesmo tempo, surgem propostas de arquitetura ESAA e ambientes locais que podem mitigar riscos e despesas.</p>
+  <div class="chips"><span>weekly-report</span><span>google-news</span><span>tabnews</span><span>github-trending</span><span>anthropic fable routing</span><span>anthropic fable cost</span><span>br</span><span>developer</span><span>python</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-06-07">2026-06-07</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-07-relatorio-semanal-panorama-tecnico-31-05-2026-a-07-06-2026">Relatorio Semanal: Panorama tecnico (31/05/2026 a 07/06/2026)</a></h3>
   
