@@ -1,6 +1,7 @@
 import type { Octokit } from "@octokit/rest";
 import { describe, expect, it, vi } from "vitest";
-import { commitFiles } from "../publisher/github.js";
+import type { GeneratedArticle } from "../agent/types.js";
+import { buildPublicationBatch, commitFiles } from "../publisher/github.js";
 
 function githubClient(options: { failTree?: boolean } = {}) {
   const updateRef = vi.fn().mockResolvedValue({});
@@ -69,5 +70,55 @@ describe("atomic GitHub publication", () => {
     ).rejects.toThrow("tree failed");
 
     expect(updateRef).not.toHaveBeenCalled();
+  });
+
+  it("builds one atomic batch for multiple historical articles", () => {
+    const generated = (date: string, slug: string): GeneratedArticle => ({
+      title: `Edição ${date}`,
+      slug,
+      content: "# Conteúdo",
+      summary: "Resumo histórico suficientemente completo para publicação.",
+      tags: ["backfill"],
+      date,
+      sources: ["https://example.com/source"],
+      evidence: [
+        {
+          sourceUrl: "https://example.com/source",
+          sourceTitle: "Fonte",
+          excerpt: "Trecho factual suficientemente detalhado para auditoria.",
+        },
+      ],
+      editorialMetrics: {
+        considered: 4,
+        selected: 1,
+        rejected: 3,
+        buckets: { official: 1 },
+        primarySources: 1,
+      },
+    });
+
+    const batch = buildPublicationBatch(
+      [
+        {
+          article: generated("2026-06-01", "retroativo-1"),
+          reportPeriod: false,
+        },
+        {
+          article: generated("2026-06-02", "retroativo-2"),
+          reportPeriod: false,
+        },
+      ],
+      [],
+      { owner: "owner", repo: "repo", branch: "gh-pages" },
+    );
+
+    expect(batch.files.map((file) => file.path)).toEqual(
+      expect.arrayContaining([
+        "articles/2026-06-01-retroativo-1.md",
+        "articles/2026-06-02-retroativo-2.md",
+        "index.md",
+      ]),
+    );
+    expect(batch.items).toHaveLength(2);
   });
 });

@@ -10,6 +10,7 @@
     "health": "tsx src/observability/health-cli.ts",
     "benchmark:editorial": "tsx src/agent/benchmark-cli.ts",
     "prompt:rollback": "tsx src/agent/prompt-rollback-cli.ts",
+    "backfill:articles": "node dist/agent/backfill-cli.js",
     "smoke:reddit-comments": "tsx src/crawler/reddit-smoke.ts",
     "build": "tsc",
     "lint": "biome check src/",

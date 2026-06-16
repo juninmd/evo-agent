@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { articlesFromDraft } from "../agent/editorial-renderer.js";
 import type { EditorialDraft } from "../agent/editorial.js";
 import { generateArticle, renderEditorialDraft } from "../agent/writer.js";
 import { type Article, db } from "../knowledge/store.js";
@@ -83,6 +84,36 @@ describe("renderEditorialDraft", () => {
       "[Fonte: Claude melhora tarefas longas](https://anthropic.com/news/claude)",
     );
     expect(markdown).not.toContain("Sem conteúdo");
+    expect(articlesFromDraft(draft, articles)).toEqual(articles);
+  });
+
+  it("keeps selected sources whose URL contains markdown punctuation", () => {
+    const selected = article(
+      "Release oficial",
+      "The GitHub Blog",
+      "https://github.blog/changelog/feature_(preview)",
+      '["github"]',
+    );
+    const draft: EditorialDraft = {
+      title: "GitHub publica nova versão de recurso em preview",
+      dek: "A mudança altera decisões concretas de adoção para equipes que usam o recurso.",
+      highlights: [
+        {
+          sourceIndex: 0,
+          headline: "Recurso entra em nova fase",
+          whatHappened:
+            "O GitHub publicou uma atualização oficial para o recurso em preview.",
+          whyItMatters:
+            "Equipes podem revisar critérios de adoção e integração.",
+          evidence:
+            "Resumo técnico suficientemente detalhado para sustentar a pauta e explicar seu contexto.",
+        },
+      ],
+      synthesis:
+        "A atualização fornece evidência oficial para revisar a adoção do recurso.",
+    };
+
+    expect(articlesFromDraft(draft, [selected])).toEqual([selected]);
   });
 
   it("refuses publication when the editorial LLM is unavailable", async () => {
@@ -129,6 +160,96 @@ describe("renderEditorialDraft", () => {
 
     await expect(generateArticle("daily")).rejects.toThrow(
       "Editorial drafting failed: LLM unavailable",
+    );
+  });
+
+  it("uses a bounded historical window for retroactive editions", async () => {
+    const articles = Array.from({ length: 5 }, (_, index) => ({
+      ...article(
+        `Fonte histórica ${index}`,
+        index < 2 ? "The GitHub Blog" : "Hacker News",
+        `https://example.com/history-${index}`,
+        '["history","agents"]',
+      ),
+      id: index + 1,
+      crawled_at: `2026-06-0${8 + Math.min(index, 1)}T10:00:00Z`,
+      engagement_score: 100 - index,
+    }));
+    const between = vi
+      .spyOn(db, "getArticlesBetween")
+      .mockReturnValue(articles);
+    vi.spyOn(db, "getState").mockReturnValue(null);
+
+    await expect(
+      generateArticle("daily", { targetDate: "2026-06-09" }),
+    ).rejects.toThrow("Editorial drafting failed: LLM unavailable");
+
+    expect(between).toHaveBeenCalledWith(
+      "2026-06-08T00:00:00.000Z",
+      "2026-06-10T00:00:00.000Z",
+      150,
+    );
+  });
+
+  it("expands only backward when the daily window has no primary source", async () => {
+    const titles = [
+      "Agentes locais recebem nova avaliação",
+      "Custos de inferência entram no debate",
+      "Memória vetorial ganha benchmark",
+      "Ferramentas MCP mudam integração",
+      "Observabilidade de prompts avança",
+    ];
+    const sources = [
+      "Hacker News",
+      "TabNews",
+      "Reddit Community Signals",
+      "Google News",
+      "GitHub Trending",
+    ];
+    const community = titles.map((title, index) => ({
+      ...article(
+        title,
+        sources[index],
+        `https://example.com/community-${index}`,
+        '["history","agents"]',
+      ),
+      id: index + 1,
+      crawled_at: "2026-06-09T10:00:00Z",
+      engagement_score: 100 - index,
+    }));
+    const expanded = [
+      ...community,
+      {
+        ...article(
+          "Release oficial histórica",
+          "The GitHub Blog",
+          "https://github.blog/history",
+          '["history","agents"]',
+        ),
+        id: 10,
+        crawled_at: "2026-06-05T10:00:00Z",
+        engagement_score: 90,
+      },
+    ];
+    const between = vi
+      .spyOn(db, "getArticlesBetween")
+      .mockReturnValueOnce(community);
+    const official = expanded.at(-1);
+    expect(official).toBeDefined();
+    const primaryBetween = vi
+      .spyOn(db, "getPrimaryArticlesBetween")
+      .mockReturnValue(official ? [official] : []);
+    vi.spyOn(db, "getState").mockReturnValue(null);
+
+    await expect(
+      generateArticle("daily", { targetDate: "2026-06-09" }),
+    ).rejects.toThrow("Editorial drafting failed: LLM unavailable");
+
+    expect(between).toHaveBeenCalledTimes(1);
+    expect(primaryBetween).toHaveBeenCalledWith(
+      "2026-06-02T00:00:00.000Z",
+      "2026-06-10T00:00:00.000Z",
+      50,
     );
   });
 });

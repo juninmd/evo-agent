@@ -74,6 +74,16 @@ export function citedArticles(
   return articles.filter((article) => markdown.includes(`](${article.url})`));
 }
 
+export function articlesFromDraft(
+  draft: EditorialDraft,
+  articles: Article[],
+): Article[] {
+  return draft.highlights.flatMap((highlight) => {
+    const article = articles[highlight.sourceIndex];
+    return article ? [article] : [];
+  });
+}
+
 export function groupBySourceType(articles: Article[]): Map<string, Article[]> {
   const groups = new Map<string, Article[]>();
   for (const article of articles) {

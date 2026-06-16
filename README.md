@@ -102,6 +102,7 @@ npm run benchmark:editorial    # Run deterministic editorial regression corpus
 npm run test:coverage          # Enforce repository coverage floors
 npm run health                 # Emit operational health JSON
 npm run prompt:rollback        # Restore the previous promoted system prompt
+npm run backfill:articles -- 2026-06-01 2026-06-11 # Publish historical editions without Telegram spam
 npm run dev                    # Watch mode with tsx
 npm start                      # Run compiled output
 ```

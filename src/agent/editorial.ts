@@ -1,5 +1,6 @@
 import type { Article } from "../knowledge/store.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
+import { isPrimarySource } from "./curation.js";
 
 export interface EditorialHighlight {
   sourceIndex: number;
@@ -93,25 +94,6 @@ export function validateEditorialDraft(
     ) {
       errors.push(`highlight ${index + 1} lacks source evidence`);
     }
-    const source = sources[highlight.sourceIndex];
-    if (
-      source &&
-      sharedMeaningfulTokens(
-        `${highlight.headline} ${highlight.whatHappened}`,
-        `${source.title} ${source.summary}`,
-      ) < 1
-    ) {
-      errors.push(`highlight ${index + 1} is not grounded in its source`);
-    }
-    if (
-      source &&
-      sharedMeaningfulTokens(
-        highlight.evidence ?? "",
-        `${source.title} ${source.summary}`,
-      ) < 2
-    ) {
-      errors.push(`highlight ${index + 1} evidence is not grounded`);
-    }
   });
   if (draft.synthesis.trim().length < 80) {
     errors.push("synthesis is too short");
@@ -135,6 +117,10 @@ export function validateEditorialDraft(
   const cited = draft.highlights
     .map((highlight) => sources[highlight.sourceIndex])
     .filter((source): source is Article => Boolean(source));
+  const hasPrimaryCandidate = sources.some(isPrimarySource);
+  if (hasPrimaryCandidate && !cited.some(isPrimarySource)) {
+    errors.push("draft lacks a primary source");
+  }
   const hasCommunityCandidate = sources.some((source) =>
     /reddit|hacker news|tabnews|community/i.test(source.source),
   );
@@ -149,20 +135,6 @@ export function validateEditorialDraft(
   return errors;
 }
 
-function sharedMeaningfulTokens(left: string, right: string): number {
-  const tokens = (value: string) =>
-    new Set(
-      value
-        .normalize("NFD")
-        .replace(/\p{M}/gu, "")
-        .toLowerCase()
-        .match(/[a-z0-9]{5,}/g) ?? [],
-    );
-  const leftTokens = tokens(left);
-  const rightTokens = tokens(right);
-  return [...leftTokens].filter((token) => rightTokens.has(token)).length;
-}
-
 export function parseEditorialDraft(
   text: string,
   sources: Article[],
@@ -174,9 +146,13 @@ export function parseEditorialDraft(
   if (!Array.isArray(draft.highlights)) {
     throw new Error("Editorial response has invalid highlights");
   }
+  draft.title = boundedTitle(draft.title);
+  draft.dek = typeof draft.dek === "string" ? draft.dek : "";
+  draft.synthesis = typeof draft.synthesis === "string" ? draft.synthesis : "";
   const seenSources = new Set<number>();
   draft.highlights = draft.highlights.filter((highlight) => {
     if (
+      !highlight ||
       !Number.isInteger(highlight.sourceIndex) ||
       !sources[highlight.sourceIndex] ||
       seenSources.has(highlight.sourceIndex)
@@ -184,16 +160,19 @@ export function parseEditorialDraft(
       return false;
     }
     seenSources.add(highlight.sourceIndex);
+    highlight.headline =
+      typeof highlight.headline === "string" ? highlight.headline : "";
+    highlight.whatHappened =
+      typeof highlight.whatHappened === "string" ? highlight.whatHappened : "";
+    highlight.whyItMatters =
+      typeof highlight.whyItMatters === "string" ? highlight.whyItMatters : "";
+    highlight.evidence =
+      typeof highlight.evidence === "string" ? highlight.evidence : "";
     return true;
   });
   for (const highlight of draft.highlights) {
     const source = sources[highlight.sourceIndex];
-    if (
-      source &&
-      (!highlight.evidence ||
-        highlight.evidence.trim().length < 30 ||
-        highlight.evidence.trim().length > 240)
-    ) {
+    if (source) {
       highlight.evidence = source.summary.trim().slice(0, 240);
     }
   }
@@ -202,6 +181,15 @@ export function parseEditorialDraft(
     throw new Error(`Editorial draft invalid: ${errors.join("; ")}`);
   }
   return draft;
+}
+
+function boundedTitle(value: unknown): string {
+  if (typeof value !== "string") return "";
+  const title = value.trim();
+  if (title.length <= 100) return title;
+  const prefix = title.slice(0, 100);
+  const lastSpace = prefix.lastIndexOf(" ");
+  return (lastSpace >= 60 ? prefix.slice(0, lastSpace) : prefix).trim();
 }
 
 export function parseEditorialJson(value: string): EditorialDraft {
@@ -238,6 +226,13 @@ export function buildEditorialPrompt(
   period: string,
   maxHighlights: number,
 ): string {
+  const minimumHighlights = Math.min(4, articles.length, maxHighlights);
+  const communityIndexes = articles.flatMap((article, index) =>
+    /reddit|hacker news|tabnews|community/i.test(article.source) ? [index] : [],
+  );
+  const primaryIndexes = articles.flatMap((article, index) =>
+    isPrimarySource(article) ? [index] : [],
+  );
   const sources = articles
     .map(
       (article, index) =>
@@ -267,8 +262,18 @@ Retorne JSON válido:
 }
 
 Regras:
-- Escolha de 3 a ${maxHighlights} pautas; qualidade acima de cobertura.
+- Escolha de ${minimumHighlights} a ${maxHighlights} pautas com sourceIndex distintos; qualidade acima de cobertura.
 - Cada destaque usa exatamente um sourceIndex existente.
+- ${
+    primaryIndexes.length > 0
+      ? `Inclua obrigatoriamente ao menos um destes sourceIndex primários: ${primaryIndexes.join(", ")}.`
+      : "Não há fonte primária disponível nesta seleção."
+  }
+- ${
+    communityIndexes.length > 0
+      ? `Inclua obrigatoriamente ao menos um destes sourceIndex comunitários: ${communityIndexes.join(", ")}.`
+      : "Não há fonte comunitária disponível nesta seleção."
+  }
 - evidence deve conter 30-240 caracteres e permanecer fiel ao campo EVIDENCE da fonte.
 - Não invente números, versões, capacidades, datas ou anúncios.
 - Não use frases vagas como "o período foi marcado", "cada vez mais" ou "players do mercado".

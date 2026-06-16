@@ -48,7 +48,7 @@ export interface PublishedArticle {
   tags: string[];
   kind: "article" | "report";
   period: string | null;
-  notification_status: "pending" | "delivered" | "dead_letter";
+  notification_status: "pending" | "delivered" | "dead_letter" | "suppressed";
   notification_attempts: number;
   next_notification_at: string;
   notification_error: string | null;
@@ -263,6 +263,7 @@ export interface SavePublishedInput {
     sourceTitle: string;
     excerpt: string;
   }>;
+  notificationStatus?: PublishedArticle["notification_status"];
 }
 
 let _urlExistsStmt: ReturnType<Database.Database["prepare"]> | null = null;
@@ -302,6 +303,41 @@ export const db = {
         "SELECT * FROM articles WHERE crawled_at >= datetime('now', ?) ORDER BY crawled_at DESC LIMIT ?",
       )
       .all(`-${days} days`, limit) as Article[];
+  },
+
+  getArticlesBetween(from: string, to: string, limit = 2000): Article[] {
+    return getDb()
+      .prepare(
+        `SELECT * FROM articles
+         WHERE datetime(crawled_at) >= datetime(?)
+           AND datetime(crawled_at) < datetime(?)
+         ORDER BY crawled_at DESC
+         LIMIT ?`,
+      )
+      .all(from, to, limit) as Article[];
+  },
+
+  getPrimaryArticlesBetween(from: string, to: string, limit = 50): Article[] {
+    return getDb()
+      .prepare(
+        `SELECT * FROM articles
+         WHERE datetime(crawled_at) >= datetime(?)
+           AND datetime(crawled_at) < datetime(?)
+           AND (
+             lower(source) LIKE '%anthropic%'
+             OR lower(source) LIKE '%openai%'
+             OR lower(source) LIKE '%github blog%'
+             OR lower(source) LIKE '%google research%'
+             OR lower(source) LIKE '%google ai%'
+             OR lower(source) LIKE '%hugging face%'
+             OR lower(source) LIKE '%mistral%'
+             OR lower(source) LIKE '%together ai%'
+             OR lower(source) LIKE '%vscode updates%'
+           )
+         ORDER BY crawled_at DESC
+         LIMIT ?`,
+      )
+      .all(from, to, limit) as Article[];
   },
 
   urlExists(url: string): boolean {
@@ -485,7 +521,7 @@ export const db = {
             notification_status, notification_attempts, next_notification_at,
             notification_error, editorial_metrics)
          VALUES (@slug, @title, @url, @date, @summary, @tags, @kind, @period,
-                 'pending', 0, datetime('now'), NULL, @editorialMetrics)
+                 @notificationStatus, 0, datetime('now'), NULL, @editorialMetrics)
          ON CONFLICT(slug) DO UPDATE SET
            title = excluded.title,
            url = excluded.url,
@@ -494,7 +530,7 @@ export const db = {
            tags = excluded.tags,
            kind = excluded.kind,
            period = excluded.period,
-           notification_status = 'pending',
+           notification_status = excluded.notification_status,
            notification_attempts = 0,
            next_notification_at = datetime('now'),
            notification_error = NULL,
@@ -505,6 +541,7 @@ export const db = {
           ...item,
           tags: JSON.stringify(item.tags),
           period: item.period ?? null,
+          notificationStatus: item.notificationStatus ?? "pending",
           editorialMetrics: JSON.stringify(item.editorialMetrics ?? {}),
         });
       database

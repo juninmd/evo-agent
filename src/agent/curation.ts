@@ -58,6 +58,7 @@ export interface CurationPolicy {
   requirePrimary?: boolean;
   minSummaryLength?: number;
   maxPrimaryShare?: number;
+  now?: number;
 }
 
 export function parseTags(value: string): string[] {
@@ -190,6 +191,7 @@ export function curateArticles(
             maxEngagementByBucket.get(sourceBucket(article.source)) ?? 0;
           return bucketMax > 0 ? engagement / bucketMax : 0;
         })(),
+        policy.now,
       ),
       primary: isPrimarySource(article),
       evidenceUrls: [article.url],

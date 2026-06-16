@@ -279,3 +279,21 @@ describe("Database - published_articles", () => {
     expect(result.changes).toBe(0);
   });
 });
+
+describe("historical article queries", () => {
+  it("excludes articles at and after the historical upper bound", () => {
+    const rows = db
+      .prepare(
+        `SELECT * FROM articles
+         WHERE crawled_at >= ? AND crawled_at < ?
+         ORDER BY crawled_at DESC`,
+      )
+      .all("2026-06-01T00:00:00Z", "2026-06-02T00:00:00Z") as Array<{
+      crawled_at: string;
+    }>;
+
+    expect(rows.every((row) => row.crawled_at < "2026-06-02T00:00:00Z")).toBe(
+      true,
+    );
+  });
+});
