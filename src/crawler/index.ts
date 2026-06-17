@@ -867,9 +867,7 @@ async function crawlHtmlSource(source: FeedSource): Promise<number> {
               summary: summary ?? "",
             };
           })
-          .filter(
-            (item) => item.title && item.url && item.url !== listUrl,
-          );
+          .filter((item) => item.title && item.url && item.url !== listUrl);
       },
       { hrefPrefix, baseUrl, listUrl: source.url },
     );
