@@ -22,6 +22,8 @@ interface FeedSource {
   name: string;
   url: string;
   tags: string[];
+  // HTML sources are scraped via Playwright instead of RSS parsing.
+  html?: { hrefPrefix: string; baseUrl: string };
 }
 
 interface RedditComment {
@@ -113,6 +115,7 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Anthropic News",
     url: "https://www.anthropic.com/news",
     tags: ["anthropic", "claude", "ai"],
+    html: { hrefPrefix: "/news/", baseUrl: "https://www.anthropic.com" },
   },
   {
     name: "OpenAI Blog",
@@ -128,6 +131,7 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "VSCode Blogs",
     url: "https://code.visualstudio.com/blogs",
     tags: ["vscode", "tools", "developer", "ai"],
+    html: { hrefPrefix: "/blogs/", baseUrl: "https://code.visualstudio.com" },
   },
   {
     name: "The GitHub Blog",
@@ -826,7 +830,9 @@ async function crawlLinkedInTopContent(url: string): Promise<number> {
   return newCount;
 }
 
-async function crawlAnthropicNewsDirect(source: FeedSource): Promise<number> {
+async function crawlHtmlSource(source: FeedSource): Promise<number> {
+  if (!source.html) return 0;
+  const { hrefPrefix, baseUrl } = source.html;
   const browser = await chromium.launch({
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -841,32 +847,38 @@ async function crawlAnthropicNewsDirect(source: FeedSource): Promise<number> {
     const page = await context.newPage();
     await page.goto(source.url, { waitUntil: "networkidle", timeout: 30000 });
 
-    const articles = await page.evaluate(() => {
-      const links = document.querySelectorAll('a[href^="/news/"]');
-      return Array.from(links)
-        .map((a) => {
-          const href = a.getAttribute("href") ?? "";
-          const titleEl = a.querySelector('h2, h3, h4, [class*="title"]');
-          const title = titleEl
-            ? titleEl.textContent?.trim()
-            : a.textContent?.trim();
-          const descEl = a.querySelector("p");
-          const summary = descEl ? descEl.textContent?.trim() : "";
-          return {
-            title: title ?? "",
-            url: href.startsWith("http")
-              ? href
-              : `https://www.anthropic.com${href}`,
-            summary: summary ?? "",
-          };
-        })
-        .filter(
-          (item) =>
-            item.title &&
-            item.url &&
-            item.url !== "https://www.anthropic.com/news",
-        );
-    });
+    const articles = await page.evaluate(
+      ({ hrefPrefix, baseUrl, listUrl }) => {
+        const links = document.querySelectorAll(`a[href^="${hrefPrefix}"]`);
+        return Array.from(links)
+          .map((a) => {
+            const href = a.getAttribute("href") ?? "";
+            const titleEl = a.querySelector('h2, h3, h4, [class*="title"]');
+            const title = titleEl
+              ? titleEl.textContent?.trim()
+              : a.textContent?.trim();
+            // Description often lives in the card wrapper, not inside the <a>.
+            const card = a.closest('[class*="card"]') ?? a.parentElement ?? a;
+            const descEl = a.querySelector("p") ?? card.querySelector("p");
+            const summary = descEl ? descEl.textContent?.trim() : "";
+            return {
+              title: title ?? "",
+              url: href.startsWith("http") ? href : `${baseUrl}${href}`,
+              summary: summary ?? "",
+            };
+          })
+          .filter(
+            (item) => item.title && item.url && item.url !== listUrl,
+          );
+      },
+      { hrefPrefix, baseUrl, listUrl: source.url },
+    );
+
+    if (articles.length === 0) {
+      log.warn(
+        `HTML source "${source.name}" matched 0 items — markup may have changed (selector a[href^="${hrefPrefix}"]).`,
+      );
+    }
 
     for (const article of articles.slice(0, 10)) {
       if (!article.url || !article.title) continue;
@@ -883,71 +895,7 @@ async function crawlAnthropicNewsDirect(source: FeedSource): Promise<number> {
       newCount++;
     }
   } catch (err) {
-    log.warn(`Anthropic crawler failed: ${(err as Error).message}`);
-  } finally {
-    await browser.close();
-  }
-  return newCount;
-}
-
-async function crawlVscodeBlogsDirect(source: FeedSource): Promise<number> {
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-
-  let newCount = 0;
-  try {
-    const context = await browser.newContext({
-      userAgent:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    });
-    const page = await context.newPage();
-    await page.goto(source.url, { waitUntil: "networkidle", timeout: 30000 });
-
-    const articles = await page.evaluate(() => {
-      const links = document.querySelectorAll('a[href^="/blogs/"]');
-      return Array.from(links)
-        .map((a) => {
-          const href = a.getAttribute("href") ?? "";
-          const titleEl = a.querySelector('h2, h3, h4, [class*="title"]');
-          const title = titleEl
-            ? titleEl.textContent?.trim()
-            : a.textContent?.trim();
-          const descEl = a.querySelector("p");
-          const summary = descEl ? descEl.textContent?.trim() : "";
-          return {
-            title: title ?? "",
-            url: href.startsWith("http")
-              ? href
-              : `https://code.visualstudio.com${href}`,
-            summary: summary ?? "",
-          };
-        })
-        .filter(
-          (item) =>
-            item.title &&
-            item.url &&
-            item.url !== "https://code.visualstudio.com/blogs",
-        );
-    });
-
-    for (const article of articles.slice(0, 10)) {
-      if (!article.url || !article.title) continue;
-      if (db.urlExists(article.url)) continue;
-
-      db.saveArticle({
-        title: article.title,
-        source: source.name,
-        url: article.url,
-        summary: article.summary,
-        tags: JSON.stringify(source.tags),
-        engagement_score: 0,
-      });
-      newCount++;
-    }
-  } catch (err) {
-    log.warn(`VSCode Blogs crawler failed: ${(err as Error).message}`);
+    log.warn(`HTML crawler "${source.name}" failed: ${(err as Error).message}`);
   } finally {
     await browser.close();
   }
@@ -974,17 +922,9 @@ export async function crawlAll(): Promise<CrawlReport> {
     }
     metrics[source.name] = { saved: 0, failed: false };
     try {
-      if (source.url === "https://www.anthropic.com/news") {
-        log.info(`Scraping Anthropic News directly from: ${source.url}`);
-        const count = await crawlAnthropicNewsDirect(source);
-        newCount += count;
-        metrics[source.name].saved = count;
-        circuitSuccess(source.name);
-        continue;
-      }
-      if (source.url === "https://code.visualstudio.com/blogs") {
-        log.info(`Scraping VSCode Blogs directly from: ${source.url}`);
-        const count = await crawlVscodeBlogsDirect(source);
+      if (source.html) {
+        log.info(`Scraping HTML source "${source.name}" from: ${source.url}`);
+        const count = await crawlHtmlSource(source);
         newCount += count;
         metrics[source.name].saved = count;
         circuitSuccess(source.name);
