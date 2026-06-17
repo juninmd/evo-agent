@@ -125,6 +125,11 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["vscode", "tools", "developer"],
   },
   {
+    name: "VSCode Blogs",
+    url: "https://code.visualstudio.com/blogs",
+    tags: ["vscode", "tools", "developer", "ai"],
+  },
+  {
     name: "The GitHub Blog",
     url: "https://github.blog/feed/",
     tags: ["github", "developer", "ai"],
@@ -885,6 +890,70 @@ async function crawlAnthropicNewsDirect(source: FeedSource): Promise<number> {
   return newCount;
 }
 
+async function crawlVscodeBlogsDirect(source: FeedSource): Promise<number> {
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
+  let newCount = 0;
+  try {
+    const context = await browser.newContext({
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    });
+    const page = await context.newPage();
+    await page.goto(source.url, { waitUntil: "networkidle", timeout: 30000 });
+
+    const articles = await page.evaluate(() => {
+      const links = document.querySelectorAll('a[href^="/blogs/"]');
+      return Array.from(links)
+        .map((a) => {
+          const href = a.getAttribute("href") ?? "";
+          const titleEl = a.querySelector('h2, h3, h4, [class*="title"]');
+          const title = titleEl
+            ? titleEl.textContent?.trim()
+            : a.textContent?.trim();
+          const descEl = a.querySelector("p");
+          const summary = descEl ? descEl.textContent?.trim() : "";
+          return {
+            title: title ?? "",
+            url: href.startsWith("http")
+              ? href
+              : `https://code.visualstudio.com${href}`,
+            summary: summary ?? "",
+          };
+        })
+        .filter(
+          (item) =>
+            item.title &&
+            item.url &&
+            item.url !== "https://code.visualstudio.com/blogs",
+        );
+    });
+
+    for (const article of articles.slice(0, 10)) {
+      if (!article.url || !article.title) continue;
+      if (db.urlExists(article.url)) continue;
+
+      db.saveArticle({
+        title: article.title,
+        source: source.name,
+        url: article.url,
+        summary: article.summary,
+        tags: JSON.stringify(source.tags),
+        engagement_score: 0,
+      });
+      newCount++;
+    }
+  } catch (err) {
+    log.warn(`VSCode Blogs crawler failed: ${(err as Error).message}`);
+  } finally {
+    await browser.close();
+  }
+  return newCount;
+}
+
 export interface CrawlReport {
   totalSaved: number;
   sources: Record<string, { saved: number; failed: boolean }>;
@@ -908,6 +977,14 @@ export async function crawlAll(): Promise<CrawlReport> {
       if (source.url === "https://www.anthropic.com/news") {
         log.info(`Scraping Anthropic News directly from: ${source.url}`);
         const count = await crawlAnthropicNewsDirect(source);
+        newCount += count;
+        metrics[source.name].saved = count;
+        circuitSuccess(source.name);
+        continue;
+      }
+      if (source.url === "https://code.visualstudio.com/blogs") {
+        log.info(`Scraping VSCode Blogs directly from: ${source.url}`);
+        const count = await crawlVscodeBlogsDirect(source);
         newCount += count;
         metrics[source.name].saved = count;
         circuitSuccess(source.name);
