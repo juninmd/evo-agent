@@ -149,6 +149,32 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["ai", "ml", "research", "llm"],
   },
   {
+    name: "arXiv cs.AI",
+    url: "https://rss.arxiv.org/rss/cs.AI",
+    tags: ["arxiv", "ai", "research", "papers"],
+  },
+  {
+    name: "arXiv cs.LG",
+    url: "https://rss.arxiv.org/rss/cs.LG",
+    tags: ["arxiv", "ml", "research", "papers"],
+  },
+  {
+    name: "arXiv cs.CL",
+    url: "https://rss.arxiv.org/rss/cs.CL",
+    tags: ["arxiv", "nlp", "llm", "research", "papers"],
+  },
+  {
+    name: "arXiv cs.SE",
+    url: "https://rss.arxiv.org/rss/cs.SE",
+    tags: [
+      "arxiv",
+      "software-engineering",
+      "programming",
+      "research",
+      "papers",
+    ],
+  },
+  {
     name: "Reddit: ClaudeAI",
     url: "https://www.reddit.com/r/ClaudeAI/.rss",
     tags: ["reddit", "claude", "ai"],
