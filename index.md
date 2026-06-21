@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>53</strong> artigos</span>
-    <span><strong>16</strong> relatorios</span>
+    <span><strong>17</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-21">2026-06-21</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-21-fable-5-engine-de-dados-para-robotica-e-api-tabnews-decisoes-de-arquitetura-e-pr">Fable 5, Engine de Dados para Robótica e API TabNews: decisões de arquitetura e privacidade em</a></h3>
+  <p>Analisamos o novo motor de ingestão de vídeo para robôs, as diferenças do modelo Fable 5 da Anthropic e o compartilhamento de inferência no Bedrock, além da abertura da API TabNews e dos desafios de upload resiliente na nuvem.</p>
+  <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>google-news</span><span>tabnews</span><span>ml</span><span>research</span><span>anthropic fable routing</span><span>anthropic fable5 custo</span><span>br</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-06-14">2026-06-14</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-14-bloqueio-do-claude-fable-5-custos-duplos-e-estrategias-de-arquitetura-autonoma">Bloqueio do Claude Fable 5, custos duplos e estratégias de arquitetura autônoma</a></h3>
   <p>O governo dos EUA impôs restrição ao acesso público ao Claude Fable 5, elevando o preço do modelo em até 2×. Ao mesmo tempo, surgem propostas de arquitetura ESAA e ambientes locais que podem mitigar riscos e despesas.</p>
