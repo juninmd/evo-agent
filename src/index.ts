@@ -163,6 +163,27 @@ async function reportCycle(
   }
 }
 
+function hasArticleForToday(): boolean {
+  const today = new Date().toISOString().split("T")[0];
+  return db
+    .getPublished()
+    .some((item) => item.kind === "article" && item.date === today);
+}
+
+// Idempotent daily article: generates at most one edition per day. Used by both
+// the startup catch-up and the scheduled cron, so a restart never duplicates the
+// post and never leaves a day without one regardless of when the pod came up.
+async function ensureDailyArticle(reason: string) {
+  if (hasArticleForToday()) {
+    log.info(`Daily article already exists for today, skipping (${reason})`);
+    return;
+  }
+  log.info(`Generating daily article (${reason})`);
+  await cycles
+    .run("daily", () => articleCycle("daily"))
+    .catch((e) => log.error(`Daily article (${reason}) failed: ${errMsg(e)}`));
+}
+
 async function main() {
   loadConfig(process.env);
   const runMode = config.runMode;
@@ -218,6 +239,11 @@ async function main() {
   await cycles.run("crawl", learnCycle);
   await flushNotificationOutbox();
 
+  // Catch up today's daily article if the daemon (re)started after the cron
+  // fired. Unlike the weekly path, the daily cron has no recovery on its own,
+  // so a deploy past ARTICLE_CRON would silently skip today's edition.
+  await ensureDailyArticle("startup catch-up");
+
   // Check if weekly report is due (or if it's Sunday and no report was generated today)
   const lastWeeklyReport = db.getState("last_weekly_report_at");
   const sevenDaysAgo = new Date();
@@ -253,9 +279,7 @@ async function main() {
 
   // Schedule daily article
   cron.schedule(config.articleCron, () => {
-    cycles
-      .run("daily", () => articleCycle("daily"))
-      .catch((e) => log.error(`Article cycle error: ${errMsg(e)}`));
+    void ensureDailyArticle("scheduled");
   });
 
   // Schedule weekly report (Every Sunday at 6pm / 18:00)
