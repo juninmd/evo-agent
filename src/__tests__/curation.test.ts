@@ -165,4 +165,35 @@ describe("editorial curation", () => {
     expect(result.selected.filter((item) => item.primary)).toHaveLength(4);
     expect(result.selected.filter((item) => !item.primary)).toHaveLength(2);
   });
+
+  it("allows a larger Reddit share when explicitly configured", () => {
+    const result = curateArticles(
+      [
+        article("Oficial", "OpenAI Blog", "https://openai.com/1"),
+        ...Array.from({ length: 5 }, (_, index) =>
+          article(
+            `Reddit sinal ${index}`,
+            `Reddit Community Signals (${index})`,
+            `https://reddit.com/${index}`,
+            500 - index,
+            '["reddit","community-signals"]',
+          ),
+        ),
+        article("HN sinal", "Hacker News", "https://news.ycombinator.com/1"),
+      ],
+      {
+        max: 7,
+        perBucket: 2,
+        perBucketOverrides: { reddit: 5 },
+        requirePrimary: true,
+      },
+    );
+
+    expect(
+      result.selected.filter(
+        (item) => sourceBucket(item.article.source) === "reddit",
+      ),
+    ).toHaveLength(5);
+    expect(result.selected.some((item) => item.primary)).toBe(true);
+  });
 });

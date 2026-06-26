@@ -274,6 +274,7 @@ Regras:
       ? `Inclua obrigatoriamente ao menos um destes sourceIndex comunitários: ${communityIndexes.join(", ")}.`
       : "Não há fonte comunitária disponível nesta seleção."
   }
+- Quando houver vários sinais do Reddit, priorize 2-4 deles se trouxerem relatos técnicos, limitações reais, regressões, benchmarks ou padrões de adoção observados por usuários.
 - evidence deve conter 30-240 caracteres e permanecer fiel ao campo EVIDENCE da fonte.
 - Não invente números, versões, capacidades, datas ou anúncios.
 - Não use frases vagas como "o período foi marcado", "cada vez mais" ou "players do mercado".

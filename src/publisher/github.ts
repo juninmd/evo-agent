@@ -1,4 +1,5 @@
 import { Octokit } from "@octokit/rest";
+import { EBOOK_SLUG, type EbookResult } from "../agent/ebook.js";
 import type { GeneratedArticle, ReportPeriod } from "../agent/writer.js";
 import { config } from "../config.js";
 import {
@@ -10,6 +11,7 @@ import { log } from "../utils/logger.js";
 import {
   type PublishedItem,
   type SiteFile,
+  buildEbookMarkdown,
   buildIndex,
   buildMarkdown,
   buildSiteFiles,
@@ -147,6 +149,48 @@ export async function publishWeeklyReport(
   period: ReportPeriod = article.reportPeriod ?? "weekly",
 ): Promise<string> {
   const [url] = await publishArticleBatch([{ article, reportPeriod: period }]);
+  return url;
+}
+
+export async function publishEbook(ebook: EbookResult): Promise<string> {
+  const target = config.github;
+  await ensureBranchExists(target.owner, target.repo, target.branch);
+  const url = `https://${target.owner}.github.io/${target.repo}/handbooks/${EBOOK_SLUG}`;
+  const existing = db.getPublished();
+  const articles = existing
+    .filter((item) => item.kind === "article")
+    .map(toPublishedItem);
+  const reports = existing
+    .filter((item) => item.kind === "report")
+    .map(toPublishedItem);
+  await commitFiles(
+    target.owner,
+    target.repo,
+    target.branch,
+    [
+      ...buildSiteFiles(target.owner, target.repo, target.branch),
+      {
+        path: `handbooks/${EBOOK_SLUG}.md`,
+        content: buildEbookMarkdown(ebook),
+      },
+      {
+        path: "index.md",
+        content: buildIndex(
+          uniqueByUrl(articles).slice(0, 80),
+          uniqueByUrl(reports).slice(0, 24),
+        ),
+      },
+      {
+        path: "README.md",
+        content: buildIndex(
+          uniqueByUrl(articles).slice(0, 80),
+          uniqueByUrl(reports).slice(0, 24),
+        ),
+      },
+    ],
+    `ebook: ${ebook.title}`,
+  );
+  log.info(`Published ebook: ${url}`);
   return url;
 }
 

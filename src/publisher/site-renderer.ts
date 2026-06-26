@@ -1,3 +1,4 @@
+import { EBOOK_SLUG, type EbookResult } from "../agent/ebook.js";
 import type { GeneratedArticle } from "../agent/writer.js";
 import { escapeHtml } from "../utils/escape.js";
 
@@ -33,6 +34,21 @@ ${article.content}
 
 ---
 *Gerado por evo-agent - agente auto-aprimorante em ${article.date}.*
+`;
+}
+
+export function buildEbookMarkdown(ebook: EbookResult): string {
+  return `---
+layout: article
+title: "${escapeYaml(ebook.title)}"
+date: "${ebook.date}"
+tags: ["ebook", "ai-assisted-development", "handbook"]
+summary: "${escapeYaml(ebook.summary)}"
+---
+
+{% raw %}
+${ebook.markdown}
+{% endraw %}
 `;
 }
 
@@ -125,6 +141,21 @@ title: Evo Agent
   </div>
 </section>
 
+<section class="reports-band" id="ebook">
+  <div class="section-title">
+    <p>Compendio vivo</p>
+    <h2>Ebook</h2>
+  </div>
+  <div class="story-grid featured-grid">
+    <article class="story-card">
+      <div class="story-meta"><time datetime="live">Atualizado pelo agente</time><span>Handbook</span></div>
+      <h3><a href="{{ '/handbooks/${EBOOK_SLUG}' | relative_url }}">Guia Pratico: Desenvolvimento de Software com IA</a></h3>
+      <p>Boas praticas, ferramentas, fluxos com agentes, prompt/contexto e anti-padroes extraidos das fontes tecnicas recentes.</p>
+      <div class="chips"><span>ebook</span><span>ai-assisted-development</span><span>agents</span></div>
+    </article>
+  </div>
+</section>
+
 <section class="archive" id="arquivo">
   <div class="section-title">
     <p>Arquivo por ano e mes</p>
@@ -160,6 +191,7 @@ export function buildDefaultLayout() {
       <nav aria-label="Principal">
         <a href="{{ '/' | relative_url }}#arquivo">Arquivo</a>
         <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
+        <a href="{{ '/' | relative_url }}#ebook">Ebook</a>
         <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
         <button class="theme-toggle" type="button" data-theme-toggle>Claro</button>
       </nav>
@@ -252,6 +284,7 @@ export function buildArticleLayout() {
       <nav aria-label="Principal">
         <a href="{{ '/' | relative_url }}#arquivo">Arquivo</a>
         <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
+        <a href="{{ '/' | relative_url }}#ebook">Ebook</a>
         <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
         <button class="theme-toggle" type="button" data-theme-toggle>Claro</button>
       </nav>

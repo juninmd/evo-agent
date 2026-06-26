@@ -78,6 +78,36 @@ describe("editorial contracts", () => {
     expect(parsed.dek).toBe("Primeira linha\nSegunda linha");
   });
 
+  it("asks the model to prioritize multiple useful Reddit signals", () => {
+    const redditArticle = (source: string, url: string): Article => ({
+      ...article("2026-06-12T08:00:00Z", url),
+      source,
+      tags: '["reddit","community-signals"]',
+    });
+    const prompt = buildEditorialPrompt(
+      [
+        article("2026-06-12T08:00:00Z", "https://openai.com/1"),
+        redditArticle(
+          "Reddit Community Signals (LocalLLaMA)",
+          "https://reddit.com/1",
+        ),
+        redditArticle(
+          "Reddit Community Signals (Cursor)",
+          "https://reddit.com/2",
+        ),
+        redditArticle(
+          "Reddit Community Signals (AI_Agents)",
+          "https://reddit.com/3",
+        ),
+      ],
+      "25/06/2026",
+      12,
+    );
+
+    expect(prompt).toContain("sinais do Reddit");
+    expect(prompt).toContain("priorize 2-4 deles");
+  });
+
   it("bounds an otherwise valid generated title without another model call", () => {
     const sources = [
       article("2026-06-12T08:00:00Z", "https://anthropic.com/news/claude"),

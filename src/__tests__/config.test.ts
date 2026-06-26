@@ -24,6 +24,20 @@ describe("loadConfig", () => {
     );
   });
 
+  it("supports EBOOK mode as a publishing job", () => {
+    const config = loadConfig({
+      ...baseEnv,
+      RUN_MODE: "EBOOK",
+      TELEGRAM_BOT_TOKEN: "token",
+      TELEGRAM_CHAT_ID: "chat",
+      GITHUB_TOKEN: "github",
+      GITHUB_OWNER: "owner",
+      GITHUB_REPO: "repo",
+    });
+
+    expect(config.runMode).toBe("EBOOK");
+  });
+
   it("rejects invalid numeric and cron configuration", () => {
     expect(() =>
       loadConfig({

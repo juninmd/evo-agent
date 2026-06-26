@@ -2,6 +2,7 @@ import type { Octokit } from "@octokit/rest";
 import { describe, expect, it, vi } from "vitest";
 import type { GeneratedArticle } from "../agent/types.js";
 import { buildPublicationBatch, commitFiles } from "../publisher/github.js";
+import { buildEbookMarkdown } from "../publisher/site-renderer.js";
 
 function githubClient(options: { failTree?: boolean } = {}) {
   const updateRef = vi.fn().mockResolvedValue({});
@@ -119,6 +120,23 @@ describe("atomic GitHub publication", () => {
         "index.md",
       ]),
     );
+    expect(
+      batch.files.find((file) => file.path === "index.md")?.content,
+    ).toContain("/handbooks/ai-dev-handbook");
     expect(batch.items).toHaveLength(2);
+  });
+
+  it("renders ebook markdown as a publishable Jekyll article", () => {
+    const markdown = buildEbookMarkdown({
+      title: "Guia Prático: Desenvolvimento de Software com IA",
+      summary: "Compêndio vivo de práticas.",
+      date: "2026-06-26",
+      markdown:
+        "# Guia Prático: Desenvolvimento de Software com IA\n\n## Ferramentas\n\n- Use fontes.",
+    });
+
+    expect(markdown).toContain('tags: ["ebook"');
+    expect(markdown).toContain("{% raw %}");
+    expect(markdown).toContain("## Ferramentas");
   });
 });

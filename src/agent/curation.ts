@@ -54,6 +54,7 @@ export interface CurationResult {
 
 export interface CurationPolicy {
   perBucket?: number;
+  perBucketOverrides?: Record<string, number>;
   max?: number;
   requirePrimary?: boolean;
   minSummaryLength?: number;
@@ -137,12 +138,19 @@ function editorialScore(
   const recency = Math.max(0, 30 - ageHours / 24);
   const engagement = normalizedEngagement * 20;
   const authority = isPrimarySource(article) ? 35 : 0;
+  const communitySignal =
+    sourceBucket(article.source) === "reddit"
+      ? 12
+      : /hackernews|tabnews/.test(sourceBucket(article.source))
+        ? 6
+        : 0;
   const summaryQuality = Math.min(article.summary.trim().length / 300, 1) * 15;
   const usefulTags = parseTags(article.tags).filter(
     (tag) => !GENERIC_TAGS.has(tag),
   ).length;
   return (
     authority +
+    communitySignal +
     engagement +
     recency +
     summaryQuality +
@@ -222,7 +230,8 @@ export function curateArticles(
       : Number.POSITIVE_INFINITY;
   for (const candidate of deduped) {
     const bucket = sourceBucket(candidate.article.source);
-    if ((bucketCount.get(bucket) ?? 0) >= perBucket) {
+    const bucketLimit = policy.perBucketOverrides?.[bucket] ?? perBucket;
+    if ((bucketCount.get(bucket) ?? 0) >= bucketLimit) {
       rejected.push({ article: candidate.article, reason: "bucket-limit" });
       continue;
     }

@@ -4,6 +4,7 @@ import {
   editorialQualityScore,
 } from "./agent/article-validation.js";
 import { isPrimarySource } from "./agent/curation.js";
+import { refineEbook } from "./agent/ebook.js";
 import { runImprovementCycle } from "./agent/improver.js";
 import { rollbackPrompt } from "./agent/prompt-policy.js";
 import { generateArticle, generatePeriodReport } from "./agent/writer.js";
@@ -16,7 +17,11 @@ import {
   processNotificationOutbox,
 } from "./notifier/outbox.js";
 import { notifyNewArticle, notifyWeeklyReport } from "./notifier/telegram.js";
-import { publishArticle, publishWeeklyReport } from "./publisher/github.js";
+import {
+  publishArticle,
+  publishEbook,
+  publishWeeklyReport,
+} from "./publisher/github.js";
 import { setAiMetricRecorder } from "./utils/ai.js";
 import { CycleCoordinator } from "./utils/cycle.js";
 import { log } from "./utils/logger.js";
@@ -163,6 +168,15 @@ async function reportCycle(
   }
 }
 
+async function ebookCycle() {
+  log.info("=== Ebook cycle start ===");
+  const ebook = await refineEbook();
+  const url = await publishEbook(ebook);
+  db.setState("last_ebook_at", new Date().toISOString());
+  log.info(`=== Ebook published: ${url} ===`);
+  return { url, lengthChars: ebook.markdown.length };
+}
+
 function hasArticleForToday(): boolean {
   const today = new Date().toISOString().split("T")[0];
   return db
@@ -230,6 +244,12 @@ async function main() {
     closeDbAndExit(0);
   }
 
+  if (runMode === "EBOOK") {
+    log.info("Running in EBOOK mode");
+    await cycles.run("ebook", ebookCycle);
+    closeDbAndExit(0);
+  }
+
   // Default DAEMON mode
   log.info(
     `Evo Agent starting (learn every ${config.crawlIntervalMinutes}min)`,
@@ -290,8 +310,15 @@ async function main() {
       .catch((e) => log.error(`Weekly report cycle error: ${errMsg(e)}`));
   });
 
+  const ebookCron = "30 19 * * 0";
+  cron.schedule(ebookCron, () => {
+    cycles
+      .run("ebook", ebookCycle)
+      .catch((e) => log.error(`Ebook cycle error: ${errMsg(e)}`));
+  });
+
   log.info(
-    `Scheduled: learn=${learnInterval}, article=${config.articleCron}, weekly=${weeklyCron}`,
+    `Scheduled: learn=${learnInterval}, article=${config.articleCron}, weekly=${weeklyCron}, ebook=${ebookCron}`,
   );
 
   process.on("SIGINT", () => {

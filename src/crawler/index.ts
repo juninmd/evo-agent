@@ -52,6 +52,7 @@ interface RedditPostCandidate {
   subreddit: string;
   title: string;
   url: string;
+  summary: string;
 }
 
 const REDDIT_COMMUNITY_SUBREDDITS = [
@@ -59,25 +60,37 @@ const REDDIT_COMMUNITY_SUBREDDITS = [
   "MachineLearning",
   "OpenAI",
   "ClaudeAI",
+  "ClaudeCode",
   "ChatGPTCoding",
   "LLMDevs",
+  "AI_Agents",
+  "AgenticAI",
+  "LangChain",
+  "ollama",
   "artificial",
   "singularity",
   "ChatGPT",
   "ArtificialIntelligence",
   "deeplearning",
+  "MLQuestions",
   "StableDiffusion",
+  "comfyui",
+  "SoraAi",
   "Cursor",
   "CursorIDE",
+  "WindsurfAI",
+  "GithubCopilot",
+  "vscode",
   "vibecoding",
   "kilocode",
   "opencode",
+  "MCP",
 ];
 
 const REDDIT_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
-const REDDIT_POSTS_PER_SUBREDDIT = 5;
-const REDDIT_COMMENTS_PER_POST = 20;
+const REDDIT_POSTS_PER_SUBREDDIT = 8;
+const REDDIT_COMMENTS_PER_POST = 30;
 const REDDIT_MIN_COMMENT_SCORE = 3;
 const REDDIT_MIN_COMMENT_LENGTH = 80;
 
@@ -208,6 +221,51 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Reddit: OpenCode",
     url: "https://www.reddit.com/r/opencode/.rss",
     tags: ["reddit", "opencode", "coding"],
+  },
+  {
+    name: "Reddit: LocalLLaMA",
+    url: "https://www.reddit.com/r/LocalLLaMA/.rss",
+    tags: ["reddit", "llm", "local-ai", "models"],
+  },
+  {
+    name: "Reddit: AI Agents",
+    url: "https://www.reddit.com/r/AI_Agents/.rss",
+    tags: ["reddit", "agents", "ai"],
+  },
+  {
+    name: "Reddit: AgenticAI",
+    url: "https://www.reddit.com/r/AgenticAI/.rss",
+    tags: ["reddit", "agents", "ai"],
+  },
+  {
+    name: "Reddit: LangChain",
+    url: "https://www.reddit.com/r/LangChain/.rss",
+    tags: ["reddit", "langchain", "agents", "rag"],
+  },
+  {
+    name: "Reddit: Ollama",
+    url: "https://www.reddit.com/r/ollama/.rss",
+    tags: ["reddit", "ollama", "local-ai", "llm"],
+  },
+  {
+    name: "Reddit: WindsurfAI",
+    url: "https://www.reddit.com/r/WindsurfAI/.rss",
+    tags: ["reddit", "windsurf", "coding", "ai"],
+  },
+  {
+    name: "Reddit Search: ai agents",
+    url: "https://www.reddit.com/search/.rss?q=ai+agents&sort=new",
+    tags: ["reddit", "agents", "ai", "search"],
+  },
+  {
+    name: "Reddit Search: local llm",
+    url: "https://www.reddit.com/search/.rss?q=local+llm&sort=new",
+    tags: ["reddit", "llm", "local-ai", "search"],
+  },
+  {
+    name: "Reddit Search: cursor windsurf copilot",
+    url: "https://www.reddit.com/search/.rss?q=cursor+OR+windsurf+OR+copilot&sort=new",
+    tags: ["reddit", "coding", "ai", "search"],
   },
   {
     name: "Reddit Search: claude code",
@@ -582,13 +640,25 @@ function buildCommunitySignalSummary(
       return `score ${comment.score}: ${body}`;
     });
 
+  const positiveCount = comments.filter((comment) => comment.score > 0).length;
   return normalizeText(
     [
       `Sinais da comunidade em r/${post.subreddit} sobre "${post.title}".`,
       `Comentarios uteis analisados: ${comments.length}.`,
+      `Comentarios com score positivo: ${positiveCount}.`,
       `Top comments: ${topComments.join(" | ")}`,
     ].join(" "),
-  ).slice(0, 1800);
+  ).slice(0, 2600);
+}
+
+function buildRedditPostSignalSummary(post: RedditPostCandidate): string {
+  return normalizeText(
+    [
+      `Sinal do Reddit em r/${post.subreddit} sobre "${post.title}".`,
+      "Comentarios indisponiveis nesta coleta; usando somente o conteudo do post RSS.",
+      post.summary,
+    ].join(" "),
+  ).slice(0, 1200);
 }
 
 async function getRedditPostCandidates(
@@ -609,7 +679,11 @@ async function getRedditPostCandidates(
   return feed.items.slice(0, REDDIT_POSTS_PER_SUBREDDIT).flatMap((item) => {
     if (!item.title || !item.link) return [];
     if (!isUsefulRedditPost(item.title)) return [];
-    return [{ subreddit, title: item.title, url: item.link }];
+    const summary = summarizeSourceContent(
+      item.contentSnippet ?? item.content ?? "",
+      1000,
+    );
+    return [{ subreddit, title: item.title, url: item.link, summary }];
   });
 }
 
@@ -645,9 +719,32 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
 
       try {
         const comments = await getRedditComments(post.url);
-        if (comments.length === 0) continue;
+        if (comments.length === 0) {
+          if (post.summary.length < REDDIT_MIN_COMMENT_LENGTH) continue;
+          db.saveArticle({
+            title: `Reddit: ${post.title}`,
+            source: `Reddit Post Signals (${post.subreddit})`,
+            url,
+            summary: buildRedditPostSignalSummary(post),
+            tags: JSON.stringify([
+              "reddit",
+              "post-signals",
+              "fallback",
+              post.subreddit.toLowerCase(),
+            ]),
+            engagement_score: 0,
+          });
+          newCount++;
+          continue;
+        }
 
         const topScore = comments.length > 0 ? comments[0].score : 0;
+        const engagementScore =
+          topScore +
+          comments.reduce(
+            (sum, comment) => sum + Math.max(comment.score, 0),
+            0,
+          );
         db.saveArticle({
           title: `Discussao: ${post.title}`,
           source: `Reddit Community Signals (${post.subreddit})`,
@@ -659,10 +756,27 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
             "experimental",
             post.subreddit.toLowerCase(),
           ]),
-          engagement_score: topScore,
+          engagement_score: engagementScore,
         });
         newCount++;
       } catch (err) {
+        if (post.summary.length >= REDDIT_MIN_COMMENT_LENGTH) {
+          db.saveArticle({
+            title: `Reddit: ${post.title}`,
+            source: `Reddit Post Signals (${post.subreddit})`,
+            url,
+            summary: buildRedditPostSignalSummary(post),
+            tags: JSON.stringify([
+              "reddit",
+              "post-signals",
+              "fallback",
+              post.subreddit.toLowerCase(),
+            ]),
+            engagement_score: 0,
+          });
+          newCount++;
+          continue;
+        }
         log.info(
           `Reddit comments skipped for r/${post.subreddit}: ${(err as Error).message}`,
         );

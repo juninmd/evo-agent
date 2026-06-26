@@ -30,13 +30,14 @@ flowchart TD
 
 ## Features
 
-- **Multi-source crawling**: 13 default RSS feeds + Google News keyword search + SearXNG for Reddit/X.com + Reddit community signal analysis
+- **Multi-source crawling**: RSS/HTML sources, Google News keyword search, SearXNG for Reddit/X.com, Hacker News, TabNews, GitHub Trending, and Reddit community signal analysis
 - **Self-improvement loop**: System prompt and search keywords evolve from ingested content
 - **Reliable orchestration**: Overlapping cycles are skipped and every run is recorded in SQLite
 - **Editorial scoring**: Recency, engagement, source authority, diversity, and cross-source evidence shape selection
 - **Evidence provenance**: Every selected highlight preserves source URL, title, and supporting excerpt
 - **Guarded self-improvement**: Prompt candidates are scored, versioned, promoted only without regression, and rollback-capable
-- **Article generation**: Daily articles (800-1200 words) and weekly reports (1500-2000 words) in pt-BR via LLM
+- **Article generation**: richer daily articles and weekly/periodic reports in pt-BR via LLM, with expanded Reddit/community evidence when available
+- **Living ebook**: weekly/refinable AI-assisted development handbook published to GitHub Pages
 - **Atomic GitHub Pages publishing**: Article, layouts, and indexes land in one Git commit
 - **Telegram outbox**: Failed delivery retries with exponential backoff and dead-letter isolation
 - **Operational health**: Structured logs, persistent metrics, primary-source alerts, and a machine-readable health command
@@ -90,6 +91,7 @@ Set `RUN_MODE` env var to control execution:
 | `MONTHLY` | Generates and publishes one monthly report, then exits |
 | `BIMONTHLY` | Generates and publishes one bimonthly report, then exits |
 | `SEMESTER` | Generates and publishes one semester report, then exits |
+| `EBOOK` | Refines and publishes the living AI-assisted development handbook, then exits |
 
 ## Commands
 
@@ -121,6 +123,7 @@ src/
   agent/
     improver.ts         # Self-improvement: updates prompt and keywords from recent sources
     writer.ts           # LLM-powered article and weekly report generation
+    ebook.ts            # Living handbook refinement
     editorial-renderer.ts # Deterministic article rendering and citations
     prompt-policy.ts    # Prompt promotion and rollback policy
   publisher/

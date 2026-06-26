@@ -10,7 +10,8 @@ export type RunMode =
   | "BIWEEKLY"
   | "MONTHLY"
   | "BIMONTHLY"
-  | "SEMESTER";
+  | "SEMESTER"
+  | "EBOOK";
 
 type Env = Record<string, string | undefined>;
 
@@ -23,6 +24,7 @@ const RUN_MODES = new Set<RunMode>([
   "MONTHLY",
   "BIMONTHLY",
   "SEMESTER",
+  "EBOOK",
 ]);
 
 function loadEnvFile(env: NodeJS.ProcessEnv) {
