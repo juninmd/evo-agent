@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>58</strong> artigos</span>
-    <span><strong>17</strong> relatorios</span>
+    <span><strong>18</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-06-28">2026-06-28</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-28-anthropic-fable-5-ataque-de-destilacao-e-openai-lanca-asic-jalapeno-impactos-par">Anthropic Fable 5, ataque de destilação e OpenAI lança ASIC Jalapeño: impactos para orçamento e</a></h3>
+  <p>Análises das últimas movimentações da Anthropic sobre custos e vulnerabilidades, combinadas com a estreia do chip ASIC da OpenAI, revelam decisões críticas de gasto e mitigação. Também são destaque relatos de desenvolvedores sobre fluxo de trabalho e monitoramento de veículos.</p>
+  <div class="chips"><span>weekly-report</span><span>tabnews</span><span>google-news</span><span>reddit</span><span>br</span><span>developer</span><span>preço fable anthropic</span><span>anthropic distillation attack</span><span>anthropic model switching</span><span>llm</span><span>local-ai</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-06-21">2026-06-21</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-21-fable-5-engine-de-dados-para-robotica-e-api-tabnews-decisoes-de-arquitetura-e-pr">Fable 5, Engine de Dados para Robótica e API TabNews: decisões de arquitetura e privacidade em</a></h3>
   <p>Analisamos o novo motor de ingestão de vídeo para robôs, as diferenças do modelo Fable 5 da Anthropic e o compartilhamento de inferência no Bedrock, além da abertura da API TabNews e dos desafios de upload resiliente na nuvem.</p>
