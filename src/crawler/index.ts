@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type AxiosError } from "axios";
 import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
 import Parser from "rss-parser";
@@ -9,6 +9,8 @@ import { log } from "../utils/logger.js";
 import { isSafeExternalUrl } from "../utils/url.js";
 
 chromium.use(stealth());
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const parser = new Parser({
   timeout: 10000,
@@ -93,6 +95,14 @@ const REDDIT_POSTS_PER_SUBREDDIT = 8;
 const REDDIT_COMMENTS_PER_POST = 30;
 const REDDIT_MIN_COMMENT_SCORE = 3;
 const REDDIT_MIN_COMMENT_LENGTH = 80;
+const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 3000;
+const REDDIT_RATE_LIMIT_MAX_RETRY_MS = 60000;
+
+class RedditRateLimitError extends Error {
+  constructor(readonly retryAfterMs: number) {
+    super(`Reddit rate limit persisted after retry (${retryAfterMs}ms)`);
+  }
+}
 
 const V2EX_AI_KEYWORDS = [
   "ai",
@@ -661,10 +671,59 @@ function buildRedditPostSignalSummary(post: RedditPostCandidate): string {
   ).slice(0, 1200);
 }
 
+function retryAfterMs(value: unknown): number | null {
+  if (typeof value !== "string" || value.trim() === "") return null;
+  const seconds = Number(value);
+  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
+  const date = Date.parse(value);
+  if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
+  return null;
+}
+
+export function redditRateLimitDelayMs(value: unknown): number {
+  return Math.min(
+    retryAfterMs(value) ?? REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS,
+    REDDIT_RATE_LIMIT_MAX_RETRY_MS,
+  );
+}
+
+function isRedditRateLimit(err: unknown): err is AxiosError {
+  return axios.isAxiosError(err) && err.response?.status === 429;
+}
+
+function isRedditSource(source: FeedSource): boolean {
+  return source.url.includes("reddit.com") || source.tags.includes("reddit");
+}
+
+async function redditGet<T = unknown>(
+  url: string,
+  config: Parameters<typeof axios.get>[1],
+): Promise<T> {
+  try {
+    const response = await axios.get<T>(url, config);
+    return response.data;
+  } catch (err) {
+    if (!isRedditRateLimit(err)) throw err;
+    const retryAfter = err.response?.headers?.["retry-after"];
+    const delayMs = redditRateLimitDelayMs(retryAfter);
+    log.warn(`Reddit rate limited; retrying once in ${delayMs}ms`);
+    await sleep(delayMs);
+    try {
+      const response = await axios.get<T>(url, config);
+      return response.data;
+    } catch (retryErr) {
+      if (!isRedditRateLimit(retryErr)) throw retryErr;
+      throw new RedditRateLimitError(
+        redditRateLimitDelayMs(retryErr.response?.headers?.["retry-after"]),
+      );
+    }
+  }
+}
+
 async function getRedditPostCandidates(
   subreddit: string,
 ): Promise<RedditPostCandidate[]> {
-  const response = await axios.get(
+  const data = await redditGet<string>(
     `https://www.reddit.com/r/${subreddit}/new/.rss`,
     {
       headers: {
@@ -674,7 +733,7 @@ async function getRedditPostCandidates(
       timeout: 8000,
     },
   );
-  const feed = await parser.parseString(response.data);
+  const feed = await parser.parseString(data);
 
   return feed.items.slice(0, REDDIT_POSTS_PER_SUBREDDIT).flatMap((item) => {
     if (!item.title || !item.link) return [];
@@ -688,11 +747,11 @@ async function getRedditPostCandidates(
 }
 
 async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
-  const response = await axios.get(redditJsonUrl(postUrl), {
+  const data = await redditGet<unknown[]>(redditJsonUrl(postUrl), {
     headers: { "User-Agent": REDDIT_USER_AGENT },
     timeout: 8000,
   });
-  const listing = response.data?.[1] as RedditListing | undefined;
+  const listing = data?.[1] as RedditListing | undefined;
   return flattenComments(listing)
     .filter(isUsefulComment)
     .sort((a, b) => b.score - a.score)
@@ -701,12 +760,19 @@ async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
 
 export async function crawlRedditCommunitySignals(): Promise<number> {
   let newCount = 0;
+  let rateLimited = false;
 
   for (const subreddit of REDDIT_COMMUNITY_SUBREDDITS) {
     let posts: RedditPostCandidate[] = [];
     try {
       posts = await getRedditPostCandidates(subreddit);
     } catch (err) {
+      if (err instanceof RedditRateLimitError) {
+        log.warn(
+          `Reddit feed rate limit persisted for r/${subreddit}; stopping Reddit crawl`,
+        );
+        break;
+      }
       log.warn(
         `Reddit feed failed for r/${subreddit}: ${(err as Error).message}`,
       );
@@ -777,11 +843,19 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
           newCount++;
           continue;
         }
+        if (err instanceof RedditRateLimitError) {
+          log.warn(
+            `Reddit comments rate limit persisted for r/${post.subreddit}; stopping Reddit crawl`,
+          );
+          rateLimited = true;
+          break;
+        }
         log.info(
           `Reddit comments skipped for r/${post.subreddit}: ${(err as Error).message}`,
         );
       }
     }
+    if (rateLimited) break;
   }
 
   log.info(`Crawled Reddit community signals, ${newCount} new digests`);
@@ -1051,9 +1125,14 @@ export async function crawlAll(): Promise<CrawlReport> {
     (s) => s?.url && s.name,
   );
   let newCount = 0;
+  let redditRateLimited = false;
   const metrics: Record<string, { saved: number; failed: boolean }> = {};
 
   for (const source of sources) {
+    if (redditRateLimited && isRedditSource(source)) {
+      log.debug(`Reddit rate limit active: skipping "${source.name}"`);
+      continue;
+    }
     if (!circuitAllow(source.name)) {
       log.debug(`Circuit breaker: skipping "${source.name}"`);
       continue;
@@ -1070,8 +1149,23 @@ export async function crawlAll(): Promise<CrawlReport> {
       }
       let feedData: Awaited<ReturnType<typeof parser.parseURL>>;
       try {
-        feedData = await parser.parseURL(source.url);
+        if (isRedditSource(source)) {
+          const rawXml = await redditGet<string>(source.url, {
+            headers: {
+              Accept: "application/atom+xml, application/xml",
+              "User-Agent": REDDIT_USER_AGENT,
+            },
+            timeout: 10000,
+          });
+          feedData = await parser.parseString(rawXml);
+        } else {
+          feedData = await parser.parseURL(source.url);
+        }
       } catch (err) {
+        if (err instanceof RedditRateLimitError && isRedditSource(source)) {
+          redditRateLimited = true;
+          throw err;
+        }
         const message = err instanceof Error ? err.message : String(err);
         if (message.includes("403") || message.includes("429")) {
           log.warn(

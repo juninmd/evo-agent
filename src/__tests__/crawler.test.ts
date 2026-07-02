@@ -3,6 +3,7 @@ import {
   hackerNewsEngagement,
   isUsefulComment,
   parseGitHubStarCount,
+  redditRateLimitDelayMs,
   summarizeSourceContent,
 } from "../crawler/index.js";
 
@@ -39,6 +40,12 @@ describe("crawler transformations", () => {
         depth: 0,
       }),
     ).toBe(false);
+  });
+
+  it("computes bounded Reddit rate-limit retry delays", () => {
+    expect(redditRateLimitDelayMs("2")).toBe(2000);
+    expect(redditRateLimitDelayMs("120")).toBe(60000);
+    expect(redditRateLimitDelayMs(undefined)).toBe(3000);
   });
 
   it("turns source Markdown into usable evidence", () => {
