@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>65</strong> artigos</span>
-    <span><strong>19</strong> relatorios</span>
+    <span><strong>20</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-05">2026-07-05</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-05-anthropic-lanca-claude-sonnet-5-com-desempenho-aprimorado-e-precos-competitivos">Anthropic Lança Claude Sonnet 5 com Desempenho Aprimorado e Preços Competitivos</a></h3>
+  <p>A Anthropic lançou o Claude Sonnet 5, oferecendo desempenho próximo ao do Opus 4.8 a preços mais baixos. Usuários relatam experiências mistas com o Fable 5, destacando tanto capacidades quanto limitações.</p>
+  <div class="chips"><span>weekly-report</span><span>google-news</span><span>reddit</span><span>tabnews</span><span>anthropic sonnet preco</span><span>anthropic precificação</span><span>claude</span><span>coding</span><span>br</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-01">2026-07-01</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-07-01-relatorio-quinzenal-avancos-em-llms-ia-generativa-e-agentes-17-06-2026-01-07-202">Relatório Quinzenal: Avanços em LLMs, IA Generativa e Agentes (17/06/2026 – 01/07/2026)</a></h3>
   <p>Destaques do período
