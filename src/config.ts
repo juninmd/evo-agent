@@ -113,7 +113,8 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
       apiKey: env.LITELLM_API_KEY ?? env.OPENCODE_API_KEY ?? "no-key",
       model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/llama-70b",
       fallbackModels: (
-        env.LITELLM_FALLBACK_MODELS ?? "cloud/maverick,cloud/llama-8b"
+        env.LITELLM_FALLBACK_MODELS ??
+        "cloud/maverick,cloud/llama-8b,cloud/nemotron-super-49b,cloud/nemotron-super-120b,cloud/gpt-oss-120b,cloud/qwen3-next-80b"
       )
         .split(",")
         .map((model) => model.trim())
