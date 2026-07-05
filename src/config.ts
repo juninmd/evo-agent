@@ -112,9 +112,13 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
       ),
       apiKey: env.LITELLM_API_KEY ?? env.OPENCODE_API_KEY ?? "no-key",
       model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/llama-70b",
+      // cloud/llama-8b, cloud/nemotron-super-49b/120b e cloud/qwen3-next-80b
+      // homologados ao vivo (texto+tool_choice:"required" via proxy).
+      // cloud/maverick/gpt-oss-120b (pre-existentes) as vezes travam em tool
+      // forcado — mantidos no fim da cadeia so como ultimo recurso.
       fallbackModels: (
         env.LITELLM_FALLBACK_MODELS ??
-        "cloud/maverick,cloud/llama-8b,cloud/nemotron-super-49b,cloud/nemotron-super-120b,cloud/gpt-oss-120b,cloud/qwen3-next-80b"
+        "cloud/llama-8b,cloud/nemotron-super-49b,cloud/nemotron-super-120b,cloud/qwen3-next-80b,cloud/openrouter-nemotron-120b-free,cloud/maverick"
       )
         .split(",")
         .map((model) => model.trim())
