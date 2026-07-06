@@ -9,5 +9,8 @@ describe("structured logger redaction", () => {
     expect(redactLogValue("GITHUB_TOKEN=abc123")).toBe(
       "GITHUB_TOKEN=[REDACTED]",
     );
+    expect(
+      redactLogValue("https://api.telegram.org/bot123456:abc_DEF/sendMessage"),
+    ).toBe("https://api.telegram.org/bot[REDACTED]/sendMessage");
   });
 });

@@ -196,4 +196,46 @@ describe("editorial curation", () => {
     ).toHaveLength(5);
     expect(result.selected.some((item) => item.primary)).toBe(true);
   });
+
+  it("promotes available Reddit signals up to the requested minimum", () => {
+    const result = curateArticles(
+      [
+        article("Oficial A", "OpenAI Blog", "https://openai.com/a", 100),
+        article("Oficial B", "Anthropic News", "https://anthropic.com/b", 95),
+        article("Oficial C", "The GitHub Blog", "https://github.blog/c", 90),
+        article(
+          "Ferramenta popular",
+          "GitHub Trending",
+          "https://gh.com/d",
+          85,
+        ),
+        article(
+          "Relato Reddit sobre custo",
+          "Reddit Community Signals (LocalLLaMA)",
+          "https://reddit.com/r/localllama/1",
+          20,
+          '["reddit","community-signals","cost"]',
+        ),
+        article(
+          "Relato Reddit sobre regressao",
+          "Reddit Community Signals (ClaudeCode)",
+          "https://reddit.com/r/claudecode/2",
+          15,
+          '["reddit","community-signals","coding"]',
+        ),
+      ],
+      {
+        max: 5,
+        perBucket: 5,
+        requirePrimary: true,
+        maxPrimaryShare: 0.8,
+        minCommunitySignals: 2,
+        minRedditSignals: 2,
+      },
+    );
+
+    expect(result.metrics.communitySignals).toBeGreaterThanOrEqual(2);
+    expect(result.metrics.redditSignals).toBeGreaterThanOrEqual(2);
+    expect(result.selected.some((item) => item.primary)).toBe(true);
+  });
 });

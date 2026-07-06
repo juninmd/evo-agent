@@ -444,6 +444,10 @@ export const db = {
              ))
             AS failedCycles24h,
           (SELECT count(*) FROM cycle_runs
+           WHERE status = 'running'
+             AND started_at < datetime('now', '-6 hours'))
+            AS staleRunningCycles,
+          (SELECT count(*) FROM cycle_runs
            WHERE status = 'succeeded' AND started_at >= datetime('now', '-24 hours'))
             AS successfulCycles24h,
           (SELECT count(*) FROM articles
@@ -483,6 +487,20 @@ export const db = {
          WHERE id = ?`,
       )
       .run(status, JSON.stringify(metrics), error ?? null, id);
+  },
+
+  failStaleRunningCycles(maxAgeHours = 6): number {
+    const result = getDb()
+      .prepare(
+        `UPDATE cycle_runs
+         SET status = 'failed',
+             error = 'cycle abandoned by previous process',
+             finished_at = datetime('now')
+         WHERE status = 'running'
+           AND started_at < datetime('now', ?)`,
+      )
+      .run(`-${maxAgeHours} hours`);
+    return result.changes;
   },
 
   getSourceHealth(source: string): SourceHealth | null {

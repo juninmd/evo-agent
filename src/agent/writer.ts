@@ -4,7 +4,12 @@ import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
-import { curateArticles, isPrimarySource, sourceBucket } from "./curation.js";
+import {
+  curateArticles,
+  isCommunitySignal,
+  isPrimarySource,
+  sourceBucket,
+} from "./curation.js";
 import {
   articlesFromDraft,
   buildReferencesSection,
@@ -121,6 +126,8 @@ export async function generateArticle(
       requirePrimary: true,
       minSummaryLength: 80,
       maxPrimaryShare: 0.65,
+      minCommunitySignals: type === "weekly" ? 4 : 2,
+      minRedditSignals: type === "weekly" ? 2 : 1,
       now: window?.referenceTime,
     });
   let curation = curate();
@@ -271,6 +278,8 @@ function loadPeriodArticles(cfg: PeriodConfig): Article[] {
     max: cfg.highlights[1] * 2,
     requirePrimary: true,
     minSummaryLength: 80,
+    minCommunitySignals: Math.min(8, Math.floor(cfg.highlights[0] / 3)),
+    minRedditSignals: Math.min(4, Math.floor(cfg.highlights[0] / 6)),
   }).selected.map((item) => item.article);
 }
 
@@ -292,6 +301,10 @@ function metricsForArticles(articles: Article[]) {
       /anthropic|openai|google|github blog|hugging face|mistral/i.test(
         article.source,
       ),
+    ).length,
+    communitySignals: articles.filter(isCommunitySignal).length,
+    redditSignals: articles.filter(
+      (article) => sourceBucket(article.source) === "reddit",
     ).length,
   };
 }

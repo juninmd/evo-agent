@@ -200,6 +200,10 @@ async function ensureDailyArticle(reason: string) {
 
 async function main() {
   loadConfig(process.env);
+  const staleCycles = db.failStaleRunningCycles();
+  if (staleCycles > 0) {
+    log.warn(`Marked stale running cycles as failed: ${staleCycles}`);
+  }
   const runMode = config.runMode;
 
   if (runMode === "CRAWL") {

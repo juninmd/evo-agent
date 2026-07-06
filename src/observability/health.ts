@@ -2,6 +2,7 @@ export interface OperationalStats {
   pendingNotifications: number;
   deadLetterNotifications: number;
   failedCycles24h: number;
+  staleRunningCycles: number;
   successfulCycles24h: number;
   recentArticles: number;
   recentPrimarySources: number;
@@ -27,6 +28,10 @@ export function evaluateHealth(stats: OperationalStats): HealthResult {
   if (stats.failedCycles24h > 0) {
     if (status === "healthy") status = "degraded";
     reasons.push("failed cycles in 24h");
+  }
+  if (stats.staleRunningCycles > 0) {
+    status = "critical";
+    reasons.push("stale running cycles");
   }
   if (stats.pendingNotifications > 5) {
     if (status === "healthy") status = "degraded";

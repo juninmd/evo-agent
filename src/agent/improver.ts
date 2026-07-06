@@ -19,6 +19,19 @@ const DEFAULT_SEARCH_KEYWORDS = [
   "AI agents architecture",
 ];
 
+export interface ImprovementResponse {
+  improved_system_prompt: string;
+  updated_keywords: string[];
+  extra_sources: Array<{ name: string; url: string; tags: string[] }>;
+  code_snippet: {
+    title: string;
+    language: string;
+    code: string;
+    explanation: string;
+  } | null;
+  reasoning: string;
+}
+
 export function getSystemPrompt(): string {
   return db.getState("system_prompt") ?? DEFAULT_SYSTEM_PROMPT;
 }
@@ -31,6 +44,48 @@ export function getSearchKeywords(): string[] {
   } catch {
     return DEFAULT_SEARCH_KEYWORDS;
   }
+}
+
+function repairBacktickStrings(value: string): string {
+  let inString = false;
+  let escaped = false;
+  let repaired = "";
+  for (let i = 0; i < value.length; i++) {
+    const char = value[i];
+    if (escaped) {
+      repaired += char;
+      escaped = false;
+      continue;
+    }
+    if (char === "\\") {
+      repaired += char;
+      escaped = true;
+      continue;
+    }
+    if (char === '"') {
+      inString = !inString;
+      repaired += char;
+      continue;
+    }
+    if (!inString && char === "`") {
+      let content = "";
+      i++;
+      for (; i < value.length; i++) {
+        if (value[i] === "`" && value[i - 1] !== "\\") break;
+        content += value[i];
+      }
+      repaired += JSON.stringify(content);
+      continue;
+    }
+    repaired += char;
+  }
+  return repaired;
+}
+
+export function parseImprovementResponse(text: string): ImprovementResponse {
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error("No JSON found");
+  return JSON.parse(repairBacktickStrings(jsonMatch[0])) as ImprovementResponse;
 }
 
 export async function runImprovementCycle() {
@@ -97,20 +152,7 @@ code_snippet should be a useful TypeScript pattern learned from the content, or 
   }
 
   try {
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error("No JSON found");
-    const result = JSON.parse(jsonMatch[0]) as {
-      improved_system_prompt: string;
-      updated_keywords: string[];
-      extra_sources: Array<{ name: string; url: string; tags: string[] }>;
-      code_snippet: {
-        title: string;
-        language: string;
-        code: string;
-        explanation: string;
-      } | null;
-      reasoning: string;
-    };
+    const result = parseImprovementResponse(text);
 
     const keywords = result.updated_keywords
       .map((k) => k.slice(0, 60).trim())
@@ -140,6 +182,7 @@ code_snippet should be a useful TypeScript pattern learned from the content, or 
     const promotion = promotePromptCandidate(db, result.improved_system_prompt);
     if (!promotion.promoted) {
       log.warn(`Improvement prompt rejected: ${promotion.reason}`);
+      return;
     }
     db.setState("search_keywords", JSON.stringify(keywords));
     if (result.extra_sources?.length) {

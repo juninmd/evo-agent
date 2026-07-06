@@ -56,6 +56,31 @@ describe("notification outbox", () => {
     );
   });
 
+  it("stores delivery error returned by sender", async () => {
+    const store = {
+      getPendingNotifications: vi.fn().mockReturnValue([item(0)]),
+      markNotificationDelivered: vi.fn(),
+      markNotificationFailed: vi.fn(),
+    };
+    const now = new Date("2026-06-12T12:00:00Z");
+
+    await processNotificationOutbox(
+      store,
+      vi.fn().mockResolvedValue({
+        delivered: false,
+        error: "Telegram API 401: Unauthorized",
+      }),
+      { now, maxAttempts: 5 },
+    );
+
+    expect(store.markNotificationFailed).toHaveBeenCalledWith(
+      "https://example.com/article",
+      "Telegram API 401: Unauthorized",
+      nextRetryAt(now, 1),
+      false,
+    );
+  });
+
   it("moves exhausted notifications to dead-letter", async () => {
     const store = {
       getPendingNotifications: vi.fn().mockReturnValue([item(4)]),

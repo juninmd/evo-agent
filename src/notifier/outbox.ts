@@ -19,7 +19,7 @@ export interface NotificationOutboxStore {
 
 export type NotificationSender = (
   notification: PendingNotification,
-) => Promise<boolean>;
+) => Promise<boolean | { delivered: boolean; error?: string }>;
 
 export function nextRetryAt(now: Date, attempt: number): string {
   const delayMs = Math.min(
@@ -40,7 +40,11 @@ export async function processNotification(
   let delivered = false;
   let error = "delivery returned false";
   try {
-    delivered = await sender(notification);
+    const result = await sender(notification);
+    delivered = typeof result === "boolean" ? result : result.delivered;
+    if (typeof result !== "boolean" && result.error) {
+      error = result.error;
+    }
   } catch (cause) {
     error = cause instanceof Error ? cause.message : String(cause);
   }

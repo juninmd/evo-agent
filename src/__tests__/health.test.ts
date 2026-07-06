@@ -8,6 +8,7 @@ describe("operational health", () => {
         pendingNotifications: 0,
         deadLetterNotifications: 0,
         failedCycles24h: 0,
+        staleRunningCycles: 0,
         successfulCycles24h: 3,
         recentArticles: 20,
         recentPrimarySources: 4,
@@ -20,6 +21,7 @@ describe("operational health", () => {
       pendingNotifications: 1,
       deadLetterNotifications: 0,
       failedCycles24h: 0,
+      staleRunningCycles: 0,
       successfulCycles24h: 2,
       recentArticles: 12,
       recentPrimarySources: 0,
@@ -34,6 +36,7 @@ describe("operational health", () => {
       pendingNotifications: 0,
       deadLetterNotifications: 1,
       failedCycles24h: 2,
+      staleRunningCycles: 0,
       successfulCycles24h: 0,
       recentArticles: 0,
       recentPrimarySources: 0,
@@ -42,5 +45,20 @@ describe("operational health", () => {
     expect(result.status).toBe("critical");
     expect(result.reasons).toContain("notifications in dead-letter");
     expect(result.reasons).toContain("no successful cycle in 24h");
+  });
+
+  it("is critical when stale cycles are still marked running", () => {
+    const result = evaluateHealth({
+      pendingNotifications: 0,
+      deadLetterNotifications: 0,
+      failedCycles24h: 0,
+      staleRunningCycles: 1,
+      successfulCycles24h: 2,
+      recentArticles: 10,
+      recentPrimarySources: 2,
+    });
+
+    expect(result.status).toBe("critical");
+    expect(result.reasons).toContain("stale running cycles");
   });
 });

@@ -5,7 +5,19 @@ const levels = { debug: 0, info: 1, warn: 2, error: 3 };
 export function redactLogValue(value: string): string {
   return value
     .replace(/(Bearer\s+)[^\s]+/gi, "$1[REDACTED]")
-    .replace(/((?:TOKEN|API_KEY|PASSWORD|SECRET)=)[^\s]+/gi, "$1[REDACTED]");
+    .replace(/((?:TOKEN|API_KEY|PASSWORD|SECRET)=)[^\s]+/gi, "$1[REDACTED]")
+    .replace(/(bot)[0-9]+:[A-Za-z0-9_-]+/g, "$1[REDACTED]");
+}
+
+function redactContext(
+  context: Record<string, unknown>,
+): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(context).map(([key, value]) => [
+      key,
+      typeof value === "string" ? redactLogValue(value) : value,
+    ]),
+  );
 }
 
 function write(
@@ -22,7 +34,7 @@ function write(
           timestamp: ts,
           level: l,
           message,
-          ...(context ? { context } : {}),
+          ...(context ? { context: redactContext(context) } : {}),
         }),
       );
       return;

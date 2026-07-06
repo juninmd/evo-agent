@@ -14,6 +14,7 @@ Critical:
 
 - no successful cycle in 24 hours
 - any notification in dead-letter
+- stale cycle still marked as running after six hours
 
 Degraded:
 
@@ -45,7 +46,14 @@ replace the active prompt.
 
 Telegram delivery uses the publication table as an outbox. Failed messages use
 exponential backoff from five minutes to six hours. Five failed attempts move
-the item to `dead_letter`.
+the item to `dead_letter`. Telegram API errors are stored in
+`notification_error` without logging bot tokens.
+
+## Cycle recovery
+
+On startup, cycles left as `running` for more than six hours are marked failed
+with `cycle abandoned by previous process`. This makes pod restarts visible in
+`npm run health` instead of hiding old work as still active.
 
 ## Metrics
 
@@ -58,4 +66,4 @@ the item to `dead_letter`.
 - automatic prompt rollback events
 
 Logs default to JSON. Set `LOG_FORMAT=text` for local interactive output.
-Credentials and bearer tokens are redacted before logging.
+Credentials, bearer tokens, and Telegram bot URLs are redacted before logging.

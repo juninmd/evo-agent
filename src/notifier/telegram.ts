@@ -5,7 +5,33 @@ import { log } from "../utils/logger.js";
 
 const BASE = `https://api.telegram.org/bot${config.telegram.botToken}`;
 
-export async function sendMessage(text: string): Promise<boolean> {
+export interface TelegramDeliveryResult {
+  delivered: boolean;
+  error?: string;
+}
+
+function telegramError(err: unknown): string {
+  if (!axios.isAxiosError(err)) {
+    return err instanceof Error ? err.message : String(err);
+  }
+
+  const status = err.response?.status;
+  const description =
+    typeof err.response?.data === "object" &&
+    err.response.data !== null &&
+    "description" in err.response.data &&
+    typeof err.response.data.description === "string"
+      ? err.response.data.description
+      : err.message;
+
+  return status
+    ? `Telegram API ${status}: ${description}`
+    : `Telegram network error: ${err.message}`;
+}
+
+export async function sendMessage(
+  text: string,
+): Promise<TelegramDeliveryResult> {
   try {
     await axios.post(
       `${BASE}/sendMessage`,
@@ -18,10 +44,11 @@ export async function sendMessage(text: string): Promise<boolean> {
       { timeout: 10000 },
     );
     log.info("Telegram message sent");
-    return true;
+    return { delivered: true };
   } catch (err) {
-    log.error(`Telegram failed: ${(err as Error).message}`);
-    return false;
+    const error = telegramError(err);
+    log.error(`Telegram failed: ${error}`);
+    return { delivered: false, error };
   }
 }
 
@@ -30,7 +57,7 @@ export async function notifyNewArticle(
   url: string,
   summary: string,
   sources: string[] = [],
-): Promise<boolean> {
+): Promise<TelegramDeliveryResult> {
   const sourcesText =
     sources.length > 0
       ? `\n\n<b>Fontes originais:</b>\n${sources.map((s) => `• ${escapeHtml(s)}`).join("\n")}`
@@ -44,7 +71,7 @@ export async function notifyWeeklyReport(
   title: string,
   url: string,
   summary: string,
-): Promise<boolean> {
+): Promise<TelegramDeliveryResult> {
   const msg = `<b>Relatório Semanal — Evo Agent</b>\n\n<b>${escapeHtml(title)}</b>\n\n${escapeHtml(summary)}\n\n<a href="${escapeHtml(url)}">Ler relatório completo</a>`;
   return sendMessage(msg);
 }

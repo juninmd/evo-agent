@@ -49,6 +49,8 @@ export interface CurationResult {
     rejected: number;
     buckets: Record<string, number>;
     primarySources: number;
+    communitySignals: number;
+    redditSignals: number;
   };
 }
 
@@ -59,6 +61,8 @@ export interface CurationPolicy {
   requirePrimary?: boolean;
   minSummaryLength?: number;
   maxPrimaryShare?: number;
+  minCommunitySignals?: number;
+  minRedditSignals?: number;
   now?: number;
 }
 
@@ -117,6 +121,10 @@ export function isPrimarySource(article: Article): boolean {
   }
 }
 
+export function isCommunitySignal(article: Article): boolean {
+  return /reddit|hacker news|tabnews|community/i.test(article.source);
+}
+
 function titleSimilarity(left: string, right: string): number {
   const a = new Set(normalizeTitle(left).split(" ").filter(Boolean));
   const b = new Set(normalizeTitle(right).split(" ").filter(Boolean));
@@ -140,9 +148,11 @@ function editorialScore(
   const authority = isPrimarySource(article) ? 35 : 0;
   const communitySignal =
     sourceBucket(article.source) === "reddit"
-      ? 12
+      ? parseTags(article.tags).includes("community-signals")
+        ? 20
+        : 16
       : /hackernews|tabnews/.test(sourceBucket(article.source))
-        ? 6
+        ? 8
         : 0;
   const summaryQuality = Math.min(article.summary.trim().length / 300, 1) * 15;
   const usefulTags = parseTags(article.tags).filter(
@@ -269,6 +279,64 @@ export function curateArticles(
     }
   }
 
+  const minCommunity = Math.min(
+    policy.minCommunitySignals ?? 0,
+    Math.max(0, max - (policy.requirePrimary ? 1 : 0)),
+  );
+  const selectedUrls = () =>
+    new Set(selected.map((candidate) => candidate.article.url));
+  const selectedCommunityCount = () =>
+    selected.filter((candidate) => isCommunitySignal(candidate.article)).length;
+  const selectedRedditCount = () =>
+    selected.filter(
+      (candidate) => sourceBucket(candidate.article.source) === "reddit",
+    ).length;
+  const replaceWith = (candidate: CuratedArticle) => {
+    const replaceIndex = selected.findIndex(
+      (selectedCandidate) =>
+        !selectedCandidate.primary &&
+        !isCommunitySignal(selectedCandidate.article),
+    );
+    const fallbackReplaceIndex = selected.findIndex(
+      (selectedCandidate) => !selectedCandidate.primary,
+    );
+    const index = replaceIndex >= 0 ? replaceIndex : fallbackReplaceIndex;
+    if (index < 0) return false;
+    const displaced = selected[index];
+    rejected.push({ article: displaced.article, reason: "max-limit" });
+    selected[index] = candidate;
+    return true;
+  };
+  const minReddit = Math.min(
+    policy.minRedditSignals ?? 0,
+    Math.max(0, max - (policy.requirePrimary ? 1 : 0)),
+  );
+  const redditCandidates = deduped.filter(
+    (candidate) =>
+      sourceBucket(candidate.article.source) === "reddit" &&
+      !selectedUrls().has(candidate.article.url),
+  );
+  for (const reddit of redditCandidates) {
+    if (selectedRedditCount() >= minReddit) break;
+    if (!replaceWith(reddit)) break;
+  }
+  const communityCandidates = deduped
+    .filter(
+      (candidate) =>
+        isCommunitySignal(candidate.article) &&
+        !selectedUrls().has(candidate.article.url),
+    )
+    .sort((a, b) => {
+      const redditDelta =
+        Number(sourceBucket(b.article.source) === "reddit") -
+        Number(sourceBucket(a.article.source) === "reddit");
+      return redditDelta || b.score - a.score;
+    });
+  for (const community of communityCandidates) {
+    if (selectedCommunityCount() >= minCommunity) break;
+    if (!replaceWith(community)) break;
+  }
+
   const buckets = Object.fromEntries(
     [...new Set(selected.map((item) => sourceBucket(item.article.source)))].map(
       (bucket) => [
@@ -288,6 +356,12 @@ export function curateArticles(
       rejected: rejected.length,
       buckets,
       primarySources: selected.filter((candidate) => candidate.primary).length,
+      communitySignals: selected.filter((candidate) =>
+        isCommunitySignal(candidate.article),
+      ).length,
+      redditSignals: selected.filter(
+        (candidate) => sourceBucket(candidate.article.source) === "reddit",
+      ).length,
     },
   };
 }
