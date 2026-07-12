@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>71</strong> artigos</span>
-    <span><strong>20</strong> relatorios</span>
+    <span><strong>21</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-12">2026-07-12</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-12-criacao-de-agentes-inteligentes-com-claude-e-openai">Criação de Agentes Inteligentes com Claude e OpenAI</a></h3>
+  <p>Desenvolvimentos em agentes inteligentes e aplicativos de LLM, com foco em Claude e OpenAI.</p>
+  <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>the</span><span>openai</span><span>tabnews</span><span>reddit</span><span>github-trending</span><span>ml</span><span>research</span><span>developer</span><span>br</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-05">2026-07-05</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-05-anthropic-lanca-claude-sonnet-5-com-desempenho-aprimorado-e-precos-competitivos">Anthropic Lança Claude Sonnet 5 com Desempenho Aprimorado e Preços Competitivos</a></h3>
   <p>A Anthropic lançou o Claude Sonnet 5, oferecendo desempenho próximo ao do Opus 4.8 a preços mais baixos. Usuários relatam experiências mistas com o Fable 5, destacando tanto capacidades quanto limitações.</p>
