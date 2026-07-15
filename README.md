@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>74</strong> artigos</span>
-    <span><strong>21</strong> relatorios</span>
+    <span><strong>22</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,15 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-15">2026-07-15</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-07-15-relatorio-quinzenal-llm-e-agentes-01-07-2026-a-15-07-2026">Relatório Quinzenal: LLM e Agentes – 01/07/2026 a 15/07/2026</a></h3>
+  <p>Finetuning de LLMs para Raciocínio – Debate sobre usar Supervised versus Reinforcement Learning na adaptação de modelos de linguagem, destacando trade‑offs entre coerência e feedback de recompensa. Discussão Hacker Newshttps://discuss.huggingface.co/t/finetuningareasoningllmwithsupervisedorreinforcementlearning/176449.  
+ Introdução ao RL em LLMs – Explicação do papel dos algoritmos de reforço para melhorar a capacidade de raciocínio de LLMs, potencializando a robustez em tarefas complexas. Hugging Face LLm coursehttps://huggingface.co/learn/llmcourse/en/chapter12/2.  
+ J‑Space: LLM como Leitor de Mente – Nova ferramenta que testa a previsibilidade de pensamentos com LLMs, desafiando limites de interpretação contextual. Hugging Face Bloghttps://huggingface.co/blog/dlouapre/jspace.  
+ Model</p>
+  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-12">2026-07-12</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-12-criacao-de-agentes-inteligentes-com-claude-e-openai">Criação de Agentes Inteligentes com Claude e OpenAI</a></h3>
   <p>Desenvolvimentos em agentes inteligentes e aplicativos de LLM, com foco em Claude e OpenAI.</p>
