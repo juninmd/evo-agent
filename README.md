@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>77</strong> artigos</span>
-    <span><strong>22</strong> relatorios</span>
+    <span><strong>23</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-19">2026-07-19</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-19-claude-fable-5-e-a-economia-da-ia">Claude Fable 5 e a Economia da IA</a></h3>
+  <p>Limites aumentados e mudanças na faturamento da Anthropic, impactando a indústria de IA e a infraestrutura de computação.</p>
+  <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>together</span><span>google-news</span><span>openai</span><span>reddit</span><span>developer</span><span>ai frontier</span><span>togetherai</span><span>anthropic fable5 pricing</span><span>vscode</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-15">2026-07-15</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-07-15-relatorio-quinzenal-llm-e-agentes-01-07-2026-a-15-07-2026">Relatório Quinzenal: LLM e Agentes – 01/07/2026 a 15/07/2026</a></h3>
   <p>Finetuning de LLMs para Raciocínio – Debate sobre usar Supervised versus Reinforcement Learning na adaptação de modelos de linguagem, destacando trade‑offs entre coerência e feedback de recompensa. Discussão Hacker Newshttps://discuss.huggingface.co/t/finetuningareasoningllmwithsupervisedorreinforcementlearning/176449.  
