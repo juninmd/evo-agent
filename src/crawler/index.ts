@@ -164,16 +164,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://openai.com/blog/rss.xml",
     tags: ["openai", "ai"],
   },
-  {
-    name: "Meta AI Research",
-    url: "https://www.facebook.com/feeds/page.php?id=156735707772349&format=rss20",
-    tags: ["meta", "ai", "research"],
-  },
-  {
-    name: "Stability AI",
-    url: "https://stability.ai/blog/feed",
-    tags: ["stability", "ai", "diffusion"],
-  },
   // Developer tools & IDEs com IA
   {
     name: "VSCode Updates",
@@ -190,16 +180,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "GitHub Blog",
     url: "https://github.blog/feed/",
     tags: ["github", "developer", "ai"],
-  },
-  {
-    name: "Cursor IDE",
-    url: "https://cursor.sh/blog/feed",
-    tags: ["cursor", "ai-coding", "ide"],
-  },
-  {
-    name: "Windsurf Blog",
-    url: "https://www.codeium.com/windsurf",
-    tags: ["windsurf", "ai-coding", "ide"],
   },
   // ML/AI Platforms & Tools
   {
@@ -221,11 +201,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Distill.pub",
     url: "https://distill.pub/rss.xml",
     tags: ["ai", "ml", "visualization", "research"],
-  },
-  {
-    name: "Papers with Code",
-    url: "https://paperswithcode.com/papers.rss",
-    tags: ["papers", "code", "ml", "research"],
   },
   // Research papers
   {
@@ -423,24 +398,9 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
   // AI Research & Leaders
   {
-    name: "The Batch (Andrew Ng)",
-    url: "https://www.thebatch.ai/rss",
-    tags: ["ai", "newsletter", "research"],
-  },
-  {
-    name: "OpenAI Research",
-    url: "https://openai.com/research/rss.xml",
-    tags: ["openai", "ai", "research"],
-  },
-  {
-    name: "Jeremy Howard's Fast.ai",
-    url: "https://www.fast.ai/feed.xml",
-    tags: ["ai", "ml", "education"],
-  },
-  {
-    name: "ARC Prize Updates",
-    url: "https://arcprize.org/",
-    tags: ["ai", "research", "reasoning"],
+    name: "OpenAI Blog",
+    url: "https://openai.com/blog/rss.xml",
+    tags: ["openai", "ai", "blog"],
   },
   {
     name: "Anthropic Research",
@@ -449,11 +409,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     html: { hrefPrefix: "/research/", baseUrl: "https://www.anthropic.com" },
   },
   // Data Science & Analytics (IA-focused)
-  {
-    name: "DataCamp Blog",
-    url: "https://www.datacamp.com/blog/feed",
-    tags: ["python", "data", "ai"],
-  },
   {
     name: "Towards Data Science (Medium)",
     url: "https://towardsdatascience.com/feed",
@@ -580,7 +535,14 @@ const GITHUB_TRENDING_AI_KEYWORDS = [
   "quantization",
 ];
 
-const GITHUB_TRENDING_LANGUAGES = ["Python", "TypeScript", "JavaScript", "Go", "Rust", "Java"];
+const GITHUB_TRENDING_LANGUAGES = [
+  "Python",
+  "TypeScript",
+  "JavaScript",
+  "Go",
+  "Rust",
+  "Java",
+];
 
 async function crawlGitHubTrending(): Promise<number> {
   let newCount = 0;
