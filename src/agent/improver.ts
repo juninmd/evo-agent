@@ -12,11 +12,57 @@ diagrams instead of pseudocode, and always cite sources. You learn from the late
 continuously improve your curation and clarity.`;
 
 const DEFAULT_SEARCH_KEYWORDS = [
+  // IA & LLM core
   "AI developer tools",
   "LLM coding assistant",
   "prompt engineering",
-  "TypeScript best practices",
   "AI agents architecture",
+  "agentic workflow",
+  "RAG Retrieval Augmented Generation",
+  "transformer models",
+  "fine-tuning LLMs",
+  "multimodal AI",
+  "vision language models",
+  // IA/ML específicos
+  "machine learning deployment",
+  "neural network architecture",
+  "computer vision CNN",
+  "natural language processing",
+  "deep learning frameworks",
+  "model optimization",
+  "inference acceleration",
+  // Ferramentas de IA
+  "AI coding assistants",
+  "Claude API",
+  "GPT integration",
+  "open source LLM",
+  "local LLM deployment",
+  // Agent Development
+  "LangChain framework",
+  "CrewAI agents",
+  "multi-agent systems",
+  "agent orchestration",
+  "tool use agents",
+  "autonomous agents",
+  // Research & Papers
+  "AI research papers",
+  "machine learning papers",
+  "transformer architecture",
+  "attention mechanism",
+  // Python para IA
+  "Python AI libraries",
+  "PyTorch",
+  "TensorFlow",
+  "Hugging Face",
+  "scikit-learn",
+  // Comunidades open source
+  "open source AI",
+  "AI model hugging face",
+  "LLM fine-tuning",
+  // Produtos e tendências
+  "AI product launches",
+  "AI startup news",
+  "machine learning trends",
 ];
 
 export interface ImprovementResponse {

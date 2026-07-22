@@ -58,6 +58,7 @@ interface RedditPostCandidate {
 }
 
 const REDDIT_COMMUNITY_SUBREDDITS = [
+  // IA/LLM Core
   "LocalLLaMA",
   "MachineLearning",
   "OpenAI",
@@ -78,6 +79,7 @@ const REDDIT_COMMUNITY_SUBREDDITS = [
   "StableDiffusion",
   "comfyui",
   "SoraAi",
+  // Development tools com IA
   "Cursor",
   "CursorIDE",
   "WindsurfAI",
@@ -87,6 +89,22 @@ const REDDIT_COMMUNITY_SUBREDDITS = [
   "kilocode",
   "opencode",
   "MCP",
+  // Linguagens de programação (foco em IA/agents)
+  "Python",
+  "TypeScript",
+  "node",
+  "golang",
+  "rust",
+  // IA/ML específicos
+  "neuralnetworks",
+  "LanguageModels",
+  "Tensorflow",
+  "learnmachinelearning",
+  "reinforcementlearning",
+  "datascience",
+  // Development & Tools
+  "learnprogramming",
+  "coding",
 ];
 
 const REDDIT_USER_AGENT =
@@ -129,6 +147,7 @@ const V2EX_AI_KEYWORDS = [
 ];
 
 const DEFAULT_SOURCES: FeedSource[] = [
+  // Grandes empresas de IA
   {
     name: "Google AI Blog",
     url: "https://blog.google/technology/ai/rss/",
@@ -146,21 +165,43 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["openai", "ai"],
   },
   {
+    name: "Meta AI Research",
+    url: "https://www.facebook.com/feeds/page.php?id=156735707772349&format=rss20",
+    tags: ["meta", "ai", "research"],
+  },
+  {
+    name: "Stability AI",
+    url: "https://stability.ai/blog/feed",
+    tags: ["stability", "ai", "diffusion"],
+  },
+  // Developer tools & IDEs com IA
+  {
     name: "VSCode Updates",
     url: "https://code.visualstudio.com/feed.xml",
-    tags: ["vscode", "tools", "developer"],
+    tags: ["vscode", "tools", "ai-assistant"],
   },
   {
     name: "VSCode Blogs",
     url: "https://code.visualstudio.com/blogs",
-    tags: ["vscode", "tools", "developer", "ai"],
+    tags: ["vscode", "tools", "ai-assistant"],
     html: { hrefPrefix: "/blogs/", baseUrl: "https://code.visualstudio.com" },
   },
   {
-    name: "The GitHub Blog",
+    name: "GitHub Blog",
     url: "https://github.blog/feed/",
     tags: ["github", "developer", "ai"],
   },
+  {
+    name: "Cursor IDE",
+    url: "https://cursor.sh/blog/feed",
+    tags: ["cursor", "ai-coding", "ide"],
+  },
+  {
+    name: "Windsurf Blog",
+    url: "https://www.codeium.com/windsurf",
+    tags: ["windsurf", "ai-coding", "ide"],
+  },
+  // ML/AI Platforms & Tools
   {
     name: "Hugging Face Blog",
     url: "https://huggingface.co/blog/feed.xml",
@@ -171,6 +212,22 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://lilianweng.github.io/index.xml",
     tags: ["ai", "ml", "research", "llm"],
   },
+  {
+    name: "Colah's Blog",
+    url: "http://colah.github.io/rss.xml",
+    tags: ["ai", "ml", "neural-networks", "research"],
+  },
+  {
+    name: "Distill.pub",
+    url: "https://distill.pub/rss.xml",
+    tags: ["ai", "ml", "visualization", "research"],
+  },
+  {
+    name: "Papers with Code",
+    url: "https://paperswithcode.com/papers.rss",
+    tags: ["papers", "code", "ml", "research"],
+  },
+  // Research papers
   {
     name: "arXiv cs.AI",
     url: "https://rss.arxiv.org/rss/cs.AI",
@@ -196,6 +253,11 @@ const DEFAULT_SOURCES: FeedSource[] = [
       "research",
       "papers",
     ],
+  },
+  {
+    name: "arXiv cs.CV",
+    url: "https://rss.arxiv.org/rss/cs.CV",
+    tags: ["arxiv", "computer-vision", "ai", "research", "papers"],
   },
   {
     name: "Reddit: ClaudeAI",
@@ -282,6 +344,37 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://www.reddit.com/search/.rss?q=claude+code&sort=new",
     tags: ["reddit", "claude", "coding", "ai", "search"],
   },
+  // AI coding tools specific
+  {
+    name: "Reddit Search: Claude AI",
+    url: "https://www.reddit.com/search/.rss?q=claude+ai+coding&sort=new",
+    tags: ["reddit", "claude", "ai-coding", "search"],
+  },
+  {
+    name: "Reddit Search: Cursor IDE",
+    url: "https://www.reddit.com/search/.rss?q=cursor+ide&sort=new",
+    tags: ["reddit", "cursor", "ai-coding", "search"],
+  },
+  {
+    name: "Reddit Search: GitHub Copilot tips",
+    url: "https://www.reddit.com/search/.rss?q=github+copilot+tips&sort=new",
+    tags: ["reddit", "copilot", "ai-coding", "search"],
+  },
+  {
+    name: "Reddit Search: prompt engineering",
+    url: "https://www.reddit.com/search/.rss?q=prompt+engineering&sort=new",
+    tags: ["reddit", "prompt-eng", "llm", "search"],
+  },
+  {
+    name: "Reddit Search: LLM agents",
+    url: "https://www.reddit.com/search/.rss?q=llm+agents&sort=new",
+    tags: ["reddit", "agents", "llm", "search"],
+  },
+  {
+    name: "Reddit Search: RAG systems",
+    url: "https://www.reddit.com/search/.rss?q=RAG+retrieval+augmented&sort=new",
+    tags: ["reddit", "rag", "llm", "search"],
+  },
   {
     name: "V2EX Tech",
     url: "https://www.v2ex.com/feed/tab/tech.xml",
@@ -316,6 +409,61 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Hacker News: Machine Learning",
     url: "https://hnrss.org/newest?q=machine+learning+OR+deep+learning+OR+transformer&count=15",
     tags: ["hackernews", "ml", "research"],
+  },
+  // AI Agent Frameworks
+  {
+    name: "LangChain Docs & Updates",
+    url: "https://github.com/langchain-ai/langchain/releases.atom",
+    tags: ["langchain", "agents", "llm-framework"],
+  },
+  {
+    name: "CrewAI Framework",
+    url: "https://github.com/joaomdmoura/crewai/releases.atom",
+    tags: ["crewai", "agents", "llm-framework"],
+  },
+  // AI Research & Leaders
+  {
+    name: "The Batch (Andrew Ng)",
+    url: "https://www.thebatch.ai/rss",
+    tags: ["ai", "newsletter", "research"],
+  },
+  {
+    name: "OpenAI Research",
+    url: "https://openai.com/research/rss.xml",
+    tags: ["openai", "ai", "research"],
+  },
+  {
+    name: "Jeremy Howard's Fast.ai",
+    url: "https://www.fast.ai/feed.xml",
+    tags: ["ai", "ml", "education"],
+  },
+  {
+    name: "ARC Prize Updates",
+    url: "https://arcprize.org/",
+    tags: ["ai", "research", "reasoning"],
+  },
+  {
+    name: "Anthropic Research",
+    url: "https://www.anthropic.com/research",
+    tags: ["anthropic", "research", "ai"],
+    html: { hrefPrefix: "/research/", baseUrl: "https://www.anthropic.com" },
+  },
+  // Data Science & Analytics (IA-focused)
+  {
+    name: "DataCamp Blog",
+    url: "https://www.datacamp.com/blog/feed",
+    tags: ["python", "data", "ai"],
+  },
+  {
+    name: "Towards Data Science (Medium)",
+    url: "https://towardsdatascience.com/feed",
+    tags: ["medium", "data", "ai", "ml"],
+  },
+  // Product showcase
+  {
+    name: "Product Hunt (AI category)",
+    url: "https://www.producthunt.com/feed?category=artificial-intelligence",
+    tags: ["producthunt", "ai", "products"],
   },
 ];
 
@@ -370,45 +518,69 @@ function getDynamicSources(): FeedSource[] {
 }
 
 const GITHUB_TRENDING_AI_KEYWORDS = [
+  // IA/LLM core
   "ai",
   "agent",
-  "claude",
-  "codex",
-  "copilot",
-  "gpt",
+  "agents",
   "llm",
   "model",
   "ml",
+  "chat",
+  "gpt",
+  "claude",
+  "codex",
+  // Ferramentas e plataformas
+  "anthropic",
+  "openai",
+  "huggingface",
   "deepseek",
   "gemini",
-  "opus",
   "qwen",
-  "cursor",
+  "mistral",
+  // Frameworks e bibliotecas
+  "langchain",
+  "crewai",
+  "autogen",
+  "vllm",
+  "ollama",
   "litellm",
-  "mcp",
+  "llamaindex",
+  // Técnicas específicas
   "rag",
+  "retrieval",
   "embedding",
+  "vector",
+  "prompt",
+  "fine-tun",
+  "training",
+  "inference",
+  // Modelos e arquitetura
   "transformer",
   "diffusion",
   "neural",
-  "inference",
-  "fine-tun",
-  "openai",
-  "anthropic",
-  "huggingface",
-  "langchain",
-  "ollama",
-  "vllm",
-  "whisper",
-  "stable-diffusion",
+  "attention",
+  "convolution",
+  // Casos de uso
+  "chatbot",
+  "assistant",
+  "copilot",
+  "nlp",
+  "computer-vision",
   "text-to-speech",
   "speech-to-text",
-  "computer-vision",
-  "nlp",
-  "chatbot",
-  "prompt",
+  "image-generation",
+  // Ferramentas de dev
+  "cursor",
+  "codiumai",
+  "comet",
+  "wandb",
+  // Infraestrutura
+  "mcp",
   "tokenizer",
+  "quantization",
 ];
+
+const GITHUB_TRENDING_LANGUAGES = ["Python", "TypeScript", "JavaScript", "Go", "Rust", "Java"];
 
 async function crawlGitHubTrending(): Promise<number> {
   let newCount = 0;
@@ -425,9 +597,29 @@ async function crawlGitHubTrending(): Promise<number> {
     });
     const page = await context.newPage();
 
-    for (const range of ["daily", "weekly"] as const) {
+    // Trending geral + trending por linguagem de IA
+    const queries: Array<{ label: string; url: string }> = [
+      {
+        label: "daily",
+        url: "https://github.com/trending?since=daily",
+      },
+      {
+        label: "weekly",
+        url: "https://github.com/trending?since=weekly",
+      },
+    ];
+
+    // Add language-specific trending
+    for (const lang of GITHUB_TRENDING_LANGUAGES) {
+      queries.push({
+        label: `daily-${lang.toLowerCase()}`,
+        url: `https://github.com/trending/${lang.toLowerCase()}?since=daily`,
+      });
+    }
+
+    for (const { label, url } of queries) {
       try {
-        await page.goto(`https://github.com/trending?since=${range}`, {
+        await page.goto(url, {
           waitUntil: "networkidle",
           timeout: 30000,
         });
@@ -435,7 +627,7 @@ async function crawlGitHubTrending(): Promise<number> {
         const repos = await page.evaluate(() => {
           const articles = document.querySelectorAll("article.Box-row");
           return Array.from(articles)
-            .slice(0, 25)
+            .slice(0, 50)
             .map((article) => {
               const link = article.querySelector("h2 a");
               const desc = article.querySelector("p");
@@ -477,14 +669,14 @@ async function crawlGitHubTrending(): Promise<number> {
           const starCount = parseGitHubStarCount(repo.stars);
           db.saveArticle({
             title: repo.name,
-            source: `GitHub Trending (${range})`,
+            source: `GitHub Trending (${label})`,
             url: repo.url,
             summary,
             tags: JSON.stringify([
               "github",
               "trending",
               "ai",
-              range,
+              label,
               repo.language?.toLowerCase() ?? "unknown",
             ]),
             engagement_score: starCount,
@@ -492,8 +684,8 @@ async function crawlGitHubTrending(): Promise<number> {
           newCount++;
         }
       } catch (err) {
-        log.warn(
-          `GitHub Trending (${range}) failed: ${(err as Error).message}`,
+        log.debug(
+          `GitHub Trending (${label}) skipped: ${(err as Error).message}`,
         );
       }
     }
@@ -988,6 +1180,78 @@ export function summarizeSourceContent(value: string, maxLength = 800): string {
     .slice(0, maxLength);
 }
 
+async function crawlAiCommunityPosts(): Promise<number> {
+  let newCount = 0;
+  const aiTags = ["ai", "llm", "machine-learning", "agents"];
+
+  // Dev.to (AI-focused)
+  for (const tag of aiTags) {
+    try {
+      const url = `https://dev.to/api/articles?tag=${tag}&top=7&per_page=25`;
+      const response = await axios.get(url, { timeout: 10000 });
+      const articles = response.data ?? [];
+
+      for (const item of articles) {
+        if (!item.url || !item.title) continue;
+        if (db.urlExists(item.url)) continue;
+
+        const summary = summarizeSourceContent(item.description ?? "", 500);
+        const engagement =
+          (item.positive_reactions_count ?? 0) + (item.comments_count ?? 0) * 2;
+
+        db.saveArticle({
+          title: item.title,
+          source: `Dev.to (${tag})`,
+          url: item.url,
+          summary,
+          tags: JSON.stringify(["devto", "community", tag, "ai"]),
+          engagement_score: engagement,
+        });
+        newCount++;
+      }
+    } catch (err) {
+      log.debug(`Dev.to (${tag}) crawler: ${(err as Error).message}`);
+    }
+  }
+
+  // Hashnode (AI-focused)
+  const hashnoteTags = ["artificial-intelligence", "llm", "machine-learning"];
+  for (const tag of hashnoteTags) {
+    try {
+      const url = `https://hashnode.com/api/v1/posts?tagSlug=${tag}&limit=15`;
+      const response = await axios.get(url, { timeout: 10000 });
+      const posts = response.data?.posts ?? [];
+
+      for (const item of posts) {
+        if (!item.url || !item.title) continue;
+        if (db.urlExists(item.url)) continue;
+
+        const summary = summarizeSourceContent(
+          item.subtitle ?? item.brief ?? "",
+          500,
+        );
+        const engagement =
+          (item.reactionCount ?? 0) + (item.responseCount ?? 0) * 2;
+
+        db.saveArticle({
+          title: item.title,
+          source: `Hashnode (${tag})`,
+          url: item.url,
+          summary,
+          tags: JSON.stringify(["hashnode", "community", tag, "ai"]),
+          engagement_score: engagement,
+        });
+        newCount++;
+      }
+    } catch (err) {
+      log.debug(`Hashnode (${tag}) crawler: ${(err as Error).message}`);
+    }
+  }
+
+  log.info(`Crawled AI community posts, ${newCount} new articles`);
+  return newCount;
+}
+
 async function crawlLinkedInTopContent(url: string): Promise<number> {
   log.info(`Crawling LinkedIn Top Content: ${url}`);
   const browser = await chromium.launch({
@@ -1270,15 +1534,10 @@ export async function crawlAll(): Promise<CrawlReport> {
   metrics["SearXNG (keywords)"] = { saved: searxngSaved, failed: false };
 
   const extras: Array<{ name: string; fn: () => Promise<number> }> = [
-    {
-      name: "LinkedIn AI Trends",
-      fn: () =>
-        crawlLinkedInTopContent(
-          "https://www.linkedin.com/top-content/innovation/ai-trends-and-innovations/",
-        ),
-    },
+    { name: "AI Community Posts", fn: crawlAiCommunityPosts },
     { name: "GitHub Trending", fn: crawlGitHubTrending },
     { name: "Hacker News Algolia", fn: crawlHackerNewsAlgolia },
+    { name: "Reddit Community Signals", fn: crawlRedditCommunitySignals },
     { name: "TabNews", fn: crawlTabNews },
   ];
   for (const extra of extras) {
