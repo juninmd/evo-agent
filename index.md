@@ -187,9 +187,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>20</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>21</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-25">2026-07-25</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-25-claude-opus-5-kimi-k3-vosk-e-brasil-torrent-avaliacao-de-custo-desempenho-e-apli">Claude Opus 5, Kimi K3, Vosk e Brasil‑Torrent: Avaliação de Custo, Desempenho e Aplicações Locais</a></h3>
+  <p>A retrospectiva traz dados críticos sobre eficiência de LLMs, o novo preço do Claude Opus 5 e insights práticos de projetos locais, como o Brasil‑torrent e reconhecimento offline de wake‑word.</p>
+  <div class="chips"><span>together</span><span>google-news</span><span>tabnews</span><span>reddit</span><span>ai frontier</span><span>togetherai</span><span>anthropic fable5 pricing</span><span>br</span><span>developer</span><span>post-signals</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-24">2026-07-24</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-24-btl-3-splitbr-e-crawlee-tres-inovacoes-que-remodelam-codificacao-pagamento-e-col">BTL‑3, Splitbr e Crawlee: Três Inovações que Remodelam Codificação, Pagamento e Coleta de Dados</a></h3>
   <p>O modelo BTL‑3 traz 27B pesos livres para codificação autônoma, enquanto o Splitbr alivia a perda de acesso a split payment. Crawlee reforça pipelines RAG e dados multimodais com FLUX 3.</p>
@@ -575,7 +581,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>17</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>16</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -670,12 +676,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-weekly-report-2026-05-25">Weekly Report: Agentes de Codificação, Crise na Supply Chain e Navegação Instantânea (Período 2026-05-24 até 2026-05-30)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-navegacao-instantanea-service-worker-github-issues">Navegação Instantânea com Service Workers: Como o GitHub Issues Abandonou os 2 Segundos de Latência</a></h3>
   
   
 </article>
