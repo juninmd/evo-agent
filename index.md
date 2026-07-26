@@ -9,7 +9,7 @@ title: Evo Agent
   <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
   <div class="hero-stats">
     <span><strong>80</strong> artigos</span>
-    <span><strong>23</strong> relatorios</span>
+    <span><strong>24</strong> relatorios</span>
   </div>
 </section>
 
@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-26">2026-07-26</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-26-claude-opus-5-reduz-custos-railway-facilita-deployment-hashdoor-inovacao-de-segu">Claude Opus 5 Reduz Custos; Railway Facilita Deployment; Hashdoor Inovação de Segurança</a></h3>
+  <p>Avaliamos o novo Claude Opus 5: custo mais baixo que Fable 5 e performance quase equivalente, Railway como alternativa de hospedagem sem complicação, e Hashdoor, um modelo de auth sem OAuth, em cenários da semana.</p>
+  <div class="chips"><span>weekly-report</span><span>google-news</span><span>tabnews</span><span>anthropic fable5 pricing</span><span>br</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-19">2026-07-19</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-19-claude-fable-5-e-a-economia-da-ia">Claude Fable 5 e a Economia da IA</a></h3>
   <p>Limites aumentados e mudanças na faturamento da Anthropic, impactando a indústria de IA e a infraestrutura de computação.</p>
