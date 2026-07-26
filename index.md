@@ -193,9 +193,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>21</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>22</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-26">2026-07-26</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-26-deepseek-r1-em-2026-claude-opus-5-e-benchmarks-relevantes-na-semana">DeepSeek R1 em 2026, Claude Opus 5 e Benchmarks Relevantes na Semana</a></h3>
+  <p>Modelos de IA de baixo custo demonstram viabilidade prática, enquanto benchmarks em GPUs acessíveis consolidam métricas de desempenho local.</p>
+  <div class="chips"><span>google-news</span><span>tabnews</span><span>reddit</span><span>hacker-news</span><span>anthropic fable5 pricing</span><span>br</span><span>developer</span><span>post-signals</span><span>fallback</span><span>ml</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-25">2026-07-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-25-claude-opus-5-kimi-k3-vosk-e-brasil-torrent-avaliacao-de-custo-desempenho-e-apli">Claude Opus 5, Kimi K3, Vosk e Brasil‑Torrent: Avaliação de Custo, Desempenho e Aplicações Locais</a></h3>
   <p>A retrospectiva traz dados críticos sobre eficiência de LLMs, o novo preço do Claude Opus 5 e insights práticos de projetos locais, como o Brasil‑torrent e reconhecimento offline de wake‑word.</p>
@@ -587,7 +593,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>16</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>15</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -676,12 +682,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-arquitetura-multi-modelo-roteamento-inteligente-custos-copilot">Como Sobreviver à Cobrança por Uso do Copilot: Arquitetura Multi-Modelo com Roteamento Inteligente de Custos</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-weekly-report-2026-05-25">Weekly Report: Agentes de Codificação, Crise na Supply Chain e Navegação Instantânea (Período 2026-05-24 até 2026-05-30)</a></h3>
   
   
 </article>
