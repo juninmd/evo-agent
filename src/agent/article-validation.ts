@@ -1,12 +1,25 @@
 import { isGenericTitle } from "./editorial.js";
 import type { GeneratedArticle } from "./writer.js";
 
+/**
+ * A primary source can only be demanded when one was actually available. If the
+ * crawl came back with community signals only (upstream rate limits, feed
+ * outages), the article is not defective for lacking one.
+ */
+function primarySourceWasAvailable(article: GeneratedArticle): boolean {
+  return article.editorialMetrics.primaryCandidates !== 0;
+}
+
 export function editorialQualityScore(article: GeneratedArticle): number {
   let score = 100;
   if (isGenericTitle(article.title)) score -= 30;
   if (article.sources.length === 0) score -= 35;
   if (article.evidence.length === 0) score -= 35;
-  if (article.editorialMetrics.primarySources === 0) score -= 20;
+  if (
+    article.editorialMetrics.primarySources === 0 &&
+    primarySourceWasAvailable(article)
+  )
+    score -= 20;
   if (/sem conte[uú]do/i.test(article.content)) score -= 35;
   if (/\]\(\s*javascript:/i.test(article.content)) score -= 40;
   const highlights = article.content.match(
@@ -54,7 +67,10 @@ export function validateArticle(article: GeneratedArticle): string[] {
   ) {
     errors.push("article evidence excerpt has invalid length");
   }
-  if (article.editorialMetrics.primarySources === 0) {
+  if (
+    article.editorialMetrics.primarySources === 0 &&
+    primarySourceWasAvailable(article)
+  ) {
     errors.push("article has no primary source");
   }
   if (/\]\(\s*javascript:/i.test(article.content)) {

@@ -41,6 +41,59 @@ describe("validateArticle", () => {
     expect(validateArticle(generated())).toEqual([]);
   });
 
+  it("rejects a missing primary source when one was available", () => {
+    const errors = validateArticle(
+      generated({
+        editorialMetrics: {
+          considered: 3,
+          selected: 1,
+          rejected: 2,
+          buckets: { community: 1 },
+          primarySources: 0,
+          primaryCandidates: 2,
+        },
+      }),
+    );
+
+    expect(errors).toContain("article has no primary source");
+  });
+
+  it("accepts a missing primary source when none was available", () => {
+    const metrics = {
+      considered: 3,
+      selected: 1,
+      rejected: 2,
+      buckets: { community: 1 },
+      primarySources: 0,
+      primaryCandidates: 0,
+    };
+
+    // Upstream rate limits left only community signals; the article is not
+    // defective for it, and must not fail the cycle or trigger a rollback.
+    expect(validateArticle(generated({ editorialMetrics: metrics }))).toEqual(
+      [],
+    );
+    expect(
+      editorialQualityScore(generated({ editorialMetrics: metrics })),
+    ).toBe(100);
+  });
+
+  it("stays strict when primary-source availability is unknown", () => {
+    const errors = validateArticle(
+      generated({
+        editorialMetrics: {
+          considered: 3,
+          selected: 1,
+          rejected: 2,
+          buckets: { community: 1 },
+          primarySources: 0,
+        },
+      }),
+    );
+
+    expect(errors).toContain("article has no primary source");
+  });
+
   it("rejects empty sources, unsafe links, and invalid Mermaid", () => {
     const errors = validateArticle(
       generated({

@@ -224,6 +224,7 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
       selected: referencedArticles.length,
       rejected: recentArticles.length - referencedArticles.length,
       primarySources: referencedArticles.filter(isPrimarySource).length,
+      primaryCandidates: recentArticles.filter(isPrimarySource).length,
     },
     content: withModelFooter(fullContentWithRefs),
     date: today,

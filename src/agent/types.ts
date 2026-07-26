@@ -17,6 +17,13 @@ export interface EditorialMetrics {
   rejected: number;
   buckets: Record<string, number>;
   primarySources: number;
+  /**
+   * How many primary sources existed in the candidate pool, regardless of what
+   * the draft cited. Lets validation tell "the model ignored an available
+   * primary source" apart from "no primary source was published anywhere today".
+   * Undefined means unknown, and validation stays strict.
+   */
+  primaryCandidates?: number;
 }
 
 export interface GeneratedArticle {
