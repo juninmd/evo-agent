@@ -193,9 +193,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>23</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>24</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-28">2026-07-28</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-28-github-copilot-harness-phishing-defense-edge-asr-precise-quantization">GitHub Copilot Harness, Phishing Defense, Edge ASR &amp; Precise Quantization</a></h3>
+  <p>Semana repleta de adoção prática de ferramentas de IA, reforço de segurança contra phishing, e avanços em ASR e quantização.</p>
+  <div class="chips"><span>github</span><span>tabnews</span><span>reddit</span><span>developer</span><span>br</span><span>post-signals</span><span>fallback</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-27">2026-07-27</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-27-kimi-k3-vs-gpt-5-6-sol-vantagem-de-custo-e-roteamento-hibrido-nova-pesquisa-da-o">Kimi K3 vs GPT‑5.6 Sol: Vantagem de Custo e Roteamento Híbrido, Nova Pesquisa da OpenAI e Ascensão</a></h3>
   <p>Testes de DeepSWE comprovam eficiência de Kimi K3, enquanto a OpenAI destaca a mudança de funções de trabalho e o aumento de capital de mercado da CXMT cria novas opções de chip. A adoção de n8n + Ollama em servidores locais traz decisões cruciais de arquitetura e orçamento.</p>
@@ -599,7 +605,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>14</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>13</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -676,12 +682,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-agentes-nao-codificadores-sistema-de-arquivos">Por que agentes não-codificadores falham (e como um sistema de arquivos resolve)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-novo-paradigma-agentes-ia-harness-scaffold-especializacao">O Novo Paradigma de Agentes de IA: Harness, Scaffold e Por Que Especialização Vence Escala</a></h3>
   
   
 </article>
