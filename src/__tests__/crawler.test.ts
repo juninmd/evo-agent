@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  focusRetryDelayMs,
   hackerNewsEngagement,
   isUsefulComment,
   orderedCommunitySubreddits,
@@ -18,6 +19,12 @@ describe("crawler transformations", () => {
       "vscode",
     ]);
     expect(new Set(ordered).size).toBe(ordered.length);
+  });
+
+  it("waits out Reddit throttling on focus feeds for a bounded number of tries", () => {
+    expect(focusRetryDelayMs(0)).toBe(30_000);
+    expect(focusRetryDelayMs(2)).toBe(120_000);
+    expect(focusRetryDelayMs(3)).toBeNull();
   });
 
   it("computes Hacker News engagement", () => {

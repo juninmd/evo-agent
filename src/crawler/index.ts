@@ -127,6 +127,8 @@ const REDDIT_FOCUS_POSTS_PER_SUBREDDIT = 12;
 const REDDIT_COMMENTS_PER_POST = 30;
 const REDDIT_MIN_COMMENT_SCORE = 3;
 const REDDIT_MIN_COMMENT_LENGTH = 80;
+/** Reddit throttles by IP, so the focus feeds wait it out instead of giving up. */
+const REDDIT_FOCUS_RETRY_DELAYS_MS = [30_000, 60_000, 120_000];
 const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 3000;
 const REDDIT_RATE_LIMIT_MAX_RETRY_MS = 60000;
 
@@ -935,6 +937,29 @@ async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
     .slice(0, REDDIT_COMMENTS_PER_POST);
 }
 
+export function focusRetryDelayMs(attempt: number): number | null {
+  return REDDIT_FOCUS_RETRY_DELAYS_MS[attempt] ?? null;
+}
+
+async function getFocusPostCandidates(
+  subreddit: string,
+  sort: "new" | "top",
+): Promise<RedditPostCandidate[]> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await getRedditPostCandidates(subreddit, sort);
+    } catch (err) {
+      const delay =
+        err instanceof RedditRateLimitError ? focusRetryDelayMs(attempt) : null;
+      if (delay === null) throw err;
+      log.warn(
+        `Reddit rate limited on focus r/${subreddit}; waiting ${delay}ms before retry ${attempt + 1}`,
+      );
+      await sleep(delay);
+    }
+  }
+}
+
 export function orderedCommunitySubreddits(): string[] {
   return [
     ...REDDIT_COMMUNITY_SUBREDDITS.filter((subreddit) =>
@@ -953,13 +978,15 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   // Reddit rate limiting aborts the whole crawl, so the focus communities are
   // collected before anything else instead of after 40 other subreddits.
   for (const subreddit of orderedCommunitySubreddits()) {
-    const sorts: ("new" | "top")[] = REDDIT_FOCUS_SUBREDDITS.has(subreddit)
-      ? ["top", "new"]
-      : ["new"];
+    const focus = REDDIT_FOCUS_SUBREDDITS.has(subreddit);
+    const sorts: ("new" | "top")[] = focus ? ["top", "new"] : ["new"];
     const byUrl = new Map<string, RedditPostCandidate>();
     for (const sort of sorts) {
       try {
-        for (const post of await getRedditPostCandidates(subreddit, sort)) {
+        const candidates = focus
+          ? await getFocusPostCandidates(subreddit, sort)
+          : await getRedditPostCandidates(subreddit, sort);
+        for (const post of candidates) {
           if (!byUrl.has(post.url)) byUrl.set(post.url, post);
         }
       } catch (err) {
