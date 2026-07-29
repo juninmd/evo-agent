@@ -193,9 +193,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>26</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>27</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-29">2026-07-29</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-29-mai-code-1-flash-sol-e-thunderagent-ampliam-throughput-e-experiencia-de-qa">MAI-Code‑1‑Flash, Sol e ThunderAgent Ampliam Throughput e Experiência de QA</a></h3>
+  <p>O pacote MAI-Code‑1‑Flash entrega inferência rápida no VS Code, enquanto Sol reduz sobre‑engineering e refina UI de ditado. ThunderAgent duplica throughput de inferência e Copilot ganha visibilidade de QA humana.</p>
+  <div class="chips"><span>vscode</span><span>github</span><span>together</span><span>reddit</span><span>openai</span><span>tools</span><span>developer</span><span>ai frontier</span><span>togetherai</span><span>post-signals</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-29">2026-07-29</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-29-vscode-terminals-codex-ui-claude-code-billing-context-compaction-cross-device-se">VSCode Terminals, Codex UI, Claude Code Billing, Context Compaction, Cross‑Device Settings, e</a></h3>
   <p>O cenário técnico de julho destaca questões de experiência do usuário em IDEs, os limites de UI dos modelos GPT‑5.6, falhas de verificação de licenças do Claude Code, a necessidade de compactação de contexto e a chegada dos novos modelos de transcrição da OpenAI.</p>
@@ -617,7 +623,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>11</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>10</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -676,12 +682,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-seguranca-cadeia-suprimentos-ia-pipelines">Segurança na Cadeia de Suprimentos de IA: Protegendo Pipelines de Desenvolvimento contra Ataques a Dependências</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-ataques-cadeia-suprimentos-nodejs-2026">A Nova Era dos Ataques à Cadeia de Suprimentos: Como Proteger seu Ecossistema Node.js em 2026</a></h3>
   
   
 </article>
