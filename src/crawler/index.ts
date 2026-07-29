@@ -935,11 +935,24 @@ async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
     .slice(0, REDDIT_COMMENTS_PER_POST);
 }
 
+export function orderedCommunitySubreddits(): string[] {
+  return [
+    ...REDDIT_COMMUNITY_SUBREDDITS.filter((subreddit) =>
+      REDDIT_FOCUS_SUBREDDITS.has(subreddit),
+    ),
+    ...REDDIT_COMMUNITY_SUBREDDITS.filter(
+      (subreddit) => !REDDIT_FOCUS_SUBREDDITS.has(subreddit),
+    ),
+  ];
+}
+
 export async function crawlRedditCommunitySignals(): Promise<number> {
   let newCount = 0;
   let rateLimited = false;
 
-  for (const subreddit of REDDIT_COMMUNITY_SUBREDDITS) {
+  // Reddit rate limiting aborts the whole crawl, so the focus communities are
+  // collected before anything else instead of after 40 other subreddits.
+  for (const subreddit of orderedCommunitySubreddits()) {
     const sorts: ("new" | "top")[] = REDDIT_FOCUS_SUBREDDITS.has(subreddit)
       ? ["top", "new"]
       : ["new"];

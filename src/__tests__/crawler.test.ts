@@ -2,12 +2,24 @@ import { describe, expect, it } from "vitest";
 import {
   hackerNewsEngagement,
   isUsefulComment,
+  orderedCommunitySubreddits,
   parseGitHubStarCount,
   redditRateLimitDelayMs,
   summarizeSourceContent,
 } from "../crawler/index.js";
 
 describe("crawler transformations", () => {
+  it("crawls the focus communities before the rest", () => {
+    const ordered = orderedCommunitySubreddits();
+    expect(ordered.slice(0, 4).sort()).toEqual([
+      "ClaudeCode",
+      "GithubCopilot",
+      "codex",
+      "vscode",
+    ]);
+    expect(new Set(ordered).size).toBe(ordered.length);
+  });
+
   it("computes Hacker News engagement", () => {
     expect(hackerNewsEngagement(150, 45)).toBe(240);
     expect(hackerNewsEngagement(undefined, undefined)).toBe(0);
