@@ -36,7 +36,7 @@ flowchart TD
 - **Editorial scoring**: Recency, engagement, source authority, diversity, and cross-source evidence shape selection
 - **Evidence provenance**: Every selected highlight preserves source URL, title, and supporting excerpt
 - **Guarded self-improvement**: Prompt candidates are scored, versioned, promoted only without regression, and rollback-capable
-- **Article generation**: richer daily articles and weekly/periodic reports in pt-BR via LLM, with expanded Reddit/community evidence when available
+- **Article generation**: three long-form daily editions (≥5 subjects each, no repeated sources within the day) and weekly/periodic reports in pt-BR via LLM, with expanded Reddit/community evidence when available
 - **Living ebook**: weekly/refinable AI-assisted development handbook published to GitHub Pages
 - **Atomic GitHub Pages publishing**: Article, layouts, and indexes land in one Git commit
 - **Telegram outbox**: Failed delivery retries with exponential backoff and dead-letter isolation
@@ -71,7 +71,8 @@ npm run build
 | `GITHUB_REPO` | Yes | — | Repository name for Pages |
 | `GITHUB_BRANCH` | No | `gh-pages` | Target branch for published content |
 | `CRAWL_INTERVAL_MINUTES` | No | `40` | Learn cycle frequency in daemon mode |
-| `ARTICLE_CRON` | No | `0 8 * * *` | Daily article cron expression |
+| `ARTICLE_CRON` | No | `0 8,13,18 * * *` | Daily edition cron (one edition per slot) |
+| `DAILY_EDITIONS` | No | `3` | Editions published per day; a 22h sweep fills missed slots |
 | `SEARXNG_URL` | No | `http://searxng.searxng.svc.cluster.local` | SearXNG instance URL |
 | `LOG_LEVEL` | No | `info` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
 | `LOG_FORMAT` | No | `json` | Structured `json` logs or local `text` output |
@@ -83,7 +84,7 @@ Set `RUN_MODE` env var to control execution:
 
 | Mode | Behavior |
 |---|---|
-| `DAEMON` (default) | Runs learn cycle immediately, then schedules crawling + daily article + weekly report via cron |
+| `DAEMON` (default) | Runs learn cycle immediately, then schedules crawling + daily editions + weekly report via cron |
 | `CRAWL` | Single crawl + improve cycle, then exits |
 | `DAILY` | Generates and publishes one daily article, then exits |
 | `WEEKLY` | Generates and publishes one weekly article, then exits |

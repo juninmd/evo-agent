@@ -1,6 +1,10 @@
 import type { Article } from "../knowledge/store.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
-import { isPrimarySource } from "./curation.js";
+import {
+  FOCUS_COMMUNITIES,
+  focusCommunity,
+  isPrimarySource,
+} from "./curation.js";
 
 export interface EditorialHighlight {
   sourceIndex: number;
@@ -8,6 +12,8 @@ export interface EditorialHighlight {
   whatHappened: string;
   whyItMatters: string;
   evidence: string;
+  /** Long-form prose produced by the expansion pass. Absent in the agenda draft. */
+  analysis?: string;
 }
 
 export interface EditorialDraft {
@@ -25,6 +31,26 @@ const GENERIC_TITLE_PATTERNS = [
   /^panorama( t[eé]cnico)?$/i,
   /^resumo( t[eé]cnico)?/i,
 ];
+
+/**
+ * Filler that makes an edition read like a template instead of a text written
+ * by an editor. "Por que importa" was the visible symptom: a fixed label glued
+ * to every item. The prose passes are checked against this list too.
+ */
+export const EDITORIAL_CLICHES =
+  /(por que (isso )?importa|interesse crescente|impacto significativo|melhorar a produtividade|produtividade e (a )?efici[eê]ncia|cada vez mais|players do mercado|o per[ií]odo foi marcado|vale (a pena )?destacar|[eé] importante (notar|destacar|ressaltar)|em resumo|nesse sentido|no fim das contas|revolucion(a|á)ri)/i;
+
+const ENGLISH_STOPWORDS =
+  /\b(the|and|with|of|for|from|that|this|are|is|to|show|shows|how|why|new|take|taking|first)\b/gi;
+
+/**
+ * The sources are mostly English and the model occasionally drifts back into it.
+ * Counting English function words is enough to catch a drifted section without
+ * flagging pt-BR text that merely quotes a product name.
+ */
+export function looksEnglish(text: string, threshold: number): boolean {
+  return (text.match(ENGLISH_STOPWORDS) ?? []).length >= threshold;
+}
 
 export function isGenericTitle(title: string): boolean {
   const normalized = title.trim();
@@ -60,12 +86,14 @@ export function validateEditorialDraft(
   const errors: string[] = [];
   const usedSources = new Set<number>();
   if (isGenericTitle(draft.title)) errors.push("title is generic");
+  if (looksEnglish(draft.title, 2)) errors.push("title is not in pt-BR");
+  if (looksEnglish(draft.dek, 3)) errors.push("dek is not in pt-BR");
   if (draft.title.trim().length < 20)
     errors.push("title is not specific enough");
   if (draft.title.trim().length > 100) errors.push("title is too long");
   if (draft.dek.trim().length < 50) errors.push("dek is too short");
   if (draft.highlights.length === 0) errors.push("draft has no highlights");
-  if (draft.highlights.length < Math.min(3, sources.length)) {
+  if (draft.highlights.length < Math.min(5, sources.length)) {
     errors.push("too few highlights");
   }
   if (draft.highlights.length > options.maxHighlights) {
@@ -107,11 +135,7 @@ export function validateEditorialDraft(
       highlight.whyItMatters,
     ]),
   ].join(" ");
-  if (
-    /(interesse crescente|impacto significativo|melhorar a produtividade|produtividade e (a )?efici[eê]ncia|cada vez mais|players do mercado)/i.test(
-      fullText,
-    )
-  ) {
+  if (EDITORIAL_CLICHES.test(fullText)) {
     errors.push("draft contains vague editorial language");
   }
   const cited = draft.highlights
@@ -131,6 +155,17 @@ export function validateEditorialDraft(
     )
   ) {
     errors.push("draft lacks an independent community signal");
+  }
+  for (const community of Object.keys(FOCUS_COMMUNITIES)) {
+    const available = sources.some(
+      (source) => focusCommunity(source) === community,
+    );
+    if (
+      available &&
+      !cited.some((source) => focusCommunity(source) === community)
+    ) {
+      errors.push(`draft lacks a post from ${community}`);
+    }
   }
   return errors;
 }
@@ -183,13 +218,18 @@ export function parseEditorialDraft(
   return draft;
 }
 
+const TRAILING_CONNECTORS =
+  /[\s,;:–—-]+(de|do|da|dos|das|e|em|com|para|por|que|a|o|as|os|no|na|nos|nas|ao|aos|à|às|sobre|entre)$/i;
+
 function boundedTitle(value: unknown): string {
   if (typeof value !== "string") return "";
   const title = value.trim();
   if (title.length <= 100) return title;
   const prefix = title.slice(0, 100);
   const lastSpace = prefix.lastIndexOf(" ");
-  return (lastSpace >= 60 ? prefix.slice(0, lastSpace) : prefix).trim();
+  const cut = (lastSpace >= 60 ? prefix.slice(0, lastSpace) : prefix).trim();
+  // Truncating mid-phrase leaves titles like "... entra em guerra de".
+  return cut.replace(TRAILING_CONNECTORS, "").replace(/[\s,;:–—-]+$/, "");
 }
 
 export function parseEditorialJson(value: string): EditorialDraft {
@@ -226,13 +266,21 @@ export function buildEditorialPrompt(
   period: string,
   maxHighlights: number,
 ): string {
-  const minimumHighlights = Math.min(4, articles.length, maxHighlights);
+  const minimumHighlights = Math.min(5, articles.length, maxHighlights);
   const communityIndexes = articles.flatMap((article, index) =>
     /reddit|hacker news|tabnews|community/i.test(article.source) ? [index] : [],
   );
   const primaryIndexes = articles.flatMap((article, index) =>
     isPrimarySource(article) ? [index] : [],
   );
+  const focusLines = Object.keys(FOCUS_COMMUNITIES).flatMap((community) => {
+    const indexes = articles.flatMap((article, index) =>
+      focusCommunity(article) === community ? [index] : [],
+    );
+    return indexes.length > 0
+      ? [`  - ${community}: ${indexes.join(", ")}`]
+      : [];
+  });
   const sources = articles
     .map(
       (article, index) =>
@@ -262,6 +310,7 @@ Retorne JSON válido:
 }
 
 Regras:
+- Escreva todos os campos em português brasileiro, inclusive o título, mesmo quando a fonte estiver em inglês.
 - Escolha de ${minimumHighlights} a ${maxHighlights} pautas com sourceIndex distintos; qualidade acima de cobertura.
 - Cada destaque usa exatamente um sourceIndex existente.
 - ${
@@ -274,10 +323,16 @@ Regras:
       ? `Inclua obrigatoriamente ao menos um destes sourceIndex comunitários: ${communityIndexes.join(", ")}.`
       : "Não há fonte comunitária disponível nesta seleção."
   }
+- ${
+    focusLines.length > 0
+      ? `Comunidades em foco — escolha ao menos um sourceIndex de CADA grupo abaixo e trate esses destaques com a mesma profundidade dos anúncios oficiais:\n${focusLines.join("\n")}`
+      : "Não há comunidades em foco nesta seleção."
+  }
 - Quando houver vários sinais do Reddit, priorize 2-4 deles se trouxerem relatos técnicos, limitações reais, regressões, benchmarks ou padrões de adoção observados por usuários.
 - evidence deve conter 30-240 caracteres e permanecer fiel ao campo EVIDENCE da fonte.
 - Não invente números, versões, capacidades, datas ou anúncios.
 - Não use frases vagas como "o período foi marcado", "cada vez mais" ou "players do mercado".
+- Nunca escreva "por que importa", "vale destacar", "é importante notar", "em resumo" ou "nesse sentido"; escreva como um editor humano, não como um template.
 - Em "whyItMatters", nomeie uma decisão concreta: orçamento, integração, risco, arquitetura, migração, operação ou adoção. Não escreva apenas "melhora produtividade e eficiência".
 - Compare ao menos um anúncio oficial com um sinal independente de Hacker News, Reddit ou TabNews quando disponível.
 - Não use os títulos genéricos "Notícias de Tecnologia", "Panorama Técnico", "Desenvolvimentos em IA" ou equivalentes.

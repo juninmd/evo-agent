@@ -14,6 +14,9 @@ weekly-report.json
 homolog.db
 homolog.db-shm
 homolog.db-wal
+homolog/*.db
+homolog/*.db-shm
+homolog/*.db-wal
 homolog-e2e.sh
 check_providers*.ts
 homolog.ts

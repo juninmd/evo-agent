@@ -14,6 +14,12 @@ describe("loadConfig", () => {
     expect(config.telegram.botToken).toBe("");
   });
 
+  it("schedules three daily editions by default", () => {
+    const config = loadConfig({ ...baseEnv, RUN_MODE: "CRAWL" });
+    expect(config.dailyEditions).toBe(3);
+    expect(config.articleCron).toBe("0 8,13,18 * * *");
+  });
+
   it("supports side-effect-free module configuration in CI", () => {
     expect(() => loadConfig({}, false)).not.toThrow();
   });

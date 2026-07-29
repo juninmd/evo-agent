@@ -78,13 +78,49 @@ describe("renderEditorialDraft", () => {
 
     const markdown = renderEditorialDraft(draft, articles, "12/06/2026");
 
-    expect(markdown).toContain("### Agentes e ferramentas de desenvolvimento");
-    expect(markdown).toContain("### Infraestrutura e eficiência");
+    expect(markdown).toContain("### Claude ganha consistência");
+    expect(markdown).toContain("### Custo de inferência vira pauta");
+    expect(markdown).not.toContain("Por que importa");
     expect(markdown).toContain(
       "[Fonte: Claude melhora tarefas longas](https://anthropic.com/news/claude)",
     );
     expect(markdown).not.toContain("Sem conteúdo");
     expect(articlesFromDraft(draft, articles)).toEqual(articles);
+  });
+
+  it("renders the long-form analysis produced by the expansion pass", () => {
+    const articles = [
+      article(
+        "Claude melhora tarefas longas",
+        "Anthropic News",
+        "https://anthropic.com/news/claude",
+        '["claude","agents"]',
+      ),
+    ];
+    const analysis =
+      "A Anthropic descreveu ganhos de consistência em execuções longas.\n\nO efeito prático aparece no desenho de retomadas e supervisão.";
+    const markdown = renderEditorialDraft(
+      {
+        title: "Claude reforça tarefas longas em fluxos com agentes",
+        dek: "Uma mudança concreta altera decisões de arquitetura e operação.",
+        highlights: [
+          {
+            sourceIndex: 0,
+            headline: "Claude ganha consistência",
+            whatHappened: "Fato apurado na pauta.",
+            whyItMatters: "Consequência técnica da pauta.",
+            evidence: articles[0].summary,
+            analysis,
+          },
+        ],
+        synthesis: "Confiabilidade e custo passam a ser avaliados juntos.",
+      },
+      articles,
+      "12/06/2026",
+    );
+
+    expect(markdown).toContain(analysis);
+    expect(markdown).not.toContain("Fato apurado na pauta.");
   });
 
   it("keeps selected sources whose URL contains markdown punctuation", () => {

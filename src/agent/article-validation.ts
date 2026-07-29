@@ -1,4 +1,4 @@
-import { isGenericTitle } from "./editorial.js";
+import { EDITORIAL_CLICHES, isGenericTitle } from "./editorial.js";
 import type { GeneratedArticle } from "./writer.js";
 
 /**
@@ -9,6 +9,9 @@ import type { GeneratedArticle } from "./writer.js";
 function primarySourceWasAvailable(article: GeneratedArticle): boolean {
   return article.editorialMetrics.primaryCandidates !== 0;
 }
+
+/** Editions are long-form prose now; anything shorter is a degraded edition. */
+const MIN_CONTENT_CHARS = 2000;
 
 export function editorialQualityScore(article: GeneratedArticle): number {
   let score = 100;
@@ -26,13 +29,8 @@ export function editorialQualityScore(article: GeneratedArticle): number {
     /## Destaques[\s\S]*?(?=\n## |\n---|$)/i,
   )?.[0];
   if (highlights && !/\]\(https?:\/\//i.test(highlights)) score -= 30;
-  if (
-    /(o per[ií]odo foi marcado|cada vez mais|players do mercado)/gi.test(
-      article.content,
-    )
-  ) {
-    score -= 15;
-  }
+  if (EDITORIAL_CLICHES.test(article.content)) score -= 15;
+  if (article.content.length < MIN_CONTENT_CHARS) score -= 20;
   if (/-->\|[^|]+\|>/g.test(article.content)) score -= 25;
   return Math.max(0, score);
 }
@@ -78,6 +76,11 @@ export function validateArticle(article: GeneratedArticle): string[] {
   }
   if (/sem conte[uú]do/i.test(article.content)) {
     errors.push("article contains placeholder content");
+  }
+  if (article.content.length < MIN_CONTENT_CHARS) {
+    errors.push(
+      `article body is too short (${article.content.length}/${MIN_CONTENT_CHARS} chars)`,
+    );
   }
   const highlights = article.content.match(
     /## Destaques[\s\S]*?(?=\n## |\n---|$)/i,

@@ -70,7 +70,7 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
   }
   const runMode = rawMode as RunMode;
   const publishes = runMode !== "CRAWL";
-  const articleCron = env.ARTICLE_CRON ?? "0 8 * * *";
+  const articleCron = env.ARTICLE_CRON ?? "0 8,13,18 * * *";
   if (!cron.validate(articleCron)) {
     throw new Error(`ARTICLE_CRON is invalid: ${articleCron}`);
   }
@@ -111,7 +111,10 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
         "http://litellm.ai.svc.cluster.local:4000/v1",
       ),
       apiKey: env.LITELLM_API_KEY ?? env.OPENCODE_API_KEY ?? "no-key",
-      model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/llama-70b",
+      // cloud/llama-70b e cloud/nemotron-super-49b estouraram 90s sem resposta
+      // no proxy em 26/07/2026; qwen3-next-80b respondeu em ~2s e sustentou a
+      // homologação das 3 edições diárias.
+      model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/qwen3-next-80b",
       // Prioridade de provider: NVIDIA NIM > OpenRouter free > Ollama Cloud.
       // cloud/llama-8b, cloud/nemotron-super-49b/120b e cloud/qwen3-next-80b
       // homologados ao vivo (texto+tool_choice:"required" via proxy).
@@ -133,6 +136,7 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
     },
     crawlIntervalMinutes: positiveNumber(env, "CRAWL_INTERVAL_MINUTES", "40"),
     articleCron,
+    dailyEditions: positiveNumber(env, "DAILY_EDITIONS", "3"),
     dbPath: env.DB_PATH ?? join(process.cwd(), "data", "knowledge.db"),
     searxngUrl: validUrl(
       env,

@@ -6,6 +6,7 @@ import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 import {
   curateArticles,
+  focusCommunity,
   isCommunitySignal,
   isPrimarySource,
   sourceBucket,
@@ -26,6 +27,7 @@ import {
   parseEditorialDraft,
 } from "./editorial.js";
 import { getSystemPrompt } from "./improver.js";
+import { expandEdition } from "./longform.js";
 import type { GeneratedArticle, ReportPeriod } from "./types.js";
 
 export { renderEditorialDraft } from "./editorial-renderer.js";
@@ -33,6 +35,8 @@ export type { GeneratedArticle, ReportPeriod } from "./types.js";
 
 export interface GenerateArticleOptions {
   targetDate?: string;
+  /** Sources already used by earlier editions of the same day. */
+  excludeUrls?: string[];
 }
 
 function historicalWindow(
@@ -106,16 +110,23 @@ export async function generateArticle(
   options: GenerateArticleOptions = {},
 ): Promise<GeneratedArticle> {
   const maxHighlights = type === "weekly" ? 20 : 12;
+  const excluded = new Set(options.excludeUrls ?? []);
+  const withoutExcluded = (articles: Article[]) =>
+    excluded.size === 0
+      ? articles
+      : articles.filter((article) => !excluded.has(article.url));
   let window = options.targetDate ? historicalWindow(options.targetDate) : null;
-  let recentArticles = window
-    ? db.getArticlesBetween(
-        window.from,
-        window.to,
-        type === "weekly" ? 450 : 240,
-      )
-    : type === "weekly"
-      ? db.getArticlesSince(7, 450)
-      : db.getArticlesSince(2, 240);
+  let recentArticles = withoutExcluded(
+    window
+      ? db.getArticlesBetween(
+          window.from,
+          window.to,
+          type === "weekly" ? 450 : 240,
+        )
+      : type === "weekly"
+        ? db.getArticlesSince(7, 450)
+        : db.getArticlesSince(2, 240),
+  );
   const systemPrompt = getSystemPrompt();
 
   const curate = () =>
@@ -128,6 +139,7 @@ export async function generateArticle(
       maxPrimaryShare: 0.65,
       minCommunitySignals: type === "weekly" ? 4 : 2,
       minRedditSignals: type === "weekly" ? 2 : 1,
+      requireFocusCommunities: true,
       now: window?.referenceTime,
     });
   let curation = curate();
@@ -144,12 +156,18 @@ export async function generateArticle(
     const knownUrls = new Set(recentArticles.map((article) => article.url));
     recentArticles = [
       ...recentArticles,
-      ...primaryArticles.filter((article) => !knownUrls.has(article.url)),
+      ...withoutExcluded(primaryArticles).filter(
+        (article) => !knownUrls.has(article.url),
+      ),
     ];
     curation = curate();
   }
   const usedArticles = curation.selected.map((item) => item.article);
-  if (usedArticles.length < 4) {
+  const focusCoverage = [
+    ...new Set(usedArticles.flatMap((a) => focusCommunity(a) ?? [])),
+  ];
+  log.info(`Focus communities in selection: [${focusCoverage.join(", ")}]`);
+  if (usedArticles.length < 5) {
     throw new Error(
       `Insufficient editorial evidence: ${usedArticles.length} usable sources`,
     );
@@ -184,6 +202,8 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
       `Editorial drafting failed: ${lastError instanceof Error ? lastError.message : String(lastError)}`,
     );
   }
+
+  draft = await expandEdition(ask, draft, usedArticles, period);
 
   const articleBody = renderEditorialDraft(draft, usedArticles, period);
   const referencedArticles = articlesFromDraft(draft, usedArticles);
@@ -281,6 +301,7 @@ function loadPeriodArticles(cfg: PeriodConfig): Article[] {
     minSummaryLength: 80,
     minCommunitySignals: Math.min(8, Math.floor(cfg.highlights[0] / 3)),
     minRedditSignals: Math.min(4, Math.floor(cfg.highlights[0] / 6)),
+    requireFocusCommunities: true,
   }).selected.map((item) => item.article);
 }
 

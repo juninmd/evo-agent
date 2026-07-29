@@ -10,8 +10,9 @@ function generatedArticle(): GeneratedArticle {
   return {
     title: "Claude muda execução de agentes",
     slug: "claude-muda-execucao-de-agentes",
-    content:
-      "## Destaques\n\n[Fonte](https://example.com/source)\n\n## Fontes e Referências",
+    content: `## Destaques\n\n### Claude muda execução de agentes\n\n${"A mudança altera retomadas, supervisão e orçamento de execuções longas em fluxos com agentes. ".repeat(
+      24,
+    )}\n\n[Fonte](https://example.com/source)\n\n## Fontes e Referências`,
     summary: "Resumo histórico suficientemente completo para publicação.",
     tags: ["agents"],
     date: "2026-06-12",

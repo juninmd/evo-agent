@@ -84,6 +84,7 @@ const REDDIT_COMMUNITY_SUBREDDITS = [
   "CursorIDE",
   "WindsurfAI",
   "GithubCopilot",
+  "codex",
   "vscode",
   "vibecoding",
   "kilocode",
@@ -107,9 +108,22 @@ const REDDIT_COMMUNITY_SUBREDDITS = [
   "coding",
 ];
 
+/**
+ * Communities the editions must cover every day. They are crawled by "top of the
+ * week" on top of the usual "new" feed so the best recent posts are collected,
+ * not only whatever happened to be posted last.
+ */
+const REDDIT_FOCUS_SUBREDDITS = new Set([
+  "ClaudeCode",
+  "codex",
+  "vscode",
+  "GithubCopilot",
+]);
+
 const REDDIT_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 const REDDIT_POSTS_PER_SUBREDDIT = 8;
+const REDDIT_FOCUS_POSTS_PER_SUBREDDIT = 12;
 const REDDIT_COMMENTS_PER_POST = 30;
 const REDDIT_MIN_COMMENT_SCORE = 3;
 const REDDIT_MIN_COMMENT_LENGTH = 80;
@@ -258,6 +272,11 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Reddit: GithubCopilot",
     url: "https://www.reddit.com/r/GithubCopilot/.rss",
     tags: ["reddit", "github", "copilot", "ai"],
+  },
+  {
+    name: "Reddit: Codex",
+    url: "https://www.reddit.com/r/codex/.rss",
+    tags: ["reddit", "codex", "openai", "coding", "ai"],
   },
   {
     name: "Reddit: KiloCode",
@@ -876,9 +895,13 @@ async function redditGet<T = unknown>(
 
 async function getRedditPostCandidates(
   subreddit: string,
+  sort: "new" | "top" = "new",
 ): Promise<RedditPostCandidate[]> {
+  const limit = REDDIT_FOCUS_SUBREDDITS.has(subreddit)
+    ? REDDIT_FOCUS_POSTS_PER_SUBREDDIT
+    : REDDIT_POSTS_PER_SUBREDDIT;
   const data = await redditGet<string>(
-    `https://www.reddit.com/r/${subreddit}/new/.rss`,
+    `https://www.reddit.com/r/${subreddit}/${sort}/.rss${sort === "top" ? "?t=week" : ""}`,
     {
       headers: {
         Accept: "application/atom+xml, application/xml",
@@ -889,7 +912,7 @@ async function getRedditPostCandidates(
   );
   const feed = await parser.parseString(data);
 
-  return feed.items.slice(0, REDDIT_POSTS_PER_SUBREDDIT).flatMap((item) => {
+  return feed.items.slice(0, limit).flatMap((item) => {
     if (!item.title || !item.link) return [];
     if (!isUsefulRedditPost(item.title)) return [];
     const summary = summarizeSourceContent(
@@ -917,21 +940,30 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   let rateLimited = false;
 
   for (const subreddit of REDDIT_COMMUNITY_SUBREDDITS) {
-    let posts: RedditPostCandidate[] = [];
-    try {
-      posts = await getRedditPostCandidates(subreddit);
-    } catch (err) {
-      if (err instanceof RedditRateLimitError) {
+    const sorts: ("new" | "top")[] = REDDIT_FOCUS_SUBREDDITS.has(subreddit)
+      ? ["top", "new"]
+      : ["new"];
+    const byUrl = new Map<string, RedditPostCandidate>();
+    for (const sort of sorts) {
+      try {
+        for (const post of await getRedditPostCandidates(subreddit, sort)) {
+          if (!byUrl.has(post.url)) byUrl.set(post.url, post);
+        }
+      } catch (err) {
+        if (err instanceof RedditRateLimitError) {
+          log.warn(
+            `Reddit feed rate limit persisted for r/${subreddit}; stopping Reddit crawl`,
+          );
+          rateLimited = true;
+          break;
+        }
         log.warn(
-          `Reddit feed rate limit persisted for r/${subreddit}; stopping Reddit crawl`,
+          `Reddit ${sort} feed failed for r/${subreddit}: ${(err as Error).message}`,
         );
-        break;
       }
-      log.warn(
-        `Reddit feed failed for r/${subreddit}: ${(err as Error).message}`,
-      );
-      continue;
     }
+    if (rateLimited) break;
+    const posts = [...byUrl.values()];
 
     for (const post of posts) {
       const url = signalUrl(post.url);

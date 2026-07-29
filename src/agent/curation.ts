@@ -23,6 +23,27 @@ const PRIMARY_SOURCE_PATTERNS = [
   /vscode updates/i,
 ];
 
+/**
+ * Communities every edition must cover. Matching stays on the source label and
+ * the tags because both carry the subreddit name, while titles and URLs would
+ * match unrelated stories that merely mention the product.
+ */
+export const FOCUS_COMMUNITIES: Record<string, RegExp> = {
+  "claude-code": /claudecode/i,
+  codex: /\bcodex\b/i,
+  "vscode-copilot": /\bvscode\b|githubcopilot/i,
+};
+
+export function focusCommunity(article: Article): string | null {
+  if (sourceBucket(article.source) !== "reddit") return null;
+  const haystack = `${article.source} ${parseTags(article.tags).join(" ")}`;
+  return (
+    Object.entries(FOCUS_COMMUNITIES).find(([, pattern]) =>
+      pattern.test(haystack),
+    )?.[0] ?? null
+  );
+}
+
 export interface CuratedArticle {
   article: Article;
   score: number;
@@ -63,6 +84,8 @@ export interface CurationPolicy {
   maxPrimaryShare?: number;
   minCommunitySignals?: number;
   minRedditSignals?: number;
+  /** Keep at least one post from each community in FOCUS_COMMUNITIES. */
+  requireFocusCommunities?: boolean;
   now?: number;
 }
 
@@ -154,6 +177,7 @@ function editorialScore(
       : /hackernews|tabnews/.test(sourceBucket(article.source))
         ? 8
         : 0;
+  const focusBoost = focusCommunity(article) ? 14 : 0;
   const summaryQuality = Math.min(article.summary.trim().length / 300, 1) * 15;
   const usefulTags = parseTags(article.tags).filter(
     (tag) => !GENERIC_TAGS.has(tag),
@@ -161,6 +185,7 @@ function editorialScore(
   return (
     authority +
     communitySignal +
+    focusBoost +
     engagement +
     recency +
     summaryQuality +
@@ -335,6 +360,46 @@ export function curateArticles(
   for (const community of communityCandidates) {
     if (selectedCommunityCount() >= minCommunity) break;
     if (!replaceWith(community)) break;
+  }
+
+  if (policy.requireFocusCommunities) {
+    // Each focus community gets one guaranteed slot; the cheapest selected item
+    // that is neither primary nor itself a focus post pays for it.
+    const replaceForFocus = (candidate: CuratedArticle) => {
+      const expendable = selected
+        .map((item, index) => ({ item, index }))
+        .filter(({ item }) => !item.primary && !focusCommunity(item.article))
+        .sort(
+          (a, b) =>
+            Number(isCommunitySignal(a.item.article)) -
+              Number(isCommunitySignal(b.item.article)) ||
+            a.item.score - b.item.score,
+        )[0];
+      if (!expendable) return false;
+      rejected.push({ article: expendable.item.article, reason: "max-limit" });
+      selected[expendable.index] = candidate;
+      return true;
+    };
+    for (const community of Object.keys(FOCUS_COMMUNITIES)) {
+      if (
+        selected.some(
+          (candidate) => focusCommunity(candidate.article) === community,
+        )
+      ) {
+        continue;
+      }
+      const candidate = deduped.find(
+        (item) =>
+          focusCommunity(item.article) === community &&
+          !selectedUrls().has(item.article.url),
+      );
+      if (!candidate) continue;
+      if (selected.length < max) {
+        selected.push(candidate);
+        continue;
+      }
+      if (!replaceForFocus(candidate)) break;
+    }
   }
 
   const buckets = Object.fromEntries(

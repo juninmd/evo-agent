@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { curateArticles, parseTags, sourceBucket } from "../agent/curation.js";
+import {
+  curateArticles,
+  focusCommunity,
+  parseTags,
+  sourceBucket,
+} from "../agent/curation.js";
 import type { Article } from "../knowledge/store.js";
 
 function article(
@@ -236,6 +241,105 @@ describe("editorial curation", () => {
 
     expect(result.metrics.communitySignals).toBeGreaterThanOrEqual(2);
     expect(result.metrics.redditSignals).toBeGreaterThanOrEqual(2);
+    expect(result.selected.some((item) => item.primary)).toBe(true);
+  });
+
+  it("maps only Reddit sources to focus communities", () => {
+    expect(
+      focusCommunity(
+        article(
+          "Relato",
+          "Reddit Community Signals (ClaudeCode)",
+          "https://reddit.com/r/claudecode/1",
+        ),
+      ),
+    ).toBe("claude-code");
+    expect(
+      focusCommunity(
+        article(
+          "Relato",
+          "Reddit Post Signals (codex)",
+          "https://reddit.com/r/codex/1",
+        ),
+      ),
+    ).toBe("codex");
+    expect(
+      focusCommunity(
+        article(
+          "Update",
+          "Reddit: GithubCopilot",
+          "https://reddit.com/r/githubcopilot/1",
+        ),
+      ),
+    ).toBe("vscode-copilot");
+    expect(
+      focusCommunity(
+        article("Codex CLI", "OpenAI Blog", "https://openai.com/codex"),
+      ),
+    ).toBeNull();
+  });
+
+  it("keeps one post from each focus community even when the pool is full", () => {
+    const result = curateArticles(
+      [
+        article("Oficial A", "OpenAI Blog", "https://openai.com/a", 400),
+        article("Oficial B", "Anthropic News", "https://anthropic.com/b", 380),
+        article("Oficial C", "The GitHub Blog", "https://github.blog/c", 360),
+        article(
+          "HN sinal",
+          "Hacker News",
+          "https://news.ycombinator.com/1",
+          300,
+        ),
+        article(
+          "Relato LocalLLaMA",
+          "Reddit Community Signals (LocalLLaMA)",
+          "https://reddit.com/r/localllama/1",
+          280,
+          '["reddit","community-signals","localllama"]',
+        ),
+        article(
+          "Regressao no Claude Code",
+          "Reddit Community Signals (ClaudeCode)",
+          "https://reddit.com/r/claudecode/2",
+          5,
+          '["reddit","community-signals","claudecode"]',
+        ),
+        article(
+          "Limites do Codex CLI",
+          "Reddit Community Signals (codex)",
+          "https://reddit.com/r/codex/3",
+          4,
+          '["reddit","community-signals","codex"]',
+        ),
+        article(
+          "Copilot no VSCode",
+          "Reddit Community Signals (GithubCopilot)",
+          "https://reddit.com/r/githubcopilot/4",
+          3,
+          '["reddit","community-signals","githubcopilot"]',
+        ),
+      ],
+      {
+        max: 6,
+        perBucket: 2,
+        requirePrimary: true,
+        maxPrimaryShare: 0.65,
+        minCommunitySignals: 2,
+        minRedditSignals: 1,
+        requireFocusCommunities: true,
+      },
+    );
+
+    const covered = new Set(
+      result.selected.flatMap((item) => focusCommunity(item.article) ?? []),
+    );
+    expect([...covered].sort()).toEqual([
+      "claude-code",
+      "codex",
+      "vscode-copilot",
+    ]);
+    expect(result.selected).toHaveLength(6);
     expect(result.selected.some((item) => item.primary)).toBe(true);
   });
 });

@@ -7,7 +7,11 @@ import { isPrimarySource } from "./agent/curation.js";
 import { refineEbook } from "./agent/ebook.js";
 import { runImprovementCycle } from "./agent/improver.js";
 import { rollbackPrompt } from "./agent/prompt-policy.js";
-import { generateArticle, generatePeriodReport } from "./agent/writer.js";
+import {
+  type GenerateArticleOptions,
+  generateArticle,
+  generatePeriodReport,
+} from "./agent/writer.js";
 import { config, loadConfig } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
 import { db, getDb } from "./knowledge/store.js";
@@ -81,10 +85,13 @@ async function learnCycle() {
   };
 }
 
-async function articleCycle(type: "daily" | "weekly" = "daily") {
+async function articleCycle(
+  type: "daily" | "weekly" = "daily",
+  options: GenerateArticleOptions = {},
+) {
   log.info(`=== Article cycle start (${type}) ===`);
   try {
-    const article = await generateArticle(type);
+    const article = await generateArticle(type, options);
     assertValidArticle(article);
     db.recordMetric("editorial.quality_score", editorialQualityScore(article), {
       type,
@@ -177,25 +184,49 @@ async function ebookCycle() {
   return { url, lengthChars: ebook.markdown.length };
 }
 
-function hasArticleForToday(): boolean {
+function articlesPublishedToday() {
   const today = new Date().toISOString().split("T")[0];
   return db
     .getPublished()
-    .some((item) => item.kind === "article" && item.date === today);
+    .filter((item) => item.kind === "article" && item.date === today);
 }
 
-// Idempotent daily article: generates at most one edition per day. Used by both
-// the startup catch-up and the scheduled cron, so a restart never duplicates the
-// post and never leaves a day without one regardless of when the pod came up.
-async function ensureDailyArticle(reason: string) {
-  if (hasArticleForToday()) {
-    log.info(`Daily article already exists for today, skipping (${reason})`);
-    return;
+// Sources already spent by today's earlier editions. Without this the second and
+// third edition of the day would re-curate the same top-ranked stories.
+function sourcesUsedToday(): string[] {
+  return articlesPublishedToday().flatMap((item) =>
+    db.getPublishedEvidence(item.url).map((evidence) => evidence.source_url),
+  );
+}
+
+// Idempotent daily editions: the day has a fixed budget (config.dailyEditions)
+// and each run only fills what is missing, so restarts never duplicate a post.
+// `fill` is used by the end-of-day sweep to recover cron slots missed while the
+// pod was down; the scheduled slots themselves publish one edition each.
+async function ensureDailyEditions(reason: string, fill = false) {
+  const target = config.dailyEditions;
+  while (articlesPublishedToday().length < target) {
+    const edition = articlesPublishedToday().length + 1;
+    log.info(`Generating daily edition ${edition}/${target} (${reason})`);
+    try {
+      const result = await cycles.run("daily", () =>
+        articleCycle("daily", { excludeUrls: sourcesUsedToday() }),
+      );
+      // A skipped run publishes nothing, so retrying inside this loop would spin
+      // against whichever cycle is holding the coordinator.
+      if (result.status !== "succeeded") {
+        log.warn(`Daily edition ${edition}/${target} skipped: ${result.error}`);
+        return;
+      }
+    } catch (e) {
+      log.error(
+        `Daily edition ${edition}/${target} (${reason}) failed: ${errMsg(e)}`,
+      );
+      return;
+    }
+    if (!fill) return;
   }
-  log.info(`Generating daily article (${reason})`);
-  await cycles
-    .run("daily", () => articleCycle("daily"))
-    .catch((e) => log.error(`Daily article (${reason}) failed: ${errMsg(e)}`));
+  log.info(`Daily editions complete for today (${reason})`);
 }
 
 async function main() {
@@ -214,7 +245,9 @@ async function main() {
 
   if (runMode === "DAILY") {
     log.info("Running in DAILY mode");
-    await cycles.run("daily", () => articleCycle("daily"));
+    await cycles.run("daily", () =>
+      articleCycle("daily", { excludeUrls: sourcesUsedToday() }),
+    );
     closeDbAndExit(0);
   }
 
@@ -266,7 +299,7 @@ async function main() {
   // Catch up today's daily article if the daemon (re)started after the cron
   // fired. Unlike the weekly path, the daily cron has no recovery on its own,
   // so a deploy past ARTICLE_CRON would silently skip today's edition.
-  await ensureDailyArticle("startup catch-up");
+  await ensureDailyEditions("startup catch-up");
 
   // Check if weekly report is due (or if it's Sunday and no report was generated today)
   const lastWeeklyReport = db.getState("last_weekly_report_at");
@@ -301,9 +334,15 @@ async function main() {
     );
   });
 
-  // Schedule daily article
+  // Schedule daily editions (one per cron slot) plus a late sweep that fills any
+  // slot missed while the pod was down.
   cron.schedule(config.articleCron, () => {
-    void ensureDailyArticle("scheduled");
+    void ensureDailyEditions("scheduled");
+  });
+
+  const dailySweepCron = "0 22 * * *";
+  cron.schedule(dailySweepCron, () => {
+    void ensureDailyEditions("end-of-day sweep", true);
   });
 
   // Schedule weekly report (Every Sunday at 6pm / 18:00)
@@ -322,7 +361,7 @@ async function main() {
   });
 
   log.info(
-    `Scheduled: learn=${learnInterval}, article=${config.articleCron}, weekly=${weeklyCron}, ebook=${ebookCron}`,
+    `Scheduled: learn=${learnInterval}, article=${config.articleCron} (${config.dailyEditions}/dia), sweep=${dailySweepCron}, weekly=${weeklyCron}, ebook=${ebookCron}`,
   );
 
   process.on("SIGINT", () => {

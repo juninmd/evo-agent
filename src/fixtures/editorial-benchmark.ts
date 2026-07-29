@@ -1,14 +1,18 @@
 import type { EditorialBenchmarkCase } from "../agent/editorial-benchmark.js";
 import type { GeneratedArticle } from "../agent/types.js";
 
+const longFormBody =
+  "A Anthropic descreveu melhorias de consistência em execuções longas de codificação, e o efeito prático aparece no desenho de retomadas, supervisão e orçamento de inferência. ".repeat(
+    8,
+  );
+
 function groundedArticle(
   overrides: Partial<GeneratedArticle> = {},
 ): GeneratedArticle {
   return {
     title: "Claude 4.8 reforça tarefas longas e muda decisões de custo",
     slug: "claude-4-8-tarefas-longas-custo",
-    content:
-      "## Destaques\n\n- **Claude 4.8** reforçou tarefas longas. [Fonte](https://anthropic.com/news/claude)\n\n## Leitura do conjunto\n\nA mudança afeta arquitetura e orçamento.",
+    content: `## Destaques\n\n### Claude 4.8 reforça tarefas longas\n\n${longFormBody}\n\n[Fonte: Claude 4.8](https://anthropic.com/news/claude)\n\n## Leitura do conjunto\n\n${longFormBody}`,
     summary:
       "Claude 4.8 reforça tarefas longas e exige revisão de arquitetura e orçamento.",
     tags: ["claude", "agents"],

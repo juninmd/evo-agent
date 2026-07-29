@@ -71,6 +71,25 @@ describe("editorial contracts", () => {
     expect(errors).toContain("highlight 1 lacks source evidence");
   });
 
+  it("rejects an edition that drifted back to the source language", () => {
+    const sources = [
+      article("2026-06-12T08:00:00Z", "https://anthropic.com/news/claude"),
+    ];
+    const errors = validateEditorialDraft(
+      {
+        title: "Meetily and Hashdoor show local-first AI taking off",
+        dek: "The tools are new and the shift is relevant for teams that are running local models.",
+        highlights: [],
+        synthesis: "Texto",
+      },
+      sources,
+      { maxHighlights: 8 },
+    );
+
+    expect(errors).toContain("title is not in pt-BR");
+    expect(errors).toContain("dek is not in pt-BR");
+  });
+
   it("repairs raw control characters inside JSON strings", () => {
     const parsed = parseEditorialJson(
       '{"title":"Claude muda execução longa","dek":"Primeira linha\nSegunda linha","highlights":[],"synthesis":"Texto"}',
@@ -136,6 +155,7 @@ describe("editorial contracts", () => {
     );
 
     expect(draft.title.length).toBeLessThanOrEqual(100);
+    expect(draft.title).not.toMatch(/\s(de|em|para|que|e)$/i);
   });
 
   it("derives missing provenance from the selected source", () => {
@@ -289,6 +309,61 @@ describe("editorial contracts", () => {
     );
 
     expect(errors).toContain("draft lacks a primary source");
+  });
+
+  it("demands one highlight per available focus community", () => {
+    const focus = (subreddit: string, url: string): Article => ({
+      ...article("2026-06-12T09:00:00Z", url),
+      source: `Reddit Community Signals (${subreddit})`,
+      tags: `["reddit","community-signals","${subreddit.toLowerCase()}"]`,
+    });
+    const sources = [
+      article("2026-06-12T08:00:00Z", "https://anthropic.com/news/claude"),
+      focus("ClaudeCode", "https://reddit.com/r/claudecode/1"),
+      focus("codex", "https://reddit.com/r/codex/2"),
+      focus("GithubCopilot", "https://reddit.com/r/githubcopilot/3"),
+    ];
+
+    const prompt = buildEditorialPrompt(sources, "12/06/2026", 8);
+    expect(prompt).toContain("Comunidades em foco");
+    expect(prompt).toContain("claude-code: 1");
+    expect(prompt).toContain("codex: 2");
+    expect(prompt).toContain("vscode-copilot: 3");
+
+    const errors = validateEditorialDraft(
+      {
+        title: "Anthropic reforça consistência em tarefas longas de código",
+        dek: "A atualização altera decisões de arquitetura para fluxos extensos e exige nova avaliação operacional.",
+        highlights: [
+          {
+            sourceIndex: 0,
+            headline: "Claude melhora tarefas longas",
+            whatHappened:
+              "A Anthropic descreveu melhorias de consistência em tarefas longas de codificação.",
+            whyItMatters:
+              "Equipes podem rever supervisão, retomadas e limites de execução.",
+            evidence: sources[0].summary,
+          },
+          {
+            sourceIndex: 1,
+            headline: "Relatos de regressão no Claude Code",
+            whatHappened:
+              "A comunidade relatou variação de comportamento em execuções longas do agente.",
+            whyItMatters:
+              "Times precisam decidir quando fixar versão antes de migrar fluxos críticos.",
+            evidence: sources[1].summary,
+          },
+        ],
+        synthesis:
+          "Os relatos da comunidade ainda não confirmam o comportamento anunciado, o que mantém a decisão de adoção em aberto para times que dependem de execuções longas.",
+      },
+      sources,
+      { maxHighlights: 8 },
+    );
+
+    expect(errors).toContain("draft lacks a post from codex");
+    expect(errors).toContain("draft lacks a post from vscode-copilot");
+    expect(errors).not.toContain("draft lacks a post from claude-code");
   });
 
   it("normalizes duplicate source selections before validation", () => {

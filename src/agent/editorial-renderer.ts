@@ -39,18 +39,27 @@ export function renderEditorialDraft(
   articles: Article[],
   period: string,
 ): string {
+  // Items are grouped by theme so related sections stay adjacent, but each one
+  // is rendered as its own long-form section instead of a labelled bullet.
   const sections = new Map<string, string[]>();
   for (const highlight of draft.highlights) {
     const article = articles[highlight.sourceIndex];
     if (!article) continue;
+    const body =
+      highlight.analysis?.trim() ||
+      `${sentence(highlight.whatHappened)} ${sentence(highlight.whyItMatters)}`;
+    const item = [
+      `### ${sentence(highlight.headline).replace(/\.$/, "")}`,
+      "",
+      body,
+      "",
+      `[Fonte: ${article.title}](${article.url})`,
+    ].join("\n");
     const theme = editorialTheme(article);
-    const item = `- **${sentence(highlight.headline)}** ${sentence(highlight.whatHappened)} **Por que importa:** ${sentence(highlight.whyItMatters)} [Fonte: ${article.title}](${article.url})`;
     sections.set(theme, [...(sections.get(theme) ?? []), item]);
   }
 
-  const highlights = [...sections.entries()]
-    .map(([theme, items]) => `### ${theme}\n\n${items.join("\n")}`)
-    .join("\n\n");
+  const highlights = [...sections.values()].flat().join("\n\n");
 
   return [
     `**Período analisado:** ${period}`,
