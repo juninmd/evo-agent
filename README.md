@@ -193,9 +193,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>27</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>28</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-07-31">2026-07-31</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-31-codex-anthropic-opus-e-nf-e-descobertas-taticas-de-31-07-2026">Codex, Anthropic Opus e NF‑e: Descobertas Táticas de 31/07/2026</a></h3>
+  <p>Os usuários do Codex reportam automação de créditos até a depreciação rápida; o lançamento do Opus 5 reduz custos pela metade; e a nova regra de validação da NF‑e modifica os emissores. Alerta aos operadores: adequação técnica e governança de IA são obrigatórias.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>openai</span><span>google-news</span><span>post-signals</span><span>fallback</span><span>br</span><span>developer</span><span>anthropic fable5 pricing</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-29">2026-07-29</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-29-mai-code-1-flash-sol-e-thunderagent-ampliam-throughput-e-experiencia-de-qa">MAI-Code‑1‑Flash, Sol e ThunderAgent Ampliam Throughput e Experiência de QA</a></h3>
   <p>O pacote MAI-Code‑1‑Flash entrega inferência rápida no VS Code, enquanto Sol reduz sobre‑engineering e refina UI de ditado. ThunderAgent duplica throughput de inferência e Copilot ganha visibilidade de QA humana.</p>
@@ -623,7 +629,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>10</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>9</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -676,12 +682,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-ataque-cadeia-suprimentos-npm-mini-shai-hulud-guia-defesa">Ataque à Cadeia de Suprimentos npm: Anatomia do Mini Shai-Hulud e um Guia Prático de Defesa</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-seguranca-cadeia-suprimentos-ia-pipelines">Segurança na Cadeia de Suprimentos de IA: Protegendo Pipelines de Desenvolvimento contra Ataques a Dependências</a></h3>
   
   
 </article>
