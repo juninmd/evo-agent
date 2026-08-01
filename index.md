@@ -193,6 +193,17 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>1</strong></div>
+  <div class="story-grid">
+    <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-01">2026-08-01</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-01-chatgpt-dirige-codex-shieldfont-bloqueia-scraping-de-ia-e-copilot-exige-desenho-">ChatGPT dirige Codex, ShieldFont bloqueia scraping de IA e Copilot exige desenho de segurança</a></h3>
+  <p>O fluxo de trabalho IA evolui: ChatGPT orquestra Codex e Terra Medium, enquanto ShieldFont demonstra diferenciação de texto entre humanos e bots. OpenAI divulga avanços que reforçam algoritmos de segurança.</p>
+  <div class="chips"><span>openai</span><span>tabnews</span><span>reddit</span><span>br</span><span>developer</span><span>post-signals</span><span>fallback</span></div>
+</article>
+  </div>
+</section>
+<section class="month-group">
   <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>28</strong></div>
   <div class="story-grid">
     <article class="story-card">
@@ -629,7 +640,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>9</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>8</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -676,12 +687,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-26">2026-05-26</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-26-dependency-graph-diff-gate-supply-chain-security">Além do Lockfile: Como Implementar um Dependency Graph Diff Gate Contra Ataques à Cadeia de Suprimento</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-25-ataque-cadeia-suprimentos-npm-mini-shai-hulud-guia-defesa">Ataque à Cadeia de Suprimentos npm: Anatomia do Mini Shai-Hulud e um Guia Prático de Defesa</a></h3>
   
   
 </article>
