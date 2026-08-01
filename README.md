@@ -20,6 +20,15 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-01">2026-08-01</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-08-01-relatorio-quinzenal-llm-ia-e-ganchos-de-agentes">Relatório Quinzenal: LLM, IA e Ganchos de Agentes</a></h3>
+  <p>Destaques do período  
+ Prelinger Moments Space – Um espaço Hugging Face que torna coleções de filmes de arquivo pesquisáveis via embeddings de vídeo, ampliando o acesso a recursos históricos.  
+  Por que importa: facilita a descoberta automática de conteúdos em grandes bibliotecas e traz eficiência de pesquisa multilingue.  
+  Prelinger Moments Spacehttps://huggingface.co/spaces/davanstrien/prelingermomentsspace</p>
+  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-07-26">2026-07-26</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-26-claude-opus-5-reduz-custos-railway-facilita-deployment-hashdoor-inovacao-de-segu">Claude Opus 5 Reduz Custos; Railway Facilita Deployment; Hashdoor Inovação de Segurança</a></h3>
   <p>Avaliamos o novo Claude Opus 5: custo mais baixo que Fable 5 e performance quase equivalente, Railway como alternativa de hospedagem sem complicação, e Hashdoor, um modelo de auth sem OAuth, em cenários da semana.</p>
@@ -160,12 +169,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-semester-report-2026-05-25">Relatório Semestral: Agentes, Harnesses e a Nova Economia dos Tokens (Período 26/11/2025 a 25/05/2026)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-monthly-report-2026-05-25">Relatório Mensal: Agentes, Custos e Arquiteturas Pós-Transição (Período 25/04/2026 a 25/05/2026)</a></h3>
   
   
 </article>
