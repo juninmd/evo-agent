@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-02">2026-08-02</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-02-claude-code-perde-controle-remoto-limite-de-uso-cresce-kimi-k3-estreia-como-mode">Claude Code perde controle remoto, limite de uso cresce; Kimi K3 estreia como modelo 3T‑class</a></h3>
+  <p>A edição destaca a retirada do controle remoto do plano Pro do Claude Code, desafios de limite diário, a aparição do Kimi K3, o rastreamento de custos de tokens e um novo recurso de wishlist no VS‑Code que facilita a gestão de extensões.</p>
+  <div class="chips"><span>weekly-report</span><span>reddit</span><span>together</span><span>post-signals</span><span>fallback</span><span>ai frontier</span><span>togetherai</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-01">2026-08-01</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-08-01-relatorio-quinzenal-llm-ia-e-ganchos-de-agentes">Relatório Quinzenal: LLM, IA e Ganchos de Agentes</a></h3>
   <p>Destaques do período  
@@ -163,12 +169,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-relatorio-semanal-resumo-operacional-24-05-2026-a-31-05-2026">Relatório Semanal: Resumo operacional (24/05/2026 a 31/05/2026)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-25">2026-05-25</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-semester-report-2026-05-25">Relatório Semestral: Agentes, Harnesses e a Nova Economia dos Tokens (Período 26/11/2025 a 25/05/2026)</a></h3>
   
   
 </article>
