@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>1</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>2</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-02">2026-08-02</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-02-kimi-k3-claude-code-e-codex-custos-fluxos-e-extensoes">Kimi K3, Claude Code e Codex – Custos, Fluxos e Extensões</a></h3>
+  <p>Esta edição descreve o lançamento da primeira meta‑classe de modelo aberto, métricas de custo de tokens em Codex e uma extensão de wishlist para VS Code. Esses insights orientam decisões de orçamento e arquitetura.</p>
+  <div class="chips"><span>together</span><span>reddit</span><span>tabnews</span><span>hacker-news</span><span>ai frontier</span><span>togetherai</span><span>post-signals</span><span>fallback</span><span>br</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-01">2026-08-01</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-01-chatgpt-dirige-codex-shieldfont-bloqueia-scraping-de-ia-e-copilot-exige-desenho-">ChatGPT dirige Codex, ShieldFont bloqueia scraping de IA e Copilot exige desenho de segurança</a></h3>
   <p>O fluxo de trabalho IA evolui: ChatGPT orquestra Codex e Terra Medium, enquanto ShieldFont demonstra diferenciação de texto entre humanos e bots. OpenAI divulga avanços que reforçam algoritmos de segurança.</p>
@@ -643,7 +649,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>8</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>7</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -684,12 +690,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-27">2026-05-27</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-27-grafos-conhecimento-interfaces-agent-native">Grafos de Conhecimento de Código e Interfaces Agent-Native: Como Reduzir o Consumo de Tokens e Turbinar Agentes de IA</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-26">2026-05-26</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-26-dependency-graph-diff-gate-supply-chain-security">Além do Lockfile: Como Implementar um Dependency Graph Diff Gate Contra Ataques à Cadeia de Suprimento</a></h3>
   
   
 </article>
