@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>2</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>3</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-03">2026-08-03</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-03-gitgo-codex-e-claude-code-extensao-vs-code-escalonamento-de-custos-e-ux-de-ia">GitGo, Codex e Claude Code: Extensão VS Code, Escalonamento de Custos e UX de IA</a></h3>
+  <p>A comunidade de desenvolvedores destaca a chegada de uma nova extensão de grafo para VS Code, a escalada de custos do Codex, e a procura por configurações de UI mais confortáveis no Claude Code.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>post-signals</span><span>fallback</span><span>br</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-02">2026-08-02</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-02-kimi-k3-claude-code-e-codex-custos-fluxos-e-extensoes">Kimi K3, Claude Code e Codex – Custos, Fluxos e Extensões</a></h3>
   <p>Esta edição descreve o lançamento da primeira meta‑classe de modelo aberto, métricas de custo de tokens em Codex e uma extensão de wishlist para VS Code. Esses insights orientam decisões de orçamento e arquitetura.</p>
@@ -649,7 +655,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>7</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>6</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -684,12 +690,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-27">2026-05-27</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-27-ataques-rollback-semantico-agentes-ia">Ataques de Rollback Semântico em Agentes de IA: Protegendo Checkpoints contra Reexecução Maliciosa</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-27">2026-05-27</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-27-grafos-conhecimento-interfaces-agent-native">Grafos de Conhecimento de Código e Interfaces Agent-Native: Como Reduzir o Consumo de Tokens e Turbinar Agentes de IA</a></h3>
   
   
 </article>
