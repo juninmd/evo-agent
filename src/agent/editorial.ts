@@ -4,6 +4,7 @@ import {
   FOCUS_COMMUNITIES,
   focusCommunity,
   isPrimarySource,
+  sourceBucket,
 } from "./curation.js";
 
 export interface EditorialHighlight {
@@ -50,6 +51,25 @@ const ENGLISH_STOPWORDS =
  */
 export function looksEnglish(text: string, threshold: number): boolean {
   return (text.match(ENGLISH_STOPWORDS) ?? []).length >= threshold;
+}
+
+function isReddit(article: Article): boolean {
+  return sourceBucket(article.source) === "reddit";
+}
+
+/**
+ * How many Reddit posts an edition has to cite. Capped so a selection with few
+ * community posts stays publishable, and kept below the target stated in the
+ * prompt: this is the floor the draft is rejected under, not the goal.
+ */
+export function requiredRedditCitations(
+  sources: Article[],
+  maxHighlights: number,
+): number {
+  return Math.min(
+    sources.filter(isReddit).length,
+    Math.max(2, Math.floor(maxHighlights / 4)),
+  );
 }
 
 export function isGenericTitle(title: string): boolean {
@@ -155,6 +175,17 @@ export function validateEditorialDraft(
     )
   ) {
     errors.push("draft lacks an independent community signal");
+  }
+  // Scaled down for short drafts so the floor never asks for half the edition.
+  const requiredReddit = Math.min(
+    requiredRedditCitations(sources, options.maxHighlights),
+    Math.ceil(draft.highlights.length / 3),
+  );
+  const citedReddit = cited.filter(isReddit).length;
+  if (citedReddit < requiredReddit) {
+    errors.push(
+      `draft cites ${citedReddit} Reddit posts, minimum is ${requiredReddit}`,
+    );
   }
   for (const community of Object.keys(FOCUS_COMMUNITIES)) {
     const available = sources.some(
@@ -273,6 +304,15 @@ export function buildEditorialPrompt(
   const primaryIndexes = articles.flatMap((article, index) =>
     isPrimarySource(article) ? [index] : [],
   );
+  const redditIndexes = articles.flatMap((article, index) =>
+    isReddit(article) ? [index] : [],
+  );
+  const minReddit = requiredRedditCitations(articles, maxHighlights);
+  const targetReddit = Math.min(redditIndexes.length, minReddit + 2);
+  const redditQuota =
+    targetReddit > minReddit
+      ? `de ${minReddit} a ${targetReddit} sinais do Reddit`
+      : `${minReddit} sinais do Reddit`;
   const focusLines = Object.keys(FOCUS_COMMUNITIES).flatMap((community) => {
     const indexes = articles.flatMap((article, index) =>
       focusCommunity(article) === community ? [index] : [],
@@ -328,7 +368,12 @@ Regras:
       ? `Comunidades em foco — escolha ao menos um sourceIndex de CADA grupo abaixo e trate esses destaques com a mesma profundidade dos anúncios oficiais:\n${focusLines.join("\n")}`
       : "Não há comunidades em foco nesta seleção."
   }
-- Quando houver vários sinais do Reddit, priorize 2-4 deles se trouxerem relatos técnicos, limitações reais, regressões, benchmarks ou padrões de adoção observados por usuários.
+- ${
+    redditIndexes.length > 0
+      ? `Use ${redditQuota} entre estes sourceIndex: ${redditIndexes.join(", ")}. Menos de ${minReddit} invalida a edição. Prefira os que trazem relatos técnicos, limitações reais, regressões, benchmarks, custos ou padrões de adoção observados por quem usa a ferramenta.`
+      : "Não há sinais do Reddit nesta seleção."
+  }
+- Trate os posts do Reddit como pauta própria, com o mesmo espaço dos anúncios oficiais: descreva o relato concreto (versão, erro, custo, fluxo) em vez de citá-los apenas como reação.
 - evidence deve conter 30-240 caracteres e permanecer fiel ao campo EVIDENCE da fonte.
 - Não invente números, versões, capacidades, datas ou anúncios.
 - Não use frases vagas como "o período foi marcado", "cada vez mais" ou "players do mercado".

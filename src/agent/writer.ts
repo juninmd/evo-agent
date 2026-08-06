@@ -117,28 +117,30 @@ export async function generateArticle(
       : articles.filter((article) => !excluded.has(article.url));
   let window = options.targetDate ? historicalWindow(options.targetDate) : null;
   let recentArticles = withoutExcluded(
+    // The window has to be wide enough for the whole crawl: Reddit runs last, so
+    // a tight limit would return community posts only and drop the primary feeds.
     window
       ? db.getArticlesBetween(
           window.from,
           window.to,
-          type === "weekly" ? 450 : 240,
+          type === "weekly" ? 900 : 500,
         )
       : type === "weekly"
-        ? db.getArticlesSince(7, 450)
-        : db.getArticlesSince(2, 240),
+        ? db.getArticlesSince(7, 900)
+        : db.getArticlesSince(2, 500),
   );
   const systemPrompt = getSystemPrompt();
 
   const curate = () =>
     curateArticles(recentArticles, {
       perBucket: type === "weekly" ? 5 : 3,
-      perBucketOverrides: { reddit: type === "weekly" ? 8 : 5 },
+      perBucketOverrides: { reddit: type === "weekly" ? 10 : 6 },
       max: maxHighlights,
       requirePrimary: true,
       minSummaryLength: 80,
-      maxPrimaryShare: 0.65,
-      minCommunitySignals: type === "weekly" ? 4 : 2,
-      minRedditSignals: type === "weekly" ? 2 : 1,
+      maxPrimaryShare: 0.5,
+      minCommunitySignals: type === "weekly" ? 7 : 4,
+      minRedditSignals: type === "weekly" ? 5 : 3,
       requireFocusCommunities: true,
       now: window?.referenceTime,
     });
@@ -295,12 +297,12 @@ function periodMeta(period: ReportPeriod) {
 function loadPeriodArticles(cfg: PeriodConfig): Article[] {
   return curateArticles(db.getArticlesSince(cfg.days), {
     perBucket: 6,
-    perBucketOverrides: { reddit: 12 },
+    perBucketOverrides: { reddit: 18 },
     max: cfg.highlights[1] * 2,
     requirePrimary: true,
     minSummaryLength: 80,
-    minCommunitySignals: Math.min(8, Math.floor(cfg.highlights[0] / 3)),
-    minRedditSignals: Math.min(4, Math.floor(cfg.highlights[0] / 6)),
+    minCommunitySignals: Math.min(14, Math.floor(cfg.highlights[0] / 2)),
+    minRedditSignals: Math.min(10, Math.floor(cfg.highlights[0] / 3)),
     requireFocusCommunities: true,
   }).selected.map((item) => item.article);
 }

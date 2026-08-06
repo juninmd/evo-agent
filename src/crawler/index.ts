@@ -122,8 +122,16 @@ const REDDIT_FOCUS_SUBREDDITS = new Set([
 
 const REDDIT_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
-const REDDIT_POSTS_PER_SUBREDDIT = 8;
-const REDDIT_FOCUS_POSTS_PER_SUBREDDIT = 12;
+const REDDIT_POSTS_PER_SUBREDDIT = 12;
+const REDDIT_FOCUS_POSTS_PER_SUBREDDIT = 20;
+/**
+ * Comments cost one request per post, which is what exhausts the rate limit.
+ * Only the top slice of each feed is enriched; the remaining posts still reach
+ * the edition as post signals, for free.
+ */
+const REDDIT_COMMENT_POSTS_PER_SUBREDDIT = 4;
+const REDDIT_FOCUS_COMMENT_POSTS_PER_SUBREDDIT = 8;
+const REDDIT_SORTS: ("top" | "new")[] = ["top", "new"];
 const REDDIT_COMMENTS_PER_POST = 30;
 const REDDIT_MIN_COMMENT_SCORE = 3;
 const REDDIT_MIN_COMMENT_LENGTH = 80;
@@ -131,6 +139,11 @@ const REDDIT_MIN_COMMENT_LENGTH = 80;
 const REDDIT_FOCUS_RETRY_DELAYS_MS = [30_000, 60_000, 120_000];
 const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 3000;
 const REDDIT_RATE_LIMIT_MAX_RETRY_MS = 60000;
+/** Spacing every call keeps the crawl under the anonymous per-IP budget. */
+const REDDIT_MIN_REQUEST_INTERVAL_MS = 1100;
+/** A throttled community is skipped after this pause instead of killing the run. */
+const REDDIT_SUBREDDIT_COOLDOWN_MS = 20_000;
+const REDDIT_MAX_CONSECUTIVE_RATE_LIMITS = 3;
 
 class RedditRateLimitError extends Error {
   constructor(readonly retryAfterMs: number) {
@@ -839,8 +852,8 @@ function buildCommunitySignalSummary(
 function buildRedditPostSignalSummary(post: RedditPostCandidate): string {
   return normalizeText(
     [
-      `Sinal do Reddit em r/${post.subreddit} sobre "${post.title}".`,
-      "Comentarios indisponiveis nesta coleta; usando somente o conteudo do post RSS.",
+      `Post da comunidade em r/${post.subreddit} sobre "${post.title}".`,
+      "Relato do autor, sem os comentarios da discussao.",
       post.summary,
     ].join(" "),
   ).slice(0, 1200);
@@ -870,10 +883,25 @@ function isRedditSource(source: FeedSource): boolean {
   return source.url.includes("reddit.com") || source.tags.includes("reddit");
 }
 
+let redditNextRequestAt = 0;
+
+/**
+ * Serializes Reddit calls to one every REDDIT_MIN_REQUEST_INTERVAL_MS. The slot
+ * is reserved before awaiting, so callers queue up instead of all firing after
+ * the same wait.
+ */
+async function redditPace(now = Date.now()): Promise<void> {
+  const waitMs = redditNextRequestAt - now;
+  redditNextRequestAt =
+    Math.max(now, redditNextRequestAt) + REDDIT_MIN_REQUEST_INTERVAL_MS;
+  if (waitMs > 0) await sleep(waitMs);
+}
+
 async function redditGet<T = unknown>(
   url: string,
   config: Parameters<typeof axios.get>[1],
 ): Promise<T> {
+  await redditPace();
   try {
     const response = await axios.get<T>(url, config);
     return response.data;
@@ -883,6 +911,7 @@ async function redditGet<T = unknown>(
     const delayMs = redditRateLimitDelayMs(retryAfter);
     log.warn(`Reddit rate limited; retrying once in ${delayMs}ms`);
     await sleep(delayMs);
+    await redditPace();
     try {
       const response = await axios.get<T>(url, config);
       return response.data;
@@ -971,117 +1000,162 @@ export function orderedCommunitySubreddits(): string[] {
   ];
 }
 
+export interface SubredditPlan {
+  subreddit: string;
+  focus: boolean;
+  /** Posts kept per community, across every sort. */
+  postLimit: number;
+  /** How many of those posts get their comment thread fetched. */
+  commentLimit: number;
+}
+
+export function subredditPlan(subreddit: string): SubredditPlan {
+  const focus = REDDIT_FOCUS_SUBREDDITS.has(subreddit);
+  return {
+    subreddit,
+    focus,
+    postLimit: focus
+      ? REDDIT_FOCUS_POSTS_PER_SUBREDDIT
+      : REDDIT_POSTS_PER_SUBREDDIT,
+    commentLimit: focus
+      ? REDDIT_FOCUS_COMMENT_POSTS_PER_SUBREDDIT
+      : REDDIT_COMMENT_POSTS_PER_SUBREDDIT,
+  };
+}
+
+function saveCommunitySignal(
+  post: RedditPostCandidate,
+  url: string,
+  comments: RedditComment[],
+): void {
+  const topScore = comments[0]?.score ?? 0;
+  db.saveArticle({
+    title: `Discussao: ${post.title}`,
+    source: `Reddit Community Signals (${post.subreddit})`,
+    url,
+    summary: buildCommunitySignalSummary(post, comments),
+    tags: JSON.stringify([
+      "reddit",
+      "community-signals",
+      post.subreddit.toLowerCase(),
+    ]),
+    engagement_score:
+      topScore +
+      comments.reduce((sum, comment) => sum + Math.max(comment.score, 0), 0),
+  });
+}
+
+/** Saves a post without its discussion. Returns false when it carries no text. */
+function savePostSignal(post: RedditPostCandidate, url: string): boolean {
+  if (post.summary.length < REDDIT_MIN_COMMENT_LENGTH) return false;
+  db.saveArticle({
+    title: `Reddit: ${post.title}`,
+    source: `Reddit Post Signals (${post.subreddit})`,
+    url,
+    summary: buildRedditPostSignalSummary(post),
+    tags: JSON.stringify([
+      "reddit",
+      "post-signals",
+      post.subreddit.toLowerCase(),
+    ]),
+    engagement_score: 0,
+  });
+  return true;
+}
+
+async function collectPostCandidates(
+  plan: SubredditPlan,
+): Promise<{ posts: RedditPostCandidate[]; throttled: boolean }> {
+  const byUrl = new Map<string, RedditPostCandidate>();
+  let throttled = false;
+
+  // "top" first: with the comment budget capped, the enriched slots should go to
+  // the best posts of the week, not to whatever was posted in the last minutes.
+  for (const sort of REDDIT_SORTS) {
+    try {
+      const candidates = plan.focus
+        ? await getFocusPostCandidates(plan.subreddit, sort)
+        : await getRedditPostCandidates(plan.subreddit, sort);
+      for (const post of candidates) {
+        if (!byUrl.has(post.url)) byUrl.set(post.url, post);
+      }
+    } catch (err) {
+      if (err instanceof RedditRateLimitError) {
+        throttled = true;
+        break;
+      }
+      log.warn(
+        `Reddit ${sort} feed failed for r/${plan.subreddit}: ${(err as Error).message}`,
+      );
+    }
+  }
+
+  return { posts: [...byUrl.values()].slice(0, plan.postLimit), throttled };
+}
+
 export async function crawlRedditCommunitySignals(): Promise<number> {
   let newCount = 0;
-  let rateLimited = false;
+  let consecutiveRateLimits = 0;
 
-  // Reddit rate limiting aborts the whole crawl, so the focus communities are
-  // collected before anything else instead of after 40 other subreddits.
+  // Reddit throttles by IP, so the focus communities are collected before
+  // anything else instead of after 40 other subreddits.
   for (const subreddit of orderedCommunitySubreddits()) {
-    const focus = REDDIT_FOCUS_SUBREDDITS.has(subreddit);
-    const sorts: ("new" | "top")[] = focus ? ["top", "new"] : ["new"];
-    const byUrl = new Map<string, RedditPostCandidate>();
-    for (const sort of sorts) {
-      try {
-        const candidates = focus
-          ? await getFocusPostCandidates(subreddit, sort)
-          : await getRedditPostCandidates(subreddit, sort);
-        for (const post of candidates) {
-          if (!byUrl.has(post.url)) byUrl.set(post.url, post);
-        }
-      } catch (err) {
-        if (err instanceof RedditRateLimitError) {
-          log.warn(
-            `Reddit feed rate limit persisted for r/${subreddit}; stopping Reddit crawl`,
-          );
-          rateLimited = true;
-          break;
-        }
-        log.warn(
-          `Reddit ${sort} feed failed for r/${subreddit}: ${(err as Error).message}`,
-        );
-      }
+    const plan = subredditPlan(subreddit);
+    const collected = await collectPostCandidates(plan);
+    let throttled = collected.throttled;
+    if (throttled) {
+      log.warn(`Reddit feed rate limit persisted for r/${subreddit}`);
     }
-    if (rateLimited) break;
-    const posts = [...byUrl.values()];
+    let enriched = 0;
 
-    for (const post of posts) {
+    for (const post of collected.posts) {
       const url = signalUrl(post.url);
       if (db.urlExists(url)) continue;
 
+      // Past the comment budget the post is still worth publishing; it just goes
+      // in without the discussion instead of costing another request.
+      if (throttled || enriched >= plan.commentLimit) {
+        if (savePostSignal(post, url)) newCount++;
+        continue;
+      }
+
       try {
         const comments = await getRedditComments(post.url);
+        enriched++;
         if (comments.length === 0) {
-          if (post.summary.length < REDDIT_MIN_COMMENT_LENGTH) continue;
-          db.saveArticle({
-            title: `Reddit: ${post.title}`,
-            source: `Reddit Post Signals (${post.subreddit})`,
-            url,
-            summary: buildRedditPostSignalSummary(post),
-            tags: JSON.stringify([
-              "reddit",
-              "post-signals",
-              "fallback",
-              post.subreddit.toLowerCase(),
-            ]),
-            engagement_score: 0,
-          });
-          newCount++;
+          if (savePostSignal(post, url)) newCount++;
           continue;
         }
-
-        const topScore = comments.length > 0 ? comments[0].score : 0;
-        const engagementScore =
-          topScore +
-          comments.reduce(
-            (sum, comment) => sum + Math.max(comment.score, 0),
-            0,
-          );
-        db.saveArticle({
-          title: `Discussao: ${post.title}`,
-          source: `Reddit Community Signals (${post.subreddit})`,
-          url,
-          summary: buildCommunitySignalSummary(post, comments),
-          tags: JSON.stringify([
-            "reddit",
-            "community-signals",
-            "experimental",
-            post.subreddit.toLowerCase(),
-          ]),
-          engagement_score: engagementScore,
-        });
+        saveCommunitySignal(post, url, comments);
         newCount++;
       } catch (err) {
-        if (post.summary.length >= REDDIT_MIN_COMMENT_LENGTH) {
-          db.saveArticle({
-            title: `Reddit: ${post.title}`,
-            source: `Reddit Post Signals (${post.subreddit})`,
-            url,
-            summary: buildRedditPostSignalSummary(post),
-            tags: JSON.stringify([
-              "reddit",
-              "post-signals",
-              "fallback",
-              post.subreddit.toLowerCase(),
-            ]),
-            engagement_score: 0,
-          });
-          newCount++;
-          continue;
-        }
         if (err instanceof RedditRateLimitError) {
-          log.warn(
-            `Reddit comments rate limit persisted for r/${post.subreddit}; stopping Reddit crawl`,
+          log.warn(`Reddit comments rate limit persisted for r/${subreddit}`);
+          throttled = true;
+        } else {
+          log.info(
+            `Reddit comments skipped for r/${subreddit}: ${(err as Error).message}`,
           );
-          rateLimited = true;
-          break;
         }
-        log.info(
-          `Reddit comments skipped for r/${post.subreddit}: ${(err as Error).message}`,
-        );
+        if (savePostSignal(post, url)) newCount++;
       }
     }
-    if (rateLimited) break;
+
+    // One throttled community used to end the whole crawl, leaving the remaining
+    // 40 subreddits uncollected. Now it costs a cooldown, and only a run of
+    // throttled communities means the IP is actually blocked.
+    if (!throttled) {
+      consecutiveRateLimits = 0;
+      continue;
+    }
+    consecutiveRateLimits++;
+    if (consecutiveRateLimits >= REDDIT_MAX_CONSECUTIVE_RATE_LIMITS) {
+      log.warn(
+        `Reddit throttled ${consecutiveRateLimits} communities in a row; stopping Reddit crawl`,
+      );
+      break;
+    }
+    await sleep(REDDIT_SUBREDDIT_COOLDOWN_MS);
   }
 
   log.info(`Crawled Reddit community signals, ${newCount} new digests`);
