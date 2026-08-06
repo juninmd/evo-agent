@@ -129,8 +129,19 @@ const REDDIT_MIN_COMMENT_SCORE = 3;
 const REDDIT_MIN_COMMENT_LENGTH = 80;
 /** Reddit throttles by IP, so the focus feeds wait it out instead of giving up. */
 const REDDIT_FOCUS_RETRY_DELAYS_MS = [30_000, 60_000, 120_000];
-const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 3000;
+const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 15000;
 const REDDIT_RATE_LIMIT_MAX_RETRY_MS = 60000;
+/**
+ * Reddit answers 403 to the post `.json` endpoint from datacenter IPs, so every
+ * comment fetch burns the shared per-IP budget for nothing and pushes the RSS
+ * feeds into 429. Comments stay behind a flag until the endpoint works again.
+ */
+const REDDIT_COMMENTS_ENABLED = process.env.REDDIT_COMMENTS_ENABLED === "true";
+/** Reddit throttles by request rate, so subreddits are paced instead of looped. */
+const REDDIT_SUBREDDIT_SPACING_MS = 8000;
+/** Hourly crawls never let the per-IP budget recover between runs. */
+const REDDIT_SIGNALS_MIN_INTERVAL_HOURS = 6;
+const REDDIT_SIGNALS_LAST_RUN_KEY = "reddit_signals_last_run";
 
 class RedditRateLimitError extends Error {
   constructor(readonly retryAfterMs: number) {
@@ -630,9 +641,13 @@ async function crawlGitHubTrending(): Promise<number> {
             });
         });
 
+        const day = todayIso();
         for (const repo of repos) {
           if (!repo.url || !repo.name) continue;
-          if (db.urlExists(repo.url)) continue;
+          // A repo trending again is today's news, so the signal is keyed by
+          // day. Keying by repo URL alone hid every repo already seen once.
+          const signalUrl = trendingSignalUrl(repo.url, label, day);
+          if (db.urlExists(signalUrl)) continue;
 
           const combined = `${repo.name} ${repo.description}`.toLowerCase();
           const isAiRelevant = GITHUB_TRENDING_AI_KEYWORDS.some((kw) =>
@@ -653,7 +668,7 @@ async function crawlGitHubTrending(): Promise<number> {
           db.saveArticle({
             title: repo.name,
             source: `GitHub Trending (${label})`,
-            url: repo.url,
+            url: signalUrl,
             summary,
             tags: JSON.stringify([
               "github",
@@ -678,6 +693,18 @@ async function crawlGitHubTrending(): Promise<number> {
 
   log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
   return newCount;
+}
+
+export function todayIso(now = new Date()): string {
+  return now.toISOString().slice(0, 10);
+}
+
+export function trendingSignalUrl(
+  repoUrl: string,
+  label: string,
+  day: string,
+): string {
+  return `${repoUrl.split("#")[0]}#trending-${label}-${day}`;
 }
 
 export function parseGitHubStarCount(value: string): number {
@@ -971,13 +998,34 @@ export function orderedCommunitySubreddits(): string[] {
   ];
 }
 
+export function redditSignalsDue(
+  lastRun: string | null,
+  now = new Date(),
+): boolean {
+  if (!lastRun) return true;
+  const elapsedMs = now.getTime() - Date.parse(lastRun);
+  if (!Number.isFinite(elapsedMs)) return true;
+  return elapsedMs >= REDDIT_SIGNALS_MIN_INTERVAL_HOURS * 3600_000;
+}
+
 export async function crawlRedditCommunitySignals(): Promise<number> {
+  if (!redditSignalsDue(db.getState(REDDIT_SIGNALS_LAST_RUN_KEY))) {
+    log.info(
+      `Reddit community signals skipped: last run under ${REDDIT_SIGNALS_MIN_INTERVAL_HOURS}h ago`,
+    );
+    return 0;
+  }
+  db.setState(REDDIT_SIGNALS_LAST_RUN_KEY, new Date().toISOString());
+
   let newCount = 0;
   let rateLimited = false;
+  let firstSubreddit = true;
 
   // Reddit rate limiting aborts the whole crawl, so the focus communities are
   // collected before anything else instead of after 40 other subreddits.
   for (const subreddit of orderedCommunitySubreddits()) {
+    if (!firstSubreddit) await sleep(REDDIT_SUBREDDIT_SPACING_MS);
+    firstSubreddit = false;
     const focus = REDDIT_FOCUS_SUBREDDITS.has(subreddit);
     const sorts: ("new" | "top")[] = focus ? ["top", "new"] : ["new"];
     const byUrl = new Map<string, RedditPostCandidate>();
@@ -1010,7 +1058,9 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
       if (db.urlExists(url)) continue;
 
       try {
-        const comments = await getRedditComments(post.url);
+        const comments = REDDIT_COMMENTS_ENABLED
+          ? await getRedditComments(post.url)
+          : [];
         if (comments.length === 0) {
           if (post.summary.length < REDDIT_MIN_COMMENT_LENGTH) continue;
           db.saveArticle({
@@ -1088,6 +1138,14 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   return newCount;
 }
 
+const HACKER_NEWS_WINDOW_DAYS = 3;
+
+export function hackerNewsSinceEpoch(now = new Date()): number {
+  return Math.floor(
+    (now.getTime() - HACKER_NEWS_WINDOW_DAYS * 86_400_000) / 1000,
+  );
+}
+
 async function crawlHackerNewsAlgolia(): Promise<number> {
   let newCount = 0;
   const queries = [
@@ -1095,9 +1153,12 @@ async function crawlHackerNewsAlgolia(): Promise<number> {
     { tag: "ml", query: "machine learning OR deep learning OR transformer" },
   ];
 
+  // Without a time window the query keeps returning the same all-time stories,
+  // which are already stored, so every run saved zero.
+  const since = hackerNewsSinceEpoch();
   for (const { tag, query } of queries) {
     try {
-      const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=story&hitsPerPage=20&numericFilters=points>5`;
+      const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=story&hitsPerPage=30&numericFilters=points>20,created_at_i>${since}`;
       const response = await axios.get(url, { timeout: 10000 });
       const hits = response.data?.hits ?? [];
 

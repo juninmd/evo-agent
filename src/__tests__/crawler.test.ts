@@ -2,11 +2,15 @@ import { describe, expect, it } from "vitest";
 import {
   focusRetryDelayMs,
   hackerNewsEngagement,
+  hackerNewsSinceEpoch,
   isUsefulComment,
   orderedCommunitySubreddits,
   parseGitHubStarCount,
   redditRateLimitDelayMs,
+  redditSignalsDue,
   summarizeSourceContent,
+  todayIso,
+  trendingSignalUrl,
 } from "../crawler/index.js";
 
 describe("crawler transformations", () => {
@@ -64,7 +68,36 @@ describe("crawler transformations", () => {
   it("computes bounded Reddit rate-limit retry delays", () => {
     expect(redditRateLimitDelayMs("2")).toBe(2000);
     expect(redditRateLimitDelayMs("120")).toBe(60000);
-    expect(redditRateLimitDelayMs(undefined)).toBe(3000);
+    expect(redditRateLimitDelayMs(undefined)).toBe(15000);
+  });
+
+  it("keys GitHub Trending signals by day so a repo can trend again", () => {
+    const repo = "https://github.com/cloudflare/computer";
+    expect(trendingSignalUrl(repo, "daily", "2026-08-06")).toBe(
+      `${repo}#trending-daily-2026-08-06`,
+    );
+    expect(trendingSignalUrl(repo, "daily", "2026-08-06")).not.toBe(
+      trendingSignalUrl(repo, "daily", "2026-08-07"),
+    );
+    expect(
+      trendingSignalUrl(`${repo}#trending-daily-2026-08-05`, "weekly", "x"),
+    ).toBe(`${repo}#trending-weekly-x`);
+    expect(todayIso(new Date("2026-08-06T22:15:00Z"))).toBe("2026-08-06");
+  });
+
+  it("limits Hacker News to a recent window", () => {
+    const now = new Date("2026-08-06T00:00:00Z");
+    expect(hackerNewsSinceEpoch(now)).toBe(
+      Math.floor(now.getTime() / 1000) - 3 * 86_400,
+    );
+  });
+
+  it("throttles Reddit community signals to one run every six hours", () => {
+    const now = new Date("2026-08-06T22:00:00Z");
+    expect(redditSignalsDue(null, now)).toBe(true);
+    expect(redditSignalsDue("not-a-date", now)).toBe(true);
+    expect(redditSignalsDue("2026-08-06T21:00:00Z", now)).toBe(false);
+    expect(redditSignalsDue("2026-08-06T16:00:00Z", now)).toBe(true);
   });
 
   it("turns source Markdown into usable evidence", () => {
