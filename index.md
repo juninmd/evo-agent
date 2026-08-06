@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-06">2026-08-06</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-06-radar-2026-08-06">Radar IA — 06/08/2026</a></h3>
+  <p>Radar de 72 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-02">2026-08-02</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-02-claude-code-perde-controle-remoto-limite-de-uso-cresce-kimi-k3-estreia-como-mode">Claude Code perde controle remoto, limite de uso cresce; Kimi K3 estreia como modelo 3T‑class</a></h3>
   <p>A edição destaca a retirada do controle remoto do plano Pro do Claude Code, desafios de limite diário, a aparição do Kimi K3, o rastreamento de custos de tokens e um novo recurso de wishlist no VS‑Code que facilita a gestão de extensões.</p>
@@ -163,12 +169,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-01">2026-06-01</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-06-01-relatorio-quinzenal-panorama-tecnico-18-05-2026-a-01-06-2026">Relatorio Quinzenal: Panorama tecnico (18/05/2026 a 01/06/2026)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-31-relatorio-semanal-resumo-operacional-24-05-2026-a-31-05-2026">Relatório Semanal: Resumo operacional (24/05/2026 a 31/05/2026)</a></h3>
   
   
 </article>
