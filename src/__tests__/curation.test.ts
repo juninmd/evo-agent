@@ -244,6 +244,44 @@ describe("editorial curation", () => {
     expect(result.selected.some((item) => item.primary)).toBe(true);
   });
 
+  it("fills a daily edition with Reddit posts when official news dominates", () => {
+    // The daily policy from generateArticle, fed a day where every official feed
+    // published and Reddit is the minority of the pool.
+    const official = Array.from({ length: 14 }, (_, index) =>
+      article(
+        `Anuncio oficial ${index}`,
+        index % 2 === 0 ? "OpenAI Blog" : "Anthropic News",
+        `https://openai.com/${index}`,
+        200 - index,
+      ),
+    );
+    const reddit = Array.from({ length: 6 }, (_, index) =>
+      article(
+        `Relato da comunidade ${index}`,
+        "Reddit Community Signals (LocalLLaMA)",
+        `https://reddit.com/r/localllama/${index}`,
+        5,
+        '["reddit","community-signals","localllama"]',
+      ),
+    );
+
+    const result = curateArticles([...official, ...reddit], {
+      perBucket: 3,
+      perBucketOverrides: { reddit: 6 },
+      max: 12,
+      requirePrimary: true,
+      minSummaryLength: 80,
+      maxPrimaryShare: 0.5,
+      minCommunitySignals: 4,
+      minRedditSignals: 3,
+    });
+
+    expect(result.selected).toHaveLength(12);
+    expect(result.metrics.redditSignals).toBeGreaterThanOrEqual(3);
+    expect(result.metrics.primarySources).toBeLessThanOrEqual(6);
+    expect(result.selected.some((item) => item.primary)).toBe(true);
+  });
+
   it("maps only Reddit sources to focus communities", () => {
     expect(
       focusCommunity(

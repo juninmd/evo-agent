@@ -5,6 +5,7 @@ import {
   isGenericTitle,
   parseEditorialDraft,
   parseEditorialJson,
+  requiredRedditCitations,
   validateEditorialDraft,
 } from "../agent/editorial.js";
 import type { Article } from "../knowledge/store.js";
@@ -124,7 +125,10 @@ describe("editorial contracts", () => {
     );
 
     expect(prompt).toContain("sinais do Reddit");
-    expect(prompt).toContain("priorize 2-4 deles");
+    // Three Reddit sources are available, so the floor is the whole supply and
+    // the prompt asks for it explicitly by index.
+    expect(prompt).toContain("Use 3 sinais do Reddit");
+    expect(prompt).toContain("sourceIndex: 1, 2, 3");
   });
 
   it("bounds an otherwise valid generated title without another model call", () => {
@@ -364,6 +368,68 @@ describe("editorial contracts", () => {
     expect(errors).toContain("draft lacks a post from codex");
     expect(errors).toContain("draft lacks a post from vscode-copilot");
     expect(errors).not.toContain("draft lacks a post from claude-code");
+  });
+
+  it("rejects an edition that leaves the available Reddit posts unused", () => {
+    const community = (index: number): Article => ({
+      ...article(
+        "2026-06-12T09:00:00Z",
+        `https://reddit.com/r/localllama/${index}`,
+      ),
+      source: "Reddit Community Signals (LocalLLaMA)",
+      tags: '["reddit","community-signals","localllama"]',
+    });
+    const sources = [
+      ...Array.from({ length: 8 }, (_, index) =>
+        article("2026-06-12T08:00:00Z", `https://anthropic.com/news/${index}`),
+      ),
+      community(1),
+      community(2),
+      community(3),
+      community(4),
+    ];
+    const official = [0, 1, 2, 3, 4, 5, 6, 7];
+    const reddit = [8, 9, 10, 11];
+
+    expect(requiredRedditCitations(sources, 12)).toBe(3);
+    expect(requiredRedditCitations([sources[0], sources[8]], 12)).toBe(1);
+
+    const highlight = (sourceIndex: number) => ({
+      sourceIndex,
+      headline: "Relato de regressão",
+      whatHappened:
+        "A comunidade relatou variação de comportamento em execuções longas do agente.",
+      whyItMatters:
+        "Times precisam decidir quando fixar versão antes de migrar fluxos críticos.",
+      evidence: sources[sourceIndex].summary,
+    });
+    const draft = (indexes: number[]) => ({
+      title: "Anthropic reforça consistência em tarefas longas de código",
+      dek: "A atualização altera decisões de arquitetura para fluxos extensos e exige nova avaliação operacional.",
+      highlights: indexes.map(highlight),
+      synthesis:
+        "Os relatos da comunidade ainda não confirmam o comportamento anunciado, o que mantém a decisão de adoção em aberto para times que dependem de execuções longas.",
+    });
+
+    // A full-length edition that cites a single community post is rejected.
+    expect(
+      validateEditorialDraft(draft([...official, reddit[0]]), sources, {
+        maxHighlights: 12,
+      }),
+    ).toContain("draft cites 1 Reddit posts, minimum is 3");
+    expect(
+      validateEditorialDraft(
+        draft([...official.slice(0, 6), ...reddit.slice(0, 3)]),
+        sources,
+        { maxHighlights: 12 },
+      ).join(" "),
+    ).not.toContain("Reddit posts, minimum");
+    // A short draft is not asked to fill half the edition with Reddit.
+    expect(
+      validateEditorialDraft(draft([0, reddit[0]]), sources, {
+        maxHighlights: 12,
+      }).join(" "),
+    ).not.toContain("Reddit posts, minimum");
   });
 
   it("normalizes duplicate source selections before validation", () => {

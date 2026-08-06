@@ -6,6 +6,7 @@ import {
   orderedCommunitySubreddits,
   parseGitHubStarCount,
   redditRateLimitDelayMs,
+  subredditPlan,
   summarizeSourceContent,
 } from "../crawler/index.js";
 
@@ -19,6 +20,21 @@ describe("crawler transformations", () => {
       "vscode",
     ]);
     expect(new Set(ordered).size).toBe(ordered.length);
+  });
+
+  it("collects more posts than it enriches with comments", () => {
+    const focus = subredditPlan("ClaudeCode");
+    const regular = subredditPlan("Python");
+
+    expect(focus.focus).toBe(true);
+    expect(regular.focus).toBe(false);
+    // Comments are the request-expensive part: every community keeps a post
+    // budget well above its comment budget so throttling costs coverage, not posts.
+    for (const plan of [focus, regular]) {
+      expect(plan.postLimit).toBeGreaterThan(plan.commentLimit);
+    }
+    expect(focus.postLimit).toBeGreaterThan(regular.postLimit);
+    expect(focus.commentLimit).toBeGreaterThan(regular.commentLimit);
   });
 
   it("waits out Reddit throttling on focus feeds for a bounded number of tries", () => {
