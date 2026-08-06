@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   bucketRadarArticles,
+  dedupeByUrl,
   displayUrl,
   fallbackReading,
   radarDate,
@@ -79,6 +80,24 @@ describe("radar", () => {
     expect(reading.indexOf("primeiro")).toBeLessThan(
       reading.indexOf("segundo"),
     );
+  });
+
+  it("dedupes a repo listed on more than one trending board", () => {
+    const deduped = dedupeByUrl([
+      article({
+        id: 1,
+        url: "https://github.com/a/b#trending-daily-2026-08-06",
+      }),
+      article({
+        id: 2,
+        url: "https://github.com/a/b#trending-weekly-2026-08-06",
+      }),
+      article({
+        id: 3,
+        url: "https://github.com/c/d#trending-daily-2026-08-06",
+      }),
+    ]);
+    expect(deduped.map((item) => item.id)).toEqual([1, 3]);
   });
 
   it("names the edition by day", () => {

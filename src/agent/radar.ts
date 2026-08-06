@@ -162,6 +162,21 @@ const RADAR_SYSTEM_PROMPT = [
   "Nao invente dados: use apenas o que esta no material fornecido.",
 ].join(" ");
 
+/**
+ * A repo on both the daily and the weekly trending list is two signals with one
+ * URL once the day key is stripped, and published_evidence is unique per
+ * (article, source).
+ */
+export function dedupeByUrl(articles: Article[]): Article[] {
+  const seen = new Set<string>();
+  return articles.filter((article) => {
+    const url = displayUrl(article.url);
+    if (seen.has(url)) return false;
+    seen.add(url);
+    return true;
+  });
+}
+
 export function radarDate(now = new Date()): string {
   return now.toISOString().slice(0, 10);
 }
@@ -195,7 +210,7 @@ export async function generateRadar(
   }
 
   const day = radarDate(now);
-  const selected = buckets.flatMap((bucket) => bucket.articles);
+  const selected = dedupeByUrl(buckets.flatMap((bucket) => bucket.articles));
   const content = [
     reading.trim(),
     "",
