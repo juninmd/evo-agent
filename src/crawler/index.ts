@@ -1209,27 +1209,64 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   return newCount;
 }
 
-const HACKER_NEWS_WINDOW_DAYS = 3;
+const HACKER_NEWS_MIN_POINTS = 20;
 
-export function hackerNewsSinceEpoch(now = new Date()): number {
-  return Math.floor(
-    (now.getTime() - HACKER_NEWS_WINDOW_DAYS * 86_400_000) / 1000,
-  );
+const HACKER_NEWS_KEYWORDS = [
+  "ai",
+  "llm",
+  "gpt",
+  "claude",
+  "agent",
+  "copilot",
+  "codex",
+  "model",
+  "openai",
+  "anthropic",
+  "gemini",
+  "qwen",
+  "deepseek",
+  "inference",
+  "prompt",
+  "rag",
+  "transformer",
+  "machine learning",
+  "deep learning",
+  "neural",
+];
+
+export function isHackerNewsRelevant(title: string): boolean {
+  const lower = title.toLowerCase();
+  const words = lower.split(/[^a-z0-9+.]+/);
+  return HACKER_NEWS_KEYWORDS.some((keyword) => {
+    if (keyword.includes(" ")) return lower.includes(keyword);
+    // Short keywords match whole words only, or "Spain" reads as AI news.
+    // Longer ones match as a prefix, so "agentic" and "qwen3.8" still count.
+    return keyword.length <= 3
+      ? words.includes(keyword)
+      : words.some((word) => word.startsWith(keyword));
+  });
 }
 
 async function crawlHackerNewsAlgolia(): Promise<number> {
   let newCount = 0;
+  // The full-text index lags — on 06/08/2026 a broad "AI OR LLM" query returned
+  // nothing newer than 23/07. The front page is always current, so relevance is
+  // filtered here instead of being delegated to the query.
   const queries = [
-    { tag: "ai", query: "AI OR LLM OR GPT OR Claude OR agent" },
-    { tag: "ml", query: "machine learning OR deep learning OR transformer" },
+    {
+      tag: "front-page",
+      url: "https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=50",
+      filter: true,
+    },
+    {
+      tag: "ai",
+      url: `https://hn.algolia.com/api/v1/search_by_date?query=${encodeURIComponent("AI OR LLM OR GPT OR Claude OR agent")}&tags=story&hitsPerPage=30&numericFilters=points>${HACKER_NEWS_MIN_POINTS}`,
+      filter: false,
+    },
   ];
 
-  // Without a time window the query keeps returning the same all-time stories,
-  // which are already stored, so every run saved zero.
-  const since = hackerNewsSinceEpoch();
-  for (const { tag, query } of queries) {
+  for (const { tag, url, filter } of queries) {
     try {
-      const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=story&hitsPerPage=30&numericFilters=points>20,created_at_i>${since}`;
       const response = await axios.get(url, { timeout: 10000 });
       const hits = response.data?.hits ?? [];
 
@@ -1237,6 +1274,8 @@ async function crawlHackerNewsAlgolia(): Promise<number> {
         const storyUrl =
           hit.url || `https://news.ycombinator.com/item?id=${hit.objectID}`;
         if (!hit.title || db.urlExists(storyUrl)) continue;
+        if (filter && !isHackerNewsRelevant(hit.title)) continue;
+        if ((hit.points ?? 0) < HACKER_NEWS_MIN_POINTS) continue;
 
         const points = hit.points ?? 0;
         const numComments = hit.num_comments ?? 0;

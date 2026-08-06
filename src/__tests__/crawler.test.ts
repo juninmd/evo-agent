@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   focusRetryDelayMs,
   hackerNewsEngagement,
-  hackerNewsSinceEpoch,
+  isHackerNewsRelevant,
   isUsefulComment,
   orderedCommunitySubreddits,
   parseGitHubStarCount,
@@ -98,11 +98,14 @@ describe("crawler transformations", () => {
     expect(todayIso(new Date("2026-08-06T22:15:00Z"))).toBe("2026-08-06");
   });
 
-  it("limits Hacker News to a recent window", () => {
-    const now = new Date("2026-08-06T00:00:00Z");
-    expect(hackerNewsSinceEpoch(now)).toBe(
-      Math.floor(now.getTime() / 1000) - 3 * 86_400,
-    );
+  it("filters the Hacker News front page by topic", () => {
+    expect(
+      isHackerNewsRelevant("Qwen3.8 Max now ranked best by agentic index"),
+    ).toBe(true);
+    expect(isHackerNewsRelevant("Machine learning for cyclones")).toBe(true);
+    expect(isHackerNewsRelevant("Crime Pays but Botany Doesn't")).toBe(false);
+    // "ai" must not match inside another word, or "Spain" becomes AI news.
+    expect(isHackerNewsRelevant("Rain in Spain")).toBe(false);
   });
 
   it("throttles Reddit community signals to one sweep every six hours", () => {
