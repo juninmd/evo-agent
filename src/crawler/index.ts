@@ -144,6 +144,15 @@ const REDDIT_MIN_REQUEST_INTERVAL_MS = 1100;
 /** A throttled community is skipped after this pause instead of killing the run. */
 const REDDIT_SUBREDDIT_COOLDOWN_MS = 20_000;
 const REDDIT_MAX_CONSECUTIVE_RATE_LIMITS = 3;
+/**
+ * Reddit answers 403 to the post `.json` endpoint from datacenter IPs, so every
+ * comment fetch burns the shared per-IP budget for nothing and pushes the RSS
+ * feeds into 429. Comments stay behind a flag until the endpoint works again.
+ */
+const REDDIT_COMMENTS_ENABLED = process.env.REDDIT_COMMENTS_ENABLED === "true";
+/** Hourly crawls never let the per-IP budget recover between sweeps. */
+const REDDIT_SIGNALS_MIN_INTERVAL_HOURS = 6;
+const REDDIT_SIGNALS_LAST_RUN_KEY = "reddit_signals_last_run";
 
 class RedditRateLimitError extends Error {
   constructor(readonly retryAfterMs: number) {
@@ -643,9 +652,13 @@ async function crawlGitHubTrending(): Promise<number> {
             });
         });
 
+        const day = todayIso();
         for (const repo of repos) {
           if (!repo.url || !repo.name) continue;
-          if (db.urlExists(repo.url)) continue;
+          // A repo trending again is today's news, so the signal is keyed by
+          // day. Keying by repo URL alone hid every repo already seen once.
+          const signalUrl = trendingSignalUrl(repo.url, label, day);
+          if (db.urlExists(signalUrl)) continue;
 
           const combined = `${repo.name} ${repo.description}`.toLowerCase();
           const isAiRelevant = GITHUB_TRENDING_AI_KEYWORDS.some((kw) =>
@@ -666,7 +679,7 @@ async function crawlGitHubTrending(): Promise<number> {
           db.saveArticle({
             title: repo.name,
             source: `GitHub Trending (${label})`,
-            url: repo.url,
+            url: signalUrl,
             summary,
             tags: JSON.stringify([
               "github",
@@ -691,6 +704,18 @@ async function crawlGitHubTrending(): Promise<number> {
 
   log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
   return newCount;
+}
+
+export function todayIso(now = new Date()): string {
+  return now.toISOString().slice(0, 10);
+}
+
+export function trendingSignalUrl(
+  repoUrl: string,
+  label: string,
+  day: string,
+): string {
+  return `${repoUrl.split("#")[0]}#trending-${label}-${day}`;
 }
 
 export function parseGitHubStarCount(value: string): number {
@@ -1093,7 +1118,25 @@ async function collectPostCandidates(
   return { posts: [...byUrl.values()].slice(0, plan.postLimit), throttled };
 }
 
+export function redditSignalsDue(
+  lastRun: string | null,
+  now = new Date(),
+): boolean {
+  if (!lastRun) return true;
+  const elapsedMs = now.getTime() - Date.parse(lastRun);
+  if (!Number.isFinite(elapsedMs)) return true;
+  return elapsedMs >= REDDIT_SIGNALS_MIN_INTERVAL_HOURS * 3600_000;
+}
+
 export async function crawlRedditCommunitySignals(): Promise<number> {
+  if (!redditSignalsDue(db.getState(REDDIT_SIGNALS_LAST_RUN_KEY))) {
+    log.info(
+      `Reddit community signals skipped: last run under ${REDDIT_SIGNALS_MIN_INTERVAL_HOURS}h ago`,
+    );
+    return 0;
+  }
+  db.setState(REDDIT_SIGNALS_LAST_RUN_KEY, new Date().toISOString());
+
   let newCount = 0;
   let consecutiveRateLimits = 0;
 
@@ -1114,7 +1157,11 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
 
       // Past the comment budget the post is still worth publishing; it just goes
       // in without the discussion instead of costing another request.
-      if (throttled || enriched >= plan.commentLimit) {
+      if (
+        throttled ||
+        !REDDIT_COMMENTS_ENABLED ||
+        enriched >= plan.commentLimit
+      ) {
         if (savePostSignal(post, url)) newCount++;
         continue;
       }
@@ -1162,6 +1209,14 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   return newCount;
 }
 
+const HACKER_NEWS_WINDOW_DAYS = 3;
+
+export function hackerNewsSinceEpoch(now = new Date()): number {
+  return Math.floor(
+    (now.getTime() - HACKER_NEWS_WINDOW_DAYS * 86_400_000) / 1000,
+  );
+}
+
 async function crawlHackerNewsAlgolia(): Promise<number> {
   let newCount = 0;
   const queries = [
@@ -1169,9 +1224,12 @@ async function crawlHackerNewsAlgolia(): Promise<number> {
     { tag: "ml", query: "machine learning OR deep learning OR transformer" },
   ];
 
+  // Without a time window the query keeps returning the same all-time stories,
+  // which are already stored, so every run saved zero.
+  const since = hackerNewsSinceEpoch();
   for (const { tag, query } of queries) {
     try {
-      const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=story&hitsPerPage=20&numericFilters=points>5`;
+      const url = `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}&tags=story&hitsPerPage=30&numericFilters=points>20,created_at_i>${since}`;
       const response = await axios.get(url, { timeout: 10000 });
       const hits = response.data?.hits ?? [];
 

@@ -7,6 +7,7 @@ import { isPrimarySource } from "./agent/curation.js";
 import { refineEbook } from "./agent/ebook.js";
 import { runImprovementCycle } from "./agent/improver.js";
 import { rollbackPrompt } from "./agent/prompt-policy.js";
+import { generateRadar } from "./agent/radar.js";
 import {
   type GenerateArticleOptions,
   generateArticle,
@@ -175,6 +176,34 @@ async function reportCycle(
   }
 }
 
+// The radar publishes the raw cross-source sweep: deterministic tables plus a
+// model-written reading. It deliberately skips the editorial gate, which exists
+// to police narrative articles and would reject a table-shaped page.
+async function radarCycle() {
+  log.info("=== Radar cycle start ===");
+  const radar = await generateRadar();
+  db.recordMetric("radar.selected_sources", radar.sources.length);
+  const url = await publishWeeklyReport(radar, "radar");
+  const notificationStatus = await processNotification(
+    db,
+    sendPendingNotification,
+    {
+      url,
+      title: radar.title,
+      summary: radar.summary,
+      kind: "report",
+      notification_attempts: 0,
+    },
+  );
+  db.setState("last_radar_at", new Date().toISOString());
+  log.info(`=== Radar published: ${url} ===`);
+  return {
+    url,
+    notified: notificationStatus === "delivered",
+    selectedSources: radar.sources.length,
+  };
+}
+
 async function ebookCycle() {
   log.info("=== Ebook cycle start ===");
   const ebook = await refineEbook();
@@ -248,6 +277,12 @@ async function main() {
     await cycles.run("daily", () =>
       articleCycle("daily", { excludeUrls: sourcesUsedToday() }),
     );
+    closeDbAndExit(0);
+  }
+
+  if (runMode === "RADAR") {
+    log.info("Running in RADAR mode");
+    await cycles.run("radar", radarCycle);
     closeDbAndExit(0);
   }
 
