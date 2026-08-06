@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>4</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>5</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-06">2026-08-06</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-06-desafios-de-codex-uso-de-ram-do-chatgpt-e-falhas-do-live-share">Desafios de Codex, Uso de RAM do ChatGPT e Falhas do Live Share</a></h3>
+  <p>Três relatos de usuários revelam problemas práticos com Codex, ChatGPT App e Live Share, mostrando impactos diretos na produtividade e custos de operação.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>github-trending</span><span>post-signals</span><span>fallback</span><span>br</span><span>developer</span><span>daily-python</span><span>python</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-04">2026-08-04</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-04-openai-anuncia-circles-usuarios-relatam-suporte-mac-intel-e-regressoes-em-copilo">OpenAI anuncia Circles; usuários relatam suporte Mac Intel e regressões em Copilot</a></h3>
   <p>Na quarta‑feira de 4 de agosto, o OpenAI reafirma posição estratégica com Circles, enquanto a comunidade exibe avanços e desafios técnicos em ChatGPT, Copilot e Claude.</p>
@@ -661,7 +667,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>5</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>4</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -684,12 +690,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-28">2026-05-28</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-28-ataques-cadeia-suprimentos-2026-mini-shai-hulud-persistencia-agentes-ia">Ataques à Cadeia de Suprimentos em 2026: Lições do Mini Shai-Hulud e a Nova Era de Persistência em Agentes de IA</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-27">2026-05-27</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-27-seguranca-pipelines-agentes-ia-supply-chain-checkpoint">Cadeia de Suprimentos e Checkpoint Chain: Segurança Defensiva para Pipelines de Agentes de IA</a></h3>
   
   
 </article>
