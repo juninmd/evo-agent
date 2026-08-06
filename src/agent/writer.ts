@@ -264,6 +264,9 @@ interface PeriodConfig {
 }
 
 const PERIOD_CONFIG: Record<ReportPeriod, PeriodConfig> = {
+  // The radar is rendered by agent/radar.ts, not by generatePeriodReport; the
+  // entry exists so the period is publishable through the same pipeline.
+  radar: { days: 1, label: "radar", highlights: [10, 18] },
   weekly: { days: 7, label: "semanal", highlights: [16, 24] },
   biweekly: { days: 14, label: "quinzenal", highlights: [20, 28] },
   monthly: { days: 30, label: "mensal", highlights: [28, 40] },
@@ -282,15 +285,17 @@ function periodMeta(period: ReportPeriod) {
   const periodStr = `${fmt(sinceDate)} a ${fmt(todayDate)}`;
   const today = todayDate.toISOString().split("T")[0];
   const titleLabel =
-    period === "weekly"
-      ? "Relatorio Semanal"
-      : period === "biweekly"
-        ? "Relatorio Quinzenal"
-        : period === "monthly"
-          ? "Relatorio Mensal"
-          : period === "bimonthly"
-            ? "Relatorio Bimestral"
-            : "Relatorio Semestral";
+    period === "radar"
+      ? "Radar"
+      : period === "weekly"
+        ? "Relatorio Semanal"
+        : period === "biweekly"
+          ? "Relatorio Quinzenal"
+          : period === "monthly"
+            ? "Relatorio Mensal"
+            : period === "bimonthly"
+              ? "Relatorio Bimestral"
+              : "Relatorio Semestral";
   return { cfg, periodStr, today, titleLabel };
 }
 
