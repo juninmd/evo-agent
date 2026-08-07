@@ -269,6 +269,10 @@ async function main() {
   if (runMode === "CRAWL") {
     log.info("Running in CRAWL mode");
     await cycles.run("crawl", learnCycle);
+    // Only the daemon used to drain the outbox, so under the CronJob deployment
+    // a Telegram outage lost the notification for good. The hourly crawl is the
+    // one job that always runs, so it carries the retries.
+    await flushNotificationOutbox();
     closeDbAndExit(0);
   }
 
