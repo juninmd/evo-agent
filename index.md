@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>5</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>6</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-07">2026-08-07</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-07-openai-amplia-gpt-5-6-luna-codex-e-copilot-ganham-ajustes-deepseek-oferece-alter">OpenAI amplia GPT‑5.6 Luna, Codex e Copilot ganham ajustes, DeepSeek oferece alternativa de custo</a></h3>
+  <p>ChatGPT disponibiliza GPT‑5.6 Luna gratuitamente. Codex apresenta fluxo de revisão pesado em locais, enquanto GitHub Copilot recebe Kimi K3 e recebe críticas comparativas com Claude Code. DeepSeek‑V4 Flash lança alternativa de alto desempenho e baixo custo.</p>
+  <div class="chips"><span>hacker-news</span><span>reddit</span><span>together</span><span>front-page</span><span>post-signals</span><span>fallback</span><span>githubcopilot</span><span>claudecode</span><span>ai frontier</span><span>togetherai</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-06">2026-08-06</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-06-desafios-de-codex-uso-de-ram-do-chatgpt-e-falhas-do-live-share">Desafios de Codex, Uso de RAM do ChatGPT e Falhas do Live Share</a></h3>
   <p>Três relatos de usuários revelam problemas práticos com Codex, ChatGPT App e Live Share, mostrando impactos diretos na produtividade e custos de operação.</p>
@@ -667,7 +673,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>4</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>3</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -684,12 +690,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-resumo-tecnico-de-ia-para-desenvolvedores">Resumo técnico de IA para desenvolvedores</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-28">2026-05-28</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-28-ataques-cadeia-suprimentos-2026-mini-shai-hulud-persistencia-agentes-ia">Ataques à Cadeia de Suprimentos em 2026: Lições do Mini Shai-Hulud e a Nova Era de Persistência em Agentes de IA</a></h3>
   
   
 </article>
