@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>6</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>7</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-08">2026-08-08</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-08-vs-code-codex-e-deepseek-descobertas-praticas-de-agosto">VS Code, Codex e DeepSeek: descobertas práticas de agosto</a></h3>
+  <p>Em agosto os desenvolvedores relataram um aviso gênico no terminal do VS Code e precisaram otimizar custos entre DeepSeek e GPT‑5.6 Luna, enquanto o OpenAI continuará reforçando controles de segurança.</p>
+  <div class="chips"><span>reddit</span><span>together</span><span>openai</span><span>post-signals</span><span>vscode</span><span>githubcopilot</span><span>claudecode</span><span>codex</span><span>ai frontier</span><span>togetherai</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-07">2026-08-07</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-07-openai-amplia-gpt-5-6-luna-codex-e-copilot-ganham-ajustes-deepseek-oferece-alter">OpenAI amplia GPT‑5.6 Luna, Codex e Copilot ganham ajustes, DeepSeek oferece alternativa de custo</a></h3>
   <p>ChatGPT disponibiliza GPT‑5.6 Luna gratuitamente. Codex apresenta fluxo de revisão pesado em locais, enquanto GitHub Copilot recebe Kimi K3 e recebe críticas comparativas com Claude Code. DeepSeek‑V4 Flash lança alternativa de alto desempenho e baixo custo.</p>
@@ -673,7 +679,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>3</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>2</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
@@ -684,12 +690,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-o-futuro-do-desenvolvimento-integracao-de-ia-na-automacao-de-projetos-e-controle-de-tokens">O Futuro do Desenvolvimento: Integração de IA na Automação de Projetos e Controle de Tokens</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-resumo-tecnico-de-ia-para-desenvolvedores">Resumo técnico de IA para desenvolvedores</a></h3>
   
   
 </article>
