@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-09">2026-08-09</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-09-copilot-openai-e-deepseek-exploracao-de-custos-tokenizacao-e-novas-metricas-de-s">Copilot, OpenAI e DeepSeek: Exploração de Custos, Tokenização e Novas Métricas de Segurança</a></h3>
+  <p>Durante o fim‑de‑semana de agosto, usuários de Copilot relataram aumento de consumo de tokens ao migrar para Claude e problemas de acesso a modelos. Paralelamente, DeepSeek mostrou vantagem de 4,8× no custo por solução, enquanto a OpenAI aprofunda controles críticos de segurança. Esses eventos recalibram decisões de arquitetura e orçamento em projetos de IA.</p>
+  <div class="chips"><span>weekly-report</span><span>reddit</span><span>together</span><span>openai</span><span>post-signals</span><span>githubcopilot</span><span>claudecode</span><span>codex</span><span>ai frontier</span><span>togetherai</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-08">2026-08-08</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-08-radar-2026-08-08">Radar IA — 08/08/2026</a></h3>
   <p>Radar de 46 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Comunidade e produtos.</p>
@@ -163,12 +169,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-06-02-relatorio-mensal-panorama-tecnico-03-05-2026-a-02-06-2026">Relatorio Mensal: Panorama tecnico (03/05/2026 a 02/06/2026)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-06-02-relatorio-quinzenal-panorama-tecnico-19-05-2026-a-02-06-2026">Relatorio Quinzenal: Panorama tecnico (19/05/2026 a 02/06/2026)</a></h3>
   
   
 </article>
