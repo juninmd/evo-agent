@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>7</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>8</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-09">2026-08-09</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-09-copilot-prompt-meta-claude-code-terminal-manager-e-sessoes-codex-ainda-compartil">Copilot Prompt Meta, Claude‑Code Terminal Manager e Sessões Codex Ainda Compartilhadas</a></h3>
+  <p>Relatos de usuários revelam mudanças de prompt na Copilot, falhas de de‑monstração de modelos da Claude e problemas de sessão no Codex, enquanto a migragem de dart_pdf abre caminho para PDFs em JavaScript puro.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>post-signals</span><span>githubcopilot</span><span>claudecode</span><span>vscode</span><span>codex</span><span>br</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-08">2026-08-08</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-08-vs-code-codex-e-deepseek-descobertas-praticas-de-agosto">VS Code, Codex e DeepSeek: descobertas práticas de agosto</a></h3>
   <p>Em agosto os desenvolvedores relataram um aviso gênico no terminal do VS Code e precisaram otimizar custos entre DeepSeek e GPT‑5.6 Luna, enquanto o OpenAI continuará reforçando controles de segurança.</p>
@@ -679,17 +685,11 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>2</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>1</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-verificacao-blockchain-orquestracao-tempo-real-seguranca-eficacia-agentes-ia">Verificação Blockchain e Orquestração em Tempo Real: Segurança e Eficácia para Agentes de IA</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-o-futuro-do-desenvolvimento-integracao-de-ia-na-automacao-de-projetos-e-controle-de-tokens">O Futuro do Desenvolvimento: Integração de IA na Automação de Projetos e Controle de Tokens</a></h3>
   
   
 </article>
