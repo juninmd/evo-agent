@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-10">2026-08-10</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-10-radar-2026-08-10">Radar IA — 10/08/2026</a></h3>
+  <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-09">2026-08-09</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-09-radar-2026-08-09">Radar IA — 09/08/2026</a></h3>
   <p>Radar de 50 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
@@ -163,12 +169,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-06-04-relatorio-mensal-panorama-tecnico-05-05-2026-a-04-06-2026">Relatorio Mensal: Panorama tecnico (05/05/2026 a 04/06/2026)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-02-relatorio-semanal-panorama-tecnico-26-05-2026-a-02-06-2026">Relatorio Semanal: Panorama tecnico (26/05/2026 a 02/06/2026)</a></h3>
   
   
 </article>
