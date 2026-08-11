@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>8</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>9</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-11">2026-08-11</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-11-lfm2-5-2-6b-gpt-5-6-cyber-e-extensoes-vs-code-ia-compacta-seguranca-e-usabilidad">LFM2.5 2.6B, GPT‑5.6‑Cyber e Extensões VS Code: IA Compacta, Segurança e Usabilidade – Semana</a></h3>
+  <p>A semana revelou que modelos de IA menores, como LFM2.5 2.6B, são capazes de competir com gigantes, enquanto GPT‑5.6‑Cyber abre novos caminhos para testes de segurança. Paralelamente, usuários de VS Code apontaram desafios de UX e de custo no Copilot.</p>
+  <div class="chips"><span>hacker-news</span><span>reddit</span><span>github</span><span>openai</span><span>front-page</span><span>ml</span><span>research</span><span>post-signals</span><span>vscode</span><span>githubcopilot</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-09">2026-08-09</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-09-copilot-prompt-meta-claude-code-terminal-manager-e-sessoes-codex-ainda-compartil">Copilot Prompt Meta, Claude‑Code Terminal Manager e Sessões Codex Ainda Compartilhadas</a></h3>
   <p>Relatos de usuários revelam mudanças de prompt na Copilot, falhas de de‑monstração de modelos da Claude e problemas de sessão no Codex, enquanto a migragem de dart_pdf abre caminho para PDFs em JavaScript puro.</p>
@@ -679,17 +685,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-01">2026-06-01</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-01-gerenciamento-de-orcamento-de-tokens-em-ia-estrategias-praticas-para-evitar-cust">Gerenciamento de Orçamento de Tokens em IA: Estratégias Práticas para Evitar Custo Excessivo</a></h3>
-  
-  
-</article>
-  </div>
-</section>
-<section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Maio</h2><strong>1</strong></div>
-  <div class="story-grid">
-    <article class="story-card">
-  <div class="story-meta"><time datetime="2026-05-31">2026-05-31</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-05-31-verificacao-blockchain-orquestracao-tempo-real-seguranca-eficacia-agentes-ia">Verificação Blockchain e Orquestração em Tempo Real: Segurança e Eficácia para Agentes de IA</a></h3>
   
   
 </article>
