@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>10</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>11</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-13">2026-08-13</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-13-chatgpt-desktop-para-linux-e-incidentes-de-desempenho-no-github-a-dinamica-de-ia">ChatGPT Desktop para Linux e Incidentes de Desempenho no GitHub: A Dinâmica de IA e Operação</a></h3>
+  <p>OpenAI lança versão de desktop do Codex para Linux enquanto o GitHub registra oito incidentes críticos de desempenho, destacando o impacto de dependências externas na produtividade de desenvolvedores.</p>
+  <div class="chips"><span>hacker-news</span><span>github</span><span>reddit</span><span>front-page</span><span>developer</span><span>post-signals</span><span>claudecode</span><span>codex</span><span>vscode</span><span>githubcopilot</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-12">2026-08-12</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-12-chatgpt-testa-anuncios-enquanto-copilot-enfrenta-regressao-de-visao">ChatGPT testa anúncios enquanto Copilot enfrenta regressão de visão</a></h3>
   <p>A edição destaca como a introdução de publicidade no ChatGPT impõe novos requisitos de controle de privacidade, ao mesmo tempo em que o Copilot registra problemas de visão que forçam ajustes de desenvolvimento e suporte. Juntas, ilustram desafios operacionais e regulatórios emergentes.</p>
@@ -434,7 +440,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>42</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>41</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-02-cache-dinamico-com-ttl-orcamentacao-de-tokens-e-troca-de-modelos-em-cloudflare-w">Cache Dinâmico com TTL, Orçamentação de Tokens e Troca de Modelos em Cloudflare Workers usando SQLite‑Backed Priority Queue</a></h3>
   
   
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-01">2026-06-01</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-01-retroativo-2026-06-01-openai-lanca-modelos-na-aws-e-expande-infraestrutura-custos-de-token-disparam-co">OpenAI lança modelos na AWS e expande infraestrutura; custos de token disparam com Claude e agentes</a></h3>
-  <p>A disponibilidade geral de modelos OpenAI na AWS abre caminho para integração corporativa, enquanto um novo data center de 1 GW em Michigan reforça a capacidade de IA nos EUA. Relatos da comunidade revelam consumo elevado de tokens por Claude, e análises de mercado apontam um aumento potencial de 24× na demanda de tokens.</p>
-  <div class="chips"><span>retroativo</span><span>openai</span><span>reddit</span><span>google-news</span><span>claude</span><span>coding</span><span>cost per token</span></div>
 </article>
   </div>
 </section>
