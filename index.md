@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>11</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>12</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-14">2026-08-14</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-14-codex-desktop-app-para-linux-chega-bug-de-fim-de-sessao-do-copilot-alerta-equipe">Codex desktop app para Linux chega, bug de fim de sessão do Copilot alerta equipes</a></h3>
+  <p>A nova versão desktop do Codex traz funcionalidade offline e revoluciona a experiência do usuário. Enquanto isso, um incidente no hook de fim de sessão do Copilot pode  interromper pipelines de integração, exigindo revisão de fluxos.</p>
+  <div class="chips"><span>hacker-news</span><span>github</span><span>reddit</span><span>front-page</span><span>developer</span><span>post-signals</span><span>githubcopilot</span><span>claudecode</span><span>codex</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-13">2026-08-13</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-13-chatgpt-desktop-para-linux-e-incidentes-de-desempenho-no-github-a-dinamica-de-ia">ChatGPT Desktop para Linux e Incidentes de Desempenho no GitHub: A Dinâmica de IA e Operação</a></h3>
   <p>OpenAI lança versão de desktop do Codex para Linux enquanto o GitHub registra oito incidentes críticos de desempenho, destacando o impacto de dependências externas na produtividade de desenvolvedores.</p>
@@ -440,7 +446,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>41</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>40</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -679,12 +685,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-02-chunking-inteligente-de-documentos-legais-e-financeiros-com-cache-ttl-compressao">Chunking Inteligente de Documentos Legais e Financeiros com Cache TTL, Compressão de Tokens e RAG Hierárquico: Práticas Avançadas para 2026</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-02-cache-dinamico-com-ttl-orcamentacao-de-tokens-e-troca-de-modelos-em-cloudflare-w">Cache Dinâmico com TTL, Orçamentação de Tokens e Troca de Modelos em Cloudflare Workers usando SQLite‑Backed Priority Queue</a></h3>
   
   
 </article>
