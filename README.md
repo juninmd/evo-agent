@@ -20,6 +20,14 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-15">2026-08-15</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-08-15-relatorio-quinzenal-inovacoes-em-llm-ia-e-agentes-01-08-2026-15-08-2026">Relatório Quinzenal: Inovações em LLM, IA e Agentes (01/08/2026 – 15/08/2026)</a></h3>
+  <p>Codex Desktop Preview: OpenAI lançou a pré‑visualização do Codex no aplicativo desktop do ChatGPT para Linux, permitindo usuários obterem sugestões de código localmente e sem depender da nuvem. Codex em ChatGPT desktop app for Linuxhttps://community.openai.com/t/codexinchatgptdesktopappforlinuxisnowinpreview/1390027.  
+ Qwen 3.8‑27B: O modelo de 27 B de pesos abertos da Qwen chega ao mercado, oferecendo desempenho de codificação superior em comparação com modelos concorrentes. Qwen 3.8 27B – open weightshttps://huggingface.co/Qwen/Qwen3.827BFP8.  
+ Conceptual Reasoning Index: Anthropic introduziu o índice por trás da avaliação de raciocínio conceitual em LLMs, criando métricas específicas para medir a compreensão abstrata e a coerência lógica. Introducing the Conceptual Reasoning Indexhttp</p>
+  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-14">2026-08-14</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-14-radar-2026-08-14">Radar IA — 14/08/2026</a></h3>
   <p>Radar de 71 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -163,12 +171,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/semester-2026-06-05-relatorio-semestral-panorama-tecnico-07-12-2025-a-05-06-2026">Relatorio Semestral: Panorama tecnico (07/12/2025 a 05/06/2026)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/bimonthly-2026-06-05-relatorio-bimestral-panorama-tecnico-06-04-2026-a-05-06-2026">Relatorio Bimestral: Panorama tecnico (06/04/2026 a 05/06/2026)</a></h3>
   
   
 </article>
