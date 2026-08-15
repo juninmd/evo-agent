@@ -21,6 +21,12 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-08-15">2026-08-15</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-15-radar-2026-08-15">Radar IA — 15/08/2026</a></h3>
+  <p>Radar de 63 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-15">2026-08-15</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-08-15-relatorio-quinzenal-inovacoes-em-llm-ia-e-agentes-01-08-2026-15-08-2026">Relatório Quinzenal: Inovações em LLM, IA e Agentes (01/08/2026 – 15/08/2026)</a></h3>
   <p>Codex Desktop Preview: OpenAI lançou a pré‑visualização do Codex no aplicativo desktop do ChatGPT para Linux, permitindo usuários obterem sugestões de código localmente e sem depender da nuvem. Codex em ChatGPT desktop app for Linuxhttps://community.openai.com/t/codexinchatgptdesktopappforlinuxisnowinpreview/1390027.  
  Qwen 3.8‑27B: O modelo de 27 B de pesos abertos da Qwen chega ao mercado, oferecendo desempenho de codificação superior em comparação com modelos concorrentes. Qwen 3.8 27B – open weightshttps://huggingface.co/Qwen/Qwen3.827BFP8.  
@@ -165,12 +171,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-07">2026-06-07</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-07-relatorio-semanal-panorama-tecnico-31-05-2026-a-07-06-2026">Relatorio Semanal: Panorama tecnico (31/05/2026 a 07/06/2026)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/semester-2026-06-05-relatorio-semestral-panorama-tecnico-07-12-2025-a-05-06-2026">Relatorio Semestral: Panorama tecnico (07/12/2025 a 05/06/2026)</a></h3>
   
   
 </article>
