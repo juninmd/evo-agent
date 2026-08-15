@@ -196,9 +196,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>12</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>13</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-15">2026-08-15</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-15-qwen-27b-app-de-agentes-do-github-e-custos-de-ia-em-foco">Qwen 27B, App de Agentes do GitHub e Custos de IA em Foco</a></h3>
+  <p>Relatório de risco da Anthropic, nova política de preços dos principais provedores de IA e o surgimento de ferramentas de codificação local redefinem as escolhas de infra e arquitetura em 2026.</p>
+  <div class="chips"><span>hacker-news</span><span>github</span><span>google-news</span><span>reddit</span><span>front-page</span><span>developer</span><span>anthropic fable 5 cost</span><span>post-signals</span><span>claudecode</span><span>vscode</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-14">2026-08-14</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-14-codex-desktop-app-para-linux-chega-bug-de-fim-de-sessao-do-copilot-alerta-equipe">Codex desktop app para Linux chega, bug de fim de sessão do Copilot alerta equipes</a></h3>
   <p>A nova versão desktop do Codex traz funcionalidade offline e revoluciona a experiência do usuário. Enquanto isso, um incidente no hook de fim de sessão do Copilot pode  interromper pipelines de integração, exigindo revisão de fluxos.</p>
@@ -446,7 +452,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>40</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>39</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-02-retroativo-2026-06-02-minimax-m3-usa-kv-block-sparse-attention-e-comunidade-constroi-claude-code-minim">MiniMax-M3 usa KV‑Block Sparse Attention e comunidade constrói Claude Code minimalista</a></h3>
   <p>Together AI revela técnicas de atenção esparsa que cortam custos de inferência. Enquanto isso, desenvolvedores dão a volta por cima ao criar agentes de codificação em Rust sem depender da Claude oficial.</p>
   <div class="chips"><span>retroativo</span><span>together</span><span>reddit</span><span>v2ex</span><span>google-news</span><span>ai frontier</span><span>togetherai</span><span>claude</span><span>coding</span><span>chinese</span><span>cloudwatch otel metrics</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-02-chunking-inteligente-de-documentos-legais-e-financeiros-com-cache-ttl-compressao">Chunking Inteligente de Documentos Legais e Financeiros com Cache TTL, Compressão de Tokens e RAG Hierárquico: Práticas Avançadas para 2026</a></h3>
-  
-  
 </article>
   </div>
 </section>
