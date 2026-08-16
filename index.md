@@ -198,9 +198,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>13</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>14</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-16">2026-08-16</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-16-vs-code-codex-claude-e-anthropic-fable-5-desafios-de-custo-adocao-e-otimizacao-d">VS Code, Codex, Claude e Anthropic Fable 5: desafios de custo, adoção e otimização de IA</a></h3>
+  <p>Mudanças técnicas em extensões de IDE, gerenciamento de tokens e centralização de modelos de IA foram observadas neste período. O panorama enfatiza impacto direto em orçamentos, arquitetura e operações de desenvolvimento.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>google-news</span><span>github-trending</span><span>post-signals</span><span>vscode</span><span>codex</span><span>githubcopilot</span><span>claudecode</span><span>br</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-15">2026-08-15</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-15-qwen-27b-app-de-agentes-do-github-e-custos-de-ia-em-foco">Qwen 27B, App de Agentes do GitHub e Custos de IA em Foco</a></h3>
   <p>Relatório de risco da Anthropic, nova política de preços dos principais provedores de IA e o surgimento de ferramentas de codificação local redefinem as escolhas de infra e arquitetura em 2026.</p>
@@ -454,7 +460,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>39</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>38</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -683,12 +689,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-03-implementando-decoradores-skill-cost-aware-com-ttl-dinamico-e-aprovacao-opcional">Implementando decoradores @skill cost‑aware com TTL dinâmico e aprovação opcional em agentes multimodais</a></h3>
   
   
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-02">2026-06-02</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-02-retroativo-2026-06-02-minimax-m3-usa-kv-block-sparse-attention-e-comunidade-constroi-claude-code-minim">MiniMax-M3 usa KV‑Block Sparse Attention e comunidade constrói Claude Code minimalista</a></h3>
-  <p>Together AI revela técnicas de atenção esparsa que cortam custos de inferência. Enquanto isso, desenvolvedores dão a volta por cima ao criar agentes de codificação em Rust sem depender da Claude oficial.</p>
-  <div class="chips"><span>retroativo</span><span>together</span><span>reddit</span><span>v2ex</span><span>google-news</span><span>ai frontier</span><span>togetherai</span><span>claude</span><span>coding</span><span>chinese</span><span>cloudwatch otel metrics</span></div>
 </article>
   </div>
 </section>
