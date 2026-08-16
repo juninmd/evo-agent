@@ -21,6 +21,12 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-08-16">2026-08-16</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-16-radar-2026-08-16">Radar IA — 16/08/2026</a></h3>
+  <p>Radar de 51 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-16">2026-08-16</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-16-qwen-3-8-open-weights-risco-anthropic-e-adocao-de-agentes-de-ia">Qwen 3.8 Open Weights, Risco Anthropic e Adoção de Agentes de IA</a></h3>
   <p>O modelo Qwen 3.8 lança pesos abertos e o relatório de risco da Anthropic aponta desafios críticos. Novas práticas de agentes de IA e custos de reset do Codex redefinem o ecossistema de desenvolvimento.</p>
   <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>github</span><span>google-news</span><span>reddit</span><span>front-page</span><span>developer</span><span>anthropic fable 5 cost</span><span>post-signals</span><span>claudecode</span><span>githubcopilot</span></div>
@@ -167,12 +173,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-21-fable-5-engine-de-dados-para-robotica-e-api-tabnews-decisoes-de-arquitetura-e-pr">Fable 5, Engine de Dados para Robótica e API TabNews: decisões de arquitetura e privacidade em</a></h3>
   <p>Analisamos o novo motor de ingestão de vídeo para robôs, as diferenças do modelo Fable 5 da Anthropic e o compartilhamento de inferência no Bedrock, além da abertura da API TabNews e dos desafios de upload resiliente na nuvem.</p>
   <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>google-news</span><span>tabnews</span><span>ml</span><span>research</span><span>anthropic fable routing</span><span>anthropic fable5 custo</span><span>br</span><span>developer</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-14">2026-06-14</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-14-bloqueio-do-claude-fable-5-custos-duplos-e-estrategias-de-arquitetura-autonoma">Bloqueio do Claude Fable 5, custos duplos e estratégias de arquitetura autônoma</a></h3>
-  <p>O governo dos EUA impôs restrição ao acesso público ao Claude Fable 5, elevando o preço do modelo em até 2×. Ao mesmo tempo, surgem propostas de arquitetura ESAA e ambientes locais que podem mitigar riscos e despesas.</p>
-  <div class="chips"><span>weekly-report</span><span>google-news</span><span>tabnews</span><span>github-trending</span><span>anthropic fable routing</span><span>anthropic fable cost</span><span>br</span><span>developer</span><span>python</span></div>
 </article>
   </div>
 </section>
