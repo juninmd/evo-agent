@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-16">2026-08-16</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-16-qwen-3-8-open-weights-risco-anthropic-e-adocao-de-agentes-de-ia">Qwen 3.8 Open Weights, Risco Anthropic e Adoção de Agentes de IA</a></h3>
+  <p>O modelo Qwen 3.8 lança pesos abertos e o relatório de risco da Anthropic aponta desafios críticos. Novas práticas de agentes de IA e custos de reset do Codex redefinem o ecossistema de desenvolvimento.</p>
+  <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>github</span><span>google-news</span><span>reddit</span><span>front-page</span><span>developer</span><span>anthropic fable 5 cost</span><span>post-signals</span><span>claudecode</span><span>githubcopilot</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-15">2026-08-15</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-15-radar-2026-08-15">Radar IA — 15/08/2026</a></h3>
   <p>Radar de 63 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -167,12 +173,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-14-bloqueio-do-claude-fable-5-custos-duplos-e-estrategias-de-arquitetura-autonoma">Bloqueio do Claude Fable 5, custos duplos e estratégias de arquitetura autônoma</a></h3>
   <p>O governo dos EUA impôs restrição ao acesso público ao Claude Fable 5, elevando o preço do modelo em até 2×. Ao mesmo tempo, surgem propostas de arquitetura ESAA e ambientes locais que podem mitigar riscos e despesas.</p>
   <div class="chips"><span>weekly-report</span><span>google-news</span><span>tabnews</span><span>github-trending</span><span>anthropic fable routing</span><span>anthropic fable cost</span><span>br</span><span>developer</span><span>python</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-07">2026-06-07</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-07-relatorio-semanal-panorama-tecnico-31-05-2026-a-07-06-2026">Relatorio Semanal: Panorama tecnico (31/05/2026 a 07/06/2026)</a></h3>
-  
-  
 </article>
   </div>
 </section>
