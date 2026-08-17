@@ -198,9 +198,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>14</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>15</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-17">2026-08-17</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-17-gemini-entra-no-futebol-vs-code-reinventa-preview-copilot-revisa-cancelamento-e-">Gemini entra no futebol, VS Code reinventa preview, Copilot revisa cancelamento e Codex reduz</a></h3>
+  <p>Gemini e Pixel firmam parcerias com clubes de futebol globais, enquanto extensões de Markdown e Copilot passam por ajustes de fluxo de trabalho. O Codex passa por uma queda de 50% nos limites de uso, obrigando equipes a revizarem orçamentos e seleções de IA.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>google</span><span>post-signals</span><span>vscode</span><span>codex</span><span>githubcopilot</span><span>claudecode</span><span>br</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-16">2026-08-16</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-16-vs-code-codex-claude-e-anthropic-fable-5-desafios-de-custo-adocao-e-otimizacao-d">VS Code, Codex, Claude e Anthropic Fable 5: desafios de custo, adoção e otimização de IA</a></h3>
   <p>Mudanças técnicas em extensões de IDE, gerenciamento de tokens e centralização de modelos de IA foram observadas neste período. O panorama enfatiza impacto direto em orçamentos, arquitetura e operações de desenvolvimento.</p>
@@ -460,7 +466,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>38</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>37</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -683,12 +689,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-03-retroativo-2026-06-03-openai-lanca-gpt-rosalind-e-define-agenda-de-politica-publica-enquanto-reddit-re">OpenAI lança GPT‑Rosalind e define agenda de política pública enquanto Reddit revela variação</a></h3>
   <p>Novas capacidades de IA para ciências da vida chegam junto a um plano de governança focado em segurança e inclusão. Dados de Reddit mostram que respostas de IA divergem por cidade, impactando estratégias de localização e compliance.</p>
   <div class="chips"><span>retroativo</span><span>openai</span><span>reddit</span><span>github-trending</span><span>claude</span><span>coding</span><span>go</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-03">2026-06-03</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-03-implementando-decoradores-skill-cost-aware-com-ttl-dinamico-e-aprovacao-opcional">Implementando decoradores @skill cost‑aware com TTL dinâmico e aprovação opcional em agentes multimodais</a></h3>
-  
-  
 </article>
   </div>
 </section>
