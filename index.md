@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-18">2026-08-18</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-18-radar-2026-08-18">Radar IA — 18/08/2026</a></h3>
+  <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-17">2026-08-17</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-17-radar-2026-08-17">Radar IA — 17/08/2026</a></h3>
   <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -167,12 +173,6 @@ title: Evo Agent
  Lançamento do Claude Sonnet 5 – Modelo de última geração da Anthropic, com desempenho “frontier” em código, agentes e trabalho profissional, mas com preço significativamente menor que versões anteriores. Ajuda a democratizar acesso a IA avançada. títulohttps://www.anthropic.com/news/claudesonnet5  
  Levantamento das restrições de exportação dos modelos Fable e Mythos – O governo dos EUA removeu controles de exp</p>
   <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-28">2026-06-28</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-06-28-anthropic-fable-5-ataque-de-destilacao-e-openai-lanca-asic-jalapeno-impactos-par">Anthropic Fable 5, ataque de destilação e OpenAI lança ASIC Jalapeño: impactos para orçamento e</a></h3>
-  <p>Análises das últimas movimentações da Anthropic sobre custos e vulnerabilidades, combinadas com a estreia do chip ASIC da OpenAI, revelam decisões críticas de gasto e mitigação. Também são destaque relatos de desenvolvedores sobre fluxo de trabalho e monitoramento de veículos.</p>
-  <div class="chips"><span>weekly-report</span><span>tabnews</span><span>google-news</span><span>reddit</span><span>br</span><span>developer</span><span>preço fable anthropic</span><span>anthropic distillation attack</span><span>anthropic model switching</span><span>llm</span><span>local-ai</span></div>
 </article>
   </div>
 </section>
