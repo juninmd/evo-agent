@@ -198,9 +198,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>15</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>16</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-18">2026-08-18</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-18-agentes-de-codigo-e-otimizacao-de-tokens-agil-revisao-de-diff-benchmark-de-model">Agentes de Código e Otimização de Tokens: Ágil Revisão de Diff, Benchmark de Modelos e Incremento</a></h3>
+  <p>Novas práticas de revisão de código no VS Code, economia de tokens via migração para Luna, benchmarks de DeepSeek V4 Pro 0813 contra GPT‑5.6 Sol e Claude Fable 5, e a adoção de ‘canvases’ para visibilidade de fluxos.</p>
+  <div class="chips"><span>reddit</span><span>github</span><span>together</span><span>post-signals</span><span>vscode</span><span>codex</span><span>githubcopilot</span><span>claudecode</span><span>developer</span><span>ai frontier</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-17">2026-08-17</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-17-gemini-entra-no-futebol-vs-code-reinventa-preview-copilot-revisa-cancelamento-e-">Gemini entra no futebol, VS Code reinventa preview, Copilot revisa cancelamento e Codex reduz</a></h3>
   <p>Gemini e Pixel firmam parcerias com clubes de futebol globais, enquanto extensões de Markdown e Copilot passam por ajustes de fluxo de trabalho. O Codex passa por uma queda de 50% nos limites de uso, obrigando equipes a revizarem orçamentos e seleções de IA.</p>
@@ -466,7 +472,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>37</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>36</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -683,12 +689,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-04-verificador-seguro-de-patches-de-cli-com-reducao-de-tokens-e-guardrails-de-custo">Verificador Seguro de Patches de CLI com Redução de Tokens e Guardrails de Custos</a></h3>
   
   
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-03">2026-06-03</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-03-retroativo-2026-06-03-openai-lanca-gpt-rosalind-e-define-agenda-de-politica-publica-enquanto-reddit-re">OpenAI lança GPT‑Rosalind e define agenda de política pública enquanto Reddit revela variação</a></h3>
-  <p>Novas capacidades de IA para ciências da vida chegam junto a um plano de governança focado em segurança e inclusão. Dados de Reddit mostram que respostas de IA divergem por cidade, impactando estratégias de localização e compliance.</p>
-  <div class="chips"><span>retroativo</span><span>openai</span><span>reddit</span><span>github-trending</span><span>claude</span><span>coding</span><span>go</span></div>
 </article>
   </div>
 </section>
