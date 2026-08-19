@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-19">2026-08-19</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-19-radar-2026-08-19">Radar IA — 19/08/2026</a></h3>
+  <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-18">2026-08-18</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-18-radar-2026-08-18">Radar IA — 18/08/2026</a></h3>
   <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -164,15 +170,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-05-anthropic-lanca-claude-sonnet-5-com-desempenho-aprimorado-e-precos-competitivos">Anthropic Lança Claude Sonnet 5 com Desempenho Aprimorado e Preços Competitivos</a></h3>
   <p>A Anthropic lançou o Claude Sonnet 5, oferecendo desempenho próximo ao do Opus 4.8 a preços mais baixos. Usuários relatam experiências mistas com o Fable 5, destacando tanto capacidades quanto limitações.</p>
   <div class="chips"><span>weekly-report</span><span>google-news</span><span>reddit</span><span>tabnews</span><span>anthropic sonnet preco</span><span>anthropic precificação</span><span>claude</span><span>coding</span><span>br</span><span>developer</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-07-01">2026-07-01</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-07-01-relatorio-quinzenal-avancos-em-llms-ia-generativa-e-agentes-17-06-2026-01-07-202">Relatório Quinzenal: Avanços em LLMs, IA Generativa e Agentes (17/06/2026 – 01/07/2026)</a></h3>
-  <p>Destaques do período
- Aquisição massiva de TPUv7 pela Anthropic – A Anthropic comprou quase 1 000 000 de chips TPUv7 da Google, reforçando sua estratégia de “hardware próprio” para reduzir custos de inferência. Importa porque pode mudar a dinâmica de preços entre GPUs e ASICs. títulohttps://www.reddit.com/r/singularity/comments/1q2fyjt/anthropicwilldirectlypurchasecloseto1000000/  
- Lançamento do Claude Sonnet 5 – Modelo de última geração da Anthropic, com desempenho “frontier” em código, agentes e trabalho profissional, mas com preço significativamente menor que versões anteriores. Ajuda a democratizar acesso a IA avançada. títulohttps://www.anthropic.com/news/claudesonnet5  
- Levantamento das restrições de exportação dos modelos Fable e Mythos – O governo dos EUA removeu controles de exp</p>
-  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
 </article>
   </div>
 </section>
