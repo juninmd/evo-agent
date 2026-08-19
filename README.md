@@ -198,9 +198,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>16</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>17</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-19">2026-08-19</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-19-gpt-5-6-fable-e-extensoes-vs-code-custos-qualidade-e-integracao">GPT‑5.6, Fable e Extensões VS Code: Custos, Qualidade e Integração</a></h3>
+  <p>Revisões de preço nos modelos GPT e Fable pedem reavaliação de contratos, enquanto novas extensões VS Code alteram fluxos de trabalho de desenvolvedores.</p>
+  <div class="chips"><span>hacker-news</span><span>together</span><span>reddit</span><span>ml</span><span>research</span><span>ai frontier</span><span>togetherai</span><span>post-signals</span><span>claudecode</span><span>codex</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-18">2026-08-18</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-18-agentes-de-codigo-e-otimizacao-de-tokens-agil-revisao-de-diff-benchmark-de-model">Agentes de Código e Otimização de Tokens: Ágil Revisão de Diff, Benchmark de Modelos e Incremento</a></h3>
   <p>Novas práticas de revisão de código no VS Code, economia de tokens via migração para Luna, benchmarks de DeepSeek V4 Pro 0813 contra GPT‑5.6 Sol e Claude Fable 5, e a adoção de ‘canvases’ para visibilidade de fluxos.</p>
@@ -472,7 +478,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>36</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>35</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-04-digest-de-desenvolvimento-ai-llm-31-05-06-06-2026">Digest de Desenvolvimento AI / LLM – 31/05 – 06/06/2026</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-04-verificador-seguro-de-patches-de-cli-com-reducao-de-tokens-e-guardrails-de-custo">Verificador Seguro de Patches de CLI com Redução de Tokens e Guardrails de Custos</a></h3>
   
   
 </article>
