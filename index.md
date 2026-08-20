@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-20">2026-08-20</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-20-radar-2026-08-20">Radar IA — 20/08/2026</a></h3>
+  <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-19">2026-08-19</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-19-radar-2026-08-19">Radar IA — 19/08/2026</a></h3>
   <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -164,12 +170,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-12-criacao-de-agentes-inteligentes-com-claude-e-openai">Criação de Agentes Inteligentes com Claude e OpenAI</a></h3>
   <p>Desenvolvimentos em agentes inteligentes e aplicativos de LLM, com foco em Claude e OpenAI.</p>
   <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>the</span><span>openai</span><span>tabnews</span><span>reddit</span><span>github-trending</span><span>ml</span><span>research</span><span>developer</span><span>br</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-07-05">2026-07-05</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-05-anthropic-lanca-claude-sonnet-5-com-desempenho-aprimorado-e-precos-competitivos">Anthropic Lança Claude Sonnet 5 com Desempenho Aprimorado e Preços Competitivos</a></h3>
-  <p>A Anthropic lançou o Claude Sonnet 5, oferecendo desempenho próximo ao do Opus 4.8 a preços mais baixos. Usuários relatam experiências mistas com o Fable 5, destacando tanto capacidades quanto limitações.</p>
-  <div class="chips"><span>weekly-report</span><span>google-news</span><span>reddit</span><span>tabnews</span><span>anthropic sonnet preco</span><span>anthropic precificação</span><span>claude</span><span>coding</span><span>br</span><span>developer</span></div>
 </article>
   </div>
 </section>
