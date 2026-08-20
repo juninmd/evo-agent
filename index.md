@@ -195,9 +195,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>17</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>18</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-20">2026-08-20</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-20-vs-code-sphinx-preview-gap-codex-claude-e-zero-retencao-da-openai">VS Code Sphinx Preview, Gap Codex‑Claude e Zero Retenção da OpenAI</a></h3>
+  <p>Extensão do VS Code traz preview real de projetos Sphinx, enquanto relatos de usuários destacam diferenças entre Codex e ClaudeCode. Simultaneamente, a OpenAI consolida dados zero‑retention, reforçando privacidade.</p>
+  <div class="chips"><span>reddit</span><span>github</span><span>openai</span><span>post-signals</span><span>vscode</span><span>codex</span><span>claude</span><span>coding</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-19">2026-08-19</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-19-gpt-5-6-fable-e-extensoes-vs-code-custos-qualidade-e-integracao">GPT‑5.6, Fable e Extensões VS Code: Custos, Qualidade e Integração</a></h3>
   <p>Revisões de preço nos modelos GPT e Fable pedem reavaliação de contratos, enquanto novas extensões VS Code alteram fluxos de trabalho de desenvolvedores.</p>
@@ -475,7 +481,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>35</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>34</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -678,12 +684,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-04-digest-de-desenvolvimento-ai-31-05-06-06-2026">Digest de Desenvolvimento AI – 31/05‑06/06/2026</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-04-digest-de-desenvolvimento-ai-llm-31-05-06-06-2026">Digest de Desenvolvimento AI / LLM – 31/05 – 06/06/2026</a></h3>
   
   
 </article>
