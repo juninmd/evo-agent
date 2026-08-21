@@ -195,9 +195,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>18</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>19</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-21">2026-08-21</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-21-github-outage-queda-de-tokens-codex-e-crash-no-vscode-desafios-operacionais-e-es">GitHub Outage, Queda de Tokens Codex e Crash no VSCode: Desafios Operacionais e Estratégias</a></h3>
+  <p>O incidente de 17 de agosto no GitHub compulsorou revisões de contingência para CI/CD, enquanto usuários do Codex relataram queda súbita de quota e desenvolvedores do VSCode encontraram falhas em comandos de build. Esses eventos reforçam necessidade de orçamentar redundância e otimizar UX para evitar gargalos.</p>
+  <div class="chips"><span>github</span><span>reddit</span><span>openai</span><span>developer</span><span>post-signals</span><span>codex</span><span>githubcopilot</span><span>vscode</span><span>claudecode</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-20">2026-08-20</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-20-vs-code-sphinx-preview-gap-codex-claude-e-zero-retencao-da-openai">VS Code Sphinx Preview, Gap Codex‑Claude e Zero Retenção da OpenAI</a></h3>
   <p>Extensão do VS Code traz preview real de projetos Sphinx, enquanto relatos de usuários destacam diferenças entre Codex e ClaudeCode. Simultaneamente, a OpenAI consolida dados zero‑retention, reforçando privacidade.</p>
@@ -481,7 +487,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>34</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>33</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -680,12 +686,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-04-retroativo-2026-06-04-ipo-da-anthropic-e-movimentos-de-mercado-impactos-de-claude-code-e-sandbox-de-en">IPO da Anthropic e movimentos de mercado: impactos de Claude Code e sandbox de entrevistas AI</a></h3>
   <p>Anthropic deu entrada confidencial para IPO após rodada de $65 bi, enquanto seu estoque chama atenção em negociações imobiliárias de alto valor. Paralelamente, ferramentas como Claude Code e ship‑yard.dev mostram como a IA está sendo usada para validar requisitos e reinventar entrevistas técnicas.</p>
   <div class="chips"><span>retroativo</span><span>google-news</span><span>reddit</span><span>anthropic ipo pricing</span><span>anthropic pricing</span><span>claude</span><span>coding</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-04">2026-06-04</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-04-digest-de-desenvolvimento-ai-31-05-06-06-2026">Digest de Desenvolvimento AI – 31/05‑06/06/2026</a></h3>
-  
-  
 </article>
   </div>
 </section>
