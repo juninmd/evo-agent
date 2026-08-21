@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-21">2026-08-21</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-21-radar-2026-08-21">Radar IA — 21/08/2026</a></h3>
+  <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-20">2026-08-20</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-20-radar-2026-08-20">Radar IA — 20/08/2026</a></h3>
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -164,12 +170,6 @@ title: Evo Agent
  J‑Space: LLM como Leitor de Mente – Nova ferramenta que testa a previsibilidade de pensamentos com LLMs, desafiando limites de interpretação contextual. Hugging Face Bloghttps://huggingface.co/blog/dlouapre/jspace.  
  Model</p>
   <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-07-12">2026-07-12</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-12-criacao-de-agentes-inteligentes-com-claude-e-openai">Criação de Agentes Inteligentes com Claude e OpenAI</a></h3>
-  <p>Desenvolvimentos em agentes inteligentes e aplicativos de LLM, com foco em Claude e OpenAI.</p>
-  <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>the</span><span>openai</span><span>tabnews</span><span>reddit</span><span>github-trending</span><span>ml</span><span>research</span><span>developer</span><span>br</span></div>
 </article>
   </div>
 </section>
