@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-22">2026-08-22</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-22-radar-2026-08-22">Radar IA — 22/08/2026</a></h3>
+  <p>Radar de 55 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-21">2026-08-21</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-21-radar-2026-08-21">Radar IA — 21/08/2026</a></h3>
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -161,15 +167,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-19-claude-fable-5-e-a-economia-da-ia">Claude Fable 5 e a Economia da IA</a></h3>
   <p>Limites aumentados e mudanças na faturamento da Anthropic, impactando a indústria de IA e a infraestrutura de computação.</p>
   <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>together</span><span>google-news</span><span>openai</span><span>reddit</span><span>developer</span><span>ai frontier</span><span>togetherai</span><span>anthropic fable5 pricing</span><span>vscode</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-07-15">2026-07-15</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-07-15-relatorio-quinzenal-llm-e-agentes-01-07-2026-a-15-07-2026">Relatório Quinzenal: LLM e Agentes – 01/07/2026 a 15/07/2026</a></h3>
-  <p>Finetuning de LLMs para Raciocínio – Debate sobre usar Supervised versus Reinforcement Learning na adaptação de modelos de linguagem, destacando trade‑offs entre coerência e feedback de recompensa. Discussão Hacker Newshttps://discuss.huggingface.co/t/finetuningareasoningllmwithsupervisedorreinforcementlearning/176449.  
- Introdução ao RL em LLMs – Explicação do papel dos algoritmos de reforço para melhorar a capacidade de raciocínio de LLMs, potencializando a robustez em tarefas complexas. Hugging Face LLm coursehttps://huggingface.co/learn/llmcourse/en/chapter12/2.  
- J‑Space: LLM como Leitor de Mente – Nova ferramenta que testa a previsibilidade de pensamentos com LLMs, desafiando limites de interpretação contextual. Hugging Face Bloghttps://huggingface.co/blog/dlouapre/jspace.  
- Model</p>
-  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
 </article>
   </div>
 </section>
