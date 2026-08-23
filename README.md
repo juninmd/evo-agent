@@ -21,6 +21,12 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-08-23">2026-08-23</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-23-radar-2026-08-23">Radar IA — 23/08/2026</a></h3>
+  <p>Radar de 53 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-23">2026-08-23</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-23-gpt-5-6-sol-rebate-de-precos-e-ajustes-de-fluxo-no-vs-code">GPT‑5.6 ‘Sol’ Rebate de Preços e Ajustes de Fluxo no VS Code</a></h3>
   <p>O preço do GPT‑5.6 ‘Sol’ caiu 20 %, modificando cálculos de orçamento, enquanto desenvolvedores enfrentam erros de I/O e lutam contra latência, mas também exploram novos extensões e prototipagem rápida.</p>
   <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>together</span><span>google</span><span>reddit</span><span>developer</span><span>ai frontier</span><span>togetherai</span><span>googledeepmind</span><span>post-signals</span><span>claudecode</span></div>
@@ -161,12 +167,6 @@ title: Evo Agent
   Por que importa: facilita a descoberta automática de conteúdos em grandes bibliotecas e traz eficiência de pesquisa multilingue.  
   Prelinger Moments Spacehttps://huggingface.co/spaces/davanstrien/prelingermomentsspace</p>
   <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-07-26">2026-07-26</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-07-26-claude-opus-5-reduz-custos-railway-facilita-deployment-hashdoor-inovacao-de-segu">Claude Opus 5 Reduz Custos; Railway Facilita Deployment; Hashdoor Inovação de Segurança</a></h3>
-  <p>Avaliamos o novo Claude Opus 5: custo mais baixo que Fable 5 e performance quase equivalente, Railway como alternativa de hospedagem sem complicação, e Hashdoor, um modelo de auth sem OAuth, em cenários da semana.</p>
-  <div class="chips"><span>weekly-report</span><span>google-news</span><span>tabnews</span><span>anthropic fable5 pricing</span><span>br</span><span>developer</span></div>
 </article>
   </div>
 </section>
