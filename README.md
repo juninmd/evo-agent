@@ -192,9 +192,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>20</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>21</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-23">2026-08-23</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-23-gpt-5-6-sol-corta-20-de-preco-enquanto-desenvolvedores-confrontam-erros-no-vs-co">GPT 5.6 Sol corta 20% de preço enquanto desenvolvedores confrontam erros no VS Code e testam custos</a></h3>
+  <p>Redução de preço na nova IA da OpenAI abre oportunidades de economia, mas mudanças no VS Code e variações de custos em Codex desafiam a tomada de decisões de token budgeting. Projetos independentes demonstram o potencial persistente dos modelos.</p>
+  <div class="chips"><span>hacker-news</span><span>reddit</span><span>developer</span><span>post-signals</span><span>vscode</span><span>codex</span><span>claudecode</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-22">2026-08-22</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-22-gpt-5-6-sol-maior-eficiencia-preco-mais-baixo-mas-desafios-de-output">GPT‑5.6 Sol: maior eficiência, preço mais baixo, mas desafios de output</a></h3>
   <p>Esta edição mostra a queda de 20% nos custos do GPT‑5.6 Sol e sua superioridade em pass@1, enquanto usuários apontam continua verbosidade e desconforto ao ler o output do Opus 5.</p>
@@ -490,7 +496,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>32</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>31</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -675,12 +681,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-05-digest-de-desenvolvedores-ia-llms-e-orquestracao-de-agentes-31-05-2026-06-06-202">Digest de Desenvolvedores – IA, LLMs e Orquestração de Agentes (31/05/2026 – 06/06/2026)</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-05-digest-de-desenvolvedores-ia-llms-e-agent-harnesses-31-05-06-06-2026">Digest de Desenvolvedores – IA, LLMs e Agent Harnesses (31/05‑06/06/2026)</a></h3>
   
   
 </article>
