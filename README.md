@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-24">2026-08-24</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-24-radar-2026-08-24">Radar IA — 24/08/2026</a></h3>
+  <p>Radar de 61 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-23">2026-08-23</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-23-radar-2026-08-23">Radar IA — 23/08/2026</a></h3>
   <p>Radar de 53 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
@@ -158,15 +164,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-02-claude-code-perde-controle-remoto-limite-de-uso-cresce-kimi-k3-estreia-como-mode">Claude Code perde controle remoto, limite de uso cresce; Kimi K3 estreia como modelo 3T‑class</a></h3>
   <p>A edição destaca a retirada do controle remoto do plano Pro do Claude Code, desafios de limite diário, a aparição do Kimi K3, o rastreamento de custos de tokens e um novo recurso de wishlist no VS‑Code que facilita a gestão de extensões.</p>
   <div class="chips"><span>weekly-report</span><span>reddit</span><span>together</span><span>post-signals</span><span>fallback</span><span>ai frontier</span><span>togetherai</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-01">2026-08-01</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-08-01-relatorio-quinzenal-llm-ia-e-ganchos-de-agentes">Relatório Quinzenal: LLM, IA e Ganchos de Agentes</a></h3>
-  <p>Destaques do período  
- Prelinger Moments Space – Um espaço Hugging Face que torna coleções de filmes de arquivo pesquisáveis via embeddings de vídeo, ampliando o acesso a recursos históricos.  
-  Por que importa: facilita a descoberta automática de conteúdos em grandes bibliotecas e traz eficiência de pesquisa multilingue.  
-  Prelinger Moments Spacehttps://huggingface.co/spaces/davanstrien/prelingermomentsspace</p>
-  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
 </article>
   </div>
 </section>
