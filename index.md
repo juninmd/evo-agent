@@ -192,9 +192,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>21</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>22</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-24">2026-08-24</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-24-fable-5-falta-de-adocao-e-codex-lanca-modelo-reserve">Fable 5: Falta de Adoção e Codex Lança Modelo &#39;Reserve&#39;</a></h3>
+  <p>Enquanto o modelo Fable 5 enfrenta baixa adoção devido aos custos, usuários do Codex relatam a introdução de um novo modelo de menor desempenho. Paralelamente, desenvolvedores de VS Code criam extensões buscando eficácia, mas confrontam limitações de recursos e perceções de usabilidade.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>google-news</span><span>post-signals</span><span>vscode</span><span>codex</span><span>githubcopilot</span><span>claudecode</span><span>br</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-23">2026-08-23</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-23-gpt-5-6-sol-corta-20-de-preco-enquanto-desenvolvedores-confrontam-erros-no-vs-co">GPT 5.6 Sol corta 20% de preço enquanto desenvolvedores confrontam erros no VS Code e testam custos</a></h3>
   <p>Redução de preço na nova IA da OpenAI abre oportunidades de economia, mas mudanças no VS Code e variações de custos em Codex desafiam a tomada de decisões de token budgeting. Projetos independentes demonstram o potencial persistente dos modelos.</p>
@@ -496,7 +502,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>31</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>30</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -677,12 +683,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-05-retroativo-2026-06-05-anthropic-lanca-claude-opus-4-8-e-agentes-ai-financeiros-preco-integracao-e-otim">Anthropic lança Claude Opus 4.8 e agentes AI financeiros: preço, integração e otimização de custos</a></h3>
   <p>Anúncios de novos agentes financeiros e da versão Claude Opus 4.8 da Anthropic pressionam orçamentos de IA. Práticas de cache e roteamento surgem como respostas para evitar sobrecarga de gastos.</p>
   <div class="chips"><span>retroativo</span><span>google-news</span><span>reddit</span><span>v2ex</span><span>anthropic price guard</span><span>claude</span><span>coding</span><span>chinese</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-05">2026-06-05</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-05-digest-de-desenvolvedores-ia-llms-e-orquestracao-de-agentes-31-05-2026-06-06-202">Digest de Desenvolvedores – IA, LLMs e Orquestração de Agentes (31/05/2026 – 06/06/2026)</a></h3>
-  
-  
 </article>
   </div>
 </section>
