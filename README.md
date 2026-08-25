@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-25">2026-08-25</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-25-radar-2026-08-25">Radar IA — 25/08/2026</a></h3>
+  <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-24">2026-08-24</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-24-radar-2026-08-24">Radar IA — 24/08/2026</a></h3>
   <p>Radar de 61 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -158,12 +164,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-06-radar-2026-08-06">Radar IA — 06/08/2026</a></h3>
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-02">2026-08-02</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-02-claude-code-perde-controle-remoto-limite-de-uso-cresce-kimi-k3-estreia-como-mode">Claude Code perde controle remoto, limite de uso cresce; Kimi K3 estreia como modelo 3T‑class</a></h3>
-  <p>A edição destaca a retirada do controle remoto do plano Pro do Claude Code, desafios de limite diário, a aparição do Kimi K3, o rastreamento de custos de tokens e um novo recurso de wishlist no VS‑Code que facilita a gestão de extensões.</p>
-  <div class="chips"><span>weekly-report</span><span>reddit</span><span>together</span><span>post-signals</span><span>fallback</span><span>ai frontier</span><span>togetherai</span></div>
 </article>
   </div>
 </section>
