@@ -189,9 +189,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>23</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>24</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-26">2026-08-26</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-26-vs-code-e-codex-em-foco-atualizacoes-que-impulsionam-a-necessidade-de-avaliacao-">VS Code e Codex em Foco: Atualizações que Impulsionam a Necessidade de Avaliação Rigorosa de LLMs</a></h3>
+  <p>Atualizações frequentes do VS Code geram regressões de API, enquanto o Codex revisa seus limites de uso. Estes casos reforçam a importância de testes de compatibilidade e avaliações rigorosas de modelos.</p>
+  <div class="chips"><span>reddit</span><span>github</span><span>post-signals</span><span>vscode</span><span>codex</span><span>claudecode</span><span>developer</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-25">2026-08-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-25-gpt-5-6-chega-de-taxa-copilot-enfrenta-erro-de-conexao">GPT‑5.6 Chega de Taxa, Copilot Enfrenta Erro de Conexão</a></h3>
   <p>A queda de preço do GPT‑5.6 abre caminho para novas integrações, mas o Copilot relata falhas de conexão que expõem fragilidades em sistemas baseados em rede.</p>
@@ -505,7 +511,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>29</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>28</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -674,12 +680,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-06-retroativo-2026-06-06-anthropic-lanca-claude-opus-4-8-e-agentes-financeiros-privados-impactos-para-int">Anthropic lança Claude Opus 4.8 e agentes financeiros privados: impactos para integração bancária e</a></h3>
   <p>A estreia dos agentes de IA de marca própria da Anthropic coincide com o lançamento de Claude Opus 4.8, provocando ajustes de orçamento e arquitetura nas plataformas financeiras. Usuários e desenvolvedores relatam dúvidas sobre créditos de uso e validam o Claude Code como ferramenta de diagnóstico de hardware.</p>
   <div class="chips"><span>retroativo</span><span>google-news</span><span>reddit</span><span>v2ex</span><span>anthropic price guard</span><span>claude</span><span>coding</span><span>chinese</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-06">2026-06-06</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-06-digest-tecnico-de-novidades-ai-31-05-06-06-2026">Digest técnico de novidades AI (31/05 – 06/06/2026)</a></h3>
-  
-  
 </article>
   </div>
 </section>
