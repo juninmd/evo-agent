@@ -189,9 +189,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>24</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>25</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-27">2026-08-27</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-27-vs-code-1-135-lanca-claude-exe-e-introduz-agent-host-enquanto-openai-expande-atu">VS Code 1.135 lança claude.exe e introduz Agent Host, enquanto OpenAI expande atuação no Brasil</a></h3>
+  <p>No fim‑de‑semana, o VS Code adicionou host persistente e a versão 1.135 introduziu execução inesperada de claude.exe. O OpenAI, por sua vez, reforça sua presença no mercado brasileiro e o GitHub Copilot automatiza triagem de atualizações.</p>
+  <div class="chips"><span>reddit</span><span>github</span><span>vscode</span><span>openai</span><span>post-signals</span><span>codex</span><span>githubcopilot</span><span>claudecode</span><span>developer</span><span>tools</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-26">2026-08-26</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-26-vs-code-e-codex-em-foco-atualizacoes-que-impulsionam-a-necessidade-de-avaliacao-">VS Code e Codex em Foco: Atualizações que Impulsionam a Necessidade de Avaliação Rigorosa de LLMs</a></h3>
   <p>Atualizações frequentes do VS Code geram regressões de API, enquanto o Codex revisa seus limites de uso. Estes casos reforçam a importância de testes de compatibilidade e avaliações rigorosas de modelos.</p>
@@ -511,7 +517,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>28</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>27</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -674,12 +680,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-07-principais-novidades-em-ia-llms-e-orquestracao-de-agentes-07-13-jun-2026">Principais novidades em IA, LLMs e orquestração de agentes (07‑13 Jun 2026)</a></h3>
   
   
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-06">2026-06-06</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-06-retroativo-2026-06-06-anthropic-lanca-claude-opus-4-8-e-agentes-financeiros-privados-impactos-para-int">Anthropic lança Claude Opus 4.8 e agentes financeiros privados: impactos para integração bancária e</a></h3>
-  <p>A estreia dos agentes de IA de marca própria da Anthropic coincide com o lançamento de Claude Opus 4.8, provocando ajustes de orçamento e arquitetura nas plataformas financeiras. Usuários e desenvolvedores relatam dúvidas sobre créditos de uso e validam o Claude Code como ferramenta de diagnóstico de hardware.</p>
-  <div class="chips"><span>retroativo</span><span>google-news</span><span>reddit</span><span>v2ex</span><span>anthropic price guard</span><span>claude</span><span>coding</span><span>chinese</span></div>
 </article>
   </div>
 </section>
