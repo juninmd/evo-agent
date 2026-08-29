@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-29">2026-08-29</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-29-radar-2026-08-29">Radar IA — 29/08/2026</a></h3>
+  <p>Radar de 50 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-28">2026-08-28</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-28-radar-2026-08-28">Radar IA — 28/08/2026</a></h3>
   <p>Radar de 66 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -158,12 +164,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-09-radar-2026-08-09">Radar IA — 09/08/2026</a></h3>
   <p>Radar de 50 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-09">2026-08-09</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-09-copilot-openai-e-deepseek-exploracao-de-custos-tokenizacao-e-novas-metricas-de-s">Copilot, OpenAI e DeepSeek: Exploração de Custos, Tokenização e Novas Métricas de Segurança</a></h3>
-  <p>Durante o fim‑de‑semana de agosto, usuários de Copilot relataram aumento de consumo de tokens ao migrar para Claude e problemas de acesso a modelos. Paralelamente, DeepSeek mostrou vantagem de 4,8× no custo por solução, enquanto a OpenAI aprofunda controles críticos de segurança. Esses eventos recalibram decisões de arquitetura e orçamento em projetos de IA.</p>
-  <div class="chips"><span>weekly-report</span><span>reddit</span><span>together</span><span>openai</span><span>post-signals</span><span>githubcopilot</span><span>claudecode</span><span>codex</span><span>ai frontier</span><span>togetherai</span></div>
 </article>
   </div>
 </section>
