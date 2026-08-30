@@ -189,9 +189,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>27</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>28</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-30">2026-08-30</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-30-limites-codex-expandidos-persistencia-de-contexto-e-nova-politica-de-api">Limites Codex Expandidos, Persistência de Contexto e Nova Política de API</a></h3>
+  <p>O período testemunhou ajustes de quotas em serviços de IA, surgimento de ferramentas de gerenciamento de múltiplas contas e avanços em persistência de contexto. Esses desenvolvimentos pedem revisão de orçamentos e arquiteturas.</p>
+  <div class="chips"><span>reddit</span><span>openai</span><span>github-trending</span><span>post-signals</span><span>vscode</span><span>codex</span><span>githubcopilot</span><span>claude</span><span>coding</span><span>daily-javascript</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-29">2026-08-29</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-29-braid-codex-e-glm-5-3-alteracoes-de-custo-e-produtividade">BRAID, Codex e GLM‑5.3: Alterações de custo e produtividade</a></h3>
   <p>Uma extensão de depuração em tempo real simplifica o fluxo de desenvolvimento no VS Code, enquanto o recente corte nos tokens do Codex reduz seu orçamento e a nova Ada Flash de GLM‑5.3 oferece alternativa de custo mais baixo. Juntas, as mudanças redefinem estratégias de consumo de IA.</p>
@@ -529,7 +535,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>25</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>24</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -674,12 +680,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-retroativo-2026-06-08-anthropic-lanca-agentes-financeiros-ia-e-claude-opus-4-8-impactos-para-desenvolv">Anthropic lança agentes financeiros IA e Claude Opus 4.8: impactos para desenvolvedores e segurança</a></h3>
   <p>A empresa apresentou agentes de IA privativos voltados ao setor bancário e a nova versão Claude Opus 4.8. Em paralelo, surgem fluxos de trabalho de segurança para Claude Code e iniciativas de mascaramento de dados sensíveis.</p>
   <div class="chips"><span>retroativo</span><span>google-news</span><span>reddit</span><span>v2ex</span><span>anthropic price guard</span><span>claude</span><span>coding</span><span>chinese</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-digest-de-inovacoes-ai-para-desenvolvedores-06-07-06-13-2026">Digest de Inovações AI para Desenvolvedores (06/07–06/13/2026)</a></h3>
-  
-  
 </article>
   </div>
 </section>
