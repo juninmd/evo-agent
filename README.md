@@ -21,6 +21,12 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-08-30">2026-08-30</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-30-radar-2026-08-30">Radar IA — 30/08/2026</a></h3>
+  <p>Radar de 51 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-30">2026-08-30</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-30-tokens-modelos-e-fluxos-decisoes-criticas-em-produtos-de-ia-de-2026">Tokens, Modelos e Fluxos: Decisões Críticas em Produtos de IA de 2026</a></h3>
   <p>Entre o monitoramento de uso, otimizações de custo e novas iniciativas de aceleradoras, a paisagem de IA evolui de maneiras práticas e mensuráveis para desenvolvedores e investidoras.</p>
   <div class="chips"><span>weekly-report</span><span>reddit</span><span>together</span><span>openai</span><span>tabnews</span><span>post-signals</span><span>vscode</span><span>codex</span><span>claude</span><span>coding</span><span>ai frontier</span></div>
@@ -157,12 +163,6 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-08-11">2026-08-11</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-11-radar-2026-08-11">Radar IA — 11/08/2026</a></h3>
   <p>Radar de 67 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-10">2026-08-10</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-10-radar-2026-08-10">Radar IA — 10/08/2026</a></h3>
-  <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
 </article>
   </div>
