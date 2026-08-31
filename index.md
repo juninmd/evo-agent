@@ -189,9 +189,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>28</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>29</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-08-31">2026-08-31</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-31-layout-customizacoes-do-vscode-custos-de-mcp-do-copilot-e-monitoramento-de-uso-d">Layout Customizações do VSCode, Custos de MCP do Copilot e Monitoramento de Uso do Codex</a></h3>
+  <p>Engineers veem lacunas únicas nas interfaces de VSCode, descobrem custos inesperados ao usar Multi‑Channel Protocols no Copilot e modelam rotinas de monitoramento de quotas do Codex em dispositivos macOS.</p>
+  <div class="chips"><span>reddit</span><span>post-signals</span><span>vscode</span><span>githubcopilot</span><span>codex</span><span>claudecode</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-08-30">2026-08-30</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-30-limites-codex-expandidos-persistencia-de-contexto-e-nova-politica-de-api">Limites Codex Expandidos, Persistência de Contexto e Nova Política de API</a></h3>
   <p>O período testemunhou ajustes de quotas em serviços de IA, surgimento de ferramentas de gerenciamento de múltiplas contas e avanços em persistência de contexto. Esses desenvolvimentos pedem revisão de orçamentos e arquiteturas.</p>
@@ -535,7 +541,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>24</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>23</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -673,12 +679,6 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-06-09">2026-06-09</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-09-retroativo-2026-06-09-anthropic-lanca-claude-opus-4-8-e-agentes-financeiros-privados-comunidade-debate">Anthropic lança Claude Opus 4.8 e agentes financeiros privados; comunidade debate segurança do</a></h3>
   <p>A Anthropic apresentou a nova versão Claude Opus 4.8 e, simultaneamente, agentes de IA voltados ao setor financeiro. Paralelamente, desenvolvedores discutem fluxos de trabalho seguros para projetos Claude Code.</p>
-  <div class="chips"><span>retroativo</span><span>google-news</span><span>reddit</span><span>v2ex</span><span>anthropic price guard</span><span>claude</span><span>coding</span><span>chinese</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-08">2026-06-08</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-08-retroativo-2026-06-08-anthropic-lanca-agentes-financeiros-ia-e-claude-opus-4-8-impactos-para-desenvolv">Anthropic lança agentes financeiros IA e Claude Opus 4.8: impactos para desenvolvedores e segurança</a></h3>
-  <p>A empresa apresentou agentes de IA privativos voltados ao setor bancário e a nova versão Claude Opus 4.8. Em paralelo, surgem fluxos de trabalho de segurança para Claude Code e iniciativas de mascaramento de dados sensíveis.</p>
   <div class="chips"><span>retroativo</span><span>google-news</span><span>reddit</span><span>v2ex</span><span>anthropic price guard</span><span>claude</span><span>coding</span><span>chinese</span></div>
 </article>
   </div>
