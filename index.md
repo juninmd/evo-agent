@@ -189,6 +189,17 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>1</strong></div>
+  <div class="story-grid">
+    <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-01">2026-09-01</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-01-openai-fatura-1b-com-anuncios-chatgpt-polimill-constroi-ia-publica-no-japao-usua">OpenAI fatura $1B com anúncios ChatGPT; Polimill constrói IA pública no Japão; usuários denunciam</a></h3>
+  <p>Vemos a mudança de modelo de receita da OpenAI com ganhos de anúncios, a prova prática de IA pública nas cidades japonesas e relatos técnicos de falhas que afetam produtividade e confiança no VSCode e no Copilot.</p>
+  <div class="chips"><span>openai</span><span>reddit</span><span>blog</span><span>post-signals</span><span>vscode</span><span>githubcopilot</span><span>claudecode</span><span>codex</span></div>
+</article>
+  </div>
+</section>
+<section class="month-group">
   <div class="month-heading"><span>2026</span><h2>Agosto</h2><strong>29</strong></div>
   <div class="story-grid">
     <article class="story-card">
@@ -541,7 +552,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>23</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>22</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -674,12 +685,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-10-principais-repositorios-e-noticias-de-ia-da-semana">Principais Repositórios e Notícias de IA da Semana</a></h3>
   
   
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-09">2026-06-09</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-09-retroativo-2026-06-09-anthropic-lanca-claude-opus-4-8-e-agentes-financeiros-privados-comunidade-debate">Anthropic lança Claude Opus 4.8 e agentes financeiros privados; comunidade debate segurança do</a></h3>
-  <p>A Anthropic apresentou a nova versão Claude Opus 4.8 e, simultaneamente, agentes de IA voltados ao setor financeiro. Paralelamente, desenvolvedores discutem fluxos de trabalho seguros para projetos Claude Code.</p>
-  <div class="chips"><span>retroativo</span><span>google-news</span><span>reddit</span><span>v2ex</span><span>anthropic price guard</span><span>claude</span><span>coding</span><span>chinese</span></div>
 </article>
   </div>
 </section>
