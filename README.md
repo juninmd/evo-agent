@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-02">2026-09-02</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-02-radar-2026-09-02">Radar IA — 02/09/2026</a></h3>
+  <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-01">2026-09-01</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-01-radar-2026-09-01">Radar IA — 01/09/2026</a></h3>
   <p>Radar de 71 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -156,12 +162,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-08-14">2026-08-14</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-14-radar-2026-08-14">Radar IA — 14/08/2026</a></h3>
-  <p>Radar de 71 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-13">2026-08-13</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-13-radar-2026-08-13">Radar IA — 13/08/2026</a></h3>
   <p>Radar de 71 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
 </article>
