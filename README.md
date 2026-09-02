@@ -189,9 +189,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>1</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>2</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-02">2026-09-02</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-02-claude-fable-5-1-reducao-de-custos-watermark-e-sinais-de-quota-na-comunidade">Claude Fable 5.1: Redução de Custos, Watermark e Sinais de Quota na Comunidade</a></h3>
+  <p>Anthropic diminuiu em 75 % o preço de leitura de cache, lançando o Fable 5.1. Paralelamente, usuários de Codex e Copilot relatam queda de quota, regressão de qualidade e a introdução de watermark no modelo.</p>
+  <div class="chips"><span>hacker-news</span><span>google-news</span><span>reddit</span><span>front-page</span><span>anthropic fable 5 cost</span><span>post-signals</span><span>codex</span><span>claudecode</span><span>githubcopilot</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-01">2026-09-01</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-01-openai-fatura-1b-com-anuncios-chatgpt-polimill-constroi-ia-publica-no-japao-usua">OpenAI fatura $1B com anúncios ChatGPT; Polimill constrói IA pública no Japão; usuários denunciam</a></h3>
   <p>Vemos a mudança de modelo de receita da OpenAI com ganhos de anúncios, a prova prática de IA pública nas cidades japonesas e relatos técnicos de falhas que afetam produtividade e confiança no VSCode e no Copilot.</p>
@@ -552,7 +558,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>22</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>21</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -677,12 +683,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-10">2026-06-10</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-10-destaques-da-semana-no-tabnews">Destaques da Semana no TabNews</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-10">2026-06-10</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-10-principais-repositorios-e-noticias-de-ia-da-semana">Principais Repositórios e Notícias de IA da Semana</a></h3>
   
   
 </article>
