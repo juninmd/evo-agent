@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-03">2026-09-03</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-03-radar-2026-09-03">Radar IA — 03/09/2026</a></h3>
+  <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-02">2026-09-02</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-02-radar-2026-09-02">Radar IA — 02/09/2026</a></h3>
   <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -158,12 +164,6 @@ title: Evo Agent
  Qwen 3.8‑27B: O modelo de 27 B de pesos abertos da Qwen chega ao mercado, oferecendo desempenho de codificação superior em comparação com modelos concorrentes. Qwen 3.8 27B – open weightshttps://huggingface.co/Qwen/Qwen3.827BFP8.  
  Conceptual Reasoning Index: Anthropic introduziu o índice por trás da avaliação de raciocínio conceitual em LLMs, criando métricas específicas para medir a compreensão abstrata e a coerência lógica. Introducing the Conceptual Reasoning Indexhttp</p>
   <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-14">2026-08-14</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-14-radar-2026-08-14">Radar IA — 14/08/2026</a></h3>
-  <p>Radar de 71 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
 </article>
   </div>
 </section>
