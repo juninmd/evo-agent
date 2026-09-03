@@ -189,9 +189,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>2</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>3</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-03">2026-09-03</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-03-gpt-6-nerf-limite-de-sessao-copilot-economiza-fable-5-1-e-bugs-do-vs-code">GPT‑6 Nerf, Limite de Sessão, Copilot Economiza, Fable 5.1 e Bugs do VS Code</a></h3>
+  <p>A semana trouxe relatos de ajustes dramáticos na capacidade do GPT‑6, a introdução de reset de sessão na API Claude, revelações de custos no Copilot, a nova versão Fable 5.1 da Anthropic e problemas recorrentes no VS Code.</p>
+  <div class="chips"><span>reddit</span><span>github</span><span>tabnews</span><span>post-signals</span><span>codex</span><span>claudecode</span><span>vscode</span><span>developer</span><span>br</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-02">2026-09-02</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-02-claude-fable-5-1-reducao-de-custos-watermark-e-sinais-de-quota-na-comunidade">Claude Fable 5.1: Redução de Custos, Watermark e Sinais de Quota na Comunidade</a></h3>
   <p>Anthropic diminuiu em 75 % o preço de leitura de cache, lançando o Fable 5.1. Paralelamente, usuários de Codex e Copilot relatam queda de quota, regressão de qualidade e a introdução de watermark no modelo.</p>
@@ -558,7 +564,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>21</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>20</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -677,12 +683,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-10">2026-06-10</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-10-destaques-da-semana-no-github-e-tecnologia">Destaques da Semana no GitHub e Tecnologia</a></h3>
-  
-  
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-10">2026-06-10</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-10-destaques-da-semana-no-tabnews">Destaques da Semana no TabNews</a></h3>
   
   
 </article>
