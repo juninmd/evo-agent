@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-04">2026-09-04</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-04-radar-2026-09-04">Radar IA — 04/09/2026</a></h3>
+  <p>Radar de 64 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-03">2026-09-03</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-03-radar-2026-09-03">Radar IA — 03/09/2026</a></h3>
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -156,14 +162,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-15-radar-2026-08-15">Radar IA — 15/08/2026</a></h3>
   <p>Radar de 63 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-15">2026-08-15</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-08-15-relatorio-quinzenal-inovacoes-em-llm-ia-e-agentes-01-08-2026-15-08-2026">Relatório Quinzenal: Inovações em LLM, IA e Agentes (01/08/2026 – 15/08/2026)</a></h3>
-  <p>Codex Desktop Preview: OpenAI lançou a pré‑visualização do Codex no aplicativo desktop do ChatGPT para Linux, permitindo usuários obterem sugestões de código localmente e sem depender da nuvem. Codex em ChatGPT desktop app for Linuxhttps://community.openai.com/t/codexinchatgptdesktopappforlinuxisnowinpreview/1390027.  
- Qwen 3.8‑27B: O modelo de 27 B de pesos abertos da Qwen chega ao mercado, oferecendo desempenho de codificação superior em comparação com modelos concorrentes. Qwen 3.8 27B – open weightshttps://huggingface.co/Qwen/Qwen3.827BFP8.  
- Conceptual Reasoning Index: Anthropic introduziu o índice por trás da avaliação de raciocínio conceitual em LLMs, criando métricas específicas para medir a compreensão abstrata e a coerência lógica. Introducing the Conceptual Reasoning Indexhttp</p>
-  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
 </article>
   </div>
 </section>
