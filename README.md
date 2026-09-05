@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-05">2026-09-05</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-05-radar-2026-09-05">Radar IA — 05/09/2026</a></h3>
+  <p>Radar de 56 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-04">2026-09-04</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-04-radar-2026-09-04">Radar IA — 04/09/2026</a></h3>
   <p>Radar de 64 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -156,12 +162,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-16-qwen-3-8-open-weights-risco-anthropic-e-adocao-de-agentes-de-ia">Qwen 3.8 Open Weights, Risco Anthropic e Adoção de Agentes de IA</a></h3>
   <p>O modelo Qwen 3.8 lança pesos abertos e o relatório de risco da Anthropic aponta desafios críticos. Novas práticas de agentes de IA e custos de reset do Codex redefinem o ecossistema de desenvolvimento.</p>
   <div class="chips"><span>weekly-report</span><span>hacker-news</span><span>github</span><span>google-news</span><span>reddit</span><span>front-page</span><span>developer</span><span>anthropic fable 5 cost</span><span>post-signals</span><span>claudecode</span><span>githubcopilot</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-15">2026-08-15</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-15-radar-2026-08-15">Radar IA — 15/08/2026</a></h3>
-  <p>Radar de 63 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
 </article>
   </div>
 </section>
