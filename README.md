@@ -187,9 +187,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>4</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>5</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-05">2026-09-05</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-05-hydrafusion-na-copilot-gpt-6-e-reset-de-limites-do-claude-tendencias-e-riscos">HydraFusion na Copilot, GPT‑6 e Reset de Limites do Claude: Tendências e Riscos</a></h3>
+  <p>O GitHub lança HydraFusion para orquestração multi‑modelo, enquanto GPT‑6 aparece em Copilot. Relações de limites e qualidade de UX geram alertas de projeto e arquitetura.</p>
+  <div class="chips"><span>github</span><span>reddit</span><span>tabnews</span><span>google-news</span><span>developer</span><span>post-signals</span><span>githubcopilot</span><span>claudecode</span><span>codex</span><span>br</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-04">2026-09-04</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-04-gpt-6-astra-impulsiona-revisoes-financeiras-e-fable-5-dobla-custos-de-inferencia">GPT‑6 Astra Impulsiona Revisões Financeiras e Fable 5 Dobla Custos de Inferência</a></h3>
   <p>O lançamento do GPT‑6 Astra acelera revisões financeiras em minutos, enquanto o aumento de preço do Fable 5 obriga ajustes de orçamento. A integração de múltiplos agentes no Copilot abre novas rotações de automação.</p>
@@ -568,7 +574,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>19</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>18</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -677,12 +683,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-11-principais-projetos-em-destaque-no-github">Principais Projetos em Destaque no GitHub</a></h3>
   
   
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-10">2026-06-10</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-10-retroativo-2026-06-10-openai-codex-impulsa-simulacoes-de-buracos-negros-e-expoe-operacoes-de-influenci">OpenAI Codex impulsa simulações de buracos negros e expõe operações de influência chinesas com IA</a></h3>
-  <p>Descobertas recentes mostram Codex sendo usado para modelar buracos negros enquanto a OpenAI revela campanhas de desinformação da China. Ferramentas como Llmbuffer demonstram ganhos de eficiência de token cache para agentes LLM.</p>
-  <div class="chips"><span>retroativo</span><span>openai</span><span>hacker-news</span><span>developer</span><span>ml</span><span>research</span></div>
 </article>
   </div>
 </section>
