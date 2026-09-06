@@ -21,6 +21,15 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-09-06-relatorio-quinzenal-avancos-significativos-em-llms-e-agregacao-de-agentes-23-08-">Relatório Quinzenal: Avanços Significativos em LLMs e Agregação de Agentes (23/08 – 06/09)</a></h3>
+  <p>Destaques do período
+ Claude Fable 5.1 / Mythos 5.1 — Anthropic lança os modelos atualizados com preços 45 % menores, cache de leitura 75 % mais barato e melhorias em detecção de falsos positivos. Crucial para quem depende de agentes de longa duração. Anthropic Bloghttps://anthropic.com/claudefableandmythos51
+ OpenAI GPT‑6 Astra — Ola o modelo de maior contexto 1.050 000 tokens com CPU e shell em tempo real, ganho de desempenho em segurança cibernética e código. Marca um salto na geração de código e aplicações baseadas em IA. OpenAI Bloghttps://openai.com/index/gpt6astra
+ Daybreak for Frontline Defenders — OpenAI aloca US$ 1 bilhão para expandir IA de defesa cibernética em governos e serviços essenciais, elevando o padrão de segurança pública. OpenAI Bloghttps://openai.com/index/daybreakfo</p>
+  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-09-06-relatorio-mensal-novos-modelos-e-precos-e-assistentes-de-codigo-e-ferramentas">Relatorio Mensal: Novos modelos e preços e Assistentes de código e ferramentas</a></h3>
   <p>GPT6 Astra was released by OpenAI on 03/09/2026 as the latest generation of its flagship model. It supports a context window of 1.05 M tokens input up to 922 K, output up to 128 K and features 2× faster computer use along with MCP, hosted shell, and code interpreter capabilities. Pricing is set at US$10 per million input tokens and US$50 per million output tokens https://www.tabnews.com.br/wildrik/gpt6astraoqueaopenailancoudeverdadeeapolemicadosbenchmarks.</p>
   <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span></div>
@@ -156,12 +165,6 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-08-19">2026-08-19</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-19-radar-2026-08-19">Radar IA — 19/08/2026</a></h3>
   <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-18">2026-08-18</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-18-radar-2026-08-18">Radar IA — 18/08/2026</a></h3>
-  <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
 </article>
   </div>
