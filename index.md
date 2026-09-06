@@ -21,6 +21,13 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/semester-2026-09-06-relatorio-semestral-lancamentos-de-modelos-frontier-e-agentes-de-codigo-ides">Relatorio Semestral: Lançamentos de Modelos Frontier e Agentes de Código &amp; IDEs  </a></h3>
+  <p>Claude Fable 5.1 e Claude Mythos 5.1 Anthropic – Em 20/03/2026 a Anthropic lançou os modelos Fable 5.1 e Mythos 5.1, reduzindo em até 45 % os custos de execução para tarefas agenciais e cortando 75 % o preço de leitura de cache. Essas melhorias tornam a plataforma mais viável para integrações em larga escala e aumentam a confiança em tarefas de codificação e conhecimento.  
+  Hacker Newshttps://www.anthropic.com/claudefableandmythos51 / The Vergehttps://news.google.com/rss/articles/CBMilwFBVV95cUxQLEJMNThLbnRBLWRoRlBnUnI0bmZ1WlVLLS0ydzhpUUVWYUZQbUtYM3I2eGRRWXhwM2kyNVdTREFQeHpxWjNJR2ZUYk5mQkFMOG5idkt3VDVvUC03bFE2UjhlRENaNTRBMnc5M0xQUHA3c0RfV2lMSTk3bzBKbDNGdHZ0MUJZSk1WODllLTBiRTdYZndGbTJ3</p>
+  <div class="chips"><span>semester-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/bimonthly-2026-09-06-relatorio-bimestral-reducao-de-custos-e-eficiencia-nos-modelos-de-ia-e-gpt-6-ast">Relatorio Bimestral: Redução de custos e eficiência nos modelos de IA e GPT-6 Astra: lançamentos e repercussões</a></h3>
   <p>Claude Fable 5.1 chega com custos mais baixos e menos falsos positivos: A Anthropic lançou o modelo Fable 5.1, que reduz os custos de inferência e melhora a precisão em comparação com a versão anterior Fable 5. Segundo MacRumorshttps://news.google.com/rss/articles/CBMickFVX3lxTE9zWVpsbEM4NFFQdXhMRS1FUzhqQjdQZ1M1bmtFd1Nac0JjN2ZQbHFVTVRENGxkS0hUazBEN3dUbTRTdm5BdWRrbXVQaUtsZ1lULU10QzhUNWVLNVhJSE1xWkN3OElrVjNDZkhfOFRvTEpxZw?oc=5, a atualização já está disponível e promete maior eficiência em tarefas de codificação e raciocínio de longo prazo, um passo importante para empresas que buscam reduzir custos operacionais com IA.</p>
   <div class="chips"><span>bimonthly-report</span><span>ai-agents</span><span>llm</span></div>
@@ -156,12 +163,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-17-radar-2026-08-17">Radar IA — 17/08/2026</a></h3>
   <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-16">2026-08-16</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-16-radar-2026-08-16">Radar IA — 16/08/2026</a></h3>
-  <p>Radar de 51 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
 </article>
   </div>
 </section>
