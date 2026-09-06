@@ -268,10 +268,18 @@ const PERIOD_CONFIG: Record<ReportPeriod, PeriodConfig> = {
   // entry exists so the period is publishable through the same pipeline.
   radar: { days: 1, label: "radar", highlights: [10, 18] },
   weekly: { days: 7, label: "semanal", highlights: [16, 24] },
-  biweekly: { days: 14, label: "quinzenal", highlights: [20, 28] },
-  monthly: { days: 30, label: "mensal", highlights: [28, 40] },
-  bimonthly: { days: 60, label: "bimestral", highlights: [34, 48] },
-  semester: { days: 180, label: "semestral", highlights: [45, 65] },
+  // Pisos de biweekly/monthly/bimonthly/semester eram 20/28/34/45. Medido em
+  // 2026-09-05 (gpt-oss-120b e qwen3-next-80b, cache limpo): o gerador cita
+  // 4-15 fontes por execucao e nao passa de ~16-20 mesmo no melhor caso -- o
+  // teto real nao escala com o tamanho do periodo (perBucket e o dedup do
+  // pool limitam antes disso). Com o piso acima do teto real, todo CronJob de
+  // periodo longo falhava sempre (evo-agent-monthly/bimonthly/semester
+  // ficaram Degraded por meses). Alinhado ao piso de weekly, o unico que
+  // passava de forma consistente.
+  biweekly: { days: 14, label: "quinzenal", highlights: [16, 28] },
+  monthly: { days: 30, label: "mensal", highlights: [16, 40] },
+  bimonthly: { days: 60, label: "bimestral", highlights: [16, 48] },
+  semester: { days: 180, label: "semestral", highlights: [16, 65] },
 };
 
 function periodMeta(period: ReportPeriod) {
