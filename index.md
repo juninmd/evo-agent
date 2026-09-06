@@ -21,6 +21,12 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-06-gpt-6-astra-hydrafusion-e-ecosistema-vs-code-desempenho-custos-e-adaptacoes-de-c">GPT‑6 Astra, HydraFusion e ecosistema VS Code: desempenho, custos e adaptações de código local</a></h3>
+  <p>O GPT‑6 Astra chega com preço e desempenho que questionam modelos anteriores. A nova HydraFusion expande orquestrações multi‑modelo. Enquanto isso, a comunidade VS Code refina extensões para programação local e integração com Claude e Pi.</p>
+  <div class="chips"><span>weekly-report</span><span>github</span><span>openai</span><span>google-news</span><span>reddit</span><span>developer</span><span>anthropic fable 5 cost</span><span>post-signals</span><span>vscode</span><span>codex</span><span>claudecode</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-09-06-relatorio-quinzenal-avancos-significativos-em-llms-e-agregacao-de-agentes-23-08-">Relatório Quinzenal: Avanços Significativos em LLMs e Agregação de Agentes (23/08 – 06/09)</a></h3>
   <p>Destaques do período
  Claude Fable 5.1 / Mythos 5.1 — Anthropic lança os modelos atualizados com preços 45 % menores, cache de leitura 75 % mais barato e melhorias em detecção de falsos positivos. Crucial para quem depende de agentes de longa duração. Anthropic Bloghttps://anthropic.com/claudefableandmythos51
@@ -159,12 +165,6 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-08-20">2026-08-20</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-20-radar-2026-08-20">Radar IA — 20/08/2026</a></h3>
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-19">2026-08-19</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-19-radar-2026-08-19">Radar IA — 19/08/2026</a></h3>
-  <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
 </article>
   </div>
