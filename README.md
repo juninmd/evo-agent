@@ -21,6 +21,12 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-09-06-relatorio-mensal-novos-modelos-e-precos-e-assistentes-de-codigo-e-ferramentas">Relatorio Mensal: Novos modelos e preços e Assistentes de código e ferramentas</a></h3>
+  <p>GPT6 Astra was released by OpenAI on 03/09/2026 as the latest generation of its flagship model. It supports a context window of 1.05 M tokens input up to 922 K, output up to 128 K and features 2× faster computer use along with MCP, hosted shell, and code interpreter capabilities. Pricing is set at US$10 per million input tokens and US$50 per million output tokens https://www.tabnews.com.br/wildrik/gpt6astraoqueaopenailancoudeverdadeeapolemicadosbenchmarks.</p>
+  <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/semester-2026-09-06-relatorio-semestral-lancamentos-de-modelos-frontier-e-agentes-de-codigo-ides">Relatorio Semestral: Lançamentos de Modelos Frontier e Agentes de Código &amp; IDEs  </a></h3>
   <p>Claude Fable 5.1 e Claude Mythos 5.1 Anthropic – Em 20/03/2026 a Anthropic lançou os modelos Fable 5.1 e Mythos 5.1, reduzindo em até 45 % os custos de execução para tarefas agenciais e cortando 75 % o preço de leitura de cache. Essas melhorias tornam a plataforma mais viável para integrações em larga escala e aumentam a confiança em tarefas de codificação e conhecimento.  
   Hacker Newshttps://www.anthropic.com/claudefableandmythos51 / The Vergehttps://news.google.com/rss/articles/CBMilwFBVV95cUxQLEJMNThLbnRBLWRoRlBnUnI0bmZ1WlVLLS0ydzhpUUVWYUZQbUtYM3I2eGRRWXhwM2kyNVdTREFQeHpxWjNJR2ZUYk5mQkFMOG5idkt3VDVvUC03bFE2UjhlRENaNTRBMnc5M0xQUHA3c0RfV2lMSTk3bzBKbDNGdHZ0MUJZSk1WODllLTBiRTdYZndGbTJ3</p>
@@ -155,12 +161,6 @@ title: Evo Agent
 <article class="story-card">
   <div class="story-meta"><time datetime="2026-08-18">2026-08-18</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-18-radar-2026-08-18">Radar IA — 18/08/2026</a></h3>
-  <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-17">2026-08-17</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-17-radar-2026-08-17">Radar IA — 17/08/2026</a></h3>
   <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
 </article>
