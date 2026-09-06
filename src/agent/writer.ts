@@ -572,7 +572,15 @@ Start with:
 
 ${CURATION_GUIDANCE}`;
 
-  return ask(userPrompt, systemPrompt, { maxOutputTokens: 800 });
+  // ~42% do peso do pool cloud/auto sao modelos de raciocinio (gpt-oss-20b,
+  // nemotron-3-nano-omni), que gastam tokens em reasoning_content ANTES do
+  // content mesmo com reasoning_effort:low. Reproduzido direto no LiteLLM:
+  // com max_tokens=800 ou 1500, o orcamento inteiro vira reasoning_content e
+  // o content volta vazio (finish_reason:"length", content:null) -- e o que
+  // gerava "Empty response from model cloud/auto" e derrubava
+  // monthly/bimonthly/semester do evo-agent por meses. 2500 ja e suficiente
+  // (testado), 3000 da folga.
+  return ask(userPrompt, systemPrompt, { maxOutputTokens: 3000 });
 }
 
 async function buildTrendsSection(
@@ -591,7 +599,9 @@ Start with:
 
 ${MERMAID_GUIDANCE}`;
 
-  return ask(userPrompt, systemPrompt, { maxOutputTokens: 600 });
+  // Mesma causa de summarizeGroup: budget curto demais para sobrar content
+  // depois do reasoning_content dos modelos de raciocinio do pool cloud/auto.
+  return ask(userPrompt, systemPrompt, { maxOutputTokens: 2500 });
 }
 
 async function generatePeriodReportMultiPass(
