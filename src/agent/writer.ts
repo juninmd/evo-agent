@@ -272,14 +272,17 @@ const PERIOD_CONFIG: Record<ReportPeriod, PeriodConfig> = {
   // 2026-09-05 (gpt-oss-120b e qwen3-next-80b, cache limpo): o gerador cita
   // 4-15 fontes por execucao e nao passa de ~16-20 mesmo no melhor caso -- o
   // teto real nao escala com o tamanho do periodo (perBucket e o dedup do
-  // pool limitam antes disso). Com o piso acima do teto real, todo CronJob de
-  // periodo longo falhava sempre (evo-agent-monthly/bimonthly/semester
-  // ficaram Degraded por meses). Alinhado ao piso de weekly, o unico que
-  // passava de forma consistente.
-  biweekly: { days: 14, label: "quinzenal", highlights: [16, 28] },
-  monthly: { days: 30, label: "mensal", highlights: [16, 40] },
-  bimonthly: { days: 60, label: "bimestral", highlights: [16, 48] },
-  semester: { days: 180, label: "semestral", highlights: [16, 65] },
+  // pool limitam antes disso). Baixado primeiro para 16 (igual weekly), mas
+  // mesmo depois de consertar o "Empty response" (ver summarizeGroup) uma
+  // rodada limpa em 2026-09-06 ainda citou so 14 -- dentro da faixa 4-15 ja
+  // documentada, so que abaixo de 16. Com backoffLimit:1 (2 tentativas por
+  // execucao), um piso colado no teto real derruba a execucao inteira em
+  // qualquer variacao normal para baixo. Baixado para 12, com folga real
+  // sob o teto medido, para que as 2 tentativas tenham chance de passar.
+  biweekly: { days: 14, label: "quinzenal", highlights: [12, 28] },
+  monthly: { days: 30, label: "mensal", highlights: [12, 40] },
+  bimonthly: { days: 60, label: "bimestral", highlights: [12, 48] },
+  semester: { days: 180, label: "semestral", highlights: [12, 65] },
 };
 
 function periodMeta(period: ReportPeriod) {
