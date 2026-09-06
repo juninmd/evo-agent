@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>5</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>6</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-06-anthropic-fable-5-1-e-astra-aceleram-ia-enquanto-vs-code-expande-customizacao-e-">Anthropic Fable 5.1 e Astra aceleram IA, enquanto VS Code expande customização e Pi propõe agente</a></h3>
+  <p>A edição destaca a introdução do Claude Fable 5.1 com custos reduzidos, a velocidade superior do Astra nas tarefas de desenvolvimento e a necessidade de ajustes de interface no VS Code para integrar agentes como Pi.</p>
+  <div class="chips"><span>reddit</span><span>google-news</span><span>post-signals</span><span>vscode</span><span>claudecode</span><span>codex</span><span>anthropic fable 5 cost</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-05">2026-09-05</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-05-hydrafusion-na-copilot-gpt-6-e-reset-de-limites-do-claude-tendencias-e-riscos">HydraFusion na Copilot, GPT‑6 e Reset de Limites do Claude: Tendências e Riscos</a></h3>
   <p>O GitHub lança HydraFusion para orquestração multi‑modelo, enquanto GPT‑6 aparece em Copilot. Relações de limites e qualidade de UX geram alertas de projeto e arquitetura.</p>
@@ -578,7 +584,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>18</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>17</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-11-retroativo-2026-06-11-openai-alerta-sobre-ameacas-de-ia-bbva-escalona-chatgpt-enterprise-e-github-sofr">OpenAI alerta sobre ameaças de IA; BBVA escalona ChatGPT Enterprise e GitHub sofre incidentes</a></h3>
   <p>Relatório de risco da OpenAI destaca usos maliciosos de IA. BBVA amplia ChatGPT Enterprise para 100 mil funcionários enquanto o GitHub registra nove incidentes de degradação.</p>
   <div class="chips"><span>retroativo</span><span>hacker-news</span><span>the</span><span>openai</span><span>google</span><span>reddit</span><span>developer</span><span>claude</span><span>coding</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-11">2026-06-11</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-11-principais-projetos-em-destaque-no-github">Principais Projetos em Destaque no GitHub</a></h3>
-  
-  
 </article>
   </div>
 </section>
