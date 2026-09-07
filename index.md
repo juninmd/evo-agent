@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>6</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>7</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-07">2026-09-07</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-07-monitoramento-de-alinhamento-da-openai-e-lancamento-do-mistral-ocr-3">Monitoramento de Alinhamento da OpenAI e Lançamento do Mistral OCR 3</a></h3>
+  <p>OpenAI implementa sistemas de detecção de desvio em agentes de codificação internos. Relatos de usuários apontam anomalias em quotas de faturamento do GitHub Copilot e resets de tokens da OpenAI.</p>
+  <div class="chips"><span>hacker-news</span><span>google-news</span><span>reddit</span><span>openai</span><span>front-page</span><span>mistral ocr 3</span><span>post-signals</span><span>githubcopilot</span><span>claudecode</span><span>codex</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-06-anthropic-fable-5-1-e-astra-aceleram-ia-enquanto-vs-code-expande-customizacao-e-">Anthropic Fable 5.1 e Astra aceleram IA, enquanto VS Code expande customização e Pi propõe agente</a></h3>
   <p>A edição destaca a introdução do Claude Fable 5.1 com custos reduzidos, a velocidade superior do Astra nas tarefas de desenvolvimento e a necessidade de ajustes de interface no VS Code para integrar agentes como Pi.</p>
@@ -584,7 +590,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>17</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>16</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-12-destaques-do-hacker-news">Destaques do Hacker News</a></h3>
   
   
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-11">2026-06-11</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-11-retroativo-2026-06-11-openai-alerta-sobre-ameacas-de-ia-bbva-escalona-chatgpt-enterprise-e-github-sofr">OpenAI alerta sobre ameaças de IA; BBVA escalona ChatGPT Enterprise e GitHub sofre incidentes</a></h3>
-  <p>Relatório de risco da OpenAI destaca usos maliciosos de IA. BBVA amplia ChatGPT Enterprise para 100 mil funcionários enquanto o GitHub registra nove incidentes de degradação.</p>
-  <div class="chips"><span>retroativo</span><span>hacker-news</span><span>the</span><span>openai</span><span>google</span><span>reddit</span><span>developer</span><span>claude</span><span>coding</span></div>
 </article>
   </div>
 </section>
