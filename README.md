@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>7</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>8</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-08">2026-09-08</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-08-mistral-ocr-4-avanca-em-estrutura-de-documentos-comunidade-expande-vscode-codex-">Mistral OCR 4 avança em estrutura de documentos; comunidade expande VSCode, Codex e Claude Code</a></h3>
+  <p>A versão 4 do Mistral OCR adiciona bounding boxes e classificação de blocos, enquanto desenvolvedores relatam novos fluxos no VSCode, benchmarks multimodais no Codex e prototipagem de hardware com Claude Code. Esses sinais indicam maior integração entre modelos de visão, edição interativa e automação agente‑first.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>searxng</span><span>mistral ocr 4</span><span>mistral ocr 3</span><span>post-signals</span><span>vscode</span><span>codex</span><span>claudecode</span><span>br</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-07">2026-09-07</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-07-monitoramento-de-alinhamento-da-openai-e-lancamento-do-mistral-ocr-3">Monitoramento de Alinhamento da OpenAI e Lançamento do Mistral OCR 3</a></h3>
   <p>OpenAI implementa sistemas de detecção de desvio em agentes de codificação internos. Relatos de usuários apontam anomalias em quotas de faturamento do GitHub Copilot e resets de tokens da OpenAI.</p>
@@ -590,7 +596,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>16</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>15</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-12-openai-lanca-cursos-academy-e-anthropic-apresenta-claude-fable-5">OpenAI lança cursos Academy e Anthropic apresenta Claude Fable 5</a></h3>
   <p>Nova oferta educacional da OpenAI visa capacitar profissionais a criar fluxos de trabalho com IA. Anthropic entrega o modelo Claude Fable 5, prometendo salvaguardas avançadas e despertando debate sobre custos de uso.</p>
   <div class="chips"><span>openai</span><span>google-news</span><span>hacker-news</span><span>v2ex</span><span>anthropic fable5 routing</span><span>developer</span><span>chinese</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-12">2026-06-12</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-12-destaques-do-hacker-news">Destaques do Hacker News</a></h3>
-  
-  
 </article>
   </div>
 </section>
