@@ -80,9 +80,41 @@ export function getDb(): Database.Database {
   mkdirSync(dirname(config.dbPath), { recursive: true });
   _db = new Database(config.dbPath);
   _db.pragma("journal_mode = WAL");
+  // Reclaims space incrementally; full VACUUM would block the event loop on a
+  // large DB. Existing databases only pick this up after their next VACUUM.
+  _db.pragma("auto_vacuum = INCREMENTAL");
   migrate(_db);
   return _db;
 }
+
+const _stmtCache = new Map<string, Database.Statement>();
+
+/** Memoized prepared statements: re-preparing on every call is wasteful. */
+function stmt(sql: string): Database.Statement {
+  let statement = _stmtCache.get(sql);
+  if (!statement) {
+    statement = getDb().prepare(sql);
+    _stmtCache.set(sql, statement);
+  }
+  return statement;
+}
+
+/** ISO string with 'T' and millis → SQLite format 'YYYY-MM-DD HH:MM:SS'. */
+function sqliteTs(iso: string): string {
+  return iso.replace("T", " ").replace(/\.\d+Z$/, "");
+}
+
+const PRIMARY_SOURCE_SQL = `
+  lower(source) LIKE '%anthropic%'
+  OR lower(source) LIKE '%openai%'
+  OR lower(source) LIKE '%github blog%'
+  OR lower(source) LIKE '%google research%'
+  OR lower(source) LIKE '%google ai%'
+  OR lower(source) LIKE '%hugging face%'
+  OR lower(source) LIKE '%mistral%'
+  OR lower(source) LIKE '%together ai%'
+  OR lower(source) LIKE '%vscode updates%'
+`;
 
 export function migrate(db: Database.Database) {
   db.exec(`
@@ -270,18 +302,24 @@ let _urlExistsStmt: ReturnType<Database.Database["prepare"]> | null = null;
 
 function urlExistsStmt() {
   if (!_urlExistsStmt) {
-    _urlExistsStmt = getDb().prepare("SELECT 1 FROM articles WHERE url = ?");
+    _urlExistsStmt = stmt("SELECT 1 FROM articles WHERE url = ?");
   }
   return _urlExistsStmt;
 }
 
 export const db = {
   saveArticle(a: SaveArticleInput) {
-    const stmt = getDb().prepare(
-      `INSERT OR IGNORE INTO articles (title, source, url, summary, tags, engagement_score)
-       VALUES (@title, @source, @url, @summary, @tags, @engagement_score)`,
-    );
-    return stmt.run({
+    // Upsert: a URL re-seen (re-trending repo, refreshed comments) updates its
+    // engagement instead of being silently ignored; crawl time stays the first
+    // sighting so recency semantics are preserved.
+    return stmt(
+      `INSERT INTO articles (title, source, url, summary, tags, engagement_score)
+       VALUES (@title, @source, @url, @summary, @tags, @engagement_score)
+       ON CONFLICT(url) DO UPDATE SET
+         summary = excluded.summary,
+         tags = excluded.tags,
+         engagement_score = excluded.engagement_score`,
+    ).run({
       title: a.title,
       source: a.source,
       url: a.url,
@@ -292,52 +330,50 @@ export const db = {
   },
 
   getRecentArticles(limit = 50): Article[] {
-    return getDb()
-      .prepare("SELECT * FROM articles ORDER BY crawled_at DESC LIMIT ?")
-      .all(limit) as Article[];
+    return stmt("SELECT * FROM articles ORDER BY crawled_at DESC LIMIT ?").all(
+      limit,
+    ) as Article[];
   },
 
   getArticlesSince(days: number, limit = 2000): Article[] {
-    return getDb()
-      .prepare(
-        "SELECT * FROM articles WHERE crawled_at >= datetime('now', ?) ORDER BY crawled_at DESC LIMIT ?",
-      )
-      .all(`-${days} days`, limit) as Article[];
+    return stmt(
+      `SELECT * FROM articles
+       WHERE crawled_at >= datetime('now', ?)
+       ORDER BY crawled_at DESC
+       LIMIT ?`,
+    ).all(`-${days} days`, limit) as Article[];
   },
 
+  // Column is bare on the left so idx_articles_crawled_at is used; the params
+  // are normalized to SQLite format instead of wrapping the column in
+  // datetime(), which would force a full scan.
   getArticlesBetween(from: string, to: string, limit = 2000): Article[] {
-    return getDb()
-      .prepare(
-        `SELECT * FROM articles
-         WHERE datetime(crawled_at) >= datetime(?)
-           AND datetime(crawled_at) < datetime(?)
-         ORDER BY crawled_at DESC
-         LIMIT ?`,
-      )
-      .all(from, to, limit) as Article[];
+    return stmt(
+      `SELECT * FROM articles
+       WHERE crawled_at >= ? AND crawled_at < ?
+       ORDER BY crawled_at DESC
+       LIMIT ?`,
+    ).all(sqliteTs(from), sqliteTs(to), limit) as Article[];
+  },
+
+  getPrimaryArticlesSince(days: number, limit = 200): Article[] {
+    return stmt(
+      `SELECT * FROM articles
+       WHERE crawled_at >= datetime('now', ?)
+         AND (${PRIMARY_SOURCE_SQL})
+       ORDER BY crawled_at DESC
+       LIMIT ?`,
+    ).all(`-${days} days`, limit) as Article[];
   },
 
   getPrimaryArticlesBetween(from: string, to: string, limit = 50): Article[] {
-    return getDb()
-      .prepare(
-        `SELECT * FROM articles
-         WHERE datetime(crawled_at) >= datetime(?)
-           AND datetime(crawled_at) < datetime(?)
-           AND (
-             lower(source) LIKE '%anthropic%'
-             OR lower(source) LIKE '%openai%'
-             OR lower(source) LIKE '%github blog%'
-             OR lower(source) LIKE '%google research%'
-             OR lower(source) LIKE '%google ai%'
-             OR lower(source) LIKE '%hugging face%'
-             OR lower(source) LIKE '%mistral%'
-             OR lower(source) LIKE '%together ai%'
-             OR lower(source) LIKE '%vscode updates%'
-           )
-         ORDER BY crawled_at DESC
-         LIMIT ?`,
-      )
-      .all(from, to, limit) as Article[];
+    return stmt(
+      `SELECT * FROM articles
+       WHERE crawled_at >= ? AND crawled_at < ?
+         AND (${PRIMARY_SOURCE_SQL})
+       ORDER BY crawled_at DESC
+       LIMIT ?`,
+    ).all(sqliteTs(from), sqliteTs(to), limit) as Article[];
   },
 
   urlExists(url: string): boolean {
@@ -345,34 +381,39 @@ export const db = {
   },
 
   saveSnippet(s: Omit<Snippet, "id" | "created_at">) {
-    return getDb()
-      .prepare(
-        `INSERT INTO snippets (title, language, code, explanation, source_url)
-         VALUES (@title, @language, @code, @explanation, @source_url)`,
-      )
-      .run(s);
+    return stmt(
+      `INSERT INTO snippets (title, language, code, explanation, source_url)
+       VALUES (@title, @language, @code, @explanation, @source_url)`,
+    ).run(s);
   },
 
   getSnippets(limit = 20): Snippet[] {
-    return getDb()
-      .prepare("SELECT * FROM snippets ORDER BY created_at DESC LIMIT ?")
-      .all(limit) as Snippet[];
+    return stmt(
+      "SELECT * FROM snippets ORDER BY created_at DESC LIMIT ?",
+    ).all(limit) as Snippet[];
+  },
+
+  /** Keeps the snippet store bounded; the improvement cycle grows it by one per run. */
+  pruneSnippets(keep = 50) {
+    stmt(
+      `DELETE FROM snippets WHERE id NOT IN (
+         SELECT id FROM snippets ORDER BY created_at DESC, id DESC LIMIT ?
+       )`,
+    ).run(keep);
   },
 
   getState(key: string): string | null {
-    const row = getDb()
-      .prepare("SELECT value FROM agent_state WHERE key = ?")
-      .get(key) as AgentState | undefined;
+    const row = stmt("SELECT value FROM agent_state WHERE key = ?").get(
+      key,
+    ) as AgentState | undefined;
     return row?.value ?? null;
   },
 
   setState(key: string, value: string) {
-    getDb()
-      .prepare(
-        `INSERT INTO agent_state (key, value) VALUES (?, ?)
-         ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')`,
-      )
-      .run(key, value);
+    stmt(
+      `INSERT INTO agent_state (key, value) VALUES (?, ?)
+       ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = datetime('now')`,
+    ).run(key, value);
   },
 
   savePromptVersion(input: {
@@ -381,12 +422,10 @@ export const db = {
     status: PromptVersion["status"];
     reason: string;
   }): number {
-    const result = getDb()
-      .prepare(
-        `INSERT INTO prompt_versions (prompt, score, status, reason)
-         VALUES (@prompt, @score, @status, @reason)`,
-      )
-      .run(input);
+    const result = stmt(
+      `INSERT INTO prompt_versions (prompt, score, status, reason)
+       VALUES (@prompt, @score, @status, @reason)`,
+    ).run(input);
     return Number(result.lastInsertRowid);
   },
 
@@ -396,15 +435,13 @@ export const db = {
   > | null {
     const current = this.getState("system_prompt");
     return (
-      (getDb()
-        .prepare(
-          `SELECT id, prompt, score
-           FROM prompt_versions
-           WHERE status = 'promoted' AND prompt <> ?
-           ORDER BY id DESC
-           LIMIT 1`,
-        )
-        .get(current ?? "") as
+      (stmt(
+        `SELECT id, prompt, score
+         FROM prompt_versions
+         WHERE status = 'promoted' AND prompt <> ?
+         ORDER BY id DESC
+         LIMIT 1`,
+      ).get(current ?? "") as
         | Pick<PromptVersion, "id" | "prompt" | "score">
         | undefined) ?? null
     );
@@ -419,18 +456,15 @@ export const db = {
     value: number,
     labels: Record<string, string | number | boolean> = {},
   ) {
-    getDb()
-      .prepare(
-        `INSERT INTO metric_events (name, value, labels_json)
-         VALUES (?, ?, ?)`,
-      )
-      .run(name, value, JSON.stringify(labels));
+    stmt(
+      `INSERT INTO metric_events (name, value, labels_json)
+       VALUES (?, ?, ?)`,
+    ).run(name, value, JSON.stringify(labels));
   },
 
   getOperationalStats(): OperationalStats {
-    const row = getDb()
-      .prepare(
-        `SELECT
+    const row = stmt(
+      `SELECT
           (SELECT count(*) FROM published_articles
            WHERE notification_status = 'pending') AS pendingNotifications,
           (SELECT count(*) FROM published_articles
@@ -468,9 +502,7 @@ export const db = {
   },
 
   startCycle(type: string): number {
-    const result = getDb()
-      .prepare("INSERT INTO cycle_runs (type) VALUES (?)")
-      .run(type);
+    const result = stmt("INSERT INTO cycle_runs (type) VALUES (?)").run(type);
     return Number(result.lastInsertRowid);
   },
 
@@ -480,34 +512,30 @@ export const db = {
     metrics: Record<string, unknown>,
     error?: string,
   ) {
-    getDb()
-      .prepare(
-        `UPDATE cycle_runs
-         SET status = ?, metrics_json = ?, error = ?, finished_at = datetime('now')
-         WHERE id = ?`,
-      )
-      .run(status, JSON.stringify(metrics), error ?? null, id);
+    stmt(
+      `UPDATE cycle_runs
+       SET status = ?, metrics_json = ?, error = ?, finished_at = datetime('now')
+       WHERE id = ?`,
+    ).run(status, JSON.stringify(metrics), error ?? null, id);
   },
 
   failStaleRunningCycles(maxAgeHours = 6): number {
-    const result = getDb()
-      .prepare(
-        `UPDATE cycle_runs
-         SET status = 'failed',
-             error = 'cycle abandoned by previous process',
-             finished_at = datetime('now')
-         WHERE status = 'running'
-           AND started_at < datetime('now', ?)`,
-      )
-      .run(`-${maxAgeHours} hours`);
+    const result = stmt(
+      `UPDATE cycle_runs
+       SET status = 'failed',
+           error = 'cycle abandoned by previous process',
+           finished_at = datetime('now')
+       WHERE status = 'running'
+         AND started_at < datetime('now', ?)`,
+    ).run(`-${maxAgeHours} hours`);
     return result.changes;
   },
 
   getSourceHealth(source: string): SourceHealth | null {
     return (
-      (getDb()
-        .prepare("SELECT * FROM source_health WHERE source = ?")
-        .get(source) as SourceHealth | undefined) ?? null
+      (stmt("SELECT * FROM source_health WHERE source = ?").get(source) as
+        | SourceHealth
+        | undefined) ?? null
     );
   },
 
@@ -516,28 +544,25 @@ export const db = {
     consecutiveFailures: number,
     skipRemaining: number,
   ) {
-    getDb()
-      .prepare(
-        `INSERT INTO source_health
-           (source, consecutive_failures, skip_remaining)
-         VALUES (?, ?, ?)
-         ON CONFLICT(source) DO UPDATE SET
-           consecutive_failures = excluded.consecutive_failures,
-           skip_remaining = excluded.skip_remaining,
-           updated_at = datetime('now')`,
-      )
-      .run(source, consecutiveFailures, skipRemaining);
+    stmt(
+      `INSERT INTO source_health
+         (source, consecutive_failures, skip_remaining)
+       VALUES (?, ?, ?)
+       ON CONFLICT(source) DO UPDATE SET
+         consecutive_failures = excluded.consecutive_failures,
+         skip_remaining = excluded.skip_remaining,
+         updated_at = datetime('now')`,
+    ).run(source, consecutiveFailures, skipRemaining);
   },
 
   savePublished(item: SavePublishedInput) {
     const database = getDb();
     const save = database.transaction(() => {
-      const result = database
-        .prepare(
-          `INSERT INTO published_articles
-           (slug, title, url, date, summary, tags, kind, period,
-            notification_status, notification_attempts, next_notification_at,
-            notification_error, editorial_metrics)
+      const result = stmt(
+        `INSERT INTO published_articles
+         (slug, title, url, date, summary, tags, kind, period,
+          notification_status, notification_attempts, next_notification_at,
+          notification_error, editorial_metrics)
          VALUES (@slug, @title, @url, @date, @summary, @tags, @kind, @period,
                  @notificationStatus, 0, datetime('now'), NULL, @editorialMetrics)
          ON CONFLICT(slug) DO UPDATE SET
@@ -554,18 +579,17 @@ export const db = {
            notification_error = NULL,
            editorial_metrics = excluded.editorial_metrics,
            published_at = datetime('now')`,
-        )
-        .run({
-          ...item,
-          tags: JSON.stringify(item.tags),
-          period: item.period ?? null,
-          notificationStatus: item.notificationStatus ?? "pending",
-          editorialMetrics: JSON.stringify(item.editorialMetrics ?? {}),
-        });
-      database
-        .prepare("DELETE FROM published_evidence WHERE article_url = ?")
-        .run(item.url);
-      const insertEvidence = database.prepare(
+      ).run({
+        ...item,
+        tags: JSON.stringify(item.tags),
+        period: item.period ?? null,
+        notificationStatus: item.notificationStatus ?? "pending",
+        editorialMetrics: JSON.stringify(item.editorialMetrics ?? {}),
+      });
+      stmt("DELETE FROM published_evidence WHERE article_url = ?").run(
+        item.url,
+      );
+      const insertEvidence = stmt(
         `INSERT INTO published_evidence
            (article_url, source_url, source_title, excerpt)
          VALUES (?, ?, ?, ?)`,
@@ -583,28 +607,34 @@ export const db = {
     return save();
   },
 
+  /**
+   * Removes a publication the git commit failed to land, so the next cycle can
+   * re-publish it without leaving a dangling pending notification.
+   */
+  deletePublishedByUrl(url: string) {
+    stmt("DELETE FROM published_articles WHERE url = ?").run(url);
+    stmt("DELETE FROM published_evidence WHERE article_url = ?").run(url);
+  },
+
   markNotification(
     url: string,
     status: "pending" | "delivered" | "dead_letter",
   ) {
-    getDb()
-      .prepare(
-        "UPDATE published_articles SET notification_status = ? WHERE url = ?",
-      )
-      .run(status, url);
+    stmt("UPDATE published_articles SET notification_status = ? WHERE url = ?").run(
+      status,
+      url,
+    );
   },
 
   getPendingNotifications(now = new Date().toISOString(), limit = 20) {
-    return getDb()
-      .prepare(
-        `SELECT url, title, summary, kind, notification_attempts
-         FROM published_articles
-         WHERE notification_status = 'pending'
-           AND datetime(next_notification_at) <= datetime(?)
-         ORDER BY next_notification_at, id
-         LIMIT ?`,
-      )
-      .all(now, limit) as Array<
+    return stmt(
+      `SELECT url, title, summary, kind, notification_attempts
+       FROM published_articles
+       WHERE notification_status = 'pending'
+         AND datetime(next_notification_at) <= datetime(?)
+       ORDER BY next_notification_at, id
+       LIMIT ?`,
+    ).all(now, limit) as Array<
       Pick<
         PublishedArticle,
         "url" | "title" | "summary" | "kind" | "notification_attempts"
@@ -613,15 +643,13 @@ export const db = {
   },
 
   markNotificationDelivered(url: string) {
-    getDb()
-      .prepare(
-        `UPDATE published_articles
-         SET notification_status = 'delivered',
-             notification_attempts = notification_attempts + 1,
-             notification_error = NULL
-         WHERE url = ?`,
-      )
-      .run(url);
+    stmt(
+      `UPDATE published_articles
+       SET notification_status = 'delivered',
+           notification_attempts = notification_attempts + 1,
+           notification_error = NULL
+       WHERE url = ?`,
+    ).run(url);
   },
 
   markNotificationFailed(
@@ -630,25 +658,21 @@ export const db = {
     nextAttemptAt: string,
     deadLetter: boolean,
   ) {
-    getDb()
-      .prepare(
-        `UPDATE published_articles
-         SET notification_status = ?,
-             notification_attempts = notification_attempts + 1,
-             next_notification_at = ?,
-             notification_error = ?
-         WHERE url = ?`,
-      )
-      .run(deadLetter ? "dead_letter" : "pending", nextAttemptAt, error, url);
+    stmt(
+      `UPDATE published_articles
+       SET notification_status = ?,
+           notification_attempts = notification_attempts + 1,
+           next_notification_at = ?,
+           notification_error = ?
+       WHERE url = ?`,
+    ).run(deadLetter ? "dead_letter" : "pending", nextAttemptAt, error, url);
   },
 
   getPublished(): PublishedArticle[] {
-    const rows = getDb()
-      .prepare(
-        `SELECT * FROM published_articles
-         ORDER BY date DESC, published_at DESC`,
-      )
-      .all() as Array<
+    const rows = stmt(
+      `SELECT * FROM published_articles
+       ORDER BY date DESC, published_at DESC`,
+    ).all() as Array<
       Omit<PublishedArticle, "tags" | "editorial_metrics"> & {
         tags: string;
         editorial_metrics: string;
@@ -662,14 +686,12 @@ export const db = {
   },
 
   getPublishedEvidence(articleUrl: string): PublishedEvidence[] {
-    return getDb()
-      .prepare(
-        `SELECT article_url, source_url, source_title, excerpt, observed_at
-         FROM published_evidence
-         WHERE article_url = ?
-         ORDER BY id`,
-      )
-      .all(articleUrl) as PublishedEvidence[];
+    return stmt(
+      `SELECT article_url, source_url, source_title, excerpt, observed_at
+       FROM published_evidence
+       WHERE article_url = ?
+       ORDER BY id`,
+    ).all(articleUrl) as PublishedEvidence[];
   },
 };
 

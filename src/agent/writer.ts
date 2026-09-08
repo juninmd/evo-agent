@@ -2,6 +2,7 @@ import { config } from "../config.js";
 import type { Article } from "../knowledge/store.js";
 import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
+import { localDayIso } from "../utils/date.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 import {
@@ -105,6 +106,15 @@ function markdownSummary(markdown: string, fallback: string): string {
   return (paragraph ?? fallback).slice(0, 800);
 }
 
+function uniqueByUrl(articles: Article[]): Article[] {
+  const seen = new Set<string>();
+  return articles.filter((article) => {
+    if (seen.has(article.url)) return false;
+    seen.add(article.url);
+    return true;
+  });
+}
+
 export async function generateArticle(
   type: "daily" | "weekly" = "daily",
   options: GenerateArticleOptions = {},
@@ -116,19 +126,24 @@ export async function generateArticle(
       ? articles
       : articles.filter((article) => !excluded.has(article.url));
   let window = options.targetDate ? historicalWindow(options.targetDate) : null;
-  let recentArticles = withoutExcluded(
-    // The window has to be wide enough for the whole crawl: Reddit runs last, so
-    // a tight limit would return community posts only and drop the primary feeds.
-    window
-      ? db.getArticlesBetween(
+  const windowDays = type === "weekly" ? 7 : 2;
+  // The main pool is capped, and Reddit crawls last, so a tight limit would
+  // return community posts only and starve the primary feeds. The primary
+  // fetch is capped on its own budget and merged back in.
+  const pool = window
+    ? [
+        ...db.getArticlesBetween(
           window.from,
           window.to,
           type === "weekly" ? 900 : 500,
-        )
-      : type === "weekly"
-        ? db.getArticlesSince(7, 900)
-        : db.getArticlesSince(2, 500),
-  );
+        ),
+        ...db.getPrimaryArticlesBetween(window.from, window.to, 300),
+      ]
+    : [
+        ...db.getArticlesSince(windowDays, type === "weekly" ? 900 : 500),
+        ...db.getPrimaryArticlesSince(windowDays, 300),
+      ];
+  let recentArticles = uniqueByUrl(withoutExcluded(pool));
   const systemPrompt = getSystemPrompt();
 
   const curate = () =>
@@ -175,7 +190,7 @@ export async function generateArticle(
     );
   }
 
-  const today = options.targetDate ?? new Date().toISOString().split("T")[0];
+  const today = options.targetDate ?? localDayIso();
   const period = editorialPeriod(usedArticles);
   let draft: EditorialDraft | null = null;
   let feedback = "";
@@ -294,7 +309,7 @@ function periodMeta(period: ReportPeriod) {
   const fmt = (d: Date) =>
     `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
   const periodStr = `${fmt(sinceDate)} a ${fmt(todayDate)}`;
-  const today = todayDate.toISOString().split("T")[0];
+  const today = localDayIso(todayDate);
   const titleLabel =
     period === "radar"
       ? "Radar"
@@ -323,7 +338,10 @@ function loadPeriodArticles(cfg: PeriodConfig): Article[] {
   }).selected.map((item) => item.article);
 }
 
-function metricsForArticles(articles: Article[]) {
+function metricsForArticles(
+  articles: Article[],
+  primaryCandidates: number,
+) {
   return {
     considered: articles.length,
     selected: articles.length,
@@ -342,6 +360,9 @@ function metricsForArticles(articles: Article[]) {
         article.source,
       ),
     ).length,
+    // How many primary sources the period window actually held; the editorial
+    // gate uses this to know whether a primary was available at all.
+    primaryCandidates,
     communitySignals: articles.filter(isCommunitySignal).length,
     redditSignals: articles.filter(
       (article) => sourceBucket(article.source) === "reddit",
@@ -389,6 +410,7 @@ async function generatePeriodReportSinglePass(
       `No articles crawled in the last ${cfg.days} days to generate a ${cfg.label} report`,
     );
   }
+  const primaryCandidates = db.getPrimaryArticlesSince(cfg.days, 200).length;
   const snippets = db.getSnippets(50);
 
   const systemPrompt = `You are a Principal AI Architect and technical newsletter editor.
@@ -475,7 +497,7 @@ ${MERMAID_GUIDANCE}`;
       sourceTitle: article.title,
       excerpt: article.summary.slice(0, 240),
     })),
-    editorialMetrics: metricsForArticles(selectedArticles),
+    editorialMetrics: metricsForArticles(selectedArticles, primaryCandidates),
     content: withModelFooter(content),
     date: today,
     reportPeriod: period,
@@ -617,6 +639,7 @@ async function generatePeriodReportMultiPass(
       `No articles crawled in the last ${cfg.days} days to generate a ${cfg.label} report`,
     );
   }
+  const primaryCandidates = db.getPrimaryArticlesSince(cfg.days, 200).length;
 
   log.info(
     `Generating ${cfg.label} report (multi-pass, ${cfg.days}d period)...`,
@@ -705,7 +728,7 @@ async function generatePeriodReportMultiPass(
       sourceTitle: article.title,
       excerpt: article.summary.slice(0, 240),
     })),
-    editorialMetrics: metricsForArticles(selectedArticles),
+    editorialMetrics: metricsForArticles(selectedArticles, primaryCandidates),
     content,
     date: today,
     reportPeriod: period,

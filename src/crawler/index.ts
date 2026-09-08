@@ -3,6 +3,7 @@ import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
 import Parser from "rss-parser";
 import { getSearchKeywords } from "../agent/improver.js";
+import { normalizeTitle } from "../agent/curation.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
@@ -11,6 +12,49 @@ import { isSafeExternalUrl } from "../utils/url.js";
 chromium.use(stealth());
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const BROWSER_LAUNCH_ARGS = ["--no-sandbox", "--disable-setuid-sandbox"];
+
+let sharedBrowser: Awaited<ReturnType<typeof chromium.launch>> | null = null;
+
+/** One browser for the whole crawl; pages per task instead of per launch. */
+async function getSharedBrowser() {
+  if (!sharedBrowser) {
+    sharedBrowser = await chromium.launch({
+      headless: true,
+      args: BROWSER_LAUNCH_ARGS,
+    });
+  }
+  return sharedBrowser;
+}
+
+async function closeSharedBrowser() {
+  if (sharedBrowser) {
+    await sharedBrowser.close();
+    sharedBrowser = null;
+  }
+}
+
+/** Runs fn over items with at most `limit` in flight at once. */
+async function mapLimit<T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<R>,
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let next = 0;
+  const workers = Array.from(
+    { length: Math.min(limit, items.length) },
+    async () => {
+      while (next < items.length) {
+        const index = next++;
+        results[index] = await fn(items[index]);
+      }
+    },
+  );
+  await Promise.all(workers);
+  return results;
+}
 
 const parser = new Parser({
   timeout: 10000,
@@ -240,6 +284,26 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://distill.pub/rss.xml",
     tags: ["ai", "ml", "visualization", "research"],
   },
+  {
+    name: "Simon Willison's Weblog",
+    url: "https://simonwillison.net/atom/entries/",
+    tags: ["ai", "llm", "developer", "tools"],
+  },
+  {
+    name: "Chip Huyen Blog",
+    url: "https://huyenchip.com/feed.xml",
+    tags: ["ai", "ml", "mlops", "engineering"],
+  },
+  {
+    name: "PyTorch Blog",
+    url: "https://pytorch.org/blog/feed/",
+    tags: ["pytorch", "ml", "training", "inference"],
+  },
+  {
+    name: "TensorFlow Blog",
+    url: "https://blog.tensorflow.org/feeds/posts/default",
+    tags: ["tensorflow", "ml", "training", "inference"],
+  },
   // Research papers
   {
     name: "arXiv cs.AI",
@@ -435,9 +499,39 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["langchain", "agents", "llm-framework"],
   },
   {
+    name: "LangGraph Releases",
+    url: "https://github.com/langchain-ai/langgraph/releases.atom",
+    tags: ["langgraph", "agents", "llm-framework"],
+  },
+  {
     name: "CrewAI Framework",
     url: "https://github.com/joaomdmoura/crewai/releases.atom",
     tags: ["crewai", "agents", "llm-framework"],
+  },
+  {
+    name: "AutoGen Releases",
+    url: "https://github.com/microsoft/autogen/releases.atom",
+    tags: ["autogen", "agents", "llm-framework"],
+  },
+  {
+    name: "Dify Releases",
+    url: "https://github.com/langgenius/dify/releases.atom",
+    tags: ["dify", "agents", "llm-framework"],
+  },
+  {
+    name: "LiteLLM Releases",
+    url: "https://github.com/BerriAI/litellm/releases.atom",
+    tags: ["litellm", "llm-framework", "infra"],
+  },
+  {
+    name: "vLLM Releases",
+    url: "https://github.com/vllm-project/vllm/releases.atom",
+    tags: ["vllm", "inference", "infra"],
+  },
+  {
+    name: "Ollama Releases",
+    url: "https://github.com/ollama/ollama/releases.atom",
+    tags: ["ollama", "local-ai", "infra"],
   },
   // AI Research & Leaders
   {
@@ -451,11 +545,57 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["anthropic", "research", "ai"],
     html: { hrefPrefix: "/research/", baseUrl: "https://www.anthropic.com" },
   },
+  {
+    name: "Latent Space",
+    url: "https://latent.space/feed",
+    tags: ["ai-engineering", "agents", "research"],
+  },
+  {
+    name: "The Gradient",
+    url: "https://thegradient.pub/rss/",
+    tags: ["ai", "research", "essays"],
+  },
+  {
+    name: "Ahead of AI (Sebastian Raschka)",
+    url: "https://magazine.sebastianraschka.com/feed",
+    tags: ["ai", "llm", "research"],
+  },
+  {
+    name: "Last Week in AI",
+    url: "https://lastweekin.ai/feed",
+    tags: ["ai", "news", "research"],
+  },
   // Data Science & Analytics (IA-focused)
   {
     name: "Towards Data Science (Medium)",
     url: "https://towardsdatascience.com/feed",
     tags: ["medium", "data", "ai", "ml"],
+  },
+  {
+    name: "AWS Machine Learning Blog",
+    url: "https://aws.amazon.com/blogs/machine-learning/feed/",
+    tags: ["aws", "ml", "ai", "bedrock"],
+  },
+  // News & Aggregators
+  {
+    name: "MarkTechPost",
+    url: "https://www.marktechpost.com/feed/",
+    tags: ["news", "ai", "papers"],
+  },
+  {
+    name: "MIT Technology Review (AI)",
+    url: "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+    tags: ["news", "ai", "policy"],
+  },
+  {
+    name: "Ben's Bites",
+    url: "https://www.bensbites.com/feed",
+    tags: ["news", "ai", "products"],
+  },
+  {
+    name: "Meta Engineering",
+    url: "https://engineering.fb.com/feed/",
+    tags: ["meta", "ai", "engineering"],
   },
   // Product showcase
   {
@@ -589,41 +729,36 @@ const GITHUB_TRENDING_LANGUAGES = [
 
 async function crawlGitHubTrending(): Promise<number> {
   let newCount = 0;
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  const browser = await getSharedBrowser();
+  const context = await browser.newContext({
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    viewport: { width: 1280, height: 720 },
   });
+  const page = await context.newPage();
 
-  try {
-    const context = await browser.newContext({
-      userAgent:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-      viewport: { width: 1280, height: 720 },
+  // Trending geral + trending por linguagem de IA
+  const queries: Array<{ label: string; url: string }> = [
+    {
+      label: "daily",
+      url: "https://github.com/trending?since=daily",
+    },
+    {
+      label: "weekly",
+      url: "https://github.com/trending?since=weekly",
+    },
+  ];
+
+  // Add language-specific trending
+  for (const lang of GITHUB_TRENDING_LANGUAGES) {
+    queries.push({
+      label: `daily-${lang.toLowerCase()}`,
+      url: `https://github.com/trending/${lang.toLowerCase()}?since=daily`,
     });
-    const page = await context.newPage();
+  }
 
-    // Trending geral + trending por linguagem de IA
-    const queries: Array<{ label: string; url: string }> = [
-      {
-        label: "daily",
-        url: "https://github.com/trending?since=daily",
-      },
-      {
-        label: "weekly",
-        url: "https://github.com/trending?since=weekly",
-      },
-    ];
-
-    // Add language-specific trending
-    for (const lang of GITHUB_TRENDING_LANGUAGES) {
-      queries.push({
-        label: `daily-${lang.toLowerCase()}`,
-        url: `https://github.com/trending/${lang.toLowerCase()}?since=daily`,
-      });
-    }
-
-    for (const { label, url } of queries) {
-      try {
+  for (const { label, url } of queries) {
+    try {
         await page.goto(url, {
           waitUntil: "networkidle",
           timeout: 30000,
@@ -698,9 +833,6 @@ async function crawlGitHubTrending(): Promise<number> {
         );
       }
     }
-  } finally {
-    await browser.close();
-  }
 
   log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
   return newCount;
@@ -736,50 +868,43 @@ export function hackerNewsEngagement(
 
 async function fetchWithPlaywright(url: string): Promise<string> {
   log.info(`Using Playwright stealth to fetch: ${url}`);
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  const browser = await getSharedBrowser();
+
+  const context = await browser.newContext({
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+    viewport: { width: 1280, height: 720 },
+    extraHTTPHeaders: {
+      Accept: "application/rss+xml, application/xml, text/xml, */*",
+    },
   });
 
-  try {
-    const context = await browser.newContext({
-      userAgent:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-      viewport: { width: 1280, height: 720 },
-      extraHTTPHeaders: {
-        Accept: "application/rss+xml, application/xml, text/xml, */*",
-      },
-    });
+  const page = await context.newPage();
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+  });
 
-    const page = await context.newPage();
-    await page.addInitScript(() => {
-      Object.defineProperty(navigator, "webdriver", { get: () => undefined });
-    });
+  await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+  await page.waitForTimeout(2000);
 
-    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-    await page.waitForTimeout(2000);
+  const content = await page.evaluate(() => {
+    const pre = document.querySelector("pre");
+    if (pre) return pre.innerText;
 
-    const content = await page.evaluate(() => {
-      const pre = document.querySelector("pre");
-      if (pre) return pre.innerText;
+    const webkitXml = document.querySelector("#webkit-xml-viewer-source-xml");
+    if (webkitXml) return webkitXml.innerHTML;
 
-      const webkitXml = document.querySelector("#webkit-xml-viewer-source-xml");
-      if (webkitXml) return webkitXml.innerHTML;
+    return document.documentElement.outerHTML;
+  });
 
-      return document.documentElement.outerHTML;
-    });
-
-    const xmlMatch = content.match(
-      /<\?xml[^>]*>[\s\S]*|<!doctype[^>]*>[\s\S]*|<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i,
-    );
-    const finalXml = xmlMatch ? xmlMatch[0] : content;
-    log.info(
-      `Fetched ${finalXml.length} bytes. Start: ${finalXml.slice(0, 100).replace(/\n/g, " ")}`,
-    );
-    return finalXml;
-  } finally {
-    await browser.close();
-  }
+  const xmlMatch = content.match(
+    /<\?xml[^>]*>[\s\S]*|<!doctype[^>]*>[\s\S]*|<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i,
+  );
+  const finalXml = xmlMatch ? xmlMatch[0] : content;
+  log.info(
+    `Fetched ${finalXml.length} bytes. Start: ${finalXml.slice(0, 100).replace(/\n/g, " ")}`,
+  );
+  return finalXml;
 }
 
 function normalizeText(value: string): string {
@@ -933,7 +1058,7 @@ async function redditGet<T = unknown>(
   } catch (err) {
     if (!isRedditRateLimit(err)) throw err;
     const retryAfter = err.response?.headers?.["retry-after"];
-    const delayMs = redditRateLimitDelayMs(retryAfter);
+    const delayMs = jitterDelay(redditRateLimitDelayMs(retryAfter));
     log.warn(`Reddit rate limited; retrying once in ${delayMs}ms`);
     await sleep(delayMs);
     await redditPace();
@@ -947,6 +1072,11 @@ async function redditGet<T = unknown>(
       );
     }
   }
+}
+
+/** ±20% jitter so parallel sources don't retry in lockstep. */
+function jitterDelay(ms: number): number {
+  return Math.round(ms * (0.8 + Math.random() * 0.4));
 }
 
 async function getRedditPostCandidates(
@@ -1006,10 +1136,11 @@ async function getFocusPostCandidates(
       const delay =
         err instanceof RedditRateLimitError ? focusRetryDelayMs(attempt) : null;
       if (delay === null) throw err;
+      const jittered = jitterDelay(delay);
       log.warn(
-        `Reddit rate limited on focus r/${subreddit}; waiting ${delay}ms before retry ${attempt + 1}`,
+        `Reddit rate limited on focus r/${subreddit}; waiting ${jittered}ms before retry ${attempt + 1}`,
       );
-      await sleep(delay);
+      await sleep(jittered);
     }
   }
 }
@@ -1135,7 +1266,6 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
     );
     return 0;
   }
-  db.setState(REDDIT_SIGNALS_LAST_RUN_KEY, new Date().toISOString());
 
   let newCount = 0;
   let consecutiveRateLimits = 0;
@@ -1204,6 +1334,10 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
     }
     await sleep(REDDIT_SUBREDDIT_COOLDOWN_MS);
   }
+
+  // Only mark the sweep as done after it actually ran; a crash mid-crawl must
+  // not lock the signals out for another REDDIT_SIGNALS_MIN_INTERVAL_HOURS.
+  db.setState(REDDIT_SIGNALS_LAST_RUN_KEY, new Date().toISOString());
 
   log.info(`Crawled Reddit community signals, ${newCount} new digests`);
   return newCount;
@@ -1310,27 +1444,54 @@ async function crawlHackerNewsAlgolia(): Promise<number> {
   return newCount;
 }
 
+interface TabNewsItem {
+  title?: string;
+  slug?: string;
+  status?: string;
+  owner_username?: string;
+  tabcoins?: number;
+  children_deep_count?: number;
+  body?: string;
+}
+
 async function crawlTabNews(): Promise<number> {
   let newCount = 0;
   try {
     const url =
       "https://www.tabnews.com.br/api/v1/contents?strategy=relevant&per_page=30";
     const response = await axios.get(url, { timeout: 15000 });
-    const contents = (response.data ?? [])
+    const contents = ((response.data ?? []) as TabNewsItem[])
       .filter(
-        (item: { title?: string; slug?: string; status?: string }) =>
-          item.title && item.slug && item.status === "published",
+        (item): item is TabNewsItem & { title: string; slug: string } =>
+          Boolean(item.title && item.slug && item.status === "published"),
       )
       .sort(
-        (
-          left: { tabcoins?: number; children_deep_count?: number },
-          right: { tabcoins?: number; children_deep_count?: number },
-        ) =>
+        (left, right) =>
           (right.tabcoins ?? 0) +
           (right.children_deep_count ?? 0) * 2 -
           ((left.tabcoins ?? 0) + (left.children_deep_count ?? 0) * 2),
       )
       .slice(0, 20);
+
+    // Bodies are fetched in bounded parallel; the list call stays cheap.
+    const missingBodies = contents.filter((item) => !item.body);
+    const fetchedBodies = await mapLimit(missingBodies, 5, async (item) => {
+      try {
+        const detail = await axios.get(
+          `https://www.tabnews.com.br/api/v1/contents/${item.owner_username}/${item.slug}`,
+          { timeout: 8000 },
+        );
+        return { slug: item.slug, body: detail.data?.body ?? "" };
+      } catch (err) {
+        log.debug(
+          `TabNews detail skipped for ${item.slug}: ${(err as Error).message}`,
+        );
+        return { slug: item.slug, body: "" };
+      }
+    });
+    const bodyBySlug = new Map(
+      fetchedBodies.map((entry) => [entry.slug, entry.body]),
+    );
 
     for (const item of contents) {
       const postUrl = `https://www.tabnews.com.br/${item.owner_username}/${item.slug}`;
@@ -1338,20 +1499,7 @@ async function crawlTabNews(): Promise<number> {
 
       const tabcoins = item.tabcoins ?? 0;
       const comments = item.children_deep_count ?? 0;
-      let body = item.body ?? "";
-      if (!body) {
-        try {
-          const detail = await axios.get(
-            `https://www.tabnews.com.br/api/v1/contents/${item.owner_username}/${item.slug}`,
-            { timeout: 8000 },
-          );
-          body = detail.data?.body ?? "";
-        } catch (err) {
-          log.debug(
-            `TabNews detail skipped for ${item.slug}: ${(err as Error).message}`,
-          );
-        }
-      }
+      const body = item.body ?? bodyBySlug.get(item.slug) ?? "";
       const summary = summarizeSourceContent(body);
       if (summary.length < 80) continue;
 
@@ -1459,56 +1607,47 @@ async function crawlAiCommunityPosts(): Promise<number> {
 
 async function crawlLinkedInTopContent(url: string): Promise<number> {
   log.info(`Crawling LinkedIn Top Content: ${url}`);
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  const browser = await getSharedBrowser();
 
   let newCount = 0;
-  try {
-    const context = await browser.newContext({
-      userAgent:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+  const context = await browser.newContext({
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+  });
+  const page = await context.newPage();
+  await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+
+  // Extract articles from LinkedIn Top Content page
+  // Based on typical LinkedIn Top Content structure (selectors might need updates)
+  const articles = await page.evaluate(() => {
+    const items = document.querySelectorAll(
+      '.top-content-card, [data-test-id="top-content-card"], article',
+    );
+    return Array.from(items).map((item) => {
+      const titleEl = item.querySelector("h2, h3, .title");
+      const linkEl = item.querySelector("a");
+      return {
+        title: titleEl?.textContent?.trim() ?? "",
+        url: linkEl?.href ?? "",
+        summary:
+          item.textContent?.replace(/\s+/g, " ").trim().slice(0, 500) ?? "",
+      };
     });
-    const page = await context.newPage();
-    await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+  });
 
-    // Extract articles from LinkedIn Top Content page
-    // Based on typical LinkedIn Top Content structure (selectors might need updates)
-    const articles = await page.evaluate(() => {
-      const items = document.querySelectorAll(
-        '.top-content-card, [data-test-id="top-content-card"], article',
-      );
-      return Array.from(items).map((item) => {
-        const titleEl = item.querySelector("h2, h3, .title");
-        const linkEl = item.querySelector("a");
-        return {
-          title: titleEl?.textContent?.trim() ?? "",
-          url: linkEl?.href ?? "",
-          summary:
-            item.textContent?.replace(/\s+/g, " ").trim().slice(0, 500) ?? "",
-        };
-      });
+  for (const article of articles) {
+    if (!article.url || !article.title) continue;
+    if (db.urlExists(article.url)) continue;
+
+    db.saveArticle({
+      title: article.title,
+      source: "LinkedIn AI Innovations",
+      url: article.url,
+      summary: article.summary,
+      tags: JSON.stringify(["ai", "innovation", "linkedin", "trends"]),
+      engagement_score: 0,
     });
-
-    for (const article of articles) {
-      if (!article.url || !article.title) continue;
-      if (db.urlExists(article.url)) continue;
-
-      db.saveArticle({
-        title: article.title,
-        source: "LinkedIn AI Innovations",
-        url: article.url,
-        summary: article.summary,
-        tags: JSON.stringify(["ai", "innovation", "linkedin", "trends"]),
-        engagement_score: 0,
-      });
-      newCount++;
-    }
-  } catch (err) {
-    log.warn(`LinkedIn crawler failed: ${(err as Error).message}`);
-  } finally {
-    await browser.close();
+    newCount++;
   }
   return newCount;
 }
@@ -1516,10 +1655,7 @@ async function crawlLinkedInTopContent(url: string): Promise<number> {
 async function crawlHtmlSource(source: FeedSource): Promise<number> {
   if (!source.html) return 0;
   const { hrefPrefix, baseUrl } = source.html;
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  const browser = await getSharedBrowser();
 
   let newCount = 0;
   try {
@@ -1577,8 +1713,6 @@ async function crawlHtmlSource(source: FeedSource): Promise<number> {
     }
   } catch (err) {
     log.warn(`HTML crawler "${source.name}" failed: ${(err as Error).message}`);
-  } finally {
-    await browser.close();
   }
   return newCount;
 }
@@ -1590,23 +1724,36 @@ export interface CrawlReport {
 }
 
 export async function crawlAll(): Promise<CrawlReport> {
+  try {
+    return await crawlAllInner();
+  } finally {
+    await closeSharedBrowser();
+  }
+}
+
+async function crawlAllInner(): Promise<CrawlReport> {
   const sources = [...DEFAULT_SOURCES, ...getDynamicSources()].filter(
     (s) => s?.url && s.name,
   );
   let newCount = 0;
   let redditRateLimited = false;
   const metrics: Record<string, { saved: number; failed: boolean }> = {};
-
   for (const source of sources) {
+    metrics[source.name] = { saved: 0, failed: false };
+  }
+
+  // Non-Reddit feeds are independent, so bounded concurrency cuts the crawl
+  // tail instead of waiting on 60+ sources in a row; Reddit stays serialized
+  // by its own pace limiter and the shared rate-limit flag.
+  const crawlSource = async (source: FeedSource): Promise<void> => {
     if (redditRateLimited && isRedditSource(source)) {
       log.debug(`Reddit rate limit active: skipping "${source.name}"`);
-      continue;
+      return;
     }
     if (!circuitAllow(source.name)) {
       log.debug(`Circuit breaker: skipping "${source.name}"`);
-      continue;
+      return;
     }
-    metrics[source.name] = { saved: 0, failed: false };
     try {
       if (source.html) {
         log.info(`Scraping HTML source "${source.name}" from: ${source.url}`);
@@ -1614,7 +1761,7 @@ export async function crawlAll(): Promise<CrawlReport> {
         newCount += count;
         metrics[source.name].saved = count;
         circuitSuccess(source.name);
-        continue;
+        return;
       }
       let feedData: Awaited<ReturnType<typeof parser.parseURL>>;
       try {
@@ -1647,7 +1794,7 @@ export async function crawlAll(): Promise<CrawlReport> {
         }
       }
 
-      if (!feedData?.items) continue;
+      if (!feedData?.items) return;
 
       for (const item of feedData.items.slice(0, 10)) {
         if (!item.link || !item.title) continue;
@@ -1673,10 +1820,16 @@ export async function crawlAll(): Promise<CrawlReport> {
         `Crawler failed for ${source.name}: ${err instanceof Error ? err.message : String(err)}`,
       );
     }
-  }
+  };
+
+  await mapLimit(sources, 4, crawlSource);
 
   const keywords = getSearchKeywords();
   let googleNewsSaved = 0;
+  let googleNewsFailed = 0;
+  // Google News links are redirect URLs unique per query, so the same story
+  // would be saved once per keyword; normalized titles dedupe the pass.
+  const googleNewsTitles = new Set<string>();
   for (const keyword of keywords) {
     try {
       const queryUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keyword)}&hl=en-US&gl=US&ceid=US:en`;
@@ -1684,6 +1837,9 @@ export async function crawlAll(): Promise<CrawlReport> {
       for (const item of feed.items.slice(0, 5)) {
         if (!item.link || !item.title) continue;
         if (db.urlExists(item.link)) continue;
+        const titleKey = normalizeTitle(item.title);
+        if (googleNewsTitles.has(titleKey)) continue;
+        googleNewsTitles.add(titleKey);
         db.saveArticle({
           title: item.title,
           source: `Google News (${keyword})`,
@@ -1696,14 +1852,19 @@ export async function crawlAll(): Promise<CrawlReport> {
         googleNewsSaved++;
       }
     } catch (err) {
+      googleNewsFailed++;
       log.warn(
         `Google News search crawler failed for '${keyword}': ${err instanceof Error ? err.message : String(err)}`,
       );
     }
   }
-  metrics["Google News (keywords)"] = { saved: googleNewsSaved, failed: false };
+  metrics["Google News (keywords)"] = {
+    saved: googleNewsSaved,
+    failed: googleNewsFailed === keywords.length && keywords.length > 0,
+  };
 
   let searxngSaved = 0;
+  let searxngFailed = 0;
   for (const keyword of keywords) {
     try {
       const cleanKeyword = keyword.slice(0, 60).trim();
@@ -1731,12 +1892,16 @@ export async function crawlAll(): Promise<CrawlReport> {
         searxngSaved++;
       }
     } catch (err) {
+      searxngFailed++;
       log.warn(
         `SearXNG failed for '${keyword.slice(0, 40)}': ${err instanceof Error ? err.message : String(err)}`,
       );
     }
   }
-  metrics["SearXNG (keywords)"] = { saved: searxngSaved, failed: false };
+  metrics["SearXNG (keywords)"] = {
+    saved: searxngSaved,
+    failed: searxngFailed === keywords.length && keywords.length > 0,
+  };
 
   const extras: Array<{ name: string; fn: () => Promise<number> }> = [
     { name: "AI Community Posts", fn: crawlAiCommunityPosts },

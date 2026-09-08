@@ -1,9 +1,11 @@
 import { db } from "../knowledge/store.js";
+import type { Article } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 import { isSafeExternalUrl } from "../utils/url.js";
 import { promotePromptCandidate } from "./prompt-policy.js";
+import { sourceBucket } from "./curation.js";
 
 const DEFAULT_SYSTEM_PROMPT = `You are an expert AI developer agent that curates high-signal technical
 digests about software development and AI. You cover many interesting developments concisely (the most
@@ -134,9 +136,95 @@ export function parseImprovementResponse(text: string): ImprovementResponse {
   return JSON.parse(repairBacktickStrings(jsonMatch[0])) as ImprovementResponse;
 }
 
+export interface ExtraSourceInput {
+  name: string;
+  url: string;
+  tags: string[];
+}
+
+/**
+ * The improvement model proposes keywords every cycle; replacing the learned
+ * set wholesale would let one bad response wipe it. Keep most of the current
+ * set and let a few slots rotate in fresh candidates.
+ */
+export function mergeKeywords(current: string[], candidate: string[]): string[] {
+  if (candidate.length === 0) return current;
+  const kept = [...new Set(current)].filter(Boolean);
+  const fresh = [...new Set(candidate)].filter(
+    (keyword) => keyword && !kept.includes(keyword),
+  );
+  return [...kept.slice(0, 7), ...fresh.slice(0, 3)].slice(0, 10);
+}
+
+/** Same stability rule for the source list, deduped by URL, capped at 20. */
+export function mergeExtraSources(
+  current: ExtraSourceInput[],
+  candidate: ExtraSourceInput[],
+): ExtraSourceInput[] {
+  if (candidate.length === 0) return current;
+  const byUrl = new Map<string, ExtraSourceInput>();
+  for (const source of [...current, ...candidate]) {
+    if (source && typeof source.name === "string" && source.url) {
+      byUrl.set(source.url, source);
+    }
+  }
+  return [...byUrl.values()].slice(0, 20);
+}
+
+/**
+ * Reddit crawls last, so the latest N articles are mostly community signals.
+ * Sample across source buckets instead, round-robin, so the improvement cycle
+ * sees primary feeds and vendors too.
+ */
+export function stratifiedSample(
+  articles: Article[],
+  size = 20,
+): Article[] {
+  const buckets = new Map<string, Article[]>();
+  for (const article of articles) {
+    const bucket = sourceBucket(article.source);
+    const list = buckets.get(bucket) ?? [];
+    list.push(article);
+    buckets.set(bucket, list);
+  }
+  const sampled: Article[] = [];
+  let progress = true;
+  while (sampled.length < size && progress) {
+    progress = false;
+    for (const list of buckets.values()) {
+      if (sampled.length >= size) break;
+      const next = list.shift();
+      if (next) {
+        sampled.push(next);
+        progress = true;
+      }
+    }
+  }
+  return sampled;
+}
+
+function currentExtraSources(): ExtraSourceInput[] {
+  try {
+    const raw = db.getState("extra_sources");
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as ExtraSourceInput[];
+    return Array.isArray(parsed)
+      ? parsed.filter(
+          (source) =>
+            source &&
+            typeof source.name === "string" &&
+            typeof source.url === "string" &&
+            Array.isArray(source.tags),
+        )
+      : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function runImprovementCycle() {
   log.info("Running self-improvement cycle...");
-  const recentArticles = db.getRecentArticles(20);
+  const recentArticles = stratifiedSample(db.getArticlesSince(2, 300));
   if (recentArticles.length === 0) {
     log.info("No articles yet, skipping improvement cycle");
     return;
@@ -230,24 +318,31 @@ code_snippet should be a useful TypeScript pattern learned from the content, or 
       log.warn(`Improvement prompt rejected: ${promotion.reason}`);
       return;
     }
-    db.setState("search_keywords", JSON.stringify(keywords));
-    if (result.extra_sources?.length) {
-      const safeSources = result.extra_sources
-        .filter(
-          (source) =>
-            source &&
-            typeof source.name === "string" &&
-            Array.isArray(source.tags) &&
-            isSafeExternalUrl(source.url),
-        )
-        .slice(0, 20);
-      db.setState("extra_sources", JSON.stringify(safeSources));
+    db.setState(
+      "search_keywords",
+      JSON.stringify(mergeKeywords(getSearchKeywords(), keywords)),
+    );
+    const safeSources = (result.extra_sources ?? [])
+      .filter(
+        (source) =>
+          source &&
+          typeof source.name === "string" &&
+          Array.isArray(source.tags) &&
+          isSafeExternalUrl(source.url),
+      )
+      .slice(0, 20);
+    if (safeSources.length > 0) {
+      db.setState(
+        "extra_sources",
+        JSON.stringify(mergeExtraSources(currentExtraSources(), safeSources)),
+      );
     }
     if (result.code_snippet) {
       db.saveSnippet({
         ...result.code_snippet,
         source_url: "self-improvement-cycle",
       });
+      db.pruneSnippets(50);
     }
 
     log.info(`Improvement cycle done. Reasoning: ${result.reasoning}`);

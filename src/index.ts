@@ -29,6 +29,7 @@ import {
 } from "./publisher/github.js";
 import { setAiMetricRecorder } from "./utils/ai.js";
 import { CycleCoordinator } from "./utils/cycle.js";
+import { localDayIso } from "./utils/date.js";
 import { log } from "./utils/logger.js";
 
 function errMsg(e: unknown): string {
@@ -72,9 +73,9 @@ async function learnCycle() {
   await runImprovementCycle();
   db.recordMetric("crawl.saved", crawl.totalSaved);
   db.recordMetric("crawl.failed_sources", crawl.failedSources.length);
-  const recentPrimarySources = db
-    .getArticlesSince(2, 500)
-    .filter(isPrimarySource).length;
+  // Counted against its own budget, not inside the LIMIT-500 pool: Reddit runs
+  // last, so the latest rows are community signals and would starve this metric.
+  const recentPrimarySources = db.getPrimaryArticlesSince(2, 500).length;
   db.recordMetric("crawl.primary_sources_48h", recentPrimarySources);
   if (recentPrimarySources === 0) {
     log.error("No primary source collected in the last 48 hours");
