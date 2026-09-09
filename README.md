@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>8</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>9</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-09">2026-09-09</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-09-mistral-ocr-4-redefine-extracao-documental-enquanto-codex-sol-e-copilot-expoem-c">Mistral OCR 4 redefine extração documental enquanto Codex Sol e Copilot expõem custos ocultos</a></h3>
+  <p>A atualização do Mistral OCR promete estrutura semântica avançada, mas relatos da comunidade apontam disparidades entre benchmarks e uso real. O lançamento do GPT‑5.6 Sol para computação quântica coincide com alertas sobre eficiência enganosa e aumento no consumo de tokens em ambientes de desenvolvimento.</p>
+  <div class="chips"><span>hacker-news</span><span>reddit</span><span>tabnews</span><span>front-page</span><span>searxng</span><span>mistral ocr 4</span><span>codex</span><span>openai</span><span>post-signals</span><span>githubcopilot</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-08">2026-09-08</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-08-mistral-ocr-4-avanca-em-estrutura-de-documentos-comunidade-expande-vscode-codex-">Mistral OCR 4 avança em estrutura de documentos; comunidade expande VSCode, Codex e Claude Code</a></h3>
   <p>A versão 4 do Mistral OCR adiciona bounding boxes e classificação de blocos, enquanto desenvolvedores relatam novos fluxos no VSCode, benchmarks multimodais no Codex e prototipagem de hardware com Claude Code. Esses sinais indicam maior integração entre modelos de visão, edição interativa e automação agente‑first.</p>
@@ -596,7 +602,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>15</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>14</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-13-anthropic-suspende-fable-e-mythos-apos-controle-de-exportacao-dos-eua">Anthropic suspende Fable e Mythos após controle de exportação dos EUA</a></h3>
   <p>O governo americano impôs restrições que forçaram a remoção dos modelos Fable 5 e Mythos. A medida gera desafios de conformidade e necessidade de revisão de orçamentos de IA.</p>
   <div class="chips"><span>google-news</span><span>tabnews</span><span>anthropic fable ban</span><span>br</span><span>developer</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-12">2026-06-12</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-12-openai-lanca-cursos-academy-e-anthropic-apresenta-claude-fable-5">OpenAI lança cursos Academy e Anthropic apresenta Claude Fable 5</a></h3>
-  <p>Nova oferta educacional da OpenAI visa capacitar profissionais a criar fluxos de trabalho com IA. Anthropic entrega o modelo Claude Fable 5, prometendo salvaguardas avançadas e despertando debate sobre custos de uso.</p>
-  <div class="chips"><span>openai</span><span>google-news</span><span>hacker-news</span><span>v2ex</span><span>anthropic fable5 routing</span><span>developer</span><span>chinese</span></div>
 </article>
   </div>
 </section>
