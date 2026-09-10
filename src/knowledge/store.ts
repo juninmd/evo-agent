@@ -388,9 +388,9 @@ export const db = {
   },
 
   getSnippets(limit = 20): Snippet[] {
-    return stmt(
-      "SELECT * FROM snippets ORDER BY created_at DESC LIMIT ?",
-    ).all(limit) as Snippet[];
+    return stmt("SELECT * FROM snippets ORDER BY created_at DESC LIMIT ?").all(
+      limit,
+    ) as Snippet[];
   },
 
   /** Keeps the snippet store bounded; the improvement cycle grows it by one per run. */
@@ -403,9 +403,9 @@ export const db = {
   },
 
   getState(key: string): string | null {
-    const row = stmt("SELECT value FROM agent_state WHERE key = ?").get(
-      key,
-    ) as AgentState | undefined;
+    const row = stmt("SELECT value FROM agent_state WHERE key = ?").get(key) as
+      | AgentState
+      | undefined;
     return row?.value ?? null;
   },
 
@@ -496,8 +496,7 @@ export const db = {
                OR lower(source) LIKE '%hugging face%'
                OR lower(source) LIKE '%mistral%'
              )) AS recentPrimarySources`,
-      )
-      .get() as OperationalStats;
+    ).get() as OperationalStats;
     return row;
   },
 
@@ -620,10 +619,9 @@ export const db = {
     url: string,
     status: "pending" | "delivered" | "dead_letter",
   ) {
-    stmt("UPDATE published_articles SET notification_status = ? WHERE url = ?").run(
-      status,
-      url,
-    );
+    stmt(
+      "UPDATE published_articles SET notification_status = ? WHERE url = ?",
+    ).run(status, url);
   },
 
   getPendingNotifications(now = new Date().toISOString(), limit = 20) {

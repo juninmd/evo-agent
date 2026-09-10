@@ -4,8 +4,8 @@ import { ask } from "../utils/ai.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 import { isSafeExternalUrl } from "../utils/url.js";
-import { promotePromptCandidate } from "./prompt-policy.js";
 import { sourceBucket } from "./curation.js";
+import { promotePromptCandidate } from "./prompt-policy.js";
 
 const DEFAULT_SYSTEM_PROMPT = `You are an expert AI developer agent that curates high-signal technical
 digests about software development and AI. You cover many interesting developments concisely (the most
@@ -147,7 +147,10 @@ export interface ExtraSourceInput {
  * set wholesale would let one bad response wipe it. Keep most of the current
  * set and let a few slots rotate in fresh candidates.
  */
-export function mergeKeywords(current: string[], candidate: string[]): string[] {
+export function mergeKeywords(
+  current: string[],
+  candidate: string[],
+): string[] {
   if (candidate.length === 0) return current;
   const kept = [...new Set(current)].filter(Boolean);
   const fresh = [...new Set(candidate)].filter(
@@ -176,10 +179,7 @@ export function mergeExtraSources(
  * Sample across source buckets instead, round-robin, so the improvement cycle
  * sees primary feeds and vendors too.
  */
-export function stratifiedSample(
-  articles: Article[],
-  size = 20,
-): Article[] {
+export function stratifiedSample(articles: Article[], size = 20): Article[] {
   const buckets = new Map<string, Article[]>();
   for (const article of articles) {
     const bucket = sourceBucket(article.source);

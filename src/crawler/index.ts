@@ -2,8 +2,8 @@ import axios, { type AxiosError } from "axios";
 import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
 import Parser from "rss-parser";
-import { getSearchKeywords } from "../agent/improver.js";
 import { normalizeTitle } from "../agent/curation.js";
+import { getSearchKeywords } from "../agent/improver.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
@@ -759,80 +759,78 @@ async function crawlGitHubTrending(): Promise<number> {
 
   for (const { label, url } of queries) {
     try {
-        await page.goto(url, {
-          waitUntil: "networkidle",
-          timeout: 30000,
-        });
+      await page.goto(url, {
+        waitUntil: "networkidle",
+        timeout: 30000,
+      });
 
-        const repos = await page.evaluate(() => {
-          const articles = document.querySelectorAll("article.Box-row");
-          return Array.from(articles)
-            .slice(0, 50)
-            .map((article) => {
-              const link = article.querySelector("h2 a");
-              const desc = article.querySelector("p");
-              const starsEl = article.querySelector('a[href$="/stargazers"]');
-              const langEl = article.querySelector(
-                '[itemprop="programmingLanguage"]',
-              );
-              return {
-                name: link?.textContent?.replace(/\s+/g, " ").trim() ?? "",
-                url: link
-                  ? `https://github.com${link.getAttribute("href")}`
-                  : "",
-                description: desc?.textContent?.trim() ?? "",
-                stars: starsEl?.textContent?.trim() ?? "",
-                language: langEl?.textContent?.trim() ?? "",
-              };
-            });
-        });
-
-        const day = todayIso();
-        for (const repo of repos) {
-          if (!repo.url || !repo.name) continue;
-          // A repo trending again is today's news, so the signal is keyed by
-          // day. Keying by repo URL alone hid every repo already seen once.
-          const signalUrl = trendingSignalUrl(repo.url, label, day);
-          if (db.urlExists(signalUrl)) continue;
-
-          const combined = `${repo.name} ${repo.description}`.toLowerCase();
-          const isAiRelevant = GITHUB_TRENDING_AI_KEYWORDS.some((kw) =>
-            combined.includes(kw),
-          );
-          if (!isAiRelevant) continue;
-
-          const summary = [
-            repo.description,
-            repo.stars ? `⭐ ${repo.stars}` : "",
-            repo.language ? `Lang: ${repo.language}` : "",
-          ]
-            .filter(Boolean)
-            .join(" | ")
-            .slice(0, 500);
-
-          const starCount = parseGitHubStarCount(repo.stars);
-          db.saveArticle({
-            title: repo.name,
-            source: `GitHub Trending (${label})`,
-            url: signalUrl,
-            summary,
-            tags: JSON.stringify([
-              "github",
-              "trending",
-              "ai",
-              label,
-              repo.language?.toLowerCase() ?? "unknown",
-            ]),
-            engagement_score: starCount,
+      const repos = await page.evaluate(() => {
+        const articles = document.querySelectorAll("article.Box-row");
+        return Array.from(articles)
+          .slice(0, 50)
+          .map((article) => {
+            const link = article.querySelector("h2 a");
+            const desc = article.querySelector("p");
+            const starsEl = article.querySelector('a[href$="/stargazers"]');
+            const langEl = article.querySelector(
+              '[itemprop="programmingLanguage"]',
+            );
+            return {
+              name: link?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+              url: link ? `https://github.com${link.getAttribute("href")}` : "",
+              description: desc?.textContent?.trim() ?? "",
+              stars: starsEl?.textContent?.trim() ?? "",
+              language: langEl?.textContent?.trim() ?? "",
+            };
           });
-          newCount++;
-        }
-      } catch (err) {
-        log.debug(
-          `GitHub Trending (${label}) skipped: ${(err as Error).message}`,
+      });
+
+      const day = todayIso();
+      for (const repo of repos) {
+        if (!repo.url || !repo.name) continue;
+        // A repo trending again is today's news, so the signal is keyed by
+        // day. Keying by repo URL alone hid every repo already seen once.
+        const signalUrl = trendingSignalUrl(repo.url, label, day);
+        if (db.urlExists(signalUrl)) continue;
+
+        const combined = `${repo.name} ${repo.description}`.toLowerCase();
+        const isAiRelevant = GITHUB_TRENDING_AI_KEYWORDS.some((kw) =>
+          combined.includes(kw),
         );
+        if (!isAiRelevant) continue;
+
+        const summary = [
+          repo.description,
+          repo.stars ? `⭐ ${repo.stars}` : "",
+          repo.language ? `Lang: ${repo.language}` : "",
+        ]
+          .filter(Boolean)
+          .join(" | ")
+          .slice(0, 500);
+
+        const starCount = parseGitHubStarCount(repo.stars);
+        db.saveArticle({
+          title: repo.name,
+          source: `GitHub Trending (${label})`,
+          url: signalUrl,
+          summary,
+          tags: JSON.stringify([
+            "github",
+            "trending",
+            "ai",
+            label,
+            repo.language?.toLowerCase() ?? "unknown",
+          ]),
+          engagement_score: starCount,
+        });
+        newCount++;
       }
+    } catch (err) {
+      log.debug(
+        `GitHub Trending (${label}) skipped: ${(err as Error).message}`,
+      );
     }
+  }
 
   log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
   return newCount;
@@ -1461,9 +1459,8 @@ async function crawlTabNews(): Promise<number> {
       "https://www.tabnews.com.br/api/v1/contents?strategy=relevant&per_page=30";
     const response = await axios.get(url, { timeout: 15000 });
     const contents = ((response.data ?? []) as TabNewsItem[])
-      .filter(
-        (item): item is TabNewsItem & { title: string; slug: string } =>
-          Boolean(item.title && item.slug && item.status === "published"),
+      .filter((item): item is TabNewsItem & { title: string; slug: string } =>
+        Boolean(item.title && item.slug && item.status === "published"),
       )
       .sort(
         (left, right) =>
