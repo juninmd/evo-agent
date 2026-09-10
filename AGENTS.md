@@ -55,6 +55,10 @@ src/
   - dark-readable and light-readable article content
   - Markdown download button
   - corrected header anchors for `Arquivo` and `Relatorios`
+  - canonical URL, Open Graph/Twitter metadata, Atom feed and sitemap
+  - skip link and an `aria-pressed` theme toggle
+- Both layouts are generated from the shared builders in `site-renderer.ts`; do not fork them.
+- Every `{{ page.* }}` interpolation must carry `| escape`: Liquid does not escape by default and titles come from crawled text.
 - Published articles may include images/videos when they improve validation or reader understanding.
 
 ## Security
