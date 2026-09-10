@@ -29,8 +29,14 @@ function sanitizeError(error: unknown): string {
 
 export class CycleCoordinator {
   private active = false;
+  private runId: number | null = null;
 
   constructor(private readonly store: CycleRunStore) {}
+
+  /** Run id of the cycle this process currently owns, for shutdown. */
+  get activeRunId(): number | null {
+    return this.runId;
+  }
 
   async run(
     type: string,
@@ -50,6 +56,7 @@ export class CycleCoordinator {
 
     this.active = true;
     const runId = this.store.start(type);
+    this.runId = runId;
     try {
       const metrics = await execute();
       this.store.finish(runId, "succeeded", metrics);
@@ -60,6 +67,7 @@ export class CycleCoordinator {
       throw error;
     } finally {
       this.active = false;
+      this.runId = null;
     }
   }
 }

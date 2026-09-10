@@ -15,8 +15,34 @@ export type SiteFile = {
   content: string;
 };
 
+/**
+ * A double-quoted YAML scalar cannot hold a raw newline or control
+ * character: one crawled title with either breaks the front matter and the
+ * page stops building.
+ */
 function escapeYaml(value: string): string {
-  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  return (
+    value
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: stripping control chars is the point
+      .replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029]/g, " ")
+      .replace(/\\/g, "\\\\")
+      .replace(/"/g, '\\"')
+      .replace(/\s+/g, " ")
+      .trim()
+  );
+}
+
+/**
+ * Article bodies are wrapped in {% raw %}, so only a literal endraw tag can
+ * break out and hand the rest of the page to the Liquid parser. A zero-width
+ * space defuses exactly that tag and leaves every other Liquid example in a
+ * code block readable.
+ */
+function neutralizeEndRaw(content: string): string {
+  return content.replace(
+    /\{%-?\s*endraw\s*-?%\}/gi,
+    (tag) => `{\u200b${tag.slice(1)}`,
+  );
 }
 
 export function buildMarkdown(article: GeneratedArticle): string {
@@ -29,7 +55,7 @@ summary: "${escapeYaml(article.summary)}"
 ---
 
 {% raw %}
-${article.content}
+${neutralizeEndRaw(article.content)}
 {% endraw %}
 
 ---
@@ -47,7 +73,7 @@ summary: "${escapeYaml(ebook.summary)}"
 ---
 
 {% raw %}
-${ebook.markdown}
+${neutralizeEndRaw(ebook.markdown)}
 {% endraw %}
 `;
 }
@@ -148,7 +174,7 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
-      <div class="story-meta"><time datetime="live">Atualizado pelo agente</time><span>Handbook</span></div>
+      <div class="story-meta"><span>Atualizado pelo agente</span><span>Handbook</span></div>
       <h3><a href="{{ '/handbooks/${EBOOK_SLUG}' | relative_url }}">Guia Pratico: Desenvolvimento de Software com IA</a></h3>
       <p>Boas praticas, ferramentas, fluxos com agentes, prompt/contexto e anti-padroes extraidos das fontes tecnicas recentes.</p>
       <div class="chips"><span>ebook</span><span>ai-assisted-development</span><span>agents</span></div>
@@ -166,53 +192,87 @@ title: Evo Agent
 `;
 }
 
-export function buildDefaultLayout() {
-  return `<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
+// Both layouts shared one byte-for-byte copy of the head, header and scripts.
+// A fix had to be applied twice or the two silently diverged, so the shared
+// parts live here once.
+
+/**
+ * Liquid does not escape `{{ }}`, and titles/summaries originate from crawled
+ * text run through an LLM. Every interpolation of page data goes through
+ * `escape`; SUMMARY also collapses newlines so it stays a valid attribute.
+ */
+const TITLE = "{{ page.title | escape }}";
+const SUMMARY =
+  "{{ page.summary | default: site.description | strip_newlines | escape }}";
+
+function buildHead(): string {
+  return `    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page.title }} | Evo Agent</title>
-    <meta name="description" content="{{ page.summary | default: site.description }}">
+    <title>${TITLE} | Evo Agent</title>
+    <meta name="description" content="${SUMMARY}">
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <meta property="og:type" content="{% if page.date %}article{% else %}website{% endif %}">
+    <meta property="og:site_name" content="{{ site.title | escape }}">
+    <meta property="og:title" content="${TITLE}">
+    <meta property="og:description" content="${SUMMARY}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:locale" content="pt_BR">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="${TITLE}">
+    <meta name="twitter:description" content="${SUMMARY}">
+    {% if page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+    <link rel="alternate" type="application/atom+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=4' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=5' | relative_url }}">
     <script>
-      const savedTheme = localStorage.getItem("evo-agent-theme");
-      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
+      // Runs before first paint: applies the theme and stamps the toggle's own
+      // label, so the button never claims the opposite of what is rendered.
+      (function () {
+        var saved = null;
+        try { saved = localStorage.getItem("evo-agent-theme"); } catch (e) {}
+        var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = saved || (systemDark ? "dark" : "light");
+      })();
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-  </head>
-  <body>
-    <header class="site-header">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>`;
+}
+
+function buildSiteNav(): string {
+  return `    <header class="site-header">
       <a class="brand" href="{{ '/' | relative_url }}">Evo Agent</a>
       <nav aria-label="Principal">
         <a href="{{ '/' | relative_url }}#arquivo">Arquivo</a>
         <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
         <a href="{{ '/' | relative_url }}#ebook">Ebook</a>
         <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
-        <button class="theme-toggle" type="button" data-theme-toggle>Claro</button>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Alternar tema claro e escuro">Claro</button>
       </nav>
-    </header>
-    <main>
-      {{ content }}
-    </main>
-    <script>
+    </header>`;
+}
+
+function buildThemeScript(): string {
+  return `    <script>
       const themeButton = document.querySelector("[data-theme-toggle]");
       const setTheme = (theme) => {
         document.documentElement.dataset.theme = theme;
-        localStorage.setItem("evo-agent-theme", theme);
-        if (themeButton) themeButton.textContent = theme === "dark" ? "Claro" : "Escuro";
+        try { localStorage.setItem("evo-agent-theme", theme); } catch (e) {}
+        if (themeButton) {
+          themeButton.textContent = theme === "dark" ? "Claro" : "Escuro";
+          themeButton.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+        }
       };
       setTheme(document.documentElement.dataset.theme || "dark");
       themeButton?.addEventListener("click", () => {
         setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
       });
-    </script>
-    <script type="module">
-      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    </script>`;
+}
+
+function buildContentScript(): string {
+  return `    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
       var isDark = document.documentElement.dataset.theme !== "light";
       mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default", securityLevel: "strict" });
       // kramdown/rouge wraps fenced mermaid as <div class="language-mermaid ...">...<code>...; some engines as <code class="language-mermaid">. Handle both, hand mermaid the raw source.
@@ -227,7 +287,7 @@ export function buildDefaultLayout() {
       hljs.configure({ cssSelector: "pre code:not(.language-mermaid)" });
       hljs.highlightAll();
       document.querySelectorAll("div[class*=language-]").forEach(function(div) {
-        var match = div.className.match(/language-(\w+)/);
+        var match = div.className.match(/language-(\\w+)/);
         if (match && match[1] !== "plaintext" && match[1] !== "mermaid") {
           var label = document.createElement("span");
           label.className = "language-label";
@@ -239,7 +299,9 @@ export function buildDefaultLayout() {
       document.querySelectorAll("pre:not(.mermaid)").forEach(function(pre) {
         var btn = document.createElement("button");
         btn.className = "copy-btn";
+        btn.type = "button";
         btn.textContent = "Copiar";
+        btn.setAttribute("aria-label", "Copiar bloco de codigo");
         btn.addEventListener("click", function() {
           var code = pre.querySelector("code");
           var text = code ? code.innerText : pre.innerText;
@@ -254,117 +316,48 @@ export function buildDefaultLayout() {
         });
         pre.appendChild(btn);
       });
-    </script>
+    </script>`;
+}
+
+function buildLayout(main: string): string {
+  return `<!doctype html>
+<html lang="pt-BR">
+  <head>
+${buildHead()}
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteudo</a>
+${buildSiteNav()}
+    <main id="conteudo">
+${main}
+    </main>
+${buildThemeScript()}
+${buildContentScript()}
   </body>
 </html>`;
 }
 
+export function buildDefaultLayout() {
+  return buildLayout("      {{ content }}");
+}
+
 export function buildArticleLayout() {
-  return `<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page.title }} | Evo Agent</title>
-    <meta name="description" content="{{ page.summary | default: site.description }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=4' | relative_url }}">
-    <script>
-      const savedTheme = localStorage.getItem("evo-agent-theme");
-      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
-  </head>
-  <body>
-    <header class="site-header">
-      <a class="brand" href="{{ '/' | relative_url }}">Evo Agent</a>
-      <nav aria-label="Principal">
-        <a href="{{ '/' | relative_url }}#arquivo">Arquivo</a>
-        <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
-        <a href="{{ '/' | relative_url }}#ebook">Ebook</a>
-        <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
-        <button class="theme-toggle" type="button" data-theme-toggle>Claro</button>
-      </nav>
-    </header>
-    <main>
-      <article class="article-shell">
+  return buildLayout(`      <article class="article-shell">
         <header class="article-hero">
           <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}</p>
-          <h1>{{ page.title }}</h1>
-          {% if page.summary %}<p class="article-summary">{{ page.summary }}</p>{% endif %}
+          <h1>${TITLE}</h1>
+          {% if page.summary %}<p class="article-summary">{{ page.summary | escape }}</p>{% endif %}
           {% if page.tags %}
           <div class="chips">
-            {% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}
+            {% for tag in page.tags %}<span>{{ tag | escape }}</span>{% endfor %}
           </div>
           {% endif %}
-          <a class="download-md" href="https://raw.githubusercontent.com/{{ site.github_owner }}/{{ site.github_repo }}/{{ site.github_branch | default: 'gh-pages' }}/{{ page.path }}" download>Baixar Markdown</a>
+          <a class="download-md" href="https://raw.githubusercontent.com/{{ site.github_owner }}/{{ site.github_repo }}/{{ site.github_branch | default: 'gh-pages' }}/{{ page.path }}" download rel="noopener">Baixar Markdown</a>
         </header>
         <div class="article-content">
           {{ content }}
         </div>
-      </article>
-    </main>
-    <script>
-      const themeButton = document.querySelector("[data-theme-toggle]");
-      const setTheme = (theme) => {
-        document.documentElement.dataset.theme = theme;
-        localStorage.setItem("evo-agent-theme", theme);
-        if (themeButton) themeButton.textContent = theme === "dark" ? "Claro" : "Escuro";
-      };
-      setTheme(document.documentElement.dataset.theme || "dark");
-      themeButton?.addEventListener("click", () => {
-        setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
-      });
-    </script>
-    <script type="module">
-      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-      var isDark = document.documentElement.dataset.theme !== "light";
-      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default", securityLevel: "strict" });
-      // kramdown/rouge wraps fenced mermaid as <div class="language-mermaid ...">...<code>...; some engines as <code class="language-mermaid">. Handle both, hand mermaid the raw source.
-      document.querySelectorAll('[class*="language-mermaid"]').forEach(function(node) {
-        var codeEl = node.matches("code") ? node : node.querySelector("code");
-        var holder = document.createElement("pre");
-        holder.className = "mermaid";
-        holder.textContent = (codeEl ? codeEl.textContent : node.textContent);
-        node.replaceWith(holder);
-      });
-      try { await mermaid.run({ querySelector: "pre.mermaid" }); } catch (e) {}
-      hljs.configure({ cssSelector: "pre code:not(.language-mermaid)" });
-      hljs.highlightAll();
-      document.querySelectorAll("div[class*=language-]").forEach(function(div) {
-        var match = div.className.match(/language-(\w+)/);
-        if (match && match[1] !== "plaintext" && match[1] !== "mermaid") {
-          var label = document.createElement("span");
-          label.className = "language-label";
-          label.textContent = match[1];
-          var pre = div.querySelector("pre");
-          if (pre) pre.parentNode.insertBefore(label, pre);
-        }
-      });
-      document.querySelectorAll("pre:not(.mermaid)").forEach(function(pre) {
-        var btn = document.createElement("button");
-        btn.className = "copy-btn";
-        btn.textContent = "Copiar";
-        btn.addEventListener("click", function() {
-          var code = pre.querySelector("code");
-          var text = code ? code.innerText : pre.innerText;
-          navigator.clipboard.writeText(text).then(function() {
-            btn.textContent = "Copiado!";
-            btn.classList.add("copied");
-            setTimeout(function() {
-              btn.textContent = "Copiar";
-              btn.classList.remove("copied");
-            }, 1400);
-          }).catch(function() {});
-        });
-        pre.appendChild(btn);
-      });
-    </script>
-  </body>
-</html>`;
+      </article>`);
 }
 
 export function buildSiteCss() {
@@ -852,6 +845,26 @@ pre:hover .copy-btn,
 .highlight .ge { font-style: italic; }
 .highlight .gs { font-weight: 700; }
 
+.skip-link {
+  background: var(--accent);
+  border-radius: 0 0 8px 0;
+  color: #08131a;
+  font-weight: 700;
+  left: 0;
+  padding: 10px 16px;
+  position: absolute;
+  top: -100px;
+  transition: top 0.15s ease;
+  z-index: 20;
+}
+
+.skip-link:focus { top: 0; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 @media (max-width: 700px) {
   .site-header,
   .section-title {
@@ -879,6 +892,9 @@ github_owner: ${owner}
 github_repo: ${repo}
 github_branch: ${branch}
 markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
 `,
     },
     { path: "_layouts/default.html", content: buildDefaultLayout() },

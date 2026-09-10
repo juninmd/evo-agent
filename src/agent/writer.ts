@@ -338,10 +338,7 @@ function loadPeriodArticles(cfg: PeriodConfig): Article[] {
   }).selected.map((item) => item.article);
 }
 
-function metricsForArticles(
-  articles: Article[],
-  primaryCandidates: number,
-) {
+function metricsForArticles(articles: Article[], primaryCandidates: number) {
   return {
     considered: articles.length,
     selected: articles.length,

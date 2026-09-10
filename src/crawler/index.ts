@@ -1,9 +1,10 @@
 import axios, { type AxiosError } from "axios";
+import type { BrowserContextOptions, Page } from "playwright";
 import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
 import Parser from "rss-parser";
-import { getSearchKeywords } from "../agent/improver.js";
 import { normalizeTitle } from "../agent/curation.js";
+import { getSearchKeywords } from "../agent/improver.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
@@ -32,6 +33,33 @@ async function closeSharedBrowser() {
   if (sharedBrowser) {
     await sharedBrowser.close();
     sharedBrowser = null;
+  }
+}
+
+const STEALTH_USER_AGENT =
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
+
+/**
+ * Owns the Playwright context lifecycle. Contexts are not reclaimed until the
+ * browser closes, so every call site that opened one by hand leaked a context
+ * plus a page for the rest of the crawl -- one per 403/429 fallback.
+ */
+export async function withStealthPage<T>(
+  run: (page: Page) => Promise<T>,
+  options: BrowserContextOptions = {},
+): Promise<T> {
+  const browser = await getSharedBrowser();
+  const context = await browser.newContext({
+    userAgent: STEALTH_USER_AGENT,
+    viewport: { width: 1280, height: 720 },
+    ...options,
+  });
+  try {
+    return await run(await context.newPage());
+  } finally {
+    await context.close().catch((err) => {
+      log.warn(`Failed to close browser context: ${(err as Error).message}`);
+    });
   }
 }
 
@@ -729,36 +757,30 @@ const GITHUB_TRENDING_LANGUAGES = [
 
 async function crawlGitHubTrending(): Promise<number> {
   let newCount = 0;
-  const browser = await getSharedBrowser();
-  const context = await browser.newContext({
-    userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    viewport: { width: 1280, height: 720 },
-  });
-  const page = await context.newPage();
 
-  // Trending geral + trending por linguagem de IA
-  const queries: Array<{ label: string; url: string }> = [
-    {
-      label: "daily",
-      url: "https://github.com/trending?since=daily",
-    },
-    {
-      label: "weekly",
-      url: "https://github.com/trending?since=weekly",
-    },
-  ];
+  await withStealthPage(async (page) => {
+    // Trending geral + trending por linguagem de IA
+    const queries: Array<{ label: string; url: string }> = [
+      {
+        label: "daily",
+        url: "https://github.com/trending?since=daily",
+      },
+      {
+        label: "weekly",
+        url: "https://github.com/trending?since=weekly",
+      },
+    ];
 
-  // Add language-specific trending
-  for (const lang of GITHUB_TRENDING_LANGUAGES) {
-    queries.push({
-      label: `daily-${lang.toLowerCase()}`,
-      url: `https://github.com/trending/${lang.toLowerCase()}?since=daily`,
-    });
-  }
+    // Add language-specific trending
+    for (const lang of GITHUB_TRENDING_LANGUAGES) {
+      queries.push({
+        label: `daily-${lang.toLowerCase()}`,
+        url: `https://github.com/trending/${lang.toLowerCase()}?since=daily`,
+      });
+    }
 
-  for (const { label, url } of queries) {
-    try {
+    for (const { label, url } of queries) {
+      try {
         await page.goto(url, {
           waitUntil: "networkidle",
           timeout: 30000,
@@ -834,7 +856,9 @@ async function crawlGitHubTrending(): Promise<number> {
       }
     }
 
-  log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
+    log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
+  });
+
   return newCount;
 }
 
@@ -868,43 +892,42 @@ export function hackerNewsEngagement(
 
 async function fetchWithPlaywright(url: string): Promise<string> {
   log.info(`Using Playwright stealth to fetch: ${url}`);
-  const browser = await getSharedBrowser();
+  return withStealthPage(
+    async (page) => {
+      await page.addInitScript(() => {
+        Object.defineProperty(navigator, "webdriver", { get: () => undefined });
+      });
 
-  const context = await browser.newContext({
-    userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    viewport: { width: 1280, height: 720 },
-    extraHTTPHeaders: {
-      Accept: "application/rss+xml, application/xml, text/xml, */*",
+      await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
+      await page.waitForTimeout(2000);
+
+      const content = await page.evaluate(() => {
+        const pre = document.querySelector("pre");
+        if (pre) return pre.innerText;
+
+        const webkitXml = document.querySelector(
+          "#webkit-xml-viewer-source-xml",
+        );
+        if (webkitXml) return webkitXml.innerHTML;
+
+        return document.documentElement.outerHTML;
+      });
+
+      const xmlMatch = content.match(
+        /<\?xml[^>]*>[\s\S]*|<!doctype[^>]*>[\s\S]*|<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i,
+      );
+      const finalXml = xmlMatch ? xmlMatch[0] : content;
+      log.info(
+        `Fetched ${finalXml.length} bytes. Start: ${finalXml.slice(0, 100).replace(/\n/g, " ")}`,
+      );
+      return finalXml;
     },
-  });
-
-  const page = await context.newPage();
-  await page.addInitScript(() => {
-    Object.defineProperty(navigator, "webdriver", { get: () => undefined });
-  });
-
-  await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-  await page.waitForTimeout(2000);
-
-  const content = await page.evaluate(() => {
-    const pre = document.querySelector("pre");
-    if (pre) return pre.innerText;
-
-    const webkitXml = document.querySelector("#webkit-xml-viewer-source-xml");
-    if (webkitXml) return webkitXml.innerHTML;
-
-    return document.documentElement.outerHTML;
-  });
-
-  const xmlMatch = content.match(
-    /<\?xml[^>]*>[\s\S]*|<!doctype[^>]*>[\s\S]*|<feed[^>]*>[\s\S]*<\/feed>|<rss[^>]*>[\s\S]*<\/rss>/i,
+    {
+      extraHTTPHeaders: {
+        Accept: "application/rss+xml, application/xml, text/xml, */*",
+      },
+    },
   );
-  const finalXml = xmlMatch ? xmlMatch[0] : content;
-  log.info(
-    `Fetched ${finalXml.length} bytes. Start: ${finalXml.slice(0, 100).replace(/\n/g, " ")}`,
-  );
-  return finalXml;
 }
 
 function normalizeText(value: string): string {
@@ -1461,9 +1484,8 @@ async function crawlTabNews(): Promise<number> {
       "https://www.tabnews.com.br/api/v1/contents?strategy=relevant&per_page=30";
     const response = await axios.get(url, { timeout: 15000 });
     const contents = ((response.data ?? []) as TabNewsItem[])
-      .filter(
-        (item): item is TabNewsItem & { title: string; slug: string } =>
-          Boolean(item.title && item.slug && item.status === "published"),
+      .filter((item): item is TabNewsItem & { title: string; slug: string } =>
+        Boolean(item.title && item.slug && item.status === "published"),
       )
       .sort(
         (left, right) =>
@@ -1605,112 +1627,61 @@ async function crawlAiCommunityPosts(): Promise<number> {
   return newCount;
 }
 
-async function crawlLinkedInTopContent(url: string): Promise<number> {
-  log.info(`Crawling LinkedIn Top Content: ${url}`);
-  const browser = await getSharedBrowser();
-
-  let newCount = 0;
-  const context = await browser.newContext({
-    userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-  });
-  const page = await context.newPage();
-  await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
-
-  // Extract articles from LinkedIn Top Content page
-  // Based on typical LinkedIn Top Content structure (selectors might need updates)
-  const articles = await page.evaluate(() => {
-    const items = document.querySelectorAll(
-      '.top-content-card, [data-test-id="top-content-card"], article',
-    );
-    return Array.from(items).map((item) => {
-      const titleEl = item.querySelector("h2, h3, .title");
-      const linkEl = item.querySelector("a");
-      return {
-        title: titleEl?.textContent?.trim() ?? "",
-        url: linkEl?.href ?? "",
-        summary:
-          item.textContent?.replace(/\s+/g, " ").trim().slice(0, 500) ?? "",
-      };
-    });
-  });
-
-  for (const article of articles) {
-    if (!article.url || !article.title) continue;
-    if (db.urlExists(article.url)) continue;
-
-    db.saveArticle({
-      title: article.title,
-      source: "LinkedIn AI Innovations",
-      url: article.url,
-      summary: article.summary,
-      tags: JSON.stringify(["ai", "innovation", "linkedin", "trends"]),
-      engagement_score: 0,
-    });
-    newCount++;
-  }
-  return newCount;
-}
-
 async function crawlHtmlSource(source: FeedSource): Promise<number> {
   if (!source.html) return 0;
   const { hrefPrefix, baseUrl } = source.html;
-  const browser = await getSharedBrowser();
 
   let newCount = 0;
   try {
-    const context = await browser.newContext({
-      userAgent:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-    });
-    const page = await context.newPage();
-    await page.goto(source.url, { waitUntil: "networkidle", timeout: 30000 });
+    await withStealthPage(async (page) => {
+      await page.goto(source.url, { waitUntil: "networkidle", timeout: 30000 });
 
-    const articles = await page.evaluate(
-      ({ hrefPrefix, baseUrl, listUrl }) => {
-        const links = document.querySelectorAll(`a[href^="${hrefPrefix}"]`);
-        return Array.from(links)
-          .map((a) => {
-            const href = a.getAttribute("href") ?? "";
-            const titleEl = a.querySelector('h2, h3, h4, [class*="title"]');
-            const title = titleEl
-              ? titleEl.textContent?.trim()
-              : a.textContent?.trim();
-            // Description often lives in the card wrapper, not inside the <a>.
-            const card = a.closest('[class*="card"]') ?? a.parentElement ?? a;
-            const descEl = a.querySelector("p") ?? card.querySelector("p");
-            const summary = descEl ? descEl.textContent?.trim() : "";
-            return {
-              title: title ?? "",
-              url: href.startsWith("http") ? href : `${baseUrl}${href}`,
-              summary: summary ?? "",
-            };
-          })
-          .filter((item) => item.title && item.url && item.url !== listUrl);
-      },
-      { hrefPrefix, baseUrl, listUrl: source.url },
-    );
-
-    if (articles.length === 0) {
-      log.warn(
-        `HTML source "${source.name}" matched 0 items — markup may have changed (selector a[href^="${hrefPrefix}"]).`,
+      const articles = await page.evaluate(
+        ({ hrefPrefix, baseUrl, listUrl }) => {
+          const links = document.querySelectorAll(`a[href^="${hrefPrefix}"]`);
+          return Array.from(links)
+            .map((a) => {
+              const href = a.getAttribute("href") ?? "";
+              const titleEl = a.querySelector('h2, h3, h4, [class*="title"]');
+              const title = titleEl
+                ? titleEl.textContent?.trim()
+                : a.textContent?.trim();
+              // Description often lives in the card wrapper, not inside the <a>.
+              const card = a.closest('[class*="card"]') ?? a.parentElement ?? a;
+              const descEl = a.querySelector("p") ?? card.querySelector("p");
+              const summary = descEl ? descEl.textContent?.trim() : "";
+              return {
+                title: title ?? "",
+                url: href.startsWith("http") ? href : `${baseUrl}${href}`,
+                summary: summary ?? "",
+              };
+            })
+            .filter((item) => item.title && item.url && item.url !== listUrl);
+        },
+        { hrefPrefix, baseUrl, listUrl: source.url },
       );
-    }
 
-    for (const article of articles.slice(0, 10)) {
-      if (!article.url || !article.title) continue;
-      if (db.urlExists(article.url)) continue;
+      if (articles.length === 0) {
+        log.warn(
+          `HTML source "${source.name}" matched 0 items — markup may have changed (selector a[href^="${hrefPrefix}"]).`,
+        );
+      }
 
-      db.saveArticle({
-        title: article.title,
-        source: source.name,
-        url: article.url,
-        summary: article.summary,
-        tags: JSON.stringify(source.tags),
-        engagement_score: 0,
-      });
-      newCount++;
-    }
+      for (const article of articles.slice(0, 10)) {
+        if (!article.url || !article.title) continue;
+        if (db.urlExists(article.url)) continue;
+
+        db.saveArticle({
+          title: article.title,
+          source: source.name,
+          url: article.url,
+          summary: article.summary,
+          tags: JSON.stringify(source.tags),
+          engagement_score: 0,
+        });
+        newCount++;
+      }
+    });
   } catch (err) {
     log.warn(`HTML crawler "${source.name}" failed: ${(err as Error).message}`);
   }

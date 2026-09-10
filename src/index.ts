@@ -214,11 +214,15 @@ async function ebookCycle() {
   return { url, lengthChars: ebook.markdown.length };
 }
 
+// Editions are stamped with the local day (see localDayIso). Counting them by
+// the UTC day made the 22h sweep see zero editions after 21:00 BRT and publish
+// the whole daily budget a second time.
+function editionsPublishedToday(): number {
+  return db.countPublishedOn("article", localDayIso());
+}
+
 function articlesPublishedToday() {
-  const today = new Date().toISOString().split("T")[0];
-  return db
-    .getPublished()
-    .filter((item) => item.kind === "article" && item.date === today);
+  return db.getPublishedOn("article", localDayIso());
 }
 
 // Sources already spent by today's earlier editions. Without this the second and
@@ -235,8 +239,8 @@ function sourcesUsedToday(): string[] {
 // pod was down; the scheduled slots themselves publish one edition each.
 async function ensureDailyEditions(reason: string, fill = false) {
   const target = config.dailyEditions;
-  while (articlesPublishedToday().length < target) {
-    const edition = articlesPublishedToday().length + 1;
+  while (editionsPublishedToday() < target) {
+    const edition = editionsPublishedToday() + 1;
     log.info(`Generating daily edition ${edition}/${target} (${reason})`);
     try {
       const result = await cycles.run("daily", () =>
@@ -348,66 +352,101 @@ async function main() {
 
   // Schedule learn+improve every N minutes
   const learnInterval = `*/${config.crawlIntervalMinutes} * * * *`;
-  cron.schedule(learnInterval, () => {
-    cycles
-      .run("crawl", learnCycle)
-      .catch((e) => log.error(`Learn cycle error: ${errMsg(e)}`));
-  });
+  cron.schedule(
+    learnInterval,
+    () => {
+      cycles
+        .run("crawl", learnCycle)
+        .catch((e) => log.error(`Learn cycle error: ${errMsg(e)}`));
+    },
+    { timezone: config.timezone },
+  );
 
   // Vacuum SQLite once a day to reclaim space
-  cron.schedule("0 3 * * *", () => {
-    try {
-      getDb().exec("VACUUM");
-      log.info("SQLite VACUUM complete");
-    } catch (e) {
-      log.warn(`SQLite VACUUM failed: ${errMsg(e)}`);
-    }
-  });
+  cron.schedule(
+    "0 3 * * *",
+    () => {
+      try {
+        getDb().exec("VACUUM");
+        log.info("SQLite VACUUM complete");
+      } catch (e) {
+        log.warn(`SQLite VACUUM failed: ${errMsg(e)}`);
+      }
+    },
+    { timezone: config.timezone },
+  );
 
-  cron.schedule("*/5 * * * *", () => {
-    flushNotificationOutbox().catch((e) =>
-      log.error(`Notification outbox failed: ${errMsg(e)}`),
-    );
-  });
+  cron.schedule(
+    "*/5 * * * *",
+    () => {
+      flushNotificationOutbox().catch((e) =>
+        log.error(`Notification outbox failed: ${errMsg(e)}`),
+      );
+    },
+    { timezone: config.timezone },
+  );
 
   // Schedule daily editions (one per cron slot) plus a late sweep that fills any
   // slot missed while the pod was down.
-  cron.schedule(config.articleCron, () => {
-    void ensureDailyEditions("scheduled");
-  });
+  cron.schedule(
+    config.articleCron,
+    () => {
+      void ensureDailyEditions("scheduled");
+    },
+    { timezone: config.timezone },
+  );
 
   const dailySweepCron = "0 22 * * *";
-  cron.schedule(dailySweepCron, () => {
-    void ensureDailyEditions("end-of-day sweep", true);
-  });
+  cron.schedule(
+    dailySweepCron,
+    () => {
+      void ensureDailyEditions("end-of-day sweep", true);
+    },
+    { timezone: config.timezone },
+  );
 
   // Schedule weekly report (Every Sunday at 6pm / 18:00)
   const weeklyCron = "0 18 * * 0";
-  cron.schedule(weeklyCron, () => {
-    cycles
-      .run("weekly", () => reportCycle("weekly"))
-      .catch((e) => log.error(`Weekly report cycle error: ${errMsg(e)}`));
-  });
+  cron.schedule(
+    weeklyCron,
+    () => {
+      cycles
+        .run("weekly", () => reportCycle("weekly"))
+        .catch((e) => log.error(`Weekly report cycle error: ${errMsg(e)}`));
+    },
+    { timezone: config.timezone },
+  );
 
   const ebookCron = "30 19 * * 0";
-  cron.schedule(ebookCron, () => {
-    cycles
-      .run("ebook", ebookCycle)
-      .catch((e) => log.error(`Ebook cycle error: ${errMsg(e)}`));
-  });
+  cron.schedule(
+    ebookCron,
+    () => {
+      cycles
+        .run("ebook", ebookCycle)
+        .catch((e) => log.error(`Ebook cycle error: ${errMsg(e)}`));
+    },
+    { timezone: config.timezone },
+  );
 
   log.info(
     `Scheduled: learn=${learnInterval}, article=${config.articleCron} (${config.dailyEditions}/dia), sweep=${dailySweepCron}, weekly=${weeklyCron}, ebook=${ebookCron}`,
   );
 
-  process.on("SIGINT", () => {
-    log.info("SIGINT received, closing...");
+  // A cycle killed mid-run left its row 'running' until the 6h stale sweep, so
+  // health reported critical for hours after every routine restart. Only this
+  // process's own run is closed: a blanket sweep would finish a concurrent
+  // instance's row out from under it.
+  const shutdown = (signal: string) => {
+    log.info(`${signal} received, closing...`);
+    const runId = cycles.activeRunId;
+    if (runId !== null) {
+      log.warn(`Marking in-flight cycle ${runId} as failed`);
+      db.finishCycle(runId, "failed", {}, `interrupted by ${signal}`);
+    }
     closeDbAndExit(0);
-  });
-  process.on("SIGTERM", () => {
-    log.info("SIGTERM received, closing...");
-    closeDbAndExit(0);
-  });
+  };
+  process.on("SIGINT", () => shutdown("SIGINT"));
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
 }
 
 main().catch((e) => {

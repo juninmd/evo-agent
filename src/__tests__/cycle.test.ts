@@ -65,4 +65,37 @@ describe("CycleCoordinator", () => {
 
     expect(finish).toHaveBeenCalledWith(9, "failed", {}, "token=[redacted]");
   });
+
+  // Shutdown closes the run this process owns; a blanket age-0 sweep would
+  // finish a concurrent instance's row out from under it.
+  it("exposes the active run id only while a cycle is in flight", async () => {
+    const coordinator = new CycleCoordinator({
+      start: () => 7,
+      finish: () => undefined,
+    });
+
+    expect(coordinator.activeRunId).toBeNull();
+    let seen: number | null = null;
+    await coordinator.run("daily", async () => {
+      seen = coordinator.activeRunId;
+      return {};
+    });
+
+    expect(seen).toBe(7);
+    expect(coordinator.activeRunId).toBeNull();
+  });
+
+  it("clears the active run id when the cycle throws", async () => {
+    const coordinator = new CycleCoordinator({
+      start: () => 7,
+      finish: () => undefined,
+    });
+
+    await expect(
+      coordinator.run("daily", async () => {
+        throw new Error("boom");
+      }),
+    ).rejects.toThrow("boom");
+    expect(coordinator.activeRunId).toBeNull();
+  });
 });

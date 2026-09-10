@@ -1,0 +1,8 @@
+# Biome formats with LF; core.autocrlf=true on Windows checkouts made
+# `npm run lint` unpassable locally. Pin the working tree to LF instead.
+* text=auto eol=lf
+
+*.db binary
+*.png binary
+*.jpg binary
+*.ico binary

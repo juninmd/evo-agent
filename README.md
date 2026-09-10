@@ -39,6 +39,8 @@ flowchart TD
 - **Article generation**: three long-form daily editions (≥5 subjects each, no repeated sources within the day) and weekly/periodic reports in pt-BR via LLM, with expanded Reddit/community evidence when available
 - **Living ebook**: weekly/refinable AI-assisted development handbook published to GitHub Pages
 - **Atomic GitHub Pages publishing**: Article, layouts, and indexes land in one Git commit
+- **Discoverable pages**: Canonical URL, Open Graph/Twitter metadata, Atom feed and sitemap on every published page
+- **Escaped by construction**: Crawled titles and summaries are HTML-escaped in the Jekyll layouts and flattened in the YAML front matter
 - **Telegram outbox**: Failed delivery retries with exponential backoff and dead-letter isolation
 - **Operational health**: Structured logs, persistent metrics, primary-source alerts, and a machine-readable health command
 - **Playwright stealth fallback**: Automatic browser-based fetch when RSS sources return 403/429
@@ -74,6 +76,7 @@ npm run build
 | `ARTICLE_CRON` | No | `0 8,13,18 * * *` | Daily edition cron (one edition per slot) |
 | `DAILY_EDITIONS` | No | `3` | Editions published per day; a 22h sweep fills missed slots |
 | `SEARXNG_URL` | No | `http://searxng.searxng.svc.cluster.local` | SearXNG instance URL |
+| `TZ` | No | `America/Sao_Paulo` | Timezone for every cron schedule and for the daily-edition day key |
 | `LOG_LEVEL` | No | `info` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
 | `LOG_FORMAT` | No | `json` | Structured `json` logs or local `text` output |
 | `DB_PATH` | No | `data/knowledge.db` | SQLite database path |
