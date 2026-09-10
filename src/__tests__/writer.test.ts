@@ -272,9 +272,13 @@ describe("renderEditorialDraft", () => {
       .mockReturnValueOnce(community);
     const official = expanded.at(-1);
     expect(official).toBeDefined();
+    // The main pool already pulls primaries for the tight window, so the
+    // backward expansion must only fire when that window returns none.
     const primaryBetween = vi
       .spyOn(db, "getPrimaryArticlesBetween")
-      .mockReturnValue(official ? [official] : []);
+      .mockImplementation((from) =>
+        from === "2026-06-08T00:00:00.000Z" || !official ? [] : [official],
+      );
     vi.spyOn(db, "getState").mockReturnValue(null);
 
     await expect(
