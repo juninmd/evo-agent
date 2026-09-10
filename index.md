@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-10">2026-09-10</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-10-radar-2026-09-10">Radar IA — 10/09/2026</a></h3>
+  <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-09">2026-09-09</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-09-radar-2026-09-09">Radar IA — 09/09/2026</a></h3>
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -160,12 +166,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-24-radar-2026-08-24">Radar IA — 24/08/2026</a></h3>
   <p>Radar de 61 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-23">2026-08-23</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-23-radar-2026-08-23">Radar IA — 23/08/2026</a></h3>
-  <p>Radar de 53 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
 </article>
   </div>
 </section>
