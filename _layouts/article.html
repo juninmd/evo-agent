@@ -3,20 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ page.title }} | Evo Agent</title>
-    <meta name="description" content="{{ page.summary | default: site.description }}">
+    <title>{{ page.title | escape }} | Evo Agent</title>
+    <meta name="description" content="{{ page.summary | default: site.description | strip_newlines | escape }}">
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    <meta property="og:type" content="{% if page.date %}article{% else %}website{% endif %}">
+    <meta property="og:site_name" content="{{ site.title | escape }}">
+    <meta property="og:title" content="{{ page.title | escape }}">
+    <meta property="og:description" content="{{ page.summary | default: site.description | strip_newlines | escape }}">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:locale" content="pt_BR">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ page.title | escape }}">
+    <meta name="twitter:description" content="{{ page.summary | default: site.description | strip_newlines | escape }}">
+    {% if page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
+    <link rel="alternate" type="application/atom+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=4' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=5' | relative_url }}">
     <script>
-      const savedTheme = localStorage.getItem("evo-agent-theme");
-      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.dataset.theme = savedTheme || (systemDark ? "dark" : "light");
+      // Runs before first paint: applies the theme and stamps the toggle's own
+      // label, so the button never claims the opposite of what is rendered.
+      (function () {
+        var saved = null;
+        try { saved = localStorage.getItem("evo-agent-theme"); } catch (e) {}
+        var systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = saved || (systemDark ? "dark" : "light");
+      })();
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
   </head>
   <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteudo</a>
     <header class="site-header">
       <a class="brand" href="{{ '/' | relative_url }}">Evo Agent</a>
       <nav aria-label="Principal">
@@ -24,21 +42,21 @@
         <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
         <a href="{{ '/' | relative_url }}#ebook">Ebook</a>
         <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
-        <button class="theme-toggle" type="button" data-theme-toggle>Claro</button>
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Alternar tema claro e escuro">Claro</button>
       </nav>
     </header>
-    <main>
+    <main id="conteudo">
       <article class="article-shell">
         <header class="article-hero">
           <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}</p>
-          <h1>{{ page.title }}</h1>
-          {% if page.summary %}<p class="article-summary">{{ page.summary }}</p>{% endif %}
+          <h1>{{ page.title | escape }}</h1>
+          {% if page.summary %}<p class="article-summary">{{ page.summary | escape }}</p>{% endif %}
           {% if page.tags %}
           <div class="chips">
-            {% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}
+            {% for tag in page.tags %}<span>{{ tag | escape }}</span>{% endfor %}
           </div>
           {% endif %}
-          <a class="download-md" href="https://raw.githubusercontent.com/{{ site.github_owner }}/{{ site.github_repo }}/{{ site.github_branch | default: 'gh-pages' }}/{{ page.path }}" download>Baixar Markdown</a>
+          <a class="download-md" href="https://raw.githubusercontent.com/{{ site.github_owner }}/{{ site.github_repo }}/{{ site.github_branch | default: 'gh-pages' }}/{{ page.path }}" download rel="noopener">Baixar Markdown</a>
         </header>
         <div class="article-content">
           {{ content }}
@@ -49,8 +67,11 @@
       const themeButton = document.querySelector("[data-theme-toggle]");
       const setTheme = (theme) => {
         document.documentElement.dataset.theme = theme;
-        localStorage.setItem("evo-agent-theme", theme);
-        if (themeButton) themeButton.textContent = theme === "dark" ? "Claro" : "Escuro";
+        try { localStorage.setItem("evo-agent-theme", theme); } catch (e) {}
+        if (themeButton) {
+          themeButton.textContent = theme === "dark" ? "Claro" : "Escuro";
+          themeButton.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+        }
       };
       setTheme(document.documentElement.dataset.theme || "dark");
       themeButton?.addEventListener("click", () => {
@@ -58,7 +79,7 @@
       });
     </script>
     <script type="module">
-      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
       var isDark = document.documentElement.dataset.theme !== "light";
       mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default", securityLevel: "strict" });
       // kramdown/rouge wraps fenced mermaid as <div class="language-mermaid ...">...<code>...; some engines as <code class="language-mermaid">. Handle both, hand mermaid the raw source.
@@ -73,7 +94,7 @@
       hljs.configure({ cssSelector: "pre code:not(.language-mermaid)" });
       hljs.highlightAll();
       document.querySelectorAll("div[class*=language-]").forEach(function(div) {
-        var match = div.className.match(/language-(w+)/);
+        var match = div.className.match(/language-(\w+)/);
         if (match && match[1] !== "plaintext" && match[1] !== "mermaid") {
           var label = document.createElement("span");
           label.className = "language-label";
@@ -85,7 +106,9 @@
       document.querySelectorAll("pre:not(.mermaid)").forEach(function(pre) {
         var btn = document.createElement("button");
         btn.className = "copy-btn";
+        btn.type = "button";
         btn.textContent = "Copiar";
+        btn.setAttribute("aria-label", "Copiar bloco de codigo");
         btn.addEventListener("click", function() {
           var code = pre.querySelector("code");
           var text = code ? code.innerText : pre.innerText;
