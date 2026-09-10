@@ -268,6 +268,8 @@ export function migrate(db: Database.Database) {
   db.exec(`
     CREATE INDEX IF NOT EXISTS idx_articles_engagement
       ON articles(engagement_score DESC);
+    CREATE INDEX IF NOT EXISTS idx_published_articles_date
+      ON published_articles(kind, date);
   `);
 }
 
@@ -305,6 +307,19 @@ function urlExistsStmt() {
     _urlExistsStmt = stmt("SELECT 1 FROM articles WHERE url = ?");
   }
   return _urlExistsStmt;
+}
+
+type PublishedRow = Omit<PublishedArticle, "tags" | "editorial_metrics"> & {
+  tags: string;
+  editorial_metrics: string;
+};
+
+function hydratePublished(row: PublishedRow): PublishedArticle {
+  return {
+    ...row,
+    tags: safeJsonArray(row.tags),
+    editorial_metrics: safeJsonObject(row.editorial_metrics),
+  };
 }
 
 export const db = {
@@ -488,14 +503,7 @@ export const db = {
            WHERE crawled_at >= datetime('now', '-48 hours')) AS recentArticles,
           (SELECT count(*) FROM articles
            WHERE crawled_at >= datetime('now', '-48 hours')
-             AND (
-               lower(source) LIKE '%anthropic%'
-               OR lower(source) LIKE '%openai%'
-               OR lower(source) LIKE '%github blog%'
-               OR lower(source) LIKE '%google research%'
-               OR lower(source) LIKE '%hugging face%'
-               OR lower(source) LIKE '%mistral%'
-             )) AS recentPrimarySources`,
+             AND (${PRIMARY_SOURCE_SQL})) AS recentPrimarySources`,
     ).get() as OperationalStats;
     return row;
   },
@@ -666,21 +674,33 @@ export const db = {
     ).run(deadLetter ? "dead_letter" : "pending", nextAttemptAt, error, url);
   },
 
+  /**
+   * Counting a day used to mean loading and JSON-parsing every row ever
+   * published; the daily-edition loop does it twice per iteration.
+   */
+  countPublishedOn(kind: string, date: string): number {
+    const row = stmt(
+      `SELECT count(*) AS total FROM published_articles
+       WHERE kind = ? AND date = ?`,
+    ).get(kind, date) as { total: number };
+    return row.total;
+  },
+
+  getPublishedOn(kind: string, date: string): PublishedArticle[] {
+    const rows = stmt(
+      `SELECT * FROM published_articles
+       WHERE kind = ? AND date = ?
+       ORDER BY published_at DESC`,
+    ).all(kind, date) as PublishedRow[];
+    return rows.map(hydratePublished);
+  },
+
   getPublished(): PublishedArticle[] {
     const rows = stmt(
       `SELECT * FROM published_articles
        ORDER BY date DESC, published_at DESC`,
-    ).all() as Array<
-      Omit<PublishedArticle, "tags" | "editorial_metrics"> & {
-        tags: string;
-        editorial_metrics: string;
-      }
-    >;
-    return rows.map((row) => ({
-      ...row,
-      tags: safeJsonArray(row.tags),
-      editorial_metrics: safeJsonObject(row.editorial_metrics),
-    }));
+    ).all() as PublishedRow[];
+    return rows.map(hydratePublished);
   },
 
   getPublishedEvidence(articleUrl: string): PublishedEvidence[] {

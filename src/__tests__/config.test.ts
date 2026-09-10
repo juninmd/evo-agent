@@ -20,6 +20,24 @@ describe("loadConfig", () => {
     expect(config.articleCron).toBe("0 8,13,18 * * *");
   });
 
+  // The schedules and the daily-edition day key are both wall-clock; leaving
+  // the container's UTC default in place ran the 22h sweep at 01h local.
+  it("defaults the cron timezone to BRT and honours TZ", () => {
+    expect(loadConfig({ ...baseEnv, RUN_MODE: "CRAWL" }).timezone).toBe(
+      "America/Sao_Paulo",
+    );
+    expect(
+      loadConfig({ ...baseEnv, RUN_MODE: "CRAWL", TZ: "Europe/Lisbon" })
+        .timezone,
+    ).toBe("Europe/Lisbon");
+  });
+
+  it("rejects an unknown timezone instead of silently using UTC", () => {
+    expect(() =>
+      loadConfig({ ...baseEnv, RUN_MODE: "CRAWL", TZ: "Mars/Olympus" }),
+    ).toThrow(/TZ is invalid/);
+  });
+
   it("supports side-effect-free module configuration in CI", () => {
     expect(() => loadConfig({}, false)).not.toThrow();
   });

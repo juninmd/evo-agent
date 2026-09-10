@@ -10,6 +10,9 @@ COPY src/ ./src/
 RUN npm run build && npm prune --omit=dev
 
 FROM mcr.microsoft.com/playwright:v1.60.0-noble
+# The crons and the daily-edition day key are both BRT wall time; the base
+# image defaults to UTC, which shifted the 22h sweep into the next local day.
+ENV TZ=America/Sao_Paulo
 WORKDIR /app
 COPY package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
