@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>10</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>11</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-12">2026-09-12</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-12-mistral-ocr-4-github-copilot-ui-e-limites-do-codex-impactos-de-custo-e-integraca">Mistral OCR 4, GitHub Copilot UI e limites do Codex: impactos de custo e integração (10‑12 set 2026)</a></h3>
+  <p>Novas ofertas de OCR da Mistral exigem avaliação de provisionamento de GPU, enquanto a interface unificada do Copilot reduz troca de contexto. Problemas de limites e bugs em Codex e Claude provocam revisões de quota e substituições de modelo.</p>
+  <div class="chips"><span>reddit</span><span>github</span><span>together</span><span>searxng</span><span>mistral ocr 4</span><span>codex</span><span>openai</span><span>post-signals</span><span>githubcopilot</span><span>claudecode</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-10">2026-09-10</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-10-github-registra-cinco-incidentes-de-desempenho-em-agosto-e-comunidade-debate-cus">GitHub registra cinco incidentes de desempenho em agosto e comunidade debate custos do Astra e uso</a></h3>
   <p>O relatório de disponibilidade do GitHub mostra cinco interrupções que afetaram serviços em agosto de 2026. Paralelamente, usuários relatam variações de custos do Astra no GitHub Copilot e estratégias para economizar com o Fable 5.1 no Claude Code.</p>
@@ -608,7 +614,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>13</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>12</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-17-git-worktrees-deepmind-ai-planning-e-claude-opus-implicacoes-tecnicas-recentes">Git Worktrees, DeepMind AI Planning, e Claude Opus: Implicações Técnicas Recentes</a></h3>
   <p>Novas adoções e restrições aceleram decisões de arquitetura e segurança nas pipelines de desenvolvimento. Analisamos impactos de worktrees, IA governamental, bloqueio de modelo e ferramentas de auditoria automática.</p>
   <div class="chips"><span>the</span><span>google</span><span>google-news</span><span>tabnews</span><span>reddit</span><span>developer</span><span>ai frontier</span><span>googledeepmind</span><span>anthropic fable pricing</span><span>br</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-16">2026-06-16</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-16-github-lanca-dataset-multilingue-e-copilot-cli-google-investe-em-data-center-no-">GitHub lança dataset multilíngue e Copilot CLI; Google investe em data center no Alabama</a></h3>
-  <p>Um novo dataset aberto da GitHub facilita a descoberta de conteúdo técnico em vários idiomas, enquanto o Copilot CLI traz comandos de barra para automatizar fluxos de terminal. Paralelamente, a Google destinou US$ 1,5 bilhão para ampliar sua infraestrutura no Alabama, sinalizando foco geográfico em capacidade de nuvem.</p>
-  <div class="chips"><span>the</span><span>google</span><span>hacker-news</span><span>developer</span><span>ml</span><span>research</span></div>
 </article>
   </div>
 </section>
