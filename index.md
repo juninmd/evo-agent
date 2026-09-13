@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>11</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>12</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-13">2026-09-13</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-13-gpt-6-astra-na-perplexity-e-regressoes-de-custo-no-claude-code">GPT-6 Astra na Perplexity e Regressões de Custo no Claude Code</a></h3>
+  <p>Perplexity integra GPT-6 Astra para automação de sistemas de produção. Relatos de usuários indicam picos inesperados de consumo de tokens durante a compactação de sessões no Claude Code.</p>
+  <div class="chips"><span>openai</span><span>reddit</span><span>together</span><span>tabnews</span><span>google-news</span><span>post-signals</span><span>claudecode</span><span>githubcopilot</span><span>codex</span><span>ai frontier</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-12">2026-09-12</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-12-mistral-ocr-4-github-copilot-ui-e-limites-do-codex-impactos-de-custo-e-integraca">Mistral OCR 4, GitHub Copilot UI e limites do Codex: impactos de custo e integração (10‑12 set 2026)</a></h3>
   <p>Novas ofertas de OCR da Mistral exigem avaliação de provisionamento de GPU, enquanto a interface unificada do Copilot reduz troca de contexto. Problemas de limites e bugs em Codex e Claude provocam revisões de quota e substituições de modelo.</p>
@@ -614,7 +620,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>12</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>11</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-17-fable-da-anthropic-spotlight-da-apple-e-claude-da-anthropic-impactos-no-orcament">Fable da Anthropic, Spotlight da Apple e Claude da Anthropic: impactos no orçamento e na integração</a></h3>
   <p>Falhas de modelo e restrições de segurança provocam reavaliações de custo, enquanto ferramentas de IA automatizam SEO e reduzem despesas de token. Incidentes de indexação mostram necessidade de ajustes operacionais.</p>
   <div class="chips"><span>google-news</span><span>hacker-news</span><span>reddit</span><span>anthropic fable 5 cost</span><span>anthropic fable routing</span><span>ml</span><span>research</span><span>claude</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-17">2026-06-17</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-17-git-worktrees-deepmind-ai-planning-e-claude-opus-implicacoes-tecnicas-recentes">Git Worktrees, DeepMind AI Planning, e Claude Opus: Implicações Técnicas Recentes</a></h3>
-  <p>Novas adoções e restrições aceleram decisões de arquitetura e segurança nas pipelines de desenvolvimento. Analisamos impactos de worktrees, IA governamental, bloqueio de modelo e ferramentas de auditoria automática.</p>
-  <div class="chips"><span>the</span><span>google</span><span>google-news</span><span>tabnews</span><span>reddit</span><span>developer</span><span>ai frontier</span><span>googledeepmind</span><span>anthropic fable pricing</span><span>br</span></div>
 </article>
   </div>
 </section>
