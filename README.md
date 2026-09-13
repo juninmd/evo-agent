@@ -20,6 +20,12 @@ title: Evo Agent
   </div>
   <div class="story-grid featured-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-13">2026-09-13</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-13-mistral-ocr-4-e-inner-warden-limites-de-tamanho-e-seguranca-kernel">Mistral OCR 4 e Inner Warden: limites de tamanho e segurança kernel</a></h3>
+  <p>A análise revela que o Mistral OCR 4 oferece precisão avançada e extração de estrutura, enquanto o Inner Warden fornece proteção kernel‑level com pequeno footprint. Ao mesmo tempo, relatos de Claude e de outras ferramentas apontam riscos de uso de tokens e confiabilidade de APIs LLM.</p>
+  <div class="chips"><span>weekly-report</span><span>reddit</span><span>tabnews</span><span>searxng</span><span>mistral ocr 4</span><span>post-signals</span><span>claudecode</span><span>codex</span><span>openai</span><span>vscode</span><span>br</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-12">2026-09-12</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-12-radar-2026-09-12">Radar IA — 12/09/2026</a></h3>
   <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -159,12 +165,6 @@ title: Evo Agent
   <div class="story-meta"><time datetime="2026-08-27">2026-08-27</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-27-radar-2026-08-27">Radar IA — 27/08/2026</a></h3>
   <p>Radar de 70 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-26">2026-08-26</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-26-radar-2026-08-26">Radar IA — 26/08/2026</a></h3>
-  <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
 </article>
   </div>
