@@ -9,6 +9,7 @@ import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 import { isSafeExternalUrl } from "../utils/url.js";
+import { TECHLEAD_SOURCES } from "./techlead-sources.js";
 
 chromium.use(stealth());
 
@@ -1703,9 +1704,11 @@ export async function crawlAll(): Promise<CrawlReport> {
 }
 
 async function crawlAllInner(): Promise<CrawlReport> {
-  const sources = [...DEFAULT_SOURCES, ...getDynamicSources()].filter(
-    (s) => s?.url && s.name,
-  );
+  const sources = [
+    ...DEFAULT_SOURCES,
+    ...TECHLEAD_SOURCES,
+    ...getDynamicSources(),
+  ].filter((s) => s?.url && s.name);
   let newCount = 0;
   let redditRateLimited = false;
   const metrics: Record<string, { saved: number; failed: boolean }> = {};

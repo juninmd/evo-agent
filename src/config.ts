@@ -7,6 +7,7 @@ export type RunMode =
   | "CRAWL"
   | "DAILY"
   | "RADAR"
+  | "TECHLEAD"
   | "WEEKLY"
   | "BIWEEKLY"
   | "MONTHLY"
@@ -21,6 +22,7 @@ const RUN_MODES = new Set<RunMode>([
   "CRAWL",
   "DAILY",
   "RADAR",
+  "TECHLEAD",
   "WEEKLY",
   "BIWEEKLY",
   "MONTHLY",

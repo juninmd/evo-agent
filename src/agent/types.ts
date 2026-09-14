@@ -1,5 +1,6 @@
 export type ReportPeriod =
   | "radar"
+  | "techlead"
   | "weekly"
   | "biweekly"
   | "monthly"
