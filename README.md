@@ -21,6 +21,12 @@ title: Evo Agent
   <div class="story-grid featured-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-09-15">2026-09-15</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-15-radar-2026-09-15">Radar IA — 15/09/2026</a></h3>
+  <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>papers</span><span>community</span></div>
+</article>
+<article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-15">2026-09-15</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-09-15-relatorio-quinzenal-avancos-em-llm-ia-e-harnesses-09-2026">Relatório Quinzenal: Avanços em LLM, IA e Harnesses (09/2026)</a></h3>
   <p>Mistral OCR 4 – A Mistral lançou a quarta geração do seu modelo OCR, capaz de reconhecer 170 idiomas e oferecer extração estruturada de documentos, com opção de auto‑hospedagem. Isso permite que empresas tratem informações sensíveis sem enviar dados para a nuvem. Introducing Mistral OCR 4https://www.reddit.com/r/MistralAI/comments/1uiepp1/localmistralforsensitiveocrdocprocessing/</p>
   <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
@@ -160,12 +166,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-08-30-radar-2026-08-30">Radar IA — 30/08/2026</a></h3>
   <p>Radar de 51 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span>reddit</span><span>hackernews</span><span>vendors</span><span>community</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-08-30">2026-08-30</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-08-30-tokens-modelos-e-fluxos-decisoes-criticas-em-produtos-de-ia-de-2026">Tokens, Modelos e Fluxos: Decisões Críticas em Produtos de IA de 2026</a></h3>
-  <p>Entre o monitoramento de uso, otimizações de custo e novas iniciativas de aceleradoras, a paisagem de IA evolui de maneiras práticas e mensuráveis para desenvolvedores e investidoras.</p>
-  <div class="chips"><span>weekly-report</span><span>reddit</span><span>together</span><span>openai</span><span>tabnews</span><span>post-signals</span><span>vscode</span><span>codex</span><span>claude</span><span>coding</span><span>ai frontier</span></div>
 </article>
   </div>
 </section>
