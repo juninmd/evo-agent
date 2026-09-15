@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>13</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>14</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-15">2026-09-15</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-15-mistral-ocr-4-vibepod-cli-0-23-e-estrategias-de-selecao-de-modelos-em-2026">Mistral OCR 4, VibePod CLI 0.23 e Estratégias de Seleção de Modelos em 2026</a></h3>
+  <p>Novas capacidades de OCR multilíngue da Mistral chegam ao mercado enquanto ferramentas de IA no editor ganham isolamento por contêiner. Comunidades debatendo escolhas de modelo e revisões de código revelam impactos de custos e integração.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>web-search</span><span>google</span><span>openai</span><span>searxng</span><span>mistral ocr 4</span><span>post-signals</span><span>vscode</span><span>githubcopilot</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-14">2026-09-14</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-14-mistral-ocr-4-lanca-extracao-estruturada-e-limites-de-claude-code-disparam-custo">Mistral OCR 4 lança extração estruturada e limites de Claude Code disparam custos</a></h3>
   <p>A nova versão do Mistral OCR adiciona suporte a 170 idiomas e auto-hospedagem, enquanto usuários de Claude Code relatam consumo acelerado de tokens e confusão sobre reset semanal. Desenvolvedores de Codex e Copilot CLI também expõem gargalos de cota e ferramentas de observabilidade.</p>
@@ -626,7 +632,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>10</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>9</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-19-openai-reforca-rl-benefico-e-anthropic-enfrenta-bloqueio-temporario-do-fable-5-l">OpenAI reforça RL benéfico e Anthropic enfrenta bloqueio temporário do Fable 5: lições para</a></h3>
   <p>OpenAI divulgou diretrizes de aprendizado por reforço para garantir modelos amplamente benéficos, enquanto Anthropic registrou uma interrupção ao restaurar acesso ao Fable 5 após respostas de modelos abertos. Esses eventos exigem ajustes imediatos em planejamentos de custo, arquitetura de runtime e rastreabilidade de decisões de IA.</p>
   <div class="chips"><span>hacker-news</span><span>google-news</span><span>arxiv</span><span>ml</span><span>research</span><span>anthropic fable5</span><span>software-engineering</span><span>nlp</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-18">2026-06-18</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-18-kill-switch-da-anthropic-fable-5-e-impactos-nas-integracoes-de-ia-e-metodologias">Kill‑switch da Anthropic Fable 5 e impactos nas integrações de IA e metodologias de desenvolvimento</a></h3>
-  <p>Os EUA bloquearam os modelos Fable 5, forçando revisões de arquitetura e orçamento. Estudos recentes mostram desafios de variabilidade e novas ferramentas de feedback automatizado.</p>
-  <div class="chips"><span>google-news</span><span>arxiv</span><span>anthropic fable5 ban</span><span>software-engineering</span><span>ml</span></div>
 </article>
   </div>
 </section>
