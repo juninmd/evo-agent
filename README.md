@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>14</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>15</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-16">2026-09-16</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-16-parceria-microsoft-mistral-e-integracao-de-claude-no-unity">Parceria Microsoft-Mistral e Integração de Claude no Unity</a></h3>
+  <p>Microsoft e Mistral expandem cooperação para setores regulados. Desenvolvedores utilizam Claude Code para automação de sistemas complexos em engines de jogos.</p>
+  <div class="chips"><span>google-news</span><span>reddit</span><span>mistral ocr 4</span><span>post-signals</span><span>claudecode</span><span>vscode</span><span>codex</span><span>searxng</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-15">2026-09-15</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-15-mistral-ocr-4-vibepod-cli-0-23-e-estrategias-de-selecao-de-modelos-em-2026">Mistral OCR 4, VibePod CLI 0.23 e Estratégias de Seleção de Modelos em 2026</a></h3>
   <p>Novas capacidades de OCR multilíngue da Mistral chegam ao mercado enquanto ferramentas de IA no editor ganham isolamento por contêiner. Comunidades debatendo escolhas de modelo e revisões de código revelam impactos de custos e integração.</p>
@@ -632,7 +638,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>9</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>8</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-21-egoinfinity-robot-learning-claude-fable-5-e-deer-flow-novidades-tecnicas-de-junh">EgoInfinity Robot Learning, Claude Fable 5 e Deer‑Flow: novidades técnicas de junho 2026</a></h3>
   <p>O motor de dados em escala da Hugging Face lança um modelo de aprendizado robotizado. O Claude Fable 5 entra no Bedrock exigindo compartilhamento de inferência, enquanto o Deer‑Flow da ByteDance amplia a oferta de SuperAgents open‑source.</p>
   <div class="chips"><span>hacker-news</span><span>google-news</span><span>github-trending</span><span>reddit</span><span>ml</span><span>research</span><span>anthropic fable5 custo</span><span>python</span><span>claude</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-19">2026-06-19</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-19-openai-reforca-rl-benefico-e-anthropic-enfrenta-bloqueio-temporario-do-fable-5-l">OpenAI reforça RL benéfico e Anthropic enfrenta bloqueio temporário do Fable 5: lições para</a></h3>
-  <p>OpenAI divulgou diretrizes de aprendizado por reforço para garantir modelos amplamente benéficos, enquanto Anthropic registrou uma interrupção ao restaurar acesso ao Fable 5 após respostas de modelos abertos. Esses eventos exigem ajustes imediatos em planejamentos de custo, arquitetura de runtime e rastreabilidade de decisões de IA.</p>
-  <div class="chips"><span>hacker-news</span><span>google-news</span><span>arxiv</span><span>ml</span><span>research</span><span>anthropic fable5</span><span>software-engineering</span><span>nlp</span></div>
 </article>
   </div>
 </section>
