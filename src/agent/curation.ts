@@ -1,4 +1,8 @@
 import type { Article } from "../knowledge/store.js";
+import { isLaunchOfDay } from "../utils/launch.js";
+
+// Above the ~144 ceiling of every other score term combined.
+const LAUNCH_OF_DAY_BOOST = 200;
 
 const GENERIC_TAGS = new Set([
   "ai",
@@ -21,6 +25,11 @@ const PRIMARY_SOURCE_PATTERNS = [
   /openai blog/i,
   /together ai/i,
   /vscode updates/i,
+  // Vendor release notes are the authoritative record of what shipped.
+  /^(?!techlead).* releases$/i,
+  /changelog/i,
+  /^hf daily papers$/i,
+  /^openrouter: new models$/i,
 ];
 
 /**
@@ -182,7 +191,12 @@ function editorialScore(
   const usefulTags = parseTags(article.tags).filter(
     (tag) => !GENERIC_TAGS.has(tag),
   ).length;
+  // Editorial rule: a model released today always leads, whatever else scored.
+  const launchOfDay = isLaunchOfDay(article, new Date(now))
+    ? LAUNCH_OF_DAY_BOOST
+    : 0;
   return (
+    launchOfDay +
     authority +
     communitySignal +
     focusBoost +
@@ -203,6 +217,8 @@ export function curateArticles(
   const rejected: RejectedArticle[] = [];
   const informative = articles.filter((article) => {
     const summary = article.summary?.trim() ?? "";
+    // Launch catalogs often ship a one-line description; the launch is still the story.
+    if (isLaunchOfDay(article, new Date(policy.now ?? Date.now()))) return true;
     if (
       summary.length >= minSummaryLength &&
       !/^sem conte[uú]do$/i.test(summary)

@@ -13,58 +13,31 @@ relevant parts only), prefer breadth over depth, illustrate flows and architectu
 diagrams instead of pseudocode, and always cite sources. You learn from the latest research and news to
 continuously improve your curation and clarity.`;
 
+// mergeKeywords pins the first 7 forever, so the head carries the highest signal.
 const DEFAULT_SEARCH_KEYWORDS = [
-  // IA & LLM core
-  "AI developer tools",
-  "LLM coding assistant",
-  "prompt engineering",
-  "AI agents architecture",
-  "agentic workflow",
-  "RAG Retrieval Augmented Generation",
-  "transformer models",
-  "fine-tuning LLMs",
-  "multimodal AI",
-  "vision language models",
-  // IA/ML específicos
-  "machine learning deployment",
-  "neural network architecture",
-  "computer vision CNN",
-  "natural language processing",
-  "deep learning frameworks",
-  "model optimization",
-  "inference acceleration",
-  // Ferramentas de IA
-  "AI coding assistants",
-  "Claude API",
-  "GPT integration",
-  "open source LLM",
-  "local LLM deployment",
-  // Agent Development
-  "LangChain framework",
-  "CrewAI agents",
-  "multi-agent systems",
-  "agent orchestration",
-  "tool use agents",
-  "autonomous agents",
-  // Research & Papers
-  "AI research papers",
-  "machine learning papers",
-  "transformer architecture",
-  "attention mechanism",
-  // Python para IA
-  "Python AI libraries",
-  "PyTorch",
-  "TensorFlow",
-  "Hugging Face",
-  "scikit-learn",
-  // Comunidades open source
-  "open source AI",
-  "AI model hugging face",
-  "LLM fine-tuning",
-  // Produtos e tendências
-  "AI product launches",
-  "AI startup news",
-  "machine learning trends",
+  "Claude Code",
+  "OpenAI Codex",
+  "GitHub Copilot agent",
+  "AI coding agent",
+  "Model Context Protocol",
+  "Gemini CLI",
+  "Cursor AI editor",
+  // Models and vendors
+  "Anthropic Claude model",
+  "OpenAI GPT model release",
+  "Google Gemini model",
+  "open-weight model release",
+  "Qwen DeepSeek model",
+  // Engineering practice
+  "LLM evals",
+  "prompt injection agent security",
+  "LLM inference cost",
+  "AI agent observability",
+  "RAG in production",
+  "vLLM Ollama local inference",
+  // Market and policy
+  "AI developer productivity study",
+  "AI regulation",
 ];
 
 export interface ImprovementResponse {

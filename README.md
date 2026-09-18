@@ -30,7 +30,7 @@ flowchart TD
 
 ## Features
 
-- **Multi-source crawling**: RSS/HTML sources, Google News keyword search, SearXNG for Reddit/X.com, Hacker News, TabNews, GitHub Trending, and Reddit community signal analysis
+- **Multi-source crawling**: RSS/HTML sources, Google News keyword search, SearXNG for Reddit/X.com, Hacker News, TabNews, GitHub Trending, Hugging Face Daily Papers (ranked by upvotes), Hugging Face trending models, new models from major labs (OpenRouter catalog, last 14 days), coding-agent release notes (Claude Code, Codex, Gemini CLI, Copilot CLI, Cursor, MCP), and Reddit community signal analysis. Feed items older than 14 days are skipped and Atom bodies back-fill empty snippets
 - **Self-improvement loop**: System prompt and search keywords evolve from ingested content
 - **Reliable orchestration**: Overlapping cycles are skipped and every run is recorded in SQLite
 - **Editorial scoring**: Recency, engagement, source authority, diversity, and cross-source evidence shape selection
@@ -121,6 +121,10 @@ src/
   config.ts             # Env loading, validation, frozen config
   crawler/
     index.ts            # RSS, Google News, SearXNG, Reddit signal crawlers
+    agent-sources.ts    # Coding-agent releases, agent SDKs, practitioner feeds
+    feed-items.ts       # Recency window, newest-first selection, summary fallback
+    hf-papers.ts        # Hugging Face Daily Papers ranked by upvotes
+    model-launches.ts   # HF trending models + new-model launches (OpenRouter)
     reddit-smoke.ts     # Standalone Reddit community signal smoke test
   knowledge/
     store.ts            # SQLite persistence (articles, snippets, state, publish log)
