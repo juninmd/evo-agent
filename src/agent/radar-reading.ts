@@ -1,3 +1,4 @@
+import { UNTRUSTED_MATERIAL_RULE } from "./prompt-guards.js";
 const MIN_TLDR_ITEMS = 5;
 // The model leads with whatever it reads first: news before popularity.
 const READING_PRIORITY = [
@@ -28,6 +29,7 @@ export const RADAR_SYSTEM_PROMPT = [
   "Priorize releases de agentes de codigo, mudancas de API/preco e papers com mais votos; cubra frentes diferentes em vez de repetir o mesmo assunto.",
   "Estrelas acumuladas do GitHub nao sao noticia: cite um repositorio so pelo que ele lancou ou mudou, nunca pela contagem de estrelas.",
   "Nao invente dados: use apenas o que esta no material fornecido.",
+  UNTRUSTED_MATERIAL_RULE,
   "Nao mostre raciocinio nem rascunho: a resposta comeca exatamente em '## TL;DR'.",
 ].join(" ");
 

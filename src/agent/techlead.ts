@@ -3,6 +3,7 @@ import type { Article } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { localDayIso } from "../utils/date.js";
 import { log } from "../utils/logger.js";
+import { UNTRUSTED_MATERIAL_RULE } from "./prompt-guards.js";
 import type { GeneratedArticle } from "./types.js";
 
 /**
@@ -58,6 +59,7 @@ const TECHLEAD_SYSTEM_PROMPT = [
   "'**Por que importa:** <impacto nesse stack ou time>',",
   "'**Acao:** testar | ler | ignorar', 'Fonte: <url exata do material>'.",
   "Use apenas URLs do material. Nao invente versoes nem numeros.",
+  UNTRUSTED_MATERIAL_RULE,
 ].join(" ");
 
 export function citedUrls(markdown: string): string[] {

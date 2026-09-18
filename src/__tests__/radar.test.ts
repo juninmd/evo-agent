@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { UNTRUSTED_MATERIAL_RULE } from "../agent/prompt-guards.js";
+import { RADAR_SYSTEM_PROMPT } from "../agent/radar-reading.js";
 import {
   bucketRadarArticles,
   dedupeByUrl,
@@ -353,6 +355,10 @@ describe("radar", () => {
   it("names the edition by day", () => {
     expect(radarDate(new Date("2026-08-06T23:30:00Z"))).toBe("2026-08-06");
     expect(radarTitle("2026-08-06")).toBe("Radar IA — 06/08/2026");
+  });
+
+  it("tells the model that feed text is data, so a poisoned title cannot steer the reading", () => {
+    expect(RADAR_SYSTEM_PROMPT).toContain(UNTRUSTED_MATERIAL_RULE);
   });
 
   it("feeds the model news before popularity, so star counts cannot lead the edition", () => {

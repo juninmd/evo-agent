@@ -9,6 +9,7 @@ vi.mock("../config.js", () => ({
 }));
 
 const { db, getDb } = await import("../knowledge/store.js");
+const { UNTRUSTED_MATERIAL_RULE } = await import("../agent/prompt-guards.js");
 const {
   TECHLEAD_MAX_ITEMS,
   generateTechleadDigest,
@@ -171,5 +172,17 @@ describe("generateTechleadDigest", () => {
     };
     await expect(run(ask, () => [])).rejects.toThrow(/no articles/);
     expect(asked).toBe(false);
+  });
+
+  it("tells the model that feed text is data, so a poisoned title cannot steer the digest", async () => {
+    let system = "";
+    await generateTechleadDigest(new Date(), {
+      load: () => pool,
+      ask: async (_prompt, systemPrompt) => {
+        system = systemPrompt ?? "";
+        return item("https://s/2");
+      },
+    });
+    expect(system).toContain(UNTRUSTED_MATERIAL_RULE);
   });
 });
