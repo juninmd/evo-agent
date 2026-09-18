@@ -6,6 +6,7 @@ import {
   extractReading,
   fallbackReading,
   radarDate,
+  radarDigestForModel,
   radarTitle,
   renderRadarTables,
 } from "../agent/radar.js";
@@ -352,5 +353,22 @@ describe("radar", () => {
   it("names the edition by day", () => {
     expect(radarDate(new Date("2026-08-06T23:30:00Z"))).toBe("2026-08-06");
     expect(radarTitle("2026-08-06")).toBe("Radar IA — 06/08/2026");
+  });
+
+  it("feeds the model news before popularity, so star counts cannot lead the edition", () => {
+    const digest = radarDigestForModel(
+      bucketRadarArticles([
+        article({ id: 1, title: "huge-repo", engagement_score: 288305 }),
+        article({
+          id: 2,
+          title: "Codex CLI 0.155.0",
+          source: "Codex CLI Releases",
+          url: "https://github.com/openai/codex/releases/tag/0.155.0",
+        }),
+      ]),
+    );
+    expect(digest.indexOf("Codex CLI 0.155.0")).toBeLessThan(
+      digest.indexOf("huge-repo"),
+    );
   });
 });

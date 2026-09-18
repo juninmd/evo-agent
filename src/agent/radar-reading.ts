@@ -1,4 +1,35 @@
 const MIN_TLDR_ITEMS = 5;
+// The model leads with whatever it reads first: news before popularity.
+const READING_PRIORITY = [
+  "models",
+  "releases",
+  "vendors",
+  "papers",
+  "hackernews",
+  "reddit",
+  "community",
+  "github",
+];
+
+export function readingOrder<T extends { key: string }>(buckets: T[]): T[] {
+  const rank = (key: string) => {
+    const index = READING_PRIORITY.indexOf(key);
+    return index < 0 ? READING_PRIORITY.length : index;
+  };
+  return [...buckets].sort((left, right) => rank(left.key) - rank(right.key));
+}
+
+export const RADAR_SYSTEM_PROMPT = [
+  "Voce escreve o resumo executivo de um radar diario de IA para um tech lead.",
+  "Responda em pt-BR, denso, sem floreio, sem introducao e sem conclusao.",
+  "Formato exato: uma secao '## TL;DR' com 10 a 12 itens numerados,",
+  "seguida de uma secao '## O que observar' com 3 bullets.",
+  "Cada item do TL;DR e uma frase curta com um fato concreto (numero, nome de produto ou versao).",
+  "Priorize releases de agentes de codigo, mudancas de API/preco e papers com mais votos; cubra frentes diferentes em vez de repetir o mesmo assunto.",
+  "Estrelas acumuladas do GitHub nao sao noticia: cite um repositorio so pelo que ele lancou ou mudou, nunca pela contagem de estrelas.",
+  "Nao invente dados: use apenas o que esta no material fornecido.",
+  "Nao mostre raciocinio nem rascunho: a resposta comeca exatamente em '## TL;DR'.",
+].join(" ");
 
 /**
  * Reasoning models behind LiteLLM leak their scratchpad into the text; the

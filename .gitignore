@@ -24,3 +24,4 @@ test-*.ts
 temp/
 dump_*.json
 homolog/.tmp/
+.playwright-mcp/

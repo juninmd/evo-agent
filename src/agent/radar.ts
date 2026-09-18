@@ -1,4 +1,5 @@
 import { db } from "../knowledge/store.js";
+import { newspaperAttachment, newspaperLink } from "../newspaper/index.js";
 import { ask } from "../utils/ai.js";
 import { log } from "../utils/logger.js";
 import {
@@ -7,8 +8,12 @@ import {
   dedupeByUrl,
 } from "./radar-buckets.js";
 import { cell, displayUrl, rowSummary } from "./radar-format.js";
-import { renderLaunchHighlights } from "./radar-launches.js";
-import { extractReading } from "./radar-reading.js";
+import { launchesOfDay, renderLaunchHighlights } from "./radar-launches.js";
+import {
+  RADAR_SYSTEM_PROMPT,
+  extractReading,
+  readingOrder,
+} from "./radar-reading.js";
 import type { GeneratedArticle } from "./types.js";
 
 export {
@@ -53,7 +58,7 @@ export function renderRadarTables(buckets: RadarBucket[]): string {
 }
 
 export function radarDigestForModel(buckets: RadarBucket[]): string {
-  return buckets
+  return readingOrder(buckets)
     .map((bucket) =>
       [
         `${bucket.title}:`,
@@ -88,17 +93,6 @@ export function fallbackReading(buckets: RadarBucket[]): string {
     "",
   ].join("\n");
 }
-
-const RADAR_SYSTEM_PROMPT = [
-  "Voce escreve o resumo executivo de um radar diario de IA para um tech lead.",
-  "Responda em pt-BR, denso, sem floreio, sem introducao e sem conclusao.",
-  "Formato exato: uma secao '## TL;DR' com 10 a 12 itens numerados,",
-  "seguida de uma secao '## O que observar' com 3 bullets.",
-  "Cada item do TL;DR e uma frase curta com um fato concreto (numero, nome de produto ou versao).",
-  "Priorize releases de agentes de codigo, mudancas de API/preco e papers com mais votos; cubra frentes diferentes em vez de repetir o mesmo assunto.",
-  "Nao invente dados: use apenas o que esta no material fornecido.",
-  "Nao mostre raciocinio nem rascunho: a resposta comeca exatamente em '## TL;DR'.",
-].join(" ");
 
 export function radarDate(now = new Date()): string {
   return now.toISOString().slice(0, 10);
@@ -156,7 +150,14 @@ export async function generateRadar(
 
   const day = radarDate(now);
   const selected = dedupeByUrl(buckets.flatMap((bucket) => bucket.articles));
+  const newspaper = newspaperAttachment({
+    day,
+    buckets,
+    launches: launchesOfDay(articles, now),
+    reading,
+  });
   const content = [
+    newspaper ? `${newspaperLink(day)}\n` : "",
     launches,
     reading.trim(),
     "",
@@ -189,5 +190,6 @@ export async function generateRadar(
         0,
     },
     reportPeriod: "radar",
+    attachments: newspaper ? [newspaper] : [],
   };
 }

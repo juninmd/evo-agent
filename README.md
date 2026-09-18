@@ -134,6 +134,12 @@ src/
     ebook.ts            # Living handbook refinement
     editorial-renderer.ts # Deterministic article rendering and citations
     prompt-policy.ts    # Prompt promotion and rollback policy
+  newspaper/
+    edition.ts          # Radar buckets + reading -> headline, desks, stories
+    images.ts           # Card image URLs from validated GitHub/Hub ids (host allowlist)
+    inline.ts           # Reading parser and escaped inline markdown
+    render.ts           # Standalone HTML page (site document or embeddable fragment)
+    styles.ts           # Newspaper CSS with light/dark tokens
   publisher/
     github.ts           # Atomic GitHub API transaction and publication
     site-renderer.ts    # Jekyll scaffold, layouts, CSS, and index rendering
@@ -154,6 +160,7 @@ Articles are available at `https://<GITHUB_OWNER>.github.io/<GITHUB_REPO>/` with
 - Light and dark theme toggle (persisted in `localStorage`)
 - Article archive grouped by year and month
 - Weekly reports section
+- Daily newspaper edition at `jornal/<YYYY-MM-DD>.html` ("Gazeta dos Agentes"), published in the same commit as the radar and linked from it: headline, TL;DR, one desk per radar bucket, and card images derived from GitHub and Hugging Face URLs (no page scraping)
 - Markdown download button per article
 - Responsive typography (Source Serif 4 body, IBM Plex Mono code, IBM Plex Sans UI)
 

@@ -17,8 +17,12 @@ export function cell(value: string): string {
 const REDDIT_POST_PREFIX =
   /^Post da comunidade em r\/\S+ sobre ".*?"\. Relato do autor, sem os comentarios da discussao\.\s*/;
 
+export function cleanSummary(summary: string): string {
+  return summary.replace(REDDIT_POST_PREFIX, "").trim();
+}
+
 export function rowSummary(summary: string): string {
-  const text = cell(summary.replace(REDDIT_POST_PREFIX, ""));
+  const text = cell(cleanSummary(summary));
   if (text.length <= ROW_SUMMARY_MAX) return text || "-";
   const cut = text.slice(0, ROW_SUMMARY_MAX);
   const space = cut.lastIndexOf(" ");
