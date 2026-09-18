@@ -168,6 +168,14 @@ Articles are available at `https://<GITHUB_OWNER>.github.io/<GITHUB_REPO>/` with
 
 Docker image published at `ghcr.io/juninmd/evo-agent:latest`. Kubernetes manifests live in a separate `app-charts/evo-agent/` repository. Secrets are injected via environment — never commit `.env` or credentials to this repository.
 
+## Code Quality (SonarQube Cloud)
+
+`sonar-project.properties` configures a CI-based SonarQube Cloud analysis with coverage (`coverage/lcov.info` from `npm run test:coverage`). The CI scan step is not enabled yet; before adding it:
+
+1. On SonarQube Cloud, create the project `juninmd_evo-agent` in the `juninmd` organization (public).
+2. In the project, **Administration → Analysis Method**: turn **Automatic Analysis off** (it conflicts with CI analysis).
+3. Generate a token and save it as the repository secret `SONAR_TOKEN`.
+
 ## Security
 
 - `.env` excluded from version control

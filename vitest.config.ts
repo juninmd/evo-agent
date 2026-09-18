@@ -5,7 +5,7 @@ export default defineConfig({
     exclude: ["dist/**", "node_modules/**"],
     coverage: {
       provider: "v8",
-      reporter: ["text", "json-summary"],
+      reporter: ["text", "json-summary", "lcov"],
       include: ["src/**/*.ts"],
       exclude: [
         "src/__tests__/**",
