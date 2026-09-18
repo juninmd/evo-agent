@@ -122,7 +122,13 @@ const NOT_TECHLEAD_SQL = `source NOT LIKE '${TECHLEAD_SOURCE_PREFIX}%'`;
 // LiteLLM is already crawled as an AI source and is part of the stack too.
 const TECHLEAD_SQL = `(source LIKE '${TECHLEAD_SOURCE_PREFIX}%' OR source = 'LiteLLM Releases')`;
 
+// One transaction: a failed step leaves the schema untouched, and a file
+// database pays one sync instead of one per statement.
 export function migrate(db: Database.Database) {
+  db.transaction(() => applyMigrations(db))();
+}
+
+function applyMigrations(db: Database.Database) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS articles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

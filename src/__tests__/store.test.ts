@@ -3,6 +3,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import Database from "better-sqlite3";
 import { beforeAll, describe, expect, it, vi } from "vitest";
+// Static, so module loading is not timed as part of the migration test; vi.mock is hoisted above it.
+import { migrate } from "../knowledge/store.js";
 
 // We test the DB schema and operations directly, bypassing the singleton
 // which depends on config.ts (env vars).
@@ -175,9 +177,36 @@ describe("Database - agent_state", () => {
   });
 });
 
+describe("migrate - atomicity", () => {
+  it("leaves a legacy database untouched when a later step fails", () => {
+    const legacyDb = new Database(":memory:");
+    legacyDb.exec(`
+      CREATE TABLE articles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        source TEXT NOT NULL,
+        url TEXT UNIQUE NOT NULL,
+        summary TEXT,
+        tags TEXT DEFAULT '[]',
+        crawled_at TEXT DEFAULT (datetime('now'))
+      );
+      -- A table squatting on an index name makes the final migration step fail.
+      CREATE TABLE idx_articles_engagement (id INTEGER);
+    `);
+
+    expect(() => migrate(legacyDb)).toThrow();
+
+    const columns = legacyDb
+      .prepare("PRAGMA table_info(articles)")
+      .all() as Array<{ name: string }>;
+    expect(columns.map((column) => column.name)).not.toContain(
+      "engagement_score",
+    );
+  });
+});
+
 describe("migrate - legacy database without engagement_score", () => {
   it("adds the engagement_score column to pre-existing databases", async () => {
-    const { migrate } = await import("../knowledge/store.js");
     const legacyDbPath = join(tmpdir(), `evo-test-legacy-${Date.now()}.db`);
     const legacyDb = new Database(legacyDbPath);
     // Old production schema: articles table without engagement_score
