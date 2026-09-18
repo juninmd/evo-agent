@@ -7,7 +7,11 @@ export function displayUrl(url: string): string {
 }
 
 export function cell(value: string): string {
-  return value.replace(/\|/g, "\\|").replace(/\s+/g, " ").trim();
+  // Titles come from external feeds; escaping brackets stops them from injecting links.
+  return value
+    .replace(/[|[\]`]/g, "\\$&")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 const REDDIT_POST_PREFIX =

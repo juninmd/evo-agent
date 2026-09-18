@@ -80,6 +80,18 @@ describe("radar", () => {
     expect(markdown).toContain("| 42 |");
   });
 
+  it("keeps an untrusted title from splicing its own link into the table", () => {
+    const markdown = renderRadarTables(
+      bucketRadarArticles([
+        article({ title: "Foo](https://evil.example)[`Bar`" }),
+      ]),
+    );
+    expect(markdown).not.toMatch(/[^\\]\]\(https:\/\/evil\.example\)/);
+    expect(markdown).toContain(
+      "[Foo\\](https://evil.example)\\[\\`Bar\\`](https://github.com/a/b)",
+    );
+  });
+
   it("falls back to a raw ranking when the model is unavailable", () => {
     const reading = fallbackReading(
       bucketRadarArticles([
