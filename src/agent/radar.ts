@@ -1,8 +1,29 @@
 import { db } from "../knowledge/store.js";
-import type { Article } from "../knowledge/store.js";
+import { newspaperAttachment, newspaperLink } from "../newspaper/index.js";
 import { ask } from "../utils/ai.js";
 import { log } from "../utils/logger.js";
+import {
+  type RadarBucket,
+  bucketRadarArticles,
+  dedupeByUrl,
+} from "./radar-buckets.js";
+import { cell, displayUrl, rowSummary } from "./radar-format.js";
+import { launchesOfDay, renderLaunchHighlights } from "./radar-launches.js";
+import {
+  RADAR_SYSTEM_PROMPT,
+  extractReading,
+  readingOrder,
+} from "./radar-reading.js";
 import type { GeneratedArticle } from "./types.js";
+
+export {
+  bucketRadarArticles,
+  dedupeByUrl,
+  displayUrl,
+  extractReading,
+  type RadarBucket,
+  renderLaunchHighlights,
+};
 
 /**
  * The radar is a cross-source sweep, not an essay: the tables are built
@@ -10,95 +31,8 @@ import type { GeneratedArticle } from "./types.js";
  * what changed. A model outage degrades the summary, never the data.
  */
 
-export interface RadarBucket {
-  key: string;
-  title: string;
-  articles: Article[];
-}
-
-const BUCKET_ORDER: Array<{
-  key: string;
-  title: string;
-  matches: (source: string) => boolean;
-}> = [
-  {
-    key: "github",
-    title: "GitHub Trending",
-    matches: (s) => s.startsWith("github trending"),
-  },
-  {
-    key: "reddit",
-    title: "Reddit",
-    matches: (s) => s.includes("reddit"),
-  },
-  {
-    key: "hackernews",
-    title: "Hacker News",
-    matches: (s) => s.includes("hacker news"),
-  },
-  {
-    key: "vendors",
-    title: "Fabricantes e ferramentas",
-    matches: (s) =>
-      [
-        "anthropic",
-        "openai",
-        "github blog",
-        "google",
-        "hugging face",
-        "vscode",
-        "mistral",
-        "together ai",
-        "deepmind",
-      ].some((needle) => s.includes(needle)),
-  },
-  {
-    key: "papers",
-    title: "Pesquisa",
-    matches: (s) => s.includes("arxiv"),
-  },
-  {
-    key: "community",
-    title: "Comunidade e produtos",
-    matches: () => true,
-  },
-];
-
-const MAX_PER_BUCKET = 12;
+const READING_ATTEMPTS = 2;
 export const RADAR_WINDOW_HOURS = 24;
-
-export function bucketRadarArticles(articles: Article[]): RadarBucket[] {
-  const byKey = new Map<string, Article[]>();
-  for (const article of articles) {
-    const source = article.source.toLowerCase();
-    const bucket = BUCKET_ORDER.find((candidate) => candidate.matches(source));
-    if (!bucket) continue;
-    const list = byKey.get(bucket.key) ?? [];
-    list.push(article);
-    byKey.set(bucket.key, list);
-  }
-
-  return BUCKET_ORDER.map((bucket) => ({
-    key: bucket.key,
-    title: bucket.title,
-    articles: (byKey.get(bucket.key) ?? [])
-      .sort(
-        (left, right) =>
-          right.engagement_score - left.engagement_score ||
-          right.crawled_at.localeCompare(left.crawled_at),
-      )
-      .slice(0, MAX_PER_BUCKET),
-  })).filter((bucket) => bucket.articles.length > 0);
-}
-
-/** Trending signals are stored as `<repo>#trending-daily-<day>`. */
-export function displayUrl(url: string): string {
-  return url.split("#")[0];
-}
-
-function cell(value: string): string {
-  return value.replace(/\|/g, "\\|").replace(/\s+/g, " ").trim();
-}
 
 export function renderRadarTables(buckets: RadarBucket[]): string {
   return buckets
@@ -108,14 +42,14 @@ export function renderRadarTables(buckets: RadarBucket[]): string {
           const signal = article.engagement_score
             ? String(article.engagement_score)
             : "-";
-          return `| [${cell(article.title)}](${displayUrl(article.url)}) | ${cell(article.source)} | ${signal} |`;
+          return `| [${cell(article.title)}](${displayUrl(article.url)}) | ${rowSummary(article.summary)} | ${cell(article.source)} | ${signal} |`;
         })
         .join("\n");
       return [
         `## ${bucket.title}`,
         "",
-        "| Item | Fonte | Sinal |",
-        "|---|---|---|",
+        "| Item | Resumo | Fonte | Sinal |",
+        "|---|---|---|---|",
         rows,
         "",
       ].join("\n");
@@ -124,13 +58,13 @@ export function renderRadarTables(buckets: RadarBucket[]): string {
 }
 
 export function radarDigestForModel(buckets: RadarBucket[]): string {
-  return buckets
+  return readingOrder(buckets)
     .map((bucket) =>
       [
         `${bucket.title}:`,
         ...bucket.articles.map(
           (article) =>
-            `- ${article.title} (sinal ${article.engagement_score}) :: ${article.summary.slice(0, 240)}`,
+            `- [${article.source}] ${article.title} (sinal ${article.engagement_score}) :: ${article.summary.slice(0, 240)}`,
         ),
       ].join("\n"),
     )
@@ -138,11 +72,18 @@ export function radarDigestForModel(buckets: RadarBucket[]): string {
 }
 
 export function fallbackReading(buckets: RadarBucket[]): string {
-  const top = buckets
-    .flatMap((bucket) => bucket.articles)
-    .sort((left, right) => right.engagement_score - left.engagement_score)
-    .slice(0, 6)
-    .map((article, index) => `${index + 1}. ${article.title}`);
+  const top = dedupeByUrl(
+    buckets
+      .flatMap((bucket) => bucket.articles)
+      .sort((left, right) => right.engagement_score - left.engagement_score),
+  )
+    .slice(0, 8)
+    .map((article, index) => {
+      const summary = article.summary.trim()
+        ? ` — ${rowSummary(article.summary)}`
+        : "";
+      return `${index + 1}. **${cell(article.title)}** (${article.source})${summary}`;
+    });
   return [
     "## TL;DR",
     "",
@@ -151,30 +92,6 @@ export function fallbackReading(buckets: RadarBucket[]): string {
     ...top,
     "",
   ].join("\n");
-}
-
-const RADAR_SYSTEM_PROMPT = [
-  "Voce escreve o resumo executivo de um radar diario de IA para um tech lead.",
-  "Responda em pt-BR, denso, sem floreio, sem introducao e sem conclusao.",
-  "Formato exato: uma secao '## TL;DR' com 6 a 8 itens numerados,",
-  "seguida de uma secao '## O que observar' com 3 bullets.",
-  "Cada item do TL;DR precisa de um fato concreto (numero, nome de produto ou versao).",
-  "Nao invente dados: use apenas o que esta no material fornecido.",
-].join(" ");
-
-/**
- * A repo on both the daily and the weekly trending list is two signals with one
- * URL once the day key is stripped, and published_evidence is unique per
- * (article, source).
- */
-export function dedupeByUrl(articles: Article[]): Article[] {
-  const seen = new Set<string>();
-  return articles.filter((article) => {
-    const url = displayUrl(article.url);
-    if (seen.has(url)) return false;
-    seen.add(url);
-    return true;
-  });
 }
 
 export function radarDate(now = new Date()): string {
@@ -195,23 +112,53 @@ export async function generateRadar(
     throw new Error("Radar has no articles in the last 24 hours");
   }
 
-  let reading: string;
-  try {
-    reading = await ask(
-      `Material coletado nas ultimas ${RADAR_WINDOW_HOURS} horas:\n\n${radarDigestForModel(buckets)}`,
-      RADAR_SYSTEM_PROMPT,
-      { maxOutputTokens: 2000 },
-    );
-  } catch (err) {
-    log.warn(
-      `Radar reading fell back to raw ranking: ${err instanceof Error ? err.message : String(err)}`,
-    );
+  const launches = renderLaunchHighlights(articles, now);
+  const prompt = [
+    `Material coletado nas ultimas ${RADAR_WINDOW_HOURS} horas:`,
+    "",
+    radarDigestForModel(buckets),
+    "",
+    launches
+      ? `Modelos lancados hoje (o item 1 do TL;DR obrigatoriamente cobre estes lancamentos):\n${launches}`
+      : "",
+    "Escreva em portugues do Brasil e nomeie o produto antes da versao (ex.: 'OpenAI Agents SDK v0.22.1').",
+  ].join("\n");
+  let reading: string | null = null;
+  // The LiteLLM proxy caches by prompt, so a retry must differ to be re-sampled.
+  for (let attempt = 1; attempt <= READING_ATTEMPTS && !reading; attempt++) {
+    const retryNote =
+      attempt > 1
+        ? `\n\nTentativa ${attempt}: a anterior veio incompleta ou em ingles. Responda somente em portugues do Brasil.`
+        : "";
+    try {
+      reading = extractReading(
+        await ask(`${prompt}${retryNote}`, RADAR_SYSTEM_PROMPT, {
+          maxOutputTokens: 4000,
+        }),
+      );
+      if (!reading) log.warn(`Radar reading attempt ${attempt} unusable`);
+    } catch (err) {
+      log.warn(
+        `Radar reading attempt ${attempt} failed: ${err instanceof Error ? err.message : String(err)}`,
+      );
+    }
+  }
+  if (!reading) {
+    log.warn("Radar reading fell back to raw ranking");
     reading = fallbackReading(buckets);
   }
 
   const day = radarDate(now);
   const selected = dedupeByUrl(buckets.flatMap((bucket) => bucket.articles));
+  const newspaper = newspaperAttachment({
+    day,
+    buckets,
+    launches: launchesOfDay(articles, now),
+    reading,
+  });
   const content = [
+    newspaper ? `${newspaperLink(day)}\n` : "",
+    launches,
     reading.trim(),
     "",
     renderRadarTables(buckets),
@@ -243,5 +190,6 @@ export async function generateRadar(
         0,
     },
     reportPeriod: "radar",
+    attachments: newspaper ? [newspaper] : [],
   };
 }

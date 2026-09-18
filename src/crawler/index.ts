@@ -9,6 +9,24 @@ import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 import { isSafeExternalUrl } from "../utils/url.js";
+import { AGENT_SOURCES } from "./agent-sources.js";
+import {
+  feedItemSummary,
+  isEmptyRelease,
+  isPrereleaseTitle,
+  selectFeedItems,
+  summarizeSourceContent,
+} from "./feed-items.js";
+import { HF_PAPERS_SOURCE, crawlHuggingFacePapers } from "./hf-papers.js";
+import {
+  HF_TRENDING_SOURCE,
+  OPENROUTER_SOURCE,
+  crawlModelLaunches,
+  crawlTrendingModels,
+} from "./model-launches.js";
+import { TECHLEAD_SOURCES } from "./techlead-sources.js";
+
+export { summarizeSourceContent };
 
 chromium.use(stealth());
 
@@ -97,7 +115,7 @@ interface FeedSource {
   url: string;
   tags: string[];
   // HTML sources are scraped via Playwright instead of RSS parsing.
-  html?: { hrefPrefix: string; baseUrl: string };
+  html?: { hrefPrefix: string; baseUrl: string; excludePrefix?: string };
 }
 
 interface RedditComment {
@@ -303,51 +321,16 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["ai", "ml", "research", "llm"],
   },
   {
-    name: "Colah's Blog",
-    url: "http://colah.github.io/rss.xml",
-    tags: ["ai", "ml", "neural-networks", "research"],
-  },
-  {
-    name: "Distill.pub",
-    url: "https://distill.pub/rss.xml",
-    tags: ["ai", "ml", "visualization", "research"],
-  },
-  {
     name: "Simon Willison's Weblog",
     url: "https://simonwillison.net/atom/entries/",
     tags: ["ai", "llm", "developer", "tools"],
-  },
-  {
-    name: "Chip Huyen Blog",
-    url: "https://huyenchip.com/feed.xml",
-    tags: ["ai", "ml", "mlops", "engineering"],
   },
   {
     name: "PyTorch Blog",
     url: "https://pytorch.org/blog/feed/",
     tags: ["pytorch", "ml", "training", "inference"],
   },
-  {
-    name: "TensorFlow Blog",
-    url: "https://blog.tensorflow.org/feeds/posts/default",
-    tags: ["tensorflow", "ml", "training", "inference"],
-  },
   // Research papers
-  {
-    name: "arXiv cs.AI",
-    url: "https://rss.arxiv.org/rss/cs.AI",
-    tags: ["arxiv", "ai", "research", "papers"],
-  },
-  {
-    name: "arXiv cs.LG",
-    url: "https://rss.arxiv.org/rss/cs.LG",
-    tags: ["arxiv", "ml", "research", "papers"],
-  },
-  {
-    name: "arXiv cs.CL",
-    url: "https://rss.arxiv.org/rss/cs.CL",
-    tags: ["arxiv", "nlp", "llm", "research", "papers"],
-  },
   {
     name: "arXiv cs.SE",
     url: "https://rss.arxiv.org/rss/cs.SE",
@@ -358,11 +341,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
       "research",
       "papers",
     ],
-  },
-  {
-    name: "arXiv cs.CV",
-    url: "https://rss.arxiv.org/rss/cs.CV",
-    tags: ["arxiv", "computer-vision", "ai", "research", "papers"],
   },
   {
     name: "Reddit: ClaudeAI",
@@ -491,11 +469,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["v2ex", "chinese", "ai", "developer"],
   },
   {
-    name: "Mistral AI",
-    url: "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_mistral.xml",
-    tags: ["ai frontier", "mistralai", "ai"],
-  },
-  {
     name: "Together AI",
     url: "https://www.together.ai/blog/rss.xml",
     tags: ["ai frontier", "togetherai", "ai"],
@@ -509,16 +482,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "Google DeepMind",
     url: "https://deepmind.google/blog/rss.xml",
     tags: ["ai frontier", "googledeepmind", "ai"],
-  },
-  {
-    name: "Hacker News: AI",
-    url: "https://hnrss.org/newest?q=AI+OR+LLM+OR+GPT+OR+Claude+OR+agent&count=15",
-    tags: ["hackernews", "ai", "developer"],
-  },
-  {
-    name: "Hacker News: Machine Learning",
-    url: "https://hnrss.org/newest?q=machine+learning+OR+deep+learning+OR+transformer&count=15",
-    tags: ["hackernews", "ml", "research"],
   },
   // AI Agent Frameworks
   {
@@ -535,11 +498,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     name: "CrewAI Framework",
     url: "https://github.com/joaomdmoura/crewai/releases.atom",
     tags: ["crewai", "agents", "llm-framework"],
-  },
-  {
-    name: "AutoGen Releases",
-    url: "https://github.com/microsoft/autogen/releases.atom",
-    tags: ["autogen", "agents", "llm-framework"],
   },
   {
     name: "Dify Releases",
@@ -563,25 +521,20 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
   // AI Research & Leaders
   {
-    name: "OpenAI Blog",
-    url: "https://openai.com/blog/rss.xml",
-    tags: ["openai", "ai", "blog"],
-  },
-  {
     name: "Anthropic Research",
     url: "https://www.anthropic.com/research",
     tags: ["anthropic", "research", "ai"],
-    html: { hrefPrefix: "/research/", baseUrl: "https://www.anthropic.com" },
+    // Team pages share the prefix and are navigation, not publications.
+    html: {
+      hrefPrefix: "/research/",
+      baseUrl: "https://www.anthropic.com",
+      excludePrefix: "/research/team/",
+    },
   },
   {
     name: "Latent Space",
     url: "https://latent.space/feed",
     tags: ["ai-engineering", "agents", "research"],
-  },
-  {
-    name: "The Gradient",
-    url: "https://thegradient.pub/rss/",
-    tags: ["ai", "research", "essays"],
   },
   {
     name: "Ahead of AI (Sebastian Raschka)",
@@ -1543,18 +1496,6 @@ async function crawlTabNews(): Promise<number> {
   return newCount;
 }
 
-export function summarizeSourceContent(value: string, maxLength = 800): string {
-  return value
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/[#*`_>|~]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, maxLength);
-}
-
 async function crawlAiCommunityPosts(): Promise<number> {
   let newCount = 0;
   const aiTags = ["ai", "llm", "machine-learning", "agents"];
@@ -1667,7 +1608,13 @@ async function crawlHtmlSource(source: FeedSource): Promise<number> {
         );
       }
 
-      for (const article of articles.slice(0, 10)) {
+      const { excludePrefix } = source.html ?? {};
+      const listed = excludePrefix
+        ? articles.filter(
+            (article) => !article.url.startsWith(`${baseUrl}${excludePrefix}`),
+          )
+        : articles;
+      for (const article of listed.slice(0, 10)) {
         if (!article.url || !article.title) continue;
         if (db.urlExists(article.url)) continue;
 
@@ -1703,9 +1650,12 @@ export async function crawlAll(): Promise<CrawlReport> {
 }
 
 async function crawlAllInner(): Promise<CrawlReport> {
-  const sources = [...DEFAULT_SOURCES, ...getDynamicSources()].filter(
-    (s) => s?.url && s.name,
-  );
+  const sources = [
+    ...DEFAULT_SOURCES,
+    ...AGENT_SOURCES,
+    ...TECHLEAD_SOURCES,
+    ...getDynamicSources(),
+  ].filter((s) => s?.url && s.name);
   let newCount = 0;
   let redditRateLimited = false;
   const metrics: Record<string, { saved: number; failed: boolean }> = {};
@@ -1767,7 +1717,14 @@ async function crawlAllInner(): Promise<CrawlReport> {
 
       if (!feedData?.items) return;
 
-      for (const item of feedData.items.slice(0, 10)) {
+      const newsworthy = feedData.items
+        .map((item) => ({ ...item, summary: feedItemSummary(item) }))
+        .filter(
+          (item) =>
+            !isEmptyRelease(item.summary) &&
+            !isPrereleaseTitle(item.title ?? ""),
+        );
+      for (const item of selectFeedItems(newsworthy)) {
         if (!item.link || !item.title) continue;
         if (db.urlExists(item.link)) continue;
         if (source.name.startsWith("V2EX") && !isV2exAiRelevant(item.title))
@@ -1776,7 +1733,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
           title: item.title,
           source: source.name,
           url: item.link,
-          summary: item.contentSnippet?.slice(0, 500) ?? "",
+          summary: item.summary,
           tags: JSON.stringify(source.tags),
           engagement_score: 0,
         });
@@ -1878,6 +1835,9 @@ async function crawlAllInner(): Promise<CrawlReport> {
     { name: "AI Community Posts", fn: crawlAiCommunityPosts },
     { name: "GitHub Trending", fn: crawlGitHubTrending },
     { name: "Hacker News Algolia", fn: crawlHackerNewsAlgolia },
+    { name: HF_PAPERS_SOURCE, fn: () => crawlHuggingFacePapers() },
+    { name: HF_TRENDING_SOURCE, fn: () => crawlTrendingModels() },
+    { name: OPENROUTER_SOURCE, fn: () => crawlModelLaunches() },
     { name: "Reddit Community Signals", fn: crawlRedditCommunitySignals },
     { name: "TabNews", fn: crawlTabNews },
   ];

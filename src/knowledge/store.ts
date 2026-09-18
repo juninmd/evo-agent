@@ -116,7 +116,19 @@ const PRIMARY_SOURCE_SQL = `
   OR lower(source) LIKE '%vscode updates%'
 `;
 
+/** Stack and leadership feeds belong to the techlead digest, never to the AI editions. */
+export const TECHLEAD_SOURCE_PREFIX = "Techlead: ";
+const NOT_TECHLEAD_SQL = `source NOT LIKE '${TECHLEAD_SOURCE_PREFIX}%'`;
+// LiteLLM is already crawled as an AI source and is part of the stack too.
+const TECHLEAD_SQL = `(source LIKE '${TECHLEAD_SOURCE_PREFIX}%' OR source = 'LiteLLM Releases')`;
+
+// One transaction: a failed step leaves the schema untouched, and a file
+// database pays one sync instead of one per statement.
 export function migrate(db: Database.Database) {
+  db.transaction(() => applyMigrations(db))();
+}
+
+function applyMigrations(db: Database.Database) {
   db.exec(`
     CREATE TABLE IF NOT EXISTS articles (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -354,6 +366,17 @@ export const db = {
     return stmt(
       `SELECT * FROM articles
        WHERE crawled_at >= datetime('now', ?)
+         AND ${NOT_TECHLEAD_SQL}
+       ORDER BY crawled_at DESC
+       LIMIT ?`,
+    ).all(`-${days} days`, limit) as Article[];
+  },
+
+  getTechleadArticlesSince(days: number, limit = 300): Article[] {
+    return stmt(
+      `SELECT * FROM articles
+       WHERE crawled_at >= datetime('now', ?)
+         AND ${TECHLEAD_SQL}
        ORDER BY crawled_at DESC
        LIMIT ?`,
     ).all(`-${days} days`, limit) as Article[];
@@ -366,6 +389,7 @@ export const db = {
     return stmt(
       `SELECT * FROM articles
        WHERE crawled_at >= ? AND crawled_at < ?
+         AND ${NOT_TECHLEAD_SQL}
        ORDER BY crawled_at DESC
        LIMIT ?`,
     ).all(sqliteTs(from), sqliteTs(to), limit) as Article[];

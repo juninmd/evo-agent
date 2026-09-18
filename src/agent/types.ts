@@ -1,5 +1,6 @@
 export type ReportPeriod =
   | "radar"
+  | "techlead"
   | "weekly"
   | "biweekly"
   | "monthly"
@@ -38,4 +39,6 @@ export interface GeneratedArticle {
   evidence: EvidenceRecord[];
   editorialMetrics: EditorialMetrics;
   reportPeriod?: ReportPeriod;
+  /** Extra site files committed with the article, e.g. the newspaper page. */
+  attachments?: Array<{ path: string; content: string }>;
 }

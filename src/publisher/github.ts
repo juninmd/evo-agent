@@ -37,7 +37,21 @@ interface PreparedPublication {
   reportPeriod: ReportPeriod | false;
   url: string;
   file: SiteFile;
+  attachments: SiteFile[];
   saved: SavePublishedInput;
+}
+
+// Attachments live in their own folder: they can never replace index, layouts or config.
+const ATTACHMENT_PATH = /^jornal\/\d{4}-\d{2}-\d{2}\.html$/;
+
+function checkedAttachments(article: GeneratedArticle): SiteFile[] {
+  const attachments = article.attachments ?? [];
+  for (const file of attachments) {
+    if (!ATTACHMENT_PATH.test(file.path)) {
+      throw new Error(`Invalid attachment path: ${file.path}`);
+    }
+  }
+  return attachments;
 }
 
 async function ensureBranchExists(owner: string, repo: string, branch: string) {
@@ -210,6 +224,7 @@ function preparePublication(
     reportPeriod,
     url: articleUrl,
     file: { path: filePath, content: buildMarkdown(article) },
+    attachments: checkedAttachments(article),
     saved: {
       slug: article.slug,
       title: article.title,
@@ -259,7 +274,7 @@ export function buildPublicationBatch(
     items,
     files: [
       ...buildSiteFiles(target.owner, target.repo, target.branch),
-      ...items.map((item) => item.file),
+      ...items.flatMap((item) => [item.file, ...item.attachments]),
       { path: "index.md", content: indexContent },
       { path: "README.md", content: indexContent },
     ],

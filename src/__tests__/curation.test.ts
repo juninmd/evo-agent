@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   curateArticles,
   focusCommunity,
+  isPrimarySource,
   parseTags,
   sourceBucket,
 } from "../agent/curation.js";
@@ -28,6 +29,18 @@ function article(
 }
 
 describe("editorial curation", () => {
+  it("treats vendor release notes as primary, but not the owner's stack feeds", () => {
+    const gh = "https://github.com/x/y/releases/tag/v1";
+    expect(isPrimarySource(article("v2.3", "Claude Code Releases", gh))).toBe(
+      true,
+    );
+    expect(isPrimarySource(article("x", "GitHub Changelog", gh))).toBe(true);
+    expect(isPrimarySource(article("v1.3", "Techlead: Bun Releases", gh))).toBe(
+      false,
+    );
+    expect(isPrimarySource(article("x", "Reddit: ClaudeCode", gh))).toBe(false);
+  });
+
   it("parses malformed tags without aborting generation", () => {
     expect(parseTags("{broken")).toEqual([]);
     expect(parseTags('["AI", 1, "Agents"]')).toEqual(["ai", "agents"]);

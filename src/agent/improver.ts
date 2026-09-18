@@ -6,66 +6,15 @@ import { log } from "../utils/logger.js";
 import { isSafeExternalUrl } from "../utils/url.js";
 import { sourceBucket } from "./curation.js";
 import { promotePromptCandidate } from "./prompt-policy.js";
+import { getSearchKeywords, saveSearchKeywords } from "./search-keywords.js";
+
+export { getSearchKeywords };
 
 const DEFAULT_SYSTEM_PROMPT = `You are an expert AI developer agent that curates high-signal technical
 digests about software development and AI. You cover many interesting developments concisely (the most
 relevant parts only), prefer breadth over depth, illustrate flows and architectures with Mermaid
 diagrams instead of pseudocode, and always cite sources. You learn from the latest research and news to
 continuously improve your curation and clarity.`;
-
-const DEFAULT_SEARCH_KEYWORDS = [
-  // IA & LLM core
-  "AI developer tools",
-  "LLM coding assistant",
-  "prompt engineering",
-  "AI agents architecture",
-  "agentic workflow",
-  "RAG Retrieval Augmented Generation",
-  "transformer models",
-  "fine-tuning LLMs",
-  "multimodal AI",
-  "vision language models",
-  // IA/ML específicos
-  "machine learning deployment",
-  "neural network architecture",
-  "computer vision CNN",
-  "natural language processing",
-  "deep learning frameworks",
-  "model optimization",
-  "inference acceleration",
-  // Ferramentas de IA
-  "AI coding assistants",
-  "Claude API",
-  "GPT integration",
-  "open source LLM",
-  "local LLM deployment",
-  // Agent Development
-  "LangChain framework",
-  "CrewAI agents",
-  "multi-agent systems",
-  "agent orchestration",
-  "tool use agents",
-  "autonomous agents",
-  // Research & Papers
-  "AI research papers",
-  "machine learning papers",
-  "transformer architecture",
-  "attention mechanism",
-  // Python para IA
-  "Python AI libraries",
-  "PyTorch",
-  "TensorFlow",
-  "Hugging Face",
-  "scikit-learn",
-  // Comunidades open source
-  "open source AI",
-  "AI model hugging face",
-  "LLM fine-tuning",
-  // Produtos e tendências
-  "AI product launches",
-  "AI startup news",
-  "machine learning trends",
-];
 
 export interface ImprovementResponse {
   improved_system_prompt: string;
@@ -82,16 +31,6 @@ export interface ImprovementResponse {
 
 export function getSystemPrompt(): string {
   return db.getState("system_prompt") ?? DEFAULT_SYSTEM_PROMPT;
-}
-
-export function getSearchKeywords(): string[] {
-  try {
-    const raw = db.getState("search_keywords");
-    if (!raw) return DEFAULT_SEARCH_KEYWORDS;
-    return JSON.parse(raw) as string[];
-  } catch {
-    return DEFAULT_SEARCH_KEYWORDS;
-  }
 }
 
 function repairBacktickStrings(value: string): string {
@@ -318,10 +257,7 @@ code_snippet should be a useful TypeScript pattern learned from the content, or 
       log.warn(`Improvement prompt rejected: ${promotion.reason}`);
       return;
     }
-    db.setState(
-      "search_keywords",
-      JSON.stringify(mergeKeywords(getSearchKeywords(), keywords)),
-    );
+    saveSearchKeywords(mergeKeywords(getSearchKeywords(), keywords));
     const safeSources = (result.extra_sources ?? [])
       .filter(
         (source) =>

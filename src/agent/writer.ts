@@ -282,6 +282,8 @@ const PERIOD_CONFIG: Record<ReportPeriod, PeriodConfig> = {
   // The radar is rendered by agent/radar.ts, not by generatePeriodReport; the
   // entry exists so the period is publishable through the same pipeline.
   radar: { days: 1, label: "radar", highlights: [10, 18] },
+  // Same as radar: rendered by agent/techlead.ts.
+  techlead: { days: 7, label: "techlead", highlights: [1, 5] },
   weekly: { days: 7, label: "semanal", highlights: [16, 24] },
   // Pisos de biweekly/monthly/bimonthly/semester eram 20/28/34/45. Medido em
   // 2026-09-05 (gpt-oss-120b e qwen3-next-80b, cache limpo): o gerador cita

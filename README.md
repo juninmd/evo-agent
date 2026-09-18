@@ -30,7 +30,7 @@ flowchart TD
 
 ## Features
 
-- **Multi-source crawling**: RSS/HTML sources, Google News keyword search, SearXNG for Reddit/X.com, Hacker News, TabNews, GitHub Trending, and Reddit community signal analysis
+- **Multi-source crawling**: RSS/HTML sources, Google News keyword search, SearXNG for Reddit/X.com, Hacker News, TabNews, GitHub Trending, Hugging Face Daily Papers (ranked by upvotes), Hugging Face trending models, new models from major labs (OpenRouter catalog, last 14 days), coding-agent release notes (Claude Code, Codex, Gemini CLI, Copilot CLI, Cursor, MCP), and Reddit community signal analysis. Feed items older than 14 days are skipped and Atom bodies back-fill empty snippets
 - **Self-improvement loop**: System prompt and search keywords evolve from ingested content
 - **Reliable orchestration**: Overlapping cycles are skipped and every run is recorded in SQLite
 - **Editorial scoring**: Recency, engagement, source authority, diversity, and cross-source evidence shape selection
@@ -121,6 +121,10 @@ src/
   config.ts             # Env loading, validation, frozen config
   crawler/
     index.ts            # RSS, Google News, SearXNG, Reddit signal crawlers
+    agent-sources.ts    # Coding-agent releases, agent SDKs, practitioner feeds
+    feed-items.ts       # Recency window, newest-first selection, summary fallback
+    hf-papers.ts        # Hugging Face Daily Papers ranked by upvotes
+    model-launches.ts   # HF trending models + new-model launches (OpenRouter)
     reddit-smoke.ts     # Standalone Reddit community signal smoke test
   knowledge/
     store.ts            # SQLite persistence (articles, snippets, state, publish log)
@@ -130,6 +134,12 @@ src/
     ebook.ts            # Living handbook refinement
     editorial-renderer.ts # Deterministic article rendering and citations
     prompt-policy.ts    # Prompt promotion and rollback policy
+  newspaper/
+    edition.ts          # Radar buckets + reading -> headline, desks, stories
+    images.ts           # Card image URLs from validated GitHub/Hub ids (host allowlist)
+    inline.ts           # Reading parser and escaped inline markdown
+    render.ts           # Standalone HTML page (site document or embeddable fragment)
+    styles.ts           # Newspaper CSS with light/dark tokens
   publisher/
     github.ts           # Atomic GitHub API transaction and publication
     site-renderer.ts    # Jekyll scaffold, layouts, CSS, and index rendering
@@ -150,12 +160,21 @@ Articles are available at `https://<GITHUB_OWNER>.github.io/<GITHUB_REPO>/` with
 - Light and dark theme toggle (persisted in `localStorage`)
 - Article archive grouped by year and month
 - Weekly reports section
+- Daily newspaper edition at `jornal/<YYYY-MM-DD>.html` ("Gazeta dos Agentes"), published in the same commit as the radar and linked from it: headline, TL;DR, one desk per radar bucket, and card images derived from GitHub and Hugging Face URLs (no page scraping)
 - Markdown download button per article
 - Responsive typography (Source Serif 4 body, IBM Plex Mono code, IBM Plex Sans UI)
 
 ## Deployment
 
 Docker image published at `ghcr.io/juninmd/evo-agent:latest`. Kubernetes manifests live in a separate `app-charts/evo-agent/` repository. Secrets are injected via environment — never commit `.env` or credentials to this repository.
+
+## Code Quality (SonarQube Cloud)
+
+`sonar-project.properties` configures a CI-based SonarQube Cloud analysis with coverage (`coverage/lcov.info` from `npm run test:coverage`). The CI scan step is not enabled yet; before adding it:
+
+1. On SonarQube Cloud, create the project `juninmd_evo-agent` in the `juninmd` organization (public).
+2. In the project, **Administration → Analysis Method**: turn **Automatic Analysis off** (it conflicts with CI analysis).
+3. Generate a token and save it as the repository secret `SONAR_TOKEN`.
 
 ## Security
 

@@ -8,6 +8,7 @@ import { refineEbook } from "./agent/ebook.js";
 import { runImprovementCycle } from "./agent/improver.js";
 import { rollbackPrompt } from "./agent/prompt-policy.js";
 import { generateRadar } from "./agent/radar.js";
+import { generateTechleadDigest } from "./agent/techlead.js";
 import {
   type GenerateArticleOptions,
   generateArticle,
@@ -205,6 +206,31 @@ async function radarCycle() {
   };
 }
 
+async function techleadCycle() {
+  log.info("=== Techlead cycle start ===");
+  const digest = await generateTechleadDigest();
+  db.recordMetric("techlead.selected_sources", digest.sources.length);
+  const url = await publishWeeklyReport(digest, "techlead");
+  const notificationStatus = await processNotification(
+    db,
+    sendPendingNotification,
+    {
+      url,
+      title: digest.title,
+      summary: digest.summary,
+      kind: "report",
+      notification_attempts: 0,
+    },
+  );
+  db.setState("last_techlead_at", new Date().toISOString());
+  log.info(`=== Techlead published: ${url} ===`);
+  return {
+    url,
+    notified: notificationStatus === "delivered",
+    selectedSources: digest.sources.length,
+  };
+}
+
 async function ebookCycle() {
   log.info("=== Ebook cycle start ===");
   const ebook = await refineEbook();
@@ -288,6 +314,12 @@ async function main() {
   if (runMode === "RADAR") {
     log.info("Running in RADAR mode");
     await cycles.run("radar", radarCycle);
+    closeDbAndExit(0);
+  }
+
+  if (runMode === "TECHLEAD") {
+    log.info("Running in TECHLEAD mode");
+    await cycles.run("techlead", techleadCycle);
     closeDbAndExit(0);
   }
 
