@@ -1,0 +1,134 @@
+---
+layout: article
+title: "Z.ai lança GLM 5.3 FlashX e DeepSeek-V4.1-Flash ataca KV cache; usuários relatam bloqueios de quota"
+date: "2026-09-19"
+tags: ["openrouter:", "hf", "reddit", "models", "launches", "papers", "research", "searxng", "anthropic claude model", "post-signals"]
+summary: "Novos modelos multimodais e de compressão de KV cache chegam ao mercado enquanto desenvolvedores enfrentam limites de taxa, cobranças inesperadas e remoção de modelos legados em ferramentas de código assistido."
+---
+
+{% raw %}
+# Z.ai lança GLM 5.3 FlashX e DeepSeek-V4.1-Flash ataca KV cache; usuários relatam bloqueios de quota
+
+**Período analisado:** 18/09/2026 a 19/09/2026
+
+Novos modelos multimodais e de compressão de KV cache chegam ao mercado enquanto desenvolvedores enfrentam limites de taxa, cobranças inesperadas e remoção de modelos legados em ferramentas de código assistido.
+
+## Destaques
+
+### Z.ai disponibiliza GLM 5.3 FlashX com 1M tokens de contexto e 200 tok/s
+
+O GLM‑5.3‑FlashX chegou ao OpenRouter com uma janela de contexto de 1.048.576 tokens e taxa de inferência de até 200 tokens por segundo, mantendo a mesma arquitetura híbrida de atenção esparsa e linear que caracteriza a família GLM‑5.3‑Flash. Para desenvolvedores que construam pipelines de Retrieval‑Augmented Generation (RAG) em que o comprimento da entrada costuma escalar para centenas de milhares de tokens, essa expansão de contexto elimina a necessidade de truncar documentos ou fragmentar consultas em múltiplas chamadas, permitindo fluxos de dados contínuos e menos propagação de erros de alinhamento.
+
+Na prática, a alteração principal está na infraestrutura de execução. Equipamentos que apostaram em GPUs H100 para ganhar menor latência agora podem trocar o endpoint no gateway OpenRouter, substituindo apenas a URL de acesso a fim de usufruir dos mesmos ganhos. O modelo roda em instâncias de CPU otimizada, reduzindo o custo de operação em cenários de carga moderada. A velocidade de 200 tokens por segundo diminui o tempo de resposta em cerca de um terço em relação à variante anterior, o que se traduz em menor consumo de recursos de rede e menor custo por chamada, especialmente quando o processo é orquestrado por micro‑serviços que são auto‑escaláveis.
+
+No entanto, a evidência apresentada deixa algumas dúvidas. A prova da taxa de 200 tokens por segundo não é acompanhada de contagens de missões de inferência em produção, nem de métricas de estabilidade sob carga concorrente. Isso gera incerteza sobre a capacidade de manutenção desse throughput em ambientes com múltiplos usuários simultâneos. Além disso, embora o modelo seja multimodal, a documentação não detalha como a atenção híbrida processa dados visuais em conjunto com texto, o que pode implicar custos adicionais em pipelines que fazem uso extensivo de embeddings de imagens. Assim, equipes que planejam adoção em larga escala ainda precisam validar essas variáveis de performance e custo em seu próprio contexto de produção.
+
+[Fonte: Z.ai: GLM 5.3 FlashX](https://openrouter.ai/z-ai/glm-5.3-flashx)
+
+### DeepSeek-V4.1-Flash foca em compressão agressiva de KV cache
+
+O paper apresenta DeepSeek-V4.1-Flash como uma resposta direta ao aumento da carga computacional e de armazenamento imposta por agentes de longo horizonte, cujo prefill continua sendo um passo custoso mesmo com avanços anteriores na eficiência de processamento de contexto estendido. O foco está na compressão agressiva do KV cache, mecanismo que armazena pares chave-valor das camadas de atenção e que, em modelos aplicados a janelas superiores a 128 mil tokens, consome volumes significativos de HBM e SSD além de gerar pressão sobre a largura de banda de transferência de dados. Ao atacar simultaneamente os três pilares do gargalo — computação, armazenamento e banda — o trabalho propõe uma redução estrutural no custo de infraestrutura necessária para manter tais agentes em operação.
+
+Para equipes que constroem ou operam sistemas baseados em agentes com janelas de contexto extensas, a mudança prática está na possibilidade de reavaliar a arquitetura de deploy sem precisar alterar o pipeline de dados de entrada ou saída. A compressão do KV cache, se efetivamente preservar a fidelidade do modelo em tarefas de longo horizonte, permite que a mesma carga de trabalho seja executada com menor footprint de memória e menor tráfego entre camadas de armazenamento, o que se traduz em menor utilização de GPUs, menor necessidade de sobreprovisionamento de SSD e redução nos custos associados ao movimento de dados entre memória e armazenamento secundário. A estimativa de até 40% de redução de custos de infraestrutura aponta para um ganho operacional concreto, especialmente em ambientes onde a escala de uso de agentes é alta e a latência de prefill impacta diretamente a experiência do usuário ou a throughput do sistema.
+
+No entanto, a evidência apresentada não detalha como a compressão afeta a precisão do modelo em tarefas que dependem de recuperação de informações finas ou de raciocínio sobre trechos distantes do contexto, nem fornece métricas de latência absoluta ou variabilidade de desempenho sob diferentes padrões de entrada. A generalização da afirmação de redução de custos depende de premissas sobre a distribuição de comprimentos de sequência e a frequência de acesso ao KV cache que não são explicitadas no trecho disponível. Assim, embora o caminho proposto seja tecnicamente coerente com os gargalos identificados, a decisão de adoção exige validação empírica em cargas de trabalho reais para garantir que a economia de recursos não seja obtida às custas de degradação não mensurável na qualidade da saída.
+
+[Fonte: DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression](https://huggingface.co/papers/2609.19969)
+
+### Azure AI Foundry nega quota para modelos Claude em novo tenant
+
+A criação de novos tenants no Azure AI Foundry tem apresentado a ausência total de cotas para a linha de modelos Anthropic Claude, impossibilitando a utilização imediata dessas ferramentas. Relatos indicam que, mesmo após a abertura de solicitações de suporte para a expansão desses limites, os pedidos estão sendo negados, o que impede que a infraestrutura seja colocada em operação. Esse cenário ocorre mesmo com a disponibilidade dos modelos em preview público, criando um gargalo administrativo que precede a implementação técnica.
+
+Para empresas que planejam a padronização de seus fluxos de trabalho em Claude através da infraestrutura da Microsoft, essa restrição altera o cronograma de implantação e a gestão de riscos do projeto. A impossibilidade de garantir cotas em novos tenants força a equipe de engenharia a antecipar a solicitação de recursos ou a diversificar a arquitetura de chamadas de API. Na prática, a dependência exclusiva do Azure para esses modelos específicos introduz um ponto de falha operacional que pode paralisar a entrega de software em produção.
+
+Como alternativa imediata para evitar o bloqueio do desenvolvimento, a operação de software com IA passa a exigir a avaliação de provedores alternativos, como a Anthropic diretamente ou o OpenRouter. A migração para esses serviços altera a governança de dados e a centralização de faturamento, mas elimina a incerteza sobre a disponibilidade de cota. A decisão de adoção agora depende menos da capacidade técnica do modelo e mais da viabilidade de acesso ao recurso dentro do ambiente de nuvem escolhido.
+
+Permanece incerto se a negação de cotas é uma política temporária de controle de carga durante o preview público ou se existe um critério de elegibilidade rígido para pequenas empresas que não foi explicitado. A evidência não esclarece quais parâmetros a Microsoft utiliza para aprovar ou negar os aumentos de cota, deixando em aberto se a resolução do problema depende do volume de gastos do tenant ou de critérios geográficos e contratuais específicos.
+
+[Fonte: Claude models are now available in public preview in Microsoft ...](https://www.reddit.com/r/ClaudeAI/comments/1p0fdul/claude_models_are_now_available_in_public_preview/)
+
+### Limites de taxa do Claude Code derrubam plano US$ 200 em 2 minutos
+
+Desenvolvedor rodando 5 agentes paralelos no plano de US$ 200 atingiu limite de 5 horas; ao trocar para plano US$ 100, o mesmo limite foi consumido em menos de 2 minutos sem trabalho efetivo.
+
+Times que escalam agentes paralelos precisam instrumentar métricas de consumo de tokens/hora e negociar cotas enterprise ou migrar cargas para modelos self-hosted (Ollama/vLLM) para previsibilidade de custo.
+
+[Fonte: Reddit: Rate limits are so bad right now, open source models should win](https://www.reddit.com/r/ClaudeCode/comments/1wjhkef/rate_limits_are_so_bad_right_now_open_source/#community-signals)
+
+### VS Code bloqueia novo design visual se telemetryLevel=off
+
+Desenvolvedor descobriu que a configuração "telemetry.telemetryLevel": "off" impede a ativação do novo design da interface do VS Code, que só fica disponível quando a telemetria está configurada para "all" ou para níveis superiores de coleta de dados. Essa restrição foi observada ao comparar visualmente a interface de dois ambientes idênticos, exceto pela configuração de telemetria, e confirmada ao inspecionar as opções de acesso a temas e componentes da interface atualizados na última liberação do editor. A evidência indica que o mecanismo de liberação do novo design está condicionado à presença de telemetria ativa, independentemente de o usuário ter instalado ou configurado algo adicional além da opção de desativar a coleta de dados.
+
+Para equipes que constroem e operam sistemas com IA, essa condição introduz uma dependência indireta entre políticas de privacidade e a evolução da experiência de desenvolvimento. Quando a telemetria é desativada por requisitos de conformidade com regulamentos como LGPD ou GDPR, ou por diretrizes internas de minimização de dados, os desenvolvedores ficam impedidos de acessar melhorias de usabilidade que podem influenciar a produtividade na escrita, depuração e compreensão de código — tarefas centrais no ciclo de vida de modelos de aprendizado de máquina e pipelines de MLOps. A impossibilidade de atualizar a interface sem comprometer a privacidade cria uma tensão entre a adoção de boas práticas de engenharia de software e a aderência a frameworks de governança de dados, forçando escolhas que podem afetar a curva de aprendizado de novos integrantes ou a padronização de ambientes em grandes organizações.
+
+O impacto operacional se estende além da estética, pois alterações no design frequentemente acompanham ajustes em atalhos, layout de painéis e integração com extensões que suportam fluxos de trabalho com IA, como sugestões de código em tempo real ou visualização de métricas de treinamento. Quando essas atualizações são bloqueadas por uma configuração de telemetria, o custo de manutenção aumenta, pois é necessário manter ramas de configuração paralelas ou recorrer a soluções alternativas para obter funcionalidades equivalentes, o que pode fragmentar o ambiente de desenvolvimento e complicar a reprodução de resultados entre membros da equipe. A situação também levanta questões sobre a transparência dos critérios de liberação de funcionalidades, uma vez que a ligação entre telemetria e acesso a atualizações de interface não é documentada de forma explícita nas notas de lançamento ou na documentação oficial do produto.
+
+Ainda que a evidência confirme a correlação entre a desativação da telemetria e o bloqueio do novo design, ela não esclarece se essa restrição é intencional, fruto de uma falha de lógica no mecanismo de verificação de recursos ou decorre de uma dependência técnica não divulgada, como a necessidade de telemetria para validar licenças de uso ou coletar métricas de compatibilidade que condicionam a renderização de componentes da interface. Não há informações sobre se o comportamento é consistente em todas as plataformas suportadas pelo VS Code, nem se versões anteriores ou futuras do editor mantêm o mesmo padrão, o que limita a capacidade de prever como essa condição se comportará em ambientes de longo prazo ou em cenários de atualização controlada. A ausência de detalhes sobre o escopo técnico por trás da condição deixa em aberto a questão de se o problema pode ser resolvido por ajuste de configuração, requer patch no código do editor ou reflete uma decisão de produto que prioriza a coleta de dados sobre a autonomia do usuário em ambientes restritos.
+
+[Fonte: Reddit: Why do I need to be surveilled (telemetry) to be able to have latest design](https://www.reddit.com/r/vscode/comments/1wkdjeu/why_do_i_need_to_be_surveilled_telemetry_to_be/#community-signals)
+
+### Benchmarks de codificação não premiam soluções enxutas; agentes geram código inchado
+
+O relato de um engenheiro em fórum da comunidade revela que ferramentas como Codex e Claude Code tendem a gerar código excessivamente elaborado quando operam sem supervisão direta, adicionando camadas de segurança, testes e estruturas arquiteturais que fogem ao escopo imediato da tarefa. Esse comportamento cria um acúmulo de funcionalidades desnecessárias em módulos centrais, como observou o autor ao construir a base de um painel B2B, onde o agente tenta incorporar segurança excessiva ao núcleo do sistema, inflacionando artificialmente a complexidade do código. Para equipes de desenvolvimento que dependem desses agentes para acelerar a entrega, o efeito prático é um aumento no débito técnico que só se manifesta durante a revisão e manutenção, exigindo esforço adicional para desmembrar o que o modelo acrescentou "por segurança" ou "padrão". A solução apontada na apuração envolve a inserção de gates de lint e arquitetura no fluxo de integração contínua, além do uso de prompts explícitos que orientem o agente a produzir o código mais enxuto possível, limitando a criação automática de funcionalidades acessórias. No entanto, a evidência deixa em aberto o quanto esse padrão se sustenta quando o desenvolvedor perde o foco momentâneo, uma vez que o modelo parece reverter para o comportamento de "overengineering" assim que a atenção constante é removida, o que coloca em dúvida a viabilidade de se confiar totalmente nesses agentes em projetos de maior envergadura sem uma supervisão estruturada.
+
+[Fonte: Reddit: Coding benchmarks should also reward the leanest possible solution. Coding agent currently build crazy bloated code right now.](https://www.reddit.com/r/codex/comments/1wgzmul/coding_benchmarks_should_also_reward_the_leanest/#community-signals)
+
+### GitHub Copilot cobra US$ 27+ excedentes com orçamento adicional em US$ 0
+
+Um usuário relatou no fórum r/GithubCopilot que a plataforma permitiu a cobrança de mais de 27 dólares em excedentes, apesar de o orçamento para uso adicional estar configurado como zero e marcado como desabilitado. O incidente ocorreu após o assinante atingir o limite de 1.500 créditos incluídos, mas a ferramenta continuou operando normalmente no Visual Studio com o modelo Sonnet, resultando em uma fatura inesperada mesmo sem a ativação explícita de verbas extras na interface de gerenciamento.
+
+Esse cenário altera a premissa de controle de custos para equipes que operam software com IA, evidenciando que a interface de usuário do GitHub não atua como um bloqueio rígido de execução em tempo real. Na prática, a configuração de orçamento na UI torna-se insuficiente para garantir a previsibilidade financeira, transferindo a responsabilidade de controle para as práticas de FinOps. Para evitar surpresas orçamentárias, torna-se necessário monitorar o consumo via API de billing do GitHub e implementar alertas de custo externos que respondam ao volume de requisições, em vez de confiar apenas nos limitadores nativos do painel de controle.
+
+A evidência deixa em aberto se essa falha de provisionamento é um comportamento sistêmico de latência na atualização de quotas ou um erro pontual de faturamento. Como o relato baseia-se em uma experiência individual de um usuário, permanece a incerteza sobre a frequência com que o sistema ignora a trava de orçamento zero e se a cobrança de excedentes ocorrerá de forma indiscriminada para todos os perfis de assinatura que utilizam modelos específicos como o Sonnet dentro do ecossistema do Visual Studio.
+
+[Fonte: Reddit: Copilot is allowing $27+ in overage despite my additional usage budget being $0](https://www.reddit.com/r/GithubCopilot/comments/1wkdn9s/copilot_is_allowing_27_in_overage_despite_my/#community-signals)
+
+### GitHub Copilot deprecia GPT-5.4 em 19/10/2026 sem alternativa clara para assinantes anuais
+
+O GitHub confirmou, via changelog oficial, que o modelo GPT-5.4 será descontinuado em 19 de outubro de 2026. A medida gera instabilidade imediata para desenvolvedores e empresas que integraram esse modelo específico em seus fluxos de trabalho, especialmente aqueles que operam sob planos de assinatura anuais legados. A remoção de um modelo de linguagem sem a indicação simultânea de um substituto direto para todas as categorias de usuários cria um vácuo operacional que pode interromper pipelines de automação de código e assistentes de desenvolvimento configurados para as capacidades específicas da versão 5.4.
+
+Para as equipes de engenharia de software, a depreciação exige a migração urgente de workloads para evitar a interrupção de serviços. Na prática, isso obriga a operação a testar a compatibilidade do GPT-6 Astra Pro ou a buscar alternativas em modelos de código aberto antes da data-limite. A mudança de modelo altera a previsibilidade de respostas da IA, o que demanda a revalidação de prompts e a execução de novos testes de regressão para garantir que a qualidade do código gerado e a estabilidade das integrações não sejam comprometidas pela troca da arquitetura do LLM.
+
+Apesar da confirmação da data de encerramento, permanece uma incerteza crítica sobre a manutenção do valor entregue aos assinantes anuais. Relatos de usuários na comunidade r/GithubCopilot indicam a ausência de informações claras sobre se haverá um modelo alternativo disponível no mesmo nível de preço para quem já efetuou o pagamento antecipado do ciclo anual. Essa lacuna na comunicação deixa em aberto o risco de perda de acesso a ferramentas de alta performance sem a compensação financeira ou técnica, tornando a continuidade do serviço incerta para a base de clientes legados.
+
+[Fonte: Reddit: GPT 5.4 deprecation: will legacy yearly subscribers have access to an alternative?](https://www.reddit.com/r/GithubCopilot/comments/1wk7lky/gpt_54_deprecation_will_legacy_yearly_subscribers/#community-signals)
+
+### Comunidade Codex alerta para não usar modelo Astra após reset; prefere Sol 5.6 xhigh
+
+O alerta surgiu a partir de um post singular na comunidade de desenvolvedores de IA, onde um usuário de uma empresa de 300 mil colaboradores reporta que o modelo Astra apresentaria desempenho quantizado e, de forma “lobotomizada”, não atenderia as exigências de qualidade esperadas. O relato recomenda fortemente a permanência no modelo Sol 5.6 xhigh ou a migração para alternativas como Claude e OpenRouter, mantendo a frase “não use Astra a menos que esteja construindo foguetes” como advertência explícita. O autor acusa a OpenAI de promover uma atualização onerosa de cinco vezes o custo sem comprovar melhorias significativas, classificando a prática como um “puxão de pagamentos” que pode inverter a confiança do cliente.
+
+Para os arquitetos de plataformas que dependem de IA a cada entrada de modelo impacta diretamente a estratégia de build e a engenharia de dados. A substituição de um modelo que já está treinado e configurado para o ecossistema pode requerer a reformulação de pipelines, validação de latência, adaptação de APIs e, em alguns casos, re‑treino de componentes que dependem da resposta específica do modelo. A recomendação de permanecer em Sol 5.6 xhigh implica a manutenção de métricas de qualidade já consolidadas, mitigando a necessidade de ajustes de integração, mas também restringe a capacidade de escalar a solução caso a demanda por capacidade de inferência multiplicada exija o uso de recursos mais robustos. Alternativamente, a migração para Claude ou OpenRouter implicará avaliação de custos de uso, bem‑como possíveis ajustes de arquitetura para suportar diferentes assinaturas de API, quedas de performance e requisitos de compliance.
+
+O limite de incerteza que a evidência deixa em aberto está centrado na falta de dados de benchmark e no caráter subjetivo do relato. Não há métricas comparativas que confirmem a perda de precisão em Astra versus Sol 5.6 xhigh, nem estudo de custo-benefício que quantifique o “puxão” de preços. Assim, a decisão sobre migração deve ser guiada por testes internos que reproduzam cenários de carga e de escalabilidade, além de uma diligência de custo que inclua o custo total de propriedade (TCO) de cada modelo ao longo do ciclo de vida. Sem esses dados, o alerta permanece sobretudo um aviso de prudência, exigindo que as equipes avaliem as métricas de erro, latência e custo antes de considerar qualquer alteração de modelo.
+
+[Fonte: Reddit: Tomorrow When Codex Resets, DON'T TOUCH ASTRA](https://www.reddit.com/r/codex/comments/1wjs8ey/tomorrow_when_codex_resets_dont_touch_astra/#community-signals)
+
+## Leitura do conjunto
+
+A visão que se desenrola frente a essas recentes publicações revela um campo tecnológico pressionado pela busca por capacidade enorme e simultaneamente pela necessidade de controle de custos e operacionalidade. Por um lado, a chegada do GLM‑5.3‑FlashX, com sua janela de mais de um milhão de tokens e velocidade de 200 tok/s, destaca a confirmação de que arquiteturas híbridas de atenção esparsa e linear ainda são pilares para suportar requisitos de contexto massivo sem sacrifício de latência. Contudo, a proposta de compressão agressiva de KV cache do DeepSeek‑V4.1‑Flash demonstra que ainda há gargalos substanciais de prefill, armazenamento e largura de banda que não são solucionados apenas pela expansão de contextos. Enquanto um modelo oferece espessura ilimitada, o outro traz uma estratégia para reduzir memória, sugerindo que a escalabilidade do setor pode depender mais de eficiência de compressão do que de simples tamanho de janela.
+
+Ao mesmo tempo, a frustração relatada por usuários do Azure AI Foundry, que veem cotas de modelos Anthropic Claude zeradas em novos tenants, evidencia a fricção entre poder de processamento e governança de recursos. Isso contrasta com o comportamento do VS Code, onde a desativação da telemetria bloqueia um novo design visual, expondo a dependência de métricas de operação para liberação de recursos de UI que, paradoxalmente, deveriam facilitar a adoção. Enquanto a IA fornece nós de computação de ponta, a infraestrutura de nuvem tenta balancear quem pode usar essas capacidades, muitas vezes de forma que bloqueia a experimentação e a escalabilidade desejada pelos desenvolvedores.
+
+Na mesma linha de tensão entre custo e funcionalidade, os relatos sobre o GitHub Copilot mostram que, mesmo quando se mantém o orçamento do uso adicionado em zero, cobranças inesperadas surgem, ressaltando a falta de clareza e controle de custos em ambientes de IA. A descontinuação do GPT‑5.4 no fim de outubro sem um substituto claro reforça este ponto, pois assinantes, especialmente os de longo prazo, ficam na linha morta quanto à continuidade de serviço ao mesmo nível. Adicionalmente, a comunidade Codex opinou que o modelo Astra pode ter sido “lobotomizado” após alteração de quantização e preferiu manter formas de modelo mais estáveis, enquanto outros relatam que limites de taxa muito baixos no plano de US$200 Khan decaem a produtividade em minutos, o que sugere que as políticas de uso de APIs não acompanham a escalabilidade real de operações de múltiplos agentes.
+
+Em conjunto, esses relatos apontam para uma direção técnica que, apesar de promover avanços monumentais em capacidades de modelo, ainda enfrenta contradições significativas. A expansão de contexto e eficiência de compressão de KV estão em paralelo, mas os recursos de nuvem e as políticas de quota permanecem restritivos. O design de interface condicionada à telemetria demonstra que até efeitos de experiência do usuário podem ser inibidos por configurações que, teoricamente, visam proteger a privacidade. A falta de previsibilidade na descontinuação de modelos e a cobrança automática de excedentes sem ajuste real de orçamento adicionam uma camada extra de complexidade administrativa. Esse cenário, portanto, deixa a comunidade enfrentando um ambiente de pressão contínua por performance, enquanto se lida com limitação de orçamento, inconsistências de política de uso e a necessidade de garantir uma experiência de desenvolvimento fluida e livre de gargalos inesperados.
+
+## Fontes e Referências
+
+1. [Z.ai: GLM 5.3 FlashX](https://openrouter.ai/z-ai/glm-5.3-flashx) — OpenRouter: New Models
+2. [DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression](https://huggingface.co/papers/2609.19969) — HF Daily Papers
+3. [Claude models are now available in public preview in Microsoft ...](https://www.reddit.com/r/ClaudeAI/comments/1p0fdul/claude_models_are_now_available_in_public_preview/) — Reddit (Anthropic Claude model)
+4. [Reddit: Why do I need to be surveilled (telemetry) to be able to have latest design](https://www.reddit.com/r/vscode/comments/1wkdjeu/why_do_i_need_to_be_surveilled_telemetry_to_be/#community-signals) — Reddit Post Signals (vscode)
+5. [Reddit: Coding benchmarks should also reward the leanest possible solution. Coding agent currently build crazy bloated code right now.](https://www.reddit.com/r/codex/comments/1wgzmul/coding_benchmarks_should_also_reward_the_leanest/#community-signals) — Reddit Post Signals (codex)
+6. [Reddit: Copilot is allowing $27+ in overage despite my additional usage budget being $0](https://www.reddit.com/r/GithubCopilot/comments/1wkdn9s/copilot_is_allowing_27_in_overage_despite_my/#community-signals) — Reddit Post Signals (GithubCopilot)
+7. [Reddit: GPT 5.4 deprecation: will legacy yearly subscribers have access to an alternative?](https://www.reddit.com/r/GithubCopilot/comments/1wk7lky/gpt_54_deprecation_will_legacy_yearly_subscribers/#community-signals) — Reddit Post Signals (GithubCopilot)
+8. [Reddit: Tomorrow When Codex Resets, DON'T TOUCH ASTRA](https://www.reddit.com/r/codex/comments/1wjs8ey/tomorrow_when_codex_resets_dont_touch_astra/#community-signals) — Reddit Post Signals (codex)
+9. [Reddit: Rate limits are so bad right now, open source models should win](https://www.reddit.com/r/ClaudeCode/comments/1wjhkef/rate_limits_are_so_bad_right_now_open_source/#community-signals) — Reddit Post Signals (ClaudeCode)
+
+---
+
+*Gerado por: cloud/auto*
+{% endraw %}
+
+---
+*Gerado por evo-agent - agente auto-aprimorante em 2026-09-19.*

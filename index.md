@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>16</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>17</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-19">2026-09-19</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-19-z-ai-lanca-glm-5-3-flashx-e-deepseek-v4-1-flash-ataca-kv-cache-usuarios-relatam-">Z.ai lança GLM 5.3 FlashX e DeepSeek-V4.1-Flash ataca KV cache; usuários relatam bloqueios de quota</a></h3>
+  <p>Novos modelos multimodais e de compressão de KV cache chegam ao mercado enquanto desenvolvedores enfrentam limites de taxa, cobranças inesperadas e remoção de modelos legados em ferramentas de código assistido.</p>
+  <div class="chips"><span>openrouter:</span><span>hf</span><span>reddit</span><span>models</span><span>launches</span><span>papers</span><span>research</span><span>searxng</span><span>anthropic claude model</span><span>post-signals</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-17">2026-09-17</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-17-openai-lanca-sponsored-agents-no-chatgpt-copilot-migra-para-rust-e-usuarios-rela">OpenAI lança Sponsored Agents no ChatGPT; Copilot migra para Rust e usuários relatam limites de uso</a></h3>
   <p>A OpenAI passa a monetizar agentes patrocinados no ChatGPT enquanto o GitHub Copilot reescreve seu runtime em Rust e unifica sugestões inline. Comunidades de desenvolvedores reportam cortes abruptos de cota no Claude Code, reset iminente no Codex e roteamento forçado de modelos caros no Copilot Business.</p>
@@ -644,7 +650,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>7</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>6</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-25-anthropic-pausa-mudanca-no-claude-agent-sdk-e-vulnerabilidades-do-mythos-openai-">Anthropic pausa mudança no Claude Agent SDK e vulnerabilidades do Mythos; OpenAI destaca agentes de</a></h3>
   <p>Este briefing reúne as últimas revelações de segurança da Anthropic e os avanços de agentes da OpenAI, além de novidades de código aberto que afetam pipelines agentic.</p>
   <div class="chips"><span>google-news</span><span>openai</span><span>github-trending</span><span>arxiv</span><span>anthropic preço modelo</span><span>anthropic billing change</span><span>python</span><span>software-engineering</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-23">2026-06-23</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-23-omio-adota-openai-para-viagens-conversacionais-orca-lanca-plataforma-de-agentes-">Omio adota OpenAI para viagens conversacionais; Orca lança plataforma de agentes paralelos;</a></h3>
-  <p>Omio usa a API da OpenAI para criar diálogos de viagem automatizados, enquanto Orca oferece um ambiente de execução de agentes sob assinatura. Um estudo de TinyMLOps destaca desafios de memória e observabilidade em sistemas ciber‑físicos.</p>
-  <div class="chips"><span>openai</span><span>github-trending</span><span>arxiv</span><span>html</span><span>typescript</span><span>software-engineering</span></div>
 </article>
   </div>
 </section>
