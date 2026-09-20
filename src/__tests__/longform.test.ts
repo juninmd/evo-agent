@@ -64,9 +64,9 @@ describe("long-form editorial pass", () => {
         700,
       ),
     ).toContain("não está em português brasileiro");
-    expect(
-      proseIssues(`${LONG} do<unk><unk><unk> conteúdo.`, 700),
-    ).toContain("contém token ou repetição corrompida do modelo");
+    expect(proseIssues(`${LONG} do<unk><unk><unk> conteúdo.`, 700)).toContain(
+      "contém token ou repetição corrompida do modelo",
+    );
   });
 
   it("fills each highlight with long-form prose and expands the synthesis", async () => {
