@@ -106,13 +106,33 @@ function groupByYearMonth(items: PublishedItem[]) {
   return [...groups.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 }
 
+function buildArchiveJumpNav(groups: [string, PublishedItem[]][]): string {
+  if (groups.length < 2) return "";
+  const links = groups
+    .map(([key]) => {
+      const year = key.slice(0, 4);
+      const month = formatMonth(`${key}-01`);
+      return `<a href="#mes-${key}">${month.slice(0, 3)}/${year.slice(2)}</a>`;
+    })
+    .join("");
+  return `<nav class="archive-jump" aria-label="Ir para mes">${links}</nav>`;
+}
+
+const MAX_VISIBLE_TAGS = 4;
+
 function buildItemCard(item: PublishedItem, kind: "Artigo" | "Relatorio") {
-  const tags = item.tags?.length
-    ? `<div class="chips">${item.tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>`
+  const allTags = item.tags ?? [];
+  const visibleTags = allTags.slice(0, MAX_VISIBLE_TAGS);
+  const hiddenCount = allTags.length - visibleTags.length;
+  const tags = allTags.length
+    ? `<div class="chips">${visibleTags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}${hiddenCount > 0 ? `<span class="chip-more">+${hiddenCount}</span>` : ""}</div>`
     : "";
   const summary = item.summary ? `<p>${escapeHtml(item.summary)}</p>` : "";
+  const searchText = escapeHtml(
+    `${item.title} ${allTags.join(" ")}`.toLowerCase(),
+  );
 
-  return `<article class="story-card">
+  return `<article class="story-card" data-search="${searchText}">
   <div class="story-meta"><time datetime="${item.date}">${item.date}</time><span>${kind}</span></div>
   <h3><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></h3>
   ${summary}
@@ -120,20 +140,39 @@ function buildItemCard(item: PublishedItem, kind: "Artigo" | "Relatorio") {
 </article>`;
 }
 
+const VISIBLE_REPORTS = 6;
+
 export function buildIndex(
   articles: PublishedItem[],
   weeklyReports: PublishedItem[],
 ) {
+  const extraReportCount = weeklyReports.length - VISIBLE_REPORTS;
   const reportCards =
     weeklyReports.length > 0
-      ? weeklyReports.map((r) => buildItemCard(r, "Relatorio")).join("\n")
+      ? weeklyReports
+          .map((r, index) => {
+            const card = buildItemCard(r, "Relatorio");
+            return index < VISIBLE_REPORTS
+              ? card
+              : card.replace(
+                  '<article class="story-card"',
+                  '<article class="story-card is-collapsed" hidden',
+                );
+          })
+          .join("\n")
       : '<p class="empty-state">Nenhum relatorio publicado ainda.</p>';
+  const reportsToggle =
+    extraReportCount > 0
+      ? `<button type="button" class="show-more" data-show-more="relatorios">Ver todos os relatorios (${weeklyReports.length})</button>`
+      : "";
 
-  const articleGroups = groupByYearMonth(articles)
+  const yearMonthGroups = groupByYearMonth(articles);
+  const archiveJumpNav = buildArchiveJumpNav(yearMonthGroups);
+  const articleGroups = yearMonthGroups
     .map(([key, items]) => {
       const year = key.slice(0, 4);
       const month = formatMonth(`${key}-01`);
-      return `<section class="month-group">
+      return `<section class="month-group" id="mes-${key}">
   <div class="month-heading"><span>${year}</span><h2>${month}</h2><strong>${items.length}</strong></div>
   <div class="story-grid">
     ${items.map((a) => buildItemCard(a, "Artigo")).join("\n")}
@@ -162,9 +201,10 @@ title: Evo Agent
     <p>Radar semanal</p>
     <h2>Relatorios</h2>
   </div>
-  <div class="story-grid featured-grid">
+  <div class="story-grid featured-grid" data-collapsible>
     ${reportCards}
   </div>
+  ${reportsToggle}
 </section>
 
 <section class="reports-band" id="ebook">
@@ -187,6 +227,11 @@ title: Evo Agent
     <p>Arquivo por ano e mes</p>
     <h2>Artigos diarios</h2>
   </div>
+  <div class="search-box">
+    <input type="search" id="story-search" placeholder="Buscar por titulo ou tag..." aria-label="Buscar artigos e relatorios por titulo ou tag">
+    <p class="search-empty" id="search-empty" hidden>Nenhum resultado encontrado.</p>
+  </div>
+  ${archiveJumpNav}
   ${articleGroups || '<p class="empty-state">Nenhum artigo publicado ainda.</p>'}
 </section>
 `;
@@ -225,7 +270,7 @@ function buildHead(): string {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=5' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=7' | relative_url }}">
     <script>
       // Runs before first paint: applies the theme and stamps the toggle's own
       // label, so the button never claims the opposite of what is rendered.
@@ -266,6 +311,55 @@ function buildThemeScript(): string {
       setTheme(document.documentElement.dataset.theme || "dark");
       themeButton?.addEventListener("click", () => {
         setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+      });
+    </script>`;
+}
+
+function buildIndexScript(): string {
+  return `    <script>
+      document.querySelectorAll("[data-show-more]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var grid = btn.previousElementSibling;
+          grid.querySelectorAll(".is-collapsed").forEach(function(card) {
+            card.hidden = false;
+          });
+          btn.remove();
+        });
+      });
+
+      var searchInput = document.getElementById("story-search");
+      if (searchInput) {
+        var emptyState = document.getElementById("search-empty");
+        searchInput.addEventListener("input", function() {
+          var query = searchInput.value.trim().toLowerCase();
+          var anyVisible = false;
+          document.querySelectorAll(".story-card[data-search]").forEach(function(card) {
+            var matches = !query || card.dataset.search.includes(query);
+            card.style.display = matches ? "" : "none";
+            if (matches) anyVisible = true;
+          });
+          document.querySelectorAll(".month-group").forEach(function(group) {
+            var hasVisible = Array.prototype.some.call(
+              group.querySelectorAll(".story-card"),
+              function(card) { return card.style.display !== "none"; },
+            );
+            group.style.display = hasVisible ? "" : "none";
+          });
+          if (emptyState) emptyState.hidden = anyVisible;
+        });
+      }
+
+      var backToTop = document.createElement("button");
+      backToTop.type = "button";
+      backToTop.className = "back-to-top";
+      backToTop.textContent = "\\u2191";
+      backToTop.setAttribute("aria-label", "Voltar ao topo");
+      backToTop.addEventListener("click", function() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      document.body.appendChild(backToTop);
+      window.addEventListener("scroll", function() {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
       });
     </script>`;
 }
@@ -333,6 +427,7 @@ ${main}
     </main>
 ${buildThemeScript()}
 ${buildContentScript()}
+${buildIndexScript()}
   </body>
 </html>`;
 }
@@ -344,6 +439,7 @@ export function buildDefaultLayout() {
 export function buildArticleLayout() {
   return buildLayout(`      <article class="article-shell">
         <header class="article-hero">
+          <a class="back-link" href="{{ '/' | relative_url }}#arquivo">&larr; Todos os artigos</a>
           <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}</p>
           <h1>${TITLE}</h1>
           {% if page.summary %}<p class="article-summary">{{ page.summary | escape }}</p>{% endif %}
@@ -604,6 +700,114 @@ main {
   border: 1px dashed var(--line);
   color: var(--muted);
   padding: 24px;
+}
+
+.archive-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.archive-jump a {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.72rem;
+  padding: 5px 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.archive-jump a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.back-link {
+  color: var(--muted);
+  display: inline-block;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.78rem;
+  margin-bottom: 16px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.back-link:hover { color: var(--accent); }
+
+.chip-more {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.search-box {
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 0.95rem;
+  padding: 12px 14px;
+  width: 100%;
+}
+
+.search-box input:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.search-empty {
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+.show-more {
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  cursor: pointer;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.78rem;
+  margin-top: 18px;
+  padding: 9px 16px;
+  text-transform: uppercase;
+}
+
+.show-more:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.back-to-top {
+  background: var(--accent);
+  border: 0;
+  border-radius: 999px;
+  bottom: 24px;
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--bg) 60%, transparent);
+  color: #08131a;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 700;
+  height: 44px;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  right: 24px;
+  transition: opacity 160ms ease;
+  width: 44px;
+  z-index: 15;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .article-shell {
