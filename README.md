@@ -195,11 +195,17 @@ title: Evo Agent
     <input type="search" id="story-search" placeholder="Buscar por titulo ou tag..." aria-label="Buscar artigos e relatorios por titulo ou tag">
     <p class="search-empty" id="search-empty" hidden>Nenhum resultado encontrado.</p>
   </div>
-  <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a><a href="#mes-2026-06">Jun/26</a></nav>
+  <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>22</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>23</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="openai lança youth safety blueprint e hex integra gpt‑6 astra para relatórios visuais openai reddit post-signals vscode githubcopilot copilot searxng openai codex">
+    <article class="story-card" data-search="regressão do codex astra 6, falha de sessão no codex e release do flet 1.0 reddit tabnews github-trending devto marktechpost v2ex towards web-search google-news codex">
+  <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-regressao-do-codex-astra-6-falha-de-sessao-no-codex-e-release-do-flet-1-0">Regressão do Codex Astra 6, falha de sessão no Codex e release do Flet 1.0</a></h3>
+  <p>Usuários relatam degradação severa no Astra 6 e travamento após primeira mensagem no Codex, enquanto o Flet 1.0 chega pronto para produção em Python. Senado dos EUA propõe pena de 20 anos para superinteligência sem salvaguardas.</p>
+  <div class="chips"><span>reddit</span><span>tabnews</span><span>github-trending</span><span>devto</span><span class="chip-more">+6</span></div>
+</article>
+<article class="story-card" data-search="openai lança youth safety blueprint e hex integra gpt‑6 astra para relatórios visuais openai reddit post-signals vscode githubcopilot copilot searxng openai codex">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-openai-lanca-youth-safety-blueprint-e-hex-integra-gpt-6-astra-para-relatorios-vi">OpenAI lança Youth Safety Blueprint e Hex integra GPT‑6 Astra para relatórios visuais</a></h3>
   <p>OpenAI divulga um plano de seis pilares para proteger jovens usando IA. Hex utiliza o modelo GPT‑6 Astra para transformar análises em visualizações interativas compartilháveis por equipes.</p>
@@ -682,17 +688,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-01-anthropic-investe-us-15-bi-em-infraestrutura-e-enfrenta-kyc-no-fable-5-enquanto-">Anthropic investe US$15 bi em infraestrutura e enfrenta KYC no Fable 5 enquanto setores de IA e</a></h3>
   <p>Grandes gastos em chips e GPUs pressionam orçamentos de IA. Simultaneamente, restrições de KYC e novas práticas de segurança emergem para agentes LLM.</p>
   <div class="chips"><span>reddit</span><span>tabnews</span><span>google-news</span><span>github-trending</span><span class="chip-more">+6</span></div>
-</article>
-  </div>
-</section>
-<section class="month-group" id="mes-2026-06">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>1</strong></div>
-  <div class="story-grid">
-    <article class="story-card" data-search="intuit se alia à anthropic para ia financeira e desenvolvedores adotam frameworks rust e ai gateway google-news google reddit anthropic custo llm local-ai">
-  <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-30-intuit-se-alia-a-anthropic-para-ia-financeira-e-desenvolvedores-adotam-framework">Intuit se alia à Anthropic para IA financeira e desenvolvedores adotam frameworks Rust e AI gateway</a></h3>
-  <p>Parcerias estratégicas impulsionam agentes de IA personalizados enquanto novos frameworks simplificam a orquestração de workloads locais. Boas práticas de segurança surgem diante da amplificação de risco em automação de suporte e scraping.</p>
-  <div class="chips"><span>google-news</span><span>google</span><span>reddit</span><span>anthropic custo</span><span class="chip-more">+2</span></div>
 </article>
   </div>
 </section>
