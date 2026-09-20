@@ -827,6 +827,15 @@ export function trendingSignalUrl(
   return `${repoUrl.split("#")[0]}#trending-${label}-${day}`;
 }
 
+/**
+ * A trending/search/article mirror page on x.com is not a citable primary
+ * source; only a real tweet permalink (x.com/<handle>/status/<id>) carries
+ * stable, quotable content.
+ */
+export function isCitableXUrl(url: string): boolean {
+  return /x\.com\/[^/]+\/status\/\d+/i.test(url);
+}
+
 export function parseGitHubStarCount(value: string): number {
   const normalized = value.trim().toLowerCase().replace(/,/g, "");
   const match = normalized.match(/^(\d+(?:\.\d+)?)\s*([km])?$/);
@@ -1803,6 +1812,9 @@ async function crawlAllInner(): Promise<CrawlReport> {
       for (const result of results.slice(0, 5)) {
         if (!result.url || !result.title) continue;
         if (db.urlExists(result.url)) continue;
+        if (result.url.includes("x.com") && !isCitableXUrl(result.url)) {
+          continue;
+        }
         const sourceName = result.url.includes("reddit.com")
           ? `Reddit (${cleanKeyword})`
           : result.url.includes("x.com")

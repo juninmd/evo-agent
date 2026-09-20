@@ -5,6 +5,7 @@ import {
   buildDefaultLayout,
   buildMarkdown,
   buildSiteFiles,
+  estimateReadingMinutes,
 } from "../publisher/site-renderer.js";
 
 function article(overrides: Partial<GeneratedArticle> = {}): GeneratedArticle {
@@ -59,6 +60,22 @@ describe("buildMarkdown front matter", () => {
       article({ content: "Use `{% for post in site.posts %}` no layout." }),
     );
     expect(markdown).toContain("{% for post in site.posts %}");
+  });
+
+  it("stamps a reading-time estimate from the article body", () => {
+    const markdown = buildMarkdown(
+      article({ content: "palavra ".repeat(400) }),
+    );
+    expect(markdown).toContain("reading_time: 2");
+  });
+});
+
+describe("estimateReadingMinutes", () => {
+  it("rounds to whole minutes at ~200 words per minute, minimum 1", () => {
+    expect(estimateReadingMinutes("palavra ".repeat(10))).toBe(1);
+    expect(estimateReadingMinutes("palavra ".repeat(400))).toBe(2);
+    expect(estimateReadingMinutes("palavra ".repeat(1000))).toBe(5);
+    expect(estimateReadingMinutes("")).toBe(1);
   });
 });
 

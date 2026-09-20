@@ -9,7 +9,9 @@ import {
 } from "./editorial.js";
 
 const ANALYSIS_MIN_CHARS = 380;
+const ANALYSIS_MAX_CHARS = 750;
 const SYNTHESIS_MIN_CHARS = 500;
+const SYNTHESIS_MAX_CHARS = 1000;
 
 const STYLE_RULES = `Regras de escrita:
 - Parágrafos corridos em português brasileiro. Nada de listas, bullets, subtítulos, tabelas ou emojis.
@@ -20,12 +22,21 @@ const STYLE_RULES = `Regras de escrita:
 - Não escreva URLs nem links; as citações são adicionadas pelo programa.
 - Prefira frases concretas: o que muda na arquitetura, no custo, no risco, na operação ou na decisão de adoção de quem lê.`;
 
-export function proseIssues(text: string, minChars: number): string[] {
+export function proseIssues(
+  text: string,
+  minChars: number,
+  maxChars?: number,
+): string[] {
   const issues: string[] = [];
   const trimmed = text.trim();
   if (trimmed.length < minChars) {
     issues.push(
       `texto curto demais (${trimmed.length}/${minChars} caracteres)`,
+    );
+  }
+  if (maxChars && trimmed.length > maxChars) {
+    issues.push(
+      `texto longo demais (${trimmed.length}/${maxChars} caracteres) — corte pela metade`,
     );
   }
   if (/^\s*[-*+]\s+/m.test(trimmed)) issues.push("contém lista com bullets");
@@ -66,6 +77,7 @@ async function writeProse(
   systemPrompt: string,
   minChars: number,
   maxOutputTokens: number,
+  maxChars?: number,
 ): Promise<string | null> {
   let feedback = "";
   for (let attempt = 1; attempt <= 2; attempt++) {
@@ -81,7 +93,7 @@ async function writeProse(
       return null;
     }
     const clean = paragraphs(text);
-    const issues = proseIssues(clean, minChars);
+    const issues = proseIssues(clean, minChars, maxChars);
     if (issues.length === 0) return clean;
     log.warn(`Long-form attempt ${attempt} rejected: ${issues.join("; ")}`);
     feedback = `\n\nA versão anterior foi rejeitada porque: ${issues.join("; ")}. Reescreva o texto inteiro corrigindo exatamente esses problemas.`;
@@ -110,7 +122,7 @@ Apuração já feita pela edição:
 - Fato central: ${sanitizeForPrompt(highlight.whatHappened, 600)}
 - Consequência técnica: ${sanitizeForPrompt(highlight.whyItMatters, 600)}
 
-Escreva 2 parágrafos curtos e diretos (no mínimo ${ANALYSIS_MIN_CHARS} caracteres no total, sem enrolação). Primeiro parágrafo: o fato, sem preâmbulo. Segundo parágrafo: o que muda na prática para quem constrói e opera software com IA, incluindo o limite ou a incerteza que a evidência ainda deixa em aberto.
+Escreva 2 parágrafos curtos e diretos, entre ${ANALYSIS_MIN_CHARS} e ${ANALYSIS_MAX_CHARS} caracteres no total (nunca mais que isso), sem enrolação. Primeiro parágrafo: o fato, sem preâmbulo. Segundo parágrafo: o que muda na prática para quem constrói e opera software com IA, incluindo o limite ou a incerteza que a evidência ainda deixa em aberto.
 
 ${STYLE_RULES}
 
@@ -122,6 +134,7 @@ Responda apenas com o texto da análise.`;
     "Você é um editor técnico sênior escrevendo em português brasileiro. Responda apenas com parágrafos de texto corrido.",
     ANALYSIS_MIN_CHARS,
     1600,
+    ANALYSIS_MAX_CHARS,
   );
   return prose ?? fallback;
 }
@@ -142,7 +155,7 @@ async function expandSynthesis(
 
 ${agenda}
 
-Escreva 2 parágrafos diretos (no mínimo ${SYNTHESIS_MIN_CHARS} caracteres) mostrando o que essas pautas, lidas juntas, dizem sobre a direção técnica do momento, onde elas se contradizem e o que ainda não está resolvido. Não repita as pautas uma a uma nem faça resumo enumerado.
+Escreva 2 parágrafos diretos, entre ${SYNTHESIS_MIN_CHARS} e ${SYNTHESIS_MAX_CHARS} caracteres no total (nunca mais que isso), mostrando o que essas pautas, lidas juntas, dizem sobre a direção técnica do momento, onde elas se contradizem e o que ainda não está resolvido. Não repita as pautas uma a uma nem faça resumo enumerado.
 
 ${STYLE_RULES}
 
@@ -154,6 +167,7 @@ Responda apenas com o texto.`;
     "Você é um editor técnico sênior escrevendo em português brasileiro. Responda apenas com parágrafos de texto corrido.",
     SYNTHESIS_MIN_CHARS,
     1600,
+    SYNTHESIS_MAX_CHARS,
   );
   return prose ?? draft.synthesis;
 }

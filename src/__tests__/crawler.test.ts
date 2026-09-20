@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   focusRetryDelayMs,
   hackerNewsEngagement,
+  isCitableXUrl,
   isHackerNewsRelevant,
   isUsefulComment,
   orderedCommunitySubreddits,
@@ -125,5 +126,19 @@ describe("crawler transformations", () => {
       "Título O projeto reduz custos de inferência usando cache semântico. Código com métricas reproduzíveis.",
     );
     expect(summarizeSourceContent("")).toBe("");
+  });
+
+  it("only accepts real tweet permalinks as citable X/Twitter sources", () => {
+    expect(
+      isCitableXUrl("https://x.com/rohanpaul_ai/status/1867646111223361755"),
+    ).toBe(true);
+    expect(isCitableXUrl("https://x.com/i/trending/2081940657879544272")).toBe(
+      false,
+    );
+    expect(
+      isCitableXUrl(
+        "https://x.com/CNASdc/article/2029218852056314162?lang=ar-x-fm",
+      ),
+    ).toBe(false);
   });
 });

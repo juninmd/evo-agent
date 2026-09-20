@@ -6,6 +6,10 @@ import type { Article } from "../knowledge/store.js";
 const LONG = "Frase técnica concreta sobre custo, risco e operação. ".repeat(
   20,
 );
+// Fits inside both the analysis (380-750) and synthesis (500-1000) bounds,
+// so it can stand in for a valid model response in either expansion pass.
+const FITS_BOTH_BOUNDS =
+  "Frase técnica concreta sobre custo, risco e operação. ".repeat(12);
 
 function source(): Article {
   return {
@@ -67,10 +71,13 @@ describe("long-form editorial pass", () => {
     expect(proseIssues(`${LONG} do<unk><unk><unk> conteúdo.`, 700)).toContain(
       "contém token ou repetição corrompida do modelo",
     );
+    expect(proseIssues(LONG, 100, 500).join(" ")).toContain(
+      "texto longo demais",
+    );
   });
 
   it("fills each highlight with long-form prose and expands the synthesis", async () => {
-    const ask = vi.fn().mockResolvedValue(LONG);
+    const ask = vi.fn().mockResolvedValue(FITS_BOTH_BOUNDS);
 
     const expanded = await expandEdition(
       ask,
@@ -80,8 +87,27 @@ describe("long-form editorial pass", () => {
     );
 
     expect(ask).toHaveBeenCalledTimes(2);
-    expect(expanded.highlights[0].analysis).toBe(LONG.trim());
-    expect(expanded.synthesis).toBe(LONG.trim());
+    expect(expanded.highlights[0].analysis).toBe(FITS_BOTH_BOUNDS.trim());
+    expect(expanded.synthesis).toBe(FITS_BOTH_BOUNDS.trim());
+  });
+
+  it("rejects prose that blows past the length ceiling", async () => {
+    const ask = vi.fn().mockResolvedValue(LONG);
+
+    const expanded = await expandEdition(
+      ask,
+      draft(),
+      [source()],
+      "12/06/2026",
+    );
+
+    // Both phases retry once against the same too-long response, then fall
+    // back to the agenda text instead of publishing an unbounded wall of text.
+    expect(ask).toHaveBeenCalledTimes(4);
+    expect(expanded.highlights[0].analysis).toContain(
+      "A Anthropic descreveu melhorias em tarefas longas.",
+    );
+    expect(expanded.synthesis).toBe("Síntese curta da pauta.");
   });
 
   it("keeps the agenda text when the expansion pass cannot deliver", async () => {

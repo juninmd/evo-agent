@@ -45,6 +45,12 @@ function neutralizeEndRaw(content: string): string {
   );
 }
 
+/** ~200 wpm is the standard estimate for technical reading in pt-BR. */
+export function estimateReadingMinutes(content: string): number {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
 export function buildMarkdown(article: GeneratedArticle): string {
   return `---
 layout: article
@@ -52,6 +58,7 @@ title: "${escapeYaml(article.title)}"
 date: "${article.date}"
 tags: [${article.tags.map((t) => `"${escapeYaml(t)}"`).join(", ")}]
 summary: "${escapeYaml(article.summary)}"
+reading_time: ${estimateReadingMinutes(article.content)}
 ---
 
 {% raw %}
@@ -440,7 +447,7 @@ export function buildArticleLayout() {
   return buildLayout(`      <article class="article-shell">
         <header class="article-hero">
           <a class="back-link" href="{{ '/' | relative_url }}#arquivo">&larr; Todos os artigos</a>
-          <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}</p>
+          <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}{% if page.reading_time %} · {{ page.reading_time }} min de leitura{% endif %}</p>
           <h1>${TITLE}</h1>
           {% if page.summary %}<p class="article-summary">{{ page.summary | escape }}</p>{% endif %}
           {% if page.tags %}
