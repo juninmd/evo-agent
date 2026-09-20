@@ -295,6 +295,9 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
   const fullContentWithRefs = references
     ? `${fullContent}\n\n${references}`
     : fullContent;
+  // primaryCandidatesAvailable is internal to CurationResult, not part of the
+  // published EditorialMetrics contract -- keep it out of the spread below.
+  const { primaryCandidatesAvailable, ...curationMetrics } = curation.metrics;
 
   return {
     title: draft.title,
@@ -309,11 +312,11 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
     sources: referencedArticles.map((article) => article.url),
     evidence,
     editorialMetrics: {
-      ...curation.metrics,
+      ...curationMetrics,
       selected: referencedArticles.length,
       rejected: recentArticles.length - referencedArticles.length,
       primarySources: referencedArticles.filter(isPrimarySource).length,
-      primaryCandidates: curation.metrics.primaryCandidatesAvailable,
+      primaryCandidates: primaryCandidatesAvailable,
     },
     content: withModelFooter(fullContentWithRefs),
     date: today,
@@ -379,8 +382,11 @@ function periodMeta(period: ReportPeriod) {
   return { cfg, periodStr, today, titleLabel };
 }
 
-function loadPeriodArticles(cfg: PeriodConfig): Article[] {
-  return curateArticles(db.getArticlesSince(cfg.days), {
+function loadPeriodArticles(cfg: PeriodConfig): {
+  articles: Article[];
+  primaryCandidates: number;
+} {
+  const curation = curateArticles(db.getArticlesSince(cfg.days), {
     perBucket: 6,
     perBucketOverrides: { reddit: 18 },
     max: cfg.highlights[1] * 2,
@@ -389,7 +395,11 @@ function loadPeriodArticles(cfg: PeriodConfig): Article[] {
     minCommunitySignals: Math.min(14, Math.floor(cfg.highlights[0] / 2)),
     minRedditSignals: Math.min(10, Math.floor(cfg.highlights[0] / 3)),
     requireFocusCommunities: true,
-  }).selected.map((item) => item.article);
+  });
+  return {
+    articles: curation.selected.map((item) => item.article),
+    primaryCandidates: curation.metrics.primaryCandidatesAvailable,
+  };
 }
 
 function metricsForArticles(articles: Article[], primaryCandidates: number) {
@@ -455,13 +465,13 @@ async function generatePeriodReportSinglePass(
   period: ReportPeriod,
 ): Promise<GeneratedArticle> {
   const { cfg, periodStr, today, titleLabel } = periodMeta(period);
-  const recentArticles = loadPeriodArticles(cfg);
+  const { articles: recentArticles, primaryCandidates } =
+    loadPeriodArticles(cfg);
   if (recentArticles.length === 0) {
     throw new Error(
       `No articles crawled in the last ${cfg.days} days to generate a ${cfg.label} report`,
     );
   }
-  const primaryCandidates = db.getPrimaryArticlesSince(cfg.days, 200).length;
   const snippets = db.getSnippets(50);
 
   const systemPrompt = `You are a Principal AI Architect and technical newsletter editor.
@@ -684,13 +694,13 @@ async function generatePeriodReportMultiPass(
   period: ReportPeriod,
 ): Promise<GeneratedArticle> {
   const { cfg, periodStr, today, titleLabel } = periodMeta(period);
-  const recentArticles = loadPeriodArticles(cfg);
+  const { articles: recentArticles, primaryCandidates } =
+    loadPeriodArticles(cfg);
   if (recentArticles.length === 0) {
     throw new Error(
       `No articles crawled in the last ${cfg.days} days to generate a ${cfg.label} report`,
     );
   }
-  const primaryCandidates = db.getPrimaryArticlesSince(cfg.days, 200).length;
 
   log.info(
     `Generating ${cfg.label} report (multi-pass, ${cfg.days}d period)...`,
