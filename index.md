@@ -197,9 +197,15 @@ title: Evo Agent
   </div>
   <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a><a href="#mes-2026-06">Jun/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>19</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>20</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="limites 5h codex expirados em 2,5h; copilot gpt-5.4 deprecation e student vs pro conflitos reddit web-search github post-signals codex copilot claudecode searxng anthropic claude model developer">
+    <article class="story-card" data-search="copilot pro, codex degradação e anthropic em foco reddit web-search copilot post-signals vscode codex searxng anthropic claude model">
+  <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-copilot-pro-codex-degradacao-e-anthropic-em-foco">Copilot Pro, Codex Degradação e Anthropic em Foco</a></h3>
+  <p>Usuários relatam inconsistências no Copilot Pro, suporte em queda do Codex e anúncios de expansão de modelos Claude. Esses eventos afetam decisões de orçamento, migração e arquitetura de IA em empresas.</p>
+  <div class="chips"><span>reddit</span><span>web-search</span><span>copilot</span><span>post-signals</span><span class="chip-more">+4</span></div>
+</article>
+<article class="story-card" data-search="limites 5h codex expirados em 2,5h; copilot gpt-5.4 deprecation e student vs pro conflitos reddit web-search github post-signals codex copilot claudecode searxng anthropic claude model developer">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-limites-5h-codex-expirados-em-2-5h-copilot-gpt-5-4-deprecation-e-student-vs-pro-">Limites 5h Codex expirados em 2,5h; Copilot GPT-5.4 deprecation e Student vs Pro conflitos</a></h3>
   <p>Usuários da Plus Codex denunciam consumos de quota superiores ao contratado; comunidade GitHub discute migração forçada de GPT-5.4 e conflitos de assinatura Copilot Student/Pro.</p>
@@ -668,7 +674,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group" id="mes-2026-06">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>4</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>3</strong></div>
   <div class="story-grid">
     <article class="story-card" data-search="intuit se alia à anthropic para ia financeira e desenvolvedores adotam frameworks rust e ai gateway google-news google reddit anthropic custo llm local-ai">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -687,12 +693,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-28-anthropic-fable-5-eleva-custos-tabs-e-carllog-mostram-desafios-de-ux-e-telemetri">Anthropic Fable 5 eleva custos; Tabs e Carllog mostram desafios de UX e telemetria</a></h3>
   <p>Preços da nova classe Mythos da Anthropic pressionam orçamentos, enquanto desenvolvedores brasileiros testam consumo móvel de conteúdo e monitoramento 24/7 de veículos elétricos.</p>
   <div class="chips"><span>tabnews</span><span>google-news</span><span>br</span><span>developer</span><span class="chip-more">+3</span></div>
-</article>
-<article class="story-card" data-search="github‑undp na gana e prévia gpt‑5.6 sol impulsionam código aberto e ia the vscode openai tabnews reddit developer tools br coding search">
-  <div class="story-meta"><time datetime="2026-06-27">2026-06-27</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-27-github-undp-na-gana-e-previa-gpt-5-6-sol-impulsionam-codigo-aberto-e-ia">GitHub‑UNDP na Gana e prévia GPT‑5.6 Sol impulsionam código aberto e IA</a></h3>
-  <p>Parcerias estratégicas e novas ferramentas marcam a agenda tecnológica de 26‑27/06/2026. Análises de comunidade revelam impactos operacionais críticos.</p>
-  <div class="chips"><span>the</span><span>vscode</span><span>openai</span><span>tabnews</span><span class="chip-more">+6</span></div>
 </article>
   </div>
 </section>
