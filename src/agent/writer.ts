@@ -22,6 +22,7 @@ import {
 } from "./editorial-renderer.js";
 import {
   type EditorialDraft,
+  EditorialValidationError,
   buildEditorialPrompt,
   editorialPeriod,
   isGenericTitle,
@@ -184,7 +185,7 @@ export async function generateArticle(
     ];
     curation = curate();
   }
-  const usedArticles = curation.selected.map((item) => item.article);
+  let usedArticles = curation.selected.map((item) => item.article);
   const focusCoverage = [
     ...new Set(usedArticles.flatMap((a) => focusCommunity(a) ?? [])),
   ];
@@ -217,6 +218,22 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
       log.warn(
         `Editorial draft attempt ${attempt} failed: ${(err as Error).message}`,
       );
+      // A source too thin to ever clear the grounded-detail/evidence floor
+      // fails identically on every retry no matter how the model rephrases
+      // it -- drop it so the next attempt has a real shot at a different
+      // outcome instead of repeating the same rejected draft.
+      if (err instanceof EditorialValidationError && usedArticles.length > 5) {
+        const badHighlight = err.message.match(
+          /highlight (\d+) lacks (?:grounded detail|source evidence)/,
+        );
+        const sourceIndex =
+          err.draft.highlights[Number(badHighlight?.[1]) - 1]?.sourceIndex;
+        if (badHighlight && Number.isInteger(sourceIndex)) {
+          const dropped = usedArticles[sourceIndex];
+          usedArticles = usedArticles.filter((a) => a !== dropped);
+          log.warn(`Dropping thin source from candidate pool: ${dropped?.url}`);
+        }
+      }
     }
   }
   if (!draft) {

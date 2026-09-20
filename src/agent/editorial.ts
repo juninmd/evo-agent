@@ -257,9 +257,27 @@ export function parseEditorialDraft(
   }
   const errors = validateEditorialDraft(draft, sources, { maxHighlights });
   if (errors.length > 0) {
-    throw new Error(`Editorial draft invalid: ${errors.join("; ")}`);
+    throw new EditorialValidationError(
+      `Editorial draft invalid: ${errors.join("; ")}`,
+      draft,
+    );
   }
   return draft;
+}
+
+/**
+ * Carries the rejected draft so a caller can find which source produced an
+ * unfixable highlight (e.g. too thin to ever clear the grounded-detail floor)
+ * and drop it, instead of asking the model to retry the same source forever.
+ */
+export class EditorialValidationError extends Error {
+  constructor(
+    message: string,
+    readonly draft: EditorialDraft,
+  ) {
+    super(message);
+    this.name = "EditorialValidationError";
+  }
 }
 
 const TRAILING_CONNECTORS =
