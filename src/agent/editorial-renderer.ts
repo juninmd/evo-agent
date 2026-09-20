@@ -132,7 +132,10 @@ export function buildTagsFromGroups(groups: Map<string, Article[]>): string[] {
     "google-news",
     "daily",
     "github-trending",
+    // Internal crawl-engine identifier (crawler/index.ts), never a topic.
+    "searxng",
   ]);
+  const slugifyTag = (tag: string) => tag.trim().replace(/\s+/g, "-");
   const sourceTags = [...groups.keys()].map((key) =>
     key.toLowerCase().replace(/\s+/g, "-"),
   );
@@ -142,6 +145,7 @@ export function buildTagsFromGroups(groups: Map<string, Article[]>): string[] {
         articles.flatMap((article) =>
           parseTags(article.tags)
             .filter((tag) => !ignored.has(tag))
+            .map(slugifyTag)
             .slice(0, 2),
         ),
       ),
