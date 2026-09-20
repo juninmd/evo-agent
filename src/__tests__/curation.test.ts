@@ -70,6 +70,33 @@ describe("editorial curation", () => {
     expect(result.rejected[0].reason).toBe("duplicate-story");
   });
 
+  it("keeps a primary source as canonical even when a higher-scored repost is lexically similar", () => {
+    const result = curateArticles(
+      [
+        article(
+          "OpenAI lança novo modelo GPT 6",
+          "OpenAI Blog",
+          "https://openai.com/gpt-6",
+          1,
+        ),
+        article(
+          "OpenAI lanca o novo modelo GPT-6",
+          "Hacker News",
+          "https://news.ycombinator.com/gpt-6",
+          500,
+        ),
+      ],
+      { max: 10, perBucket: 3, requirePrimary: true },
+    );
+
+    expect(result.selected).toHaveLength(1);
+    expect(result.selected[0].primary).toBe(true);
+    expect(result.selected[0].article.url).toBe("https://openai.com/gpt-6");
+    expect(result.selected[0].evidenceUrls).toContain(
+      "https://news.ycombinator.com/gpt-6",
+    );
+  });
+
   it("caps dominant buckets and preserves a primary source", () => {
     const result = curateArticles(
       [

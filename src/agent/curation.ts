@@ -266,6 +266,21 @@ export function curateArticles(
     );
     if (duplicate) {
       duplicate.evidenceUrls.push(candidate.article.url);
+      // A primary source deduped behind a higher-scored community repost of
+      // the same story must stay selectable -- otherwise "requirePrimary"
+      // has nothing left to promote and the edition ends up without one.
+      if (candidate.primary && !duplicate.primary) {
+        rejected.push({
+          article: duplicate.article,
+          reason: "duplicate-story",
+        });
+        const index = deduped.indexOf(duplicate);
+        deduped[index] = {
+          ...candidate,
+          evidenceUrls: duplicate.evidenceUrls,
+        };
+        continue;
+      }
       rejected.push({ article: candidate.article, reason: "duplicate-story" });
       continue;
     }
