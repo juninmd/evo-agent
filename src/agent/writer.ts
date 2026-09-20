@@ -228,10 +228,22 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
         );
         const sourceIndex =
           err.draft.highlights[Number(badHighlight?.[1]) - 1]?.sourceIndex;
-        if (badHighlight && Number.isInteger(sourceIndex)) {
-          const dropped = usedArticles[sourceIndex];
+        const dropped = badHighlight ? usedArticles[sourceIndex] : undefined;
+        // Dropping the pool's last primary source would leave the article
+        // validation step (which still expects one, based on the original
+        // recentArticles pool) unsatisfiable no matter what the model drafts.
+        const isLastPrimary =
+          dropped &&
+          isPrimarySource(dropped) &&
+          usedArticles.filter(isPrimarySource).length <= 1;
+        if (
+          badHighlight &&
+          Number.isInteger(sourceIndex) &&
+          dropped &&
+          !isLastPrimary
+        ) {
           usedArticles = usedArticles.filter((a) => a !== dropped);
-          log.warn(`Dropping thin source from candidate pool: ${dropped?.url}`);
+          log.warn(`Dropping thin source from candidate pool: ${dropped.url}`);
         }
       }
     }
