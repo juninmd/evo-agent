@@ -19,7 +19,13 @@ title: Evo Agent
     <h2>Relatorios</h2>
   </div>
   <div class="story-grid featured-grid" data-collapsible>
-    <article class="story-card" data-search="deepseek, auto‑research, e incidentes em codex e claude code weekly-report hf openrouter: github vscode reddit tabnews papers research models launches">
+    <article class="story-card" data-search="radar ia — 20/09/2026 radar ia trending github models reddit hackernews releases community">
+  <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-20-radar-2026-09-20">Radar IA — 20/09/2026</a></h3>
+  <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span class="chip-more">+5</span></div>
+</article>
+<article class="story-card" data-search="deepseek, auto‑research, e incidentes em codex e claude code weekly-report hf openrouter: github vscode reddit tabnews papers research models launches">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-20-deepseek-auto-research-e-incidentes-em-codex-e-claude-code">DeepSeek, Auto‑Research, e Incidentes em Codex e Claude Code</a></h3>
   <p>Compression inteligente de KV cache e novos harnesses impulsionam agentes, enquanto relatos de Reddit revelam bloqueios em Codex e ajustes de cache em Claude Code.</p>
@@ -49,7 +55,7 @@ title: Evo Agent
   <p>Radar de 66 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span class="chip-more">+5</span></div>
 </article>
-<article class="story-card" data-search="radar ia — 16/09/2026 radar ia trending github reddit hackernews vendors papers community">
+<article class="story-card is-collapsed" hidden data-search="radar ia — 16/09/2026 radar ia trending github reddit hackernews vendors papers community">
   <div class="story-meta"><time datetime="2026-09-16">2026-09-16</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-16-radar-2026-09-16">Radar IA — 16/09/2026</a></h3>
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -160,12 +166,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/bimonthly-2026-09-06-relatorio-bimestral-reducao-de-custos-e-eficiencia-nos-modelos-de-ia-e-gpt-6-ast">Relatorio Bimestral: Redução de custos e eficiência nos modelos de IA e GPT-6 Astra: lançamentos e repercussões</a></h3>
   <p>Claude Fable 5.1 chega com custos mais baixos e menos falsos positivos: A Anthropic lançou o modelo Fable 5.1, que reduz os custos de inferência e melhora a precisão em comparação com a versão anterior Fable 5. Segundo MacRumorshttps://news.google.com/rss/articles/CBMickFVX3lxTE9zWVpsbEM4NFFQdXhMRS1FUzhqQjdQZ1M1bmtFd1Nac0JjN2ZQbHFVTVRENGxkS0hUazBEN3dUbTRTdm5BdWRrbXVQaUtsZ1lULU10QzhUNWVLNVhJSE1xWkN3OElrVjNDZkhfOFRvTEpxZw?oc=5, a atualização já está disponível e promete maior eficiência em tarefas de codificação e raciocínio de longo prazo, um passo importante para empresas que buscam reduzir custos operacionais com IA.</p>
   <div class="chips"><span>bimonthly-report</span><span>ai-agents</span><span>llm</span></div>
-</article>
-<article class="story-card is-collapsed" hidden data-search="radar ia — 05/09/2026 radar ia trending github reddit hackernews vendors community">
-  <div class="story-meta"><time datetime="2026-09-05">2026-09-05</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-05-radar-2026-09-05">Radar IA — 05/09/2026</a></h3>
-  <p>Radar de 56 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span class="chip-more">+4</span></div>
 </article>
   </div>
   <button type="button" class="show-more" data-show-more="relatorios">Ver todos os relatorios (24)</button>
