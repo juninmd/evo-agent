@@ -49,7 +49,7 @@
       <article class="article-shell">
         <header class="article-hero">
           <a class="back-link" href="{{ '/' | relative_url }}#arquivo">&larr; Todos os artigos</a>
-          <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}</p>
+          <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}{% if page.reading_time %} · {{ page.reading_time }} min de leitura{% endif %}</p>
           <h1>{{ page.title | escape }}</h1>
           {% if page.summary %}<p class="article-summary">{{ page.summary | escape }}</p>{% endif %}
           {% if page.tags %}

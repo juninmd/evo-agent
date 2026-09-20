@@ -197,9 +197,15 @@ title: Evo Agent
   </div>
   <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a><a href="#mes-2026-06">Jun/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>20</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>21</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="copilot pro, codex degradação e anthropic em foco reddit web-search copilot post-signals vscode codex searxng anthropic claude model">
+    <article class="story-card" data-search="análise comparativa: claude 3.5 opus vs github copilot pricing e novas ferramentas de ui reddit web-search google-news copilot post-signals githubcopilot codex searxng anthropic claude model">
+  <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-analise-comparativa-claude-3-5-opus-vs-github-copilot-pricing-e-novas-ferramenta">Análise comparativa: Claude 3.5 Opus vs GitHub Copilot pricing e novas ferramentas de UI</a></h3>
+  <p>Desafios de assinatura no Copilot revelam conflitos entre planos estudantil e Pro; Codex expõe tendências de geração de código &#39;bloated&#39;.</p>
+  <div class="chips"><span>reddit</span><span>web-search</span><span>google-news</span><span>copilot</span><span class="chip-more">+5</span></div>
+</article>
+<article class="story-card" data-search="copilot pro, codex degradação e anthropic em foco reddit web-search copilot post-signals vscode codex searxng anthropic claude model">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-copilot-pro-codex-degradacao-e-anthropic-em-foco">Copilot Pro, Codex Degradação e Anthropic em Foco</a></h3>
   <p>Usuários relatam inconsistências no Copilot Pro, suporte em queda do Codex e anúncios de expansão de modelos Claude. Esses eventos afetam decisões de orçamento, migração e arquitetura de IA em empresas.</p>
@@ -674,7 +680,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group" id="mes-2026-06">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>3</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>2</strong></div>
   <div class="story-grid">
     <article class="story-card" data-search="intuit se alia à anthropic para ia financeira e desenvolvedores adotam frameworks rust e ai gateway google-news google reddit anthropic custo llm local-ai">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -687,12 +693,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-29-parcerias-estrategicas-e-riscos-operacionais-openai-anthropic-hp-e-incidentes-do">Parcerias estratégicas e riscos operacionais: OpenAI, Anthropic, HP e incidentes do Claude Code</a></h3>
   <p>Relatórios oficiais revelam novas oportunidades e expansões de IA, enquanto relatos da comunidade apontam vulnerabilidades e estratégias de redução de custos em ambientes de agentes.</p>
   <div class="chips"><span>openai</span><span>google-news</span><span>tabnews</span><span>reddit</span><span class="chip-more">+5</span></div>
-</article>
-<article class="story-card" data-search="anthropic fable 5 eleva custos; tabs e carllog mostram desafios de ux e telemetria tabnews google-news br developer preço fable anthropic anthropic fable5 preço anthropic distillation attack">
-  <div class="story-meta"><time datetime="2026-06-28">2026-06-28</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-28-anthropic-fable-5-eleva-custos-tabs-e-carllog-mostram-desafios-de-ux-e-telemetri">Anthropic Fable 5 eleva custos; Tabs e Carllog mostram desafios de UX e telemetria</a></h3>
-  <p>Preços da nova classe Mythos da Anthropic pressionam orçamentos, enquanto desenvolvedores brasileiros testam consumo móvel de conteúdo e monitoramento 24/7 de veículos elétricos.</p>
-  <div class="chips"><span>tabnews</span><span>google-news</span><span>br</span><span>developer</span><span class="chip-more">+3</span></div>
 </article>
   </div>
 </section>
