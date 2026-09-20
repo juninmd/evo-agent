@@ -229,18 +229,30 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
         const sourceIndex =
           err.draft.highlights[Number(badHighlight?.[1]) - 1]?.sourceIndex;
         const dropped = badHighlight ? usedArticles[sourceIndex] : undefined;
-        // Dropping the pool's last primary source would leave the article
-        // validation step (which still expects one, based on the original
-        // recentArticles pool) unsatisfiable no matter what the model drafts.
-        const isLastPrimary =
+        // Dropping the pool's last representative of a class the validator
+        // hard-requires (primary source, any community signal, or a focus
+        // community's only post) would make every subsequent attempt fail
+        // that requirement instead -- the same infinite-retry shape this
+        // drop exists to fix, just relocated to a different validation rule.
+        const isLastOfRequiredClass =
           dropped &&
-          isPrimarySource(dropped) &&
-          usedArticles.filter(isPrimarySource).length <= 1;
+          ((isPrimarySource(dropped) &&
+            usedArticles.filter(isPrimarySource).length <= 1) ||
+            (isCommunitySignal(dropped) &&
+              usedArticles.filter(isCommunitySignal).length <= 1) ||
+            (() => {
+              const community = focusCommunity(dropped);
+              return (
+                community !== null &&
+                usedArticles.filter((a) => focusCommunity(a) === community)
+                  .length <= 1
+              );
+            })());
         if (
           badHighlight &&
           Number.isInteger(sourceIndex) &&
           dropped &&
-          !isLastPrimary
+          !isLastOfRequiredClass
         ) {
           usedArticles = usedArticles.filter((a) => a !== dropped);
           log.warn(`Dropping thin source from candidate pool: ${dropped.url}`);
@@ -301,7 +313,7 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
       selected: referencedArticles.length,
       rejected: recentArticles.length - referencedArticles.length,
       primarySources: referencedArticles.filter(isPrimarySource).length,
-      primaryCandidates: recentArticles.filter(isPrimarySource).length,
+      primaryCandidates: curation.metrics.primaryCandidatesAvailable,
     },
     content: withModelFooter(fullContentWithRefs),
     date: today,

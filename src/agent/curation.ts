@@ -81,6 +81,14 @@ export interface CurationResult {
     primarySources: number;
     communitySignals: number;
     redditSignals: number;
+    /**
+     * Primary articles that survived low-information filtering and dedup,
+     * i.e. that curation could actually have selected. A raw crawl count
+     * includes primaries curation never had a chance to pick (too-short
+     * summary, merged into a duplicate), which makes "no primary source"
+     * validation fire on editions that were never able to cite one.
+     */
+    primaryCandidatesAvailable: number;
   };
 }
 
@@ -451,6 +459,9 @@ export function curateArticles(
       selected: selected.length,
       rejected: rejected.length,
       buckets,
+      primaryCandidatesAvailable: deduped.filter(
+        (candidate) => candidate.primary,
+      ).length,
       primarySources: selected.filter((candidate) => candidate.primary).length,
       communitySignals: selected.filter((candidate) =>
         isCommunitySignal(candidate.article),
