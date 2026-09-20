@@ -197,9 +197,15 @@ title: Evo Agent
   </div>
   <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a><a href="#mes-2026-06">Jun/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>21</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>22</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="análise comparativa: claude 3.5 opus vs github copilot pricing e novas ferramentas de ui reddit web-search google-news copilot post-signals githubcopilot codex searxng anthropic claude model">
+    <article class="story-card" data-search="openai lança youth safety blueprint e hex integra gpt‑6 astra para relatórios visuais openai reddit post-signals vscode githubcopilot copilot searxng openai codex">
+  <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-openai-lanca-youth-safety-blueprint-e-hex-integra-gpt-6-astra-para-relatorios-vi">OpenAI lança Youth Safety Blueprint e Hex integra GPT‑6 Astra para relatórios visuais</a></h3>
+  <p>OpenAI divulga um plano de seis pilares para proteger jovens usando IA. Hex utiliza o modelo GPT‑6 Astra para transformar análises em visualizações interativas compartilháveis por equipes.</p>
+  <div class="chips"><span>openai</span><span>reddit</span><span>post-signals</span><span>vscode</span><span class="chip-more">+4</span></div>
+</article>
+<article class="story-card" data-search="análise comparativa: claude 3.5 opus vs github copilot pricing e novas ferramentas de ui reddit web-search google-news copilot post-signals githubcopilot codex searxng anthropic claude model">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-analise-comparativa-claude-3-5-opus-vs-github-copilot-pricing-e-novas-ferramenta">Análise comparativa: Claude 3.5 Opus vs GitHub Copilot pricing e novas ferramentas de UI</a></h3>
   <p>Desafios de assinatura no Copilot revelam conflitos entre planos estudantil e Pro; Codex expõe tendências de geração de código &#39;bloated&#39;.</p>
@@ -680,19 +686,13 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group" id="mes-2026-06">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>2</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>1</strong></div>
   <div class="story-grid">
     <article class="story-card" data-search="intuit se alia à anthropic para ia financeira e desenvolvedores adotam frameworks rust e ai gateway google-news google reddit anthropic custo llm local-ai">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-30-intuit-se-alia-a-anthropic-para-ia-financeira-e-desenvolvedores-adotam-framework">Intuit se alia à Anthropic para IA financeira e desenvolvedores adotam frameworks Rust e AI gateway</a></h3>
   <p>Parcerias estratégicas impulsionam agentes de IA personalizados enquanto novos frameworks simplificam a orquestração de workloads locais. Boas práticas de segurança surgem diante da amplificação de risco em automação de suporte e scraping.</p>
   <div class="chips"><span>google-news</span><span>google</span><span>reddit</span><span>anthropic custo</span><span class="chip-more">+2</span></div>
-</article>
-<article class="story-card" data-search="parcerias estratégicas e riscos operacionais: openai, anthropic, hp e incidentes do claude code openai google-news tabnews reddit anthropic fable5 custo br developer agents claude">
-  <div class="story-meta"><time datetime="2026-06-29">2026-06-29</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-29-parcerias-estrategicas-e-riscos-operacionais-openai-anthropic-hp-e-incidentes-do">Parcerias estratégicas e riscos operacionais: OpenAI, Anthropic, HP e incidentes do Claude Code</a></h3>
-  <p>Relatórios oficiais revelam novas oportunidades e expansões de IA, enquanto relatos da comunidade apontam vulnerabilidades e estratégias de redução de custos em ambientes de agentes.</p>
-  <div class="chips"><span>openai</span><span>google-news</span><span>tabnews</span><span>reddit</span><span class="chip-more">+5</span></div>
 </article>
   </div>
 </section>
