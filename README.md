@@ -19,7 +19,13 @@ title: Evo Agent
     <h2>Relatorios</h2>
   </div>
   <div class="story-grid featured-grid" data-collapsible>
-    <article class="story-card" data-search="deepseek-v4.1-flash comprime kv cache; claude code adota agents.md nativo; gpt-5.4 será weekly-report hf tabnews reddit papers research br developer copilot post-signals codex">
+    <article class="story-card" data-search="deepseek, auto‑research, e incidentes em codex e claude code weekly-report hf openrouter: github vscode reddit tabnews papers research models launches">
+  <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-20-deepseek-auto-research-e-incidentes-em-codex-e-claude-code">DeepSeek, Auto‑Research, e Incidentes em Codex e Claude Code</a></h3>
+  <p>Compression inteligente de KV cache e novos harnesses impulsionam agentes, enquanto relatos de Reddit revelam bloqueios em Codex e ajustes de cache em Claude Code.</p>
+  <div class="chips"><span>weekly-report</span><span>hf</span><span>openrouter:</span><span>github</span><span class="chip-more">+7</span></div>
+</article>
+<article class="story-card" data-search="deepseek-v4.1-flash comprime kv cache; claude code adota agents.md nativo; gpt-5.4 será weekly-report hf tabnews reddit papers research br developer copilot post-signals codex">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-20-deepseek-v4-1-flash-comprime-kv-cache-claude-code-adota-agents-md-nativo-gpt-5-4">DeepSeek-V4.1-Flash comprime KV Cache; Claude Code adota AGENTS.md nativo; GPT-5.4 será</a></h3>
   <p>DeepSeek-V4.1-Flash ataca o gargalo de prefill e KV cache em agentes de longo horizonte. Enquanto isso, o ecossistema de ferramentas movimenta-se: Claude Code passa a ler AGENTS.md nativamente e usuários do GitHub Copilot relatam incerteza sobre a descontinuação do GPT-5.4 prevista para outubro.</p>
@@ -49,7 +55,7 @@ title: Evo Agent
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span class="chip-more">+5</span></div>
 </article>
-<article class="story-card" data-search="radar ia — 15/09/2026 radar ia trending github reddit hackernews vendors papers community">
+<article class="story-card is-collapsed" hidden data-search="radar ia — 15/09/2026 radar ia trending github reddit hackernews vendors papers community">
   <div class="story-meta"><time datetime="2026-09-15">2026-09-15</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-15-radar-2026-09-15">Radar IA — 15/09/2026</a></h3>
   <p>Radar de 69 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -160,12 +166,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-05-radar-2026-09-05">Radar IA — 05/09/2026</a></h3>
   <p>Radar de 56 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span class="chip-more">+4</span></div>
-</article>
-<article class="story-card is-collapsed" hidden data-search="radar ia — 04/09/2026 radar ia trending github reddit hackernews vendors papers community">
-  <div class="story-meta"><time datetime="2026-09-04">2026-09-04</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-04-radar-2026-09-04">Radar IA — 04/09/2026</a></h3>
-  <p>Radar de 64 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
-  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span class="chip-more">+5</span></div>
 </article>
   </div>
   <button type="button" class="show-more" data-show-more="relatorios">Ver todos os relatorios (24)</button>
