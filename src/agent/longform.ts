@@ -4,6 +4,7 @@ import { log } from "../utils/logger.js";
 import {
   EDITORIAL_CLICHES,
   type EditorialDraft,
+  hasModelArtifacts,
   looksEnglish,
 } from "./editorial.js";
 
@@ -30,6 +31,9 @@ export function proseIssues(text: string, minChars: number): string[] {
   if (/^\s*[-*+]\s+/m.test(trimmed)) issues.push("contém lista com bullets");
   if (/^\s*#{1,6}\s+/m.test(trimmed)) issues.push("contém subtítulo markdown");
   if (/https?:\/\//i.test(trimmed)) issues.push("contém URL");
+  if (hasModelArtifacts(trimmed)) {
+    issues.push("contém token ou repetição corrompida do modelo");
+  }
   const cliche = trimmed.match(EDITORIAL_CLICHES);
   if (cliche) issues.push(`usa a expressão proibida "${cliche[0]}"`);
   if (looksEnglish(trimmed, 8)) issues.push("não está em português brasileiro");

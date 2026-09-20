@@ -41,6 +41,16 @@ const GENERIC_TITLE_PATTERNS = [
 export const EDITORIAL_CLICHES =
   /(por que (isso )?importa|interesse crescente|impacto significativo|melhorar a produtividade|produtividade e (a )?efici[eê]ncia|cada vez mais|players do mercado|o per[ií]odo foi marcado|vale (a pena )?destacar|[eé] importante (notar|destacar|ressaltar)|em resumo|nesse sentido|no fim das contas|revolucion(a|á)ri)/i;
 
+/**
+ * Special/placeholder tokens a broken decode can leak into plain text, e.g. a
+ * repeated run of literal "<unk>" instead of the actual generated words.
+ */
+const MODEL_ARTIFACT_TOKENS = /<unk>|<pad>|\[UNK\]|<\/?s>|�/i;
+
+export function hasModelArtifacts(text: string): boolean {
+  return MODEL_ARTIFACT_TOKENS.test(text);
+}
+
 const ENGLISH_STOPWORDS =
   /\b(the|and|with|of|for|from|that|this|are|is|to|show|shows|how|why|new|take|taking|first)\b/gi;
 
@@ -157,6 +167,9 @@ export function validateEditorialDraft(
   ].join(" ");
   if (EDITORIAL_CLICHES.test(fullText)) {
     errors.push("draft contains vague editorial language");
+  }
+  if (hasModelArtifacts(fullText)) {
+    errors.push("draft contains a corrupted model decode artifact");
   }
   const cited = draft.highlights
     .map((highlight) => sources[highlight.sourceIndex])
