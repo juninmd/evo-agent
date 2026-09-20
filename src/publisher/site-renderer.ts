@@ -277,7 +277,7 @@ function buildHead(): string {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=7' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=8' | relative_url }}">
     <script>
       // Runs before first paint: applies the theme and stamps the toggle's own
       // label, so the button never claims the opposite of what is rendered.
@@ -617,13 +617,28 @@ main {
 
 .hero-stats span,
 .chips span {
-  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
   border-radius: 999px;
   color: var(--muted);
   padding: 7px 12px;
 }
 
 .hero-stats strong { color: var(--accent); }
+
+.hero {
+  position: relative;
+}
+
+.kicker::before {
+  background: var(--accent);
+  border-radius: 999px;
+  content: "";
+  display: inline-block;
+  height: 6px;
+  margin-right: 8px;
+  width: 6px;
+}
 
 .section-title {
   align-items: end;
@@ -641,21 +656,24 @@ main {
 
 .story-grid {
   display: grid;
-  gap: 16px;
+  gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
 .story-card {
   background: linear-gradient(160deg, color-mix(in srgb, var(--panel-2) 86%, transparent), color-mix(in srgb, var(--panel) 94%, transparent));
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 22px;
-  transition: border-color 160ms ease, transform 160ms ease;
+  border-radius: 14px;
+  border-top: 3px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--bg) 40%, transparent);
+  padding: 24px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
 .story-card:hover {
   border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-  transform: translateY(-2px);
+  box-shadow: 0 14px 32px color-mix(in srgb, var(--bg) 55%, transparent);
+  transform: translateY(-4px);
 }
 
 .story-meta {
@@ -686,7 +704,7 @@ main {
 
 .month-group {
   border-top: 1px solid var(--line);
-  padding: 28px 0;
+  padding: 34px 0;
 }
 
 .month-heading {
@@ -694,13 +712,24 @@ main {
   display: grid;
   gap: 12px;
   grid-template-columns: 72px 1fr auto;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
+}
+
+.month-heading h2 {
+  font-weight: 700;
 }
 
 .month-heading span,
 .month-heading strong {
   color: var(--hot);
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.month-heading strong {
+  background: color-mix(in srgb, var(--hot) 12%, transparent);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  padding: 4px 10px;
 }
 
 .empty-state {
