@@ -157,6 +157,12 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
       "SEARXNG_URL",
       "http://searxng.searxng.svc.cluster.local",
     ),
+    // Optional: GLiNER zero-shot NER tagging (see agent/entities.ts). Empty
+    // key disables it — enrichment is best-effort, never required.
+    gliner: {
+      apiKey: env.HF_API_KEY ?? "",
+      model: env.GLINER_MODEL ?? "urchade/gliner_multi-v2.1",
+    },
   } as const;
 }
 

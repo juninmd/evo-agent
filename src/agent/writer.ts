@@ -27,6 +27,7 @@ import {
   isGenericTitle,
   parseEditorialDraft,
 } from "./editorial.js";
+import { extractEntityTags } from "./entities.js";
 import { getSystemPrompt } from "./improver.js";
 import { expandEdition } from "./longform.js";
 import type { GeneratedArticle, ReportPeriod } from "./types.js";
@@ -241,7 +242,13 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
       : [];
   });
   const groups = groupBySourceType(referencedArticles);
-  const articleTags = buildTagsFromGroups(groups).slice(0, 10);
+  const entityTags = await extractEntityTags(
+    `${draft.title}. ${draft.dek}`,
+    config.gliner,
+  );
+  const articleTags = [
+    ...new Set([...entityTags, ...buildTagsFromGroups(groups)]),
+  ].slice(0, 10);
   const fullContent = `# ${draft.title}\n\n${articleBody}`;
   const references = buildReferencesSection(referencedArticles);
   const fullContentWithRefs = references
