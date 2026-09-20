@@ -243,6 +243,14 @@ const REDDIT_COMMENTS_ENABLED = process.env.REDDIT_COMMENTS_ENABLED === "true";
 /** Hourly crawls never let the per-IP budget recover between sweeps. */
 const REDDIT_SIGNALS_MIN_INTERVAL_HOURS = 6;
 const REDDIT_SIGNALS_LAST_RUN_KEY = "reddit_signals_last_run";
+/**
+ * A manual/ad-hoc crawl run minutes after the hourly cron re-hits Reddit with
+ * a cold per-process rate limiter, burning the still-throttled per-IP budget
+ * for articles that were just fetched and trips the circuit breaker for
+ * hours. Gate each Reddit feed source independently of the RSS-parser flow
+ * used by non-Reddit sources.
+ */
+const REDDIT_FEED_MIN_INTERVAL_MINUTES = 20;
 
 class RedditRateLimitError extends Error {
   constructor(readonly retryAfterMs: number) {
@@ -1244,6 +1252,20 @@ export function redditSignalsDue(
   return elapsedMs >= REDDIT_SIGNALS_MIN_INTERVAL_HOURS * 3600_000;
 }
 
+function redditFeedAttemptKey(sourceName: string): string {
+  return `reddit.feed.last_attempt.${sourceName}`;
+}
+
+export function redditFeedDue(
+  lastAttempt: string | null,
+  now = new Date(),
+): boolean {
+  if (!lastAttempt) return true;
+  const elapsedMs = now.getTime() - Date.parse(lastAttempt);
+  if (!Number.isFinite(elapsedMs)) return true;
+  return elapsedMs >= REDDIT_FEED_MIN_INTERVAL_MINUTES * 60_000;
+}
+
 export async function crawlRedditCommunitySignals(): Promise<number> {
   if (!redditSignalsDue(db.getState(REDDIT_SIGNALS_LAST_RUN_KEY))) {
     log.info(
@@ -1684,6 +1706,15 @@ async function crawlAllInner(): Promise<CrawlReport> {
       log.debug(`Circuit breaker: skipping "${source.name}"`);
       return;
     }
+    if (
+      isRedditSource(source) &&
+      !redditFeedDue(db.getState(redditFeedAttemptKey(source.name)))
+    ) {
+      log.debug(
+        `Reddit feed "${source.name}" skipped: attempted under ${REDDIT_FEED_MIN_INTERVAL_MINUTES}min ago`,
+      );
+      return;
+    }
     try {
       if (source.html) {
         log.info(`Scraping HTML source "${source.name}" from: ${source.url}`);
@@ -1696,6 +1727,10 @@ async function crawlAllInner(): Promise<CrawlReport> {
       let feedData: Awaited<ReturnType<typeof parser.parseURL>>;
       try {
         if (isRedditSource(source)) {
+          db.setState(
+            redditFeedAttemptKey(source.name),
+            new Date().toISOString(),
+          );
           const rawXml = await redditGet<string>(source.url, {
             headers: {
               Accept: "application/atom+xml, application/xml",

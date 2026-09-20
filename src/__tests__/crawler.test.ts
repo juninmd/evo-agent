@@ -7,6 +7,7 @@ import {
   isUsefulComment,
   orderedCommunitySubreddits,
   parseGitHubStarCount,
+  redditFeedDue,
   redditRateLimitDelayMs,
   redditSignalsDue,
   subredditPlan,
@@ -115,6 +116,17 @@ describe("crawler transformations", () => {
     expect(redditSignalsDue("not-a-date", now)).toBe(true);
     expect(redditSignalsDue("2026-08-06T21:00:00Z", now)).toBe(false);
     expect(redditSignalsDue("2026-08-06T16:00:00Z", now)).toBe(true);
+  });
+
+  it("throttles a single Reddit feed source to one attempt every 20 minutes", () => {
+    // A manual crawl minutes after the hourly cron must not re-hit the same
+    // still-throttled subreddit, or it wastes the per-IP budget and can trip
+    // the circuit breaker for hours.
+    const now = new Date("2026-08-06T22:00:00Z");
+    expect(redditFeedDue(null, now)).toBe(true);
+    expect(redditFeedDue("not-a-date", now)).toBe(true);
+    expect(redditFeedDue("2026-08-06T21:45:00Z", now)).toBe(false);
+    expect(redditFeedDue("2026-08-06T21:39:00Z", now)).toBe(true);
   });
 
   it("turns source Markdown into usable evidence", () => {
