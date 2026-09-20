@@ -110,7 +110,7 @@ export function groupBySourceType(articles: Article[]): Map<string, Article[]> {
                 ? "Google News"
                 : bucket === "websearch"
                   ? "Web Search"
-                  : article.source.split(" ")[0];
+                  : article.source.split(/[\s:]/)[0];
     groups.set(label, [...(groups.get(label) ?? []), article]);
   }
   return groups;
@@ -135,10 +135,13 @@ export function buildTagsFromGroups(groups: Map<string, Article[]>): string[] {
     // Internal crawl-engine identifier (crawler/index.ts), never a topic.
     "searxng",
   ]);
-  const slugifyTag = (tag: string) => tag.trim().replace(/\s+/g, "-");
-  const sourceTags = [...groups.keys()].map((key) =>
-    key.toLowerCase().replace(/\s+/g, "-"),
-  );
+  const slugifyTag = (tag: string) =>
+    tag
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
+  const sourceTags = [...groups.keys()].map(slugifyTag);
   const themeTags = [
     ...new Set(
       [...groups.values()].flatMap((articles) =>

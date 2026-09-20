@@ -42,4 +42,11 @@ describe("buildTagsFromGroups", () => {
     expect(tags).toContain("openai-codex");
     expect(tags.some((tag) => tag.includes(" "))).toBe(false);
   });
+
+  it("strips trailing punctuation from source-label tags (e.g. 'OpenRouter: New Models')", () => {
+    const articles = [article({ source: "OpenRouter: New Models" })];
+    const tags = buildTagsFromGroups(groupBySourceType(articles));
+    expect(tags).toContain("openrouter");
+    expect(tags.some((tag) => tag.includes(":"))).toBe(false);
+  });
 });
