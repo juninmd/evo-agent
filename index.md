@@ -191,9 +191,15 @@ title: Evo Agent
     <h2>Artigos diarios</h2>
   </div>
   <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>17</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>18</strong></div>
   <div class="story-grid">
     <article class="story-card">
+  <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-minimax-h3-nova-arquitetura-omni-modal-e-desafios-de-integracao-nos-navegadores-">MiniMax-H3, nova arquitetura omni‑modal e desafios de integração nos navegadores de código</a></h3>
+  <p>Um salto nos modelos omni‑modal e novas funcionalidades de sandboxing para agentes, junto com relatos de falhas de interface do VS Code e de limitações de licença do GitHub Copilot.</p>
+  <div class="chips"><span>hf</span><span>openai</span><span>reddit</span><span>papers</span><span>research</span><span>sdk</span><span>searxng</span><span>anthropic claude model</span><span>post-signals</span><span>vscode</span></div>
+</article>
+<article class="story-card">
   <div class="story-meta"><time datetime="2026-09-19">2026-09-19</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-19-z-ai-lanca-glm-5-3-flashx-e-deepseek-v4-1-flash-ataca-kv-cache-usuarios-relatam-">Z.ai lança GLM 5.3 FlashX e DeepSeek-V4.1-Flash ataca KV cache; usuários relatam bloqueios de quota</a></h3>
   <p>Novos modelos multimodais e de compressão de KV cache chegam ao mercado enquanto desenvolvedores enfrentam limites de taxa, cobranças inesperadas e remoção de modelos legados em ferramentas de código assistido.</p>
@@ -650,7 +656,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group">
-  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>6</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Junho</h2><strong>5</strong></div>
   <div class="story-grid">
     <article class="story-card">
   <div class="story-meta"><time datetime="2026-06-30">2026-06-30</time><span>Artigo</span></div>
@@ -681,12 +687,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-26-zhipu-ai-reduz-custos-de-modelagem-llms-locais-ganham-forca-no-android-egpu-e-ex">Zhipu AI reduz custos de modelagem; LLMs locais ganham força no Android, eGPU e extensões BYOK</a></h3>
   <p>Modelos de codificação de baixo custo surgem na China, impulsionando adoções on‑device. Usuários relatam experiências práticas com Android, eGPU e extensões de navegador que exigem decisões de orçamento e arquitetura.</p>
   <div class="chips"><span>google-news</span><span>reddit</span><span>anthropic fable5 cost</span><span>llm</span><span>local-ai</span></div>
-</article>
-<article class="story-card">
-  <div class="story-meta"><time datetime="2026-06-25">2026-06-25</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-06-25-anthropic-pausa-mudanca-no-claude-agent-sdk-e-vulnerabilidades-do-mythos-openai-">Anthropic pausa mudança no Claude Agent SDK e vulnerabilidades do Mythos; OpenAI destaca agentes de</a></h3>
-  <p>Este briefing reúne as últimas revelações de segurança da Anthropic e os avanços de agentes da OpenAI, além de novidades de código aberto que afetam pipelines agentic.</p>
-  <div class="chips"><span>google-news</span><span>openai</span><span>github-trending</span><span>arxiv</span><span>anthropic preço modelo</span><span>anthropic billing change</span><span>python</span><span>software-engineering</span></div>
 </article>
   </div>
 </section>
