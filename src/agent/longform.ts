@@ -7,13 +7,14 @@ import {
   looksEnglish,
 } from "./editorial.js";
 
-const ANALYSIS_MIN_CHARS = 700;
-const SYNTHESIS_MIN_CHARS = 900;
+const ANALYSIS_MIN_CHARS = 380;
+const SYNTHESIS_MIN_CHARS = 500;
 
 const STYLE_RULES = `Regras de escrita:
 - Parágrafos corridos em português brasileiro. Nada de listas, bullets, subtítulos, tabelas ou emojis.
+- Direto ao ponto: uma ideia por frase, frases curtas, sem redundância. Não repita em um parágrafo o que já foi dito no anterior.
 - Nunca use rótulos fixos como "Por que importa", "O que aconteceu", "Contexto:", "Em resumo" ou "Vale destacar". O texto deve fluir como análise escrita por uma pessoa.
-- Não use "cada vez mais", "players do mercado", "impacto significativo", "revolucionário" nem outras frases de preenchimento.
+- Não use "cada vez mais", "players do mercado", "impacto significativo", "revolucionário", "nesse contexto", "diante disso", "é fundamental", "não se trata apenas de" nem outras frases de preenchimento típicas de IA.
 - Não invente números, versões, datas, benchmarks, nomes ou capacidades que não estejam na evidência.
 - Não escreva URLs nem links; as citações são adicionadas pelo programa.
 - Prefira frases concretas: o que muda na arquitetura, no custo, no risco, na operação ou na decisão de adoção de quem lê.`;
@@ -105,7 +106,7 @@ Apuração já feita pela edição:
 - Fato central: ${sanitizeForPrompt(highlight.whatHappened, 600)}
 - Consequência técnica: ${sanitizeForPrompt(highlight.whyItMatters, 600)}
 
-Escreva de 3 a 5 parágrafos densos (no mínimo ${ANALYSIS_MIN_CHARS} caracteres no total). Comece pelo fato, depois desdobre o que ele muda na prática para quem constrói e opera software com IA, e feche com o limite ou a incerteza que a evidência ainda deixa em aberto.
+Escreva 2 parágrafos curtos e diretos (no mínimo ${ANALYSIS_MIN_CHARS} caracteres no total, sem enrolação). Primeiro parágrafo: o fato, sem preâmbulo. Segundo parágrafo: o que muda na prática para quem constrói e opera software com IA, incluindo o limite ou a incerteza que a evidência ainda deixa em aberto.
 
 ${STYLE_RULES}
 
@@ -137,7 +138,7 @@ async function expandSynthesis(
 
 ${agenda}
 
-Escreva de 3 a 4 parágrafos (no mínimo ${SYNTHESIS_MIN_CHARS} caracteres) mostrando o que essas pautas, lidas juntas, dizem sobre a direção técnica do momento, onde elas se contradizem e o que ainda não está resolvido. Não repita as pautas uma a uma nem faça resumo enumerado.
+Escreva 2 parágrafos diretos (no mínimo ${SYNTHESIS_MIN_CHARS} caracteres) mostrando o que essas pautas, lidas juntas, dizem sobre a direção técnica do momento, onde elas se contradizem e o que ainda não está resolvido. Não repita as pautas uma a uma nem faça resumo enumerado.
 
 ${STYLE_RULES}
 
