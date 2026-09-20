@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=5' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=7' | relative_url }}">
     <script>
       // Runs before first paint: applies the theme and stamps the toggle's own
       // label, so the button never claims the opposite of what is rendered.
@@ -48,6 +48,7 @@
     <main id="conteudo">
       <article class="article-shell">
         <header class="article-hero">
+          <a class="back-link" href="{{ '/' | relative_url }}#arquivo">&larr; Todos os artigos</a>
           <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}</p>
           <h1>{{ page.title | escape }}</h1>
           {% if page.summary %}<p class="article-summary">{{ page.summary | escape }}</p>{% endif %}
@@ -122,6 +123,52 @@
           }).catch(function() {});
         });
         pre.appendChild(btn);
+      });
+    </script>
+    <script>
+      document.querySelectorAll("[data-show-more]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var grid = btn.previousElementSibling;
+          grid.querySelectorAll(".is-collapsed").forEach(function(card) {
+            card.hidden = false;
+          });
+          btn.remove();
+        });
+      });
+
+      var searchInput = document.getElementById("story-search");
+      if (searchInput) {
+        var emptyState = document.getElementById("search-empty");
+        searchInput.addEventListener("input", function() {
+          var query = searchInput.value.trim().toLowerCase();
+          var anyVisible = false;
+          document.querySelectorAll(".story-card[data-search]").forEach(function(card) {
+            var matches = !query || card.dataset.search.includes(query);
+            card.style.display = matches ? "" : "none";
+            if (matches) anyVisible = true;
+          });
+          document.querySelectorAll(".month-group").forEach(function(group) {
+            var hasVisible = Array.prototype.some.call(
+              group.querySelectorAll(".story-card"),
+              function(card) { return card.style.display !== "none"; },
+            );
+            group.style.display = hasVisible ? "" : "none";
+          });
+          if (emptyState) emptyState.hidden = anyVisible;
+        });
+      }
+
+      var backToTop = document.createElement("button");
+      backToTop.type = "button";
+      backToTop.className = "back-to-top";
+      backToTop.textContent = "\u2191";
+      backToTop.setAttribute("aria-label", "Voltar ao topo");
+      backToTop.addEventListener("click", function() {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      document.body.appendChild(backToTop);
+      window.addEventListener("scroll", function() {
+        backToTop.classList.toggle("visible", window.scrollY > 600);
       });
     </script>
   </body>
