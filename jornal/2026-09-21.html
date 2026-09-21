@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 21/09/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>100 itens · 37 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>21/09/2026</strong></span><span>Coleta das últimas 24 horas</span><span>8 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Lançamento do dia</p><h1><a href="https://openrouter.ai/xiaomi/mimo-v2.6-pro">Xiaomi: MiMo-V2.6-Pro</a></h1><p class="dek">1048576 tokens de contexto. MiMo-V2.6-Pro is the flagship foundation model developed by Xiaomi. Built at a scale of over 1T parameters, it is designed to push the ceiling of capability for the most demanding...</p>
+<ul class="also"><li><a href="https://openrouter.ai/xiaomi/mimo-v2.6-flash">Xiaomi: MiMo-V2.6-Flash</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://openrouter.ai/xiaomi/mimo-v2.6-pro-ultraspeed">Xiaomi: MiMo-V2.6-Pro-UltraSpeed</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://openrouter.ai/x-ai/grok-4.7">SpaceXAI: Grok 4.7</a> <span class="meta">OpenRouter: New Models</span></li></ul></div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Xiaomi lançou os modelos MiMo-V2.6 (Pro, Flash e Pro-UltraSpeed) com 1.048.576 tokens de contexto.</li><li>SpaceXAI lançou o Grok 4.7 com 500.000 tokens de contexto para tarefas de codificação e agentes.</li><li>GitHub Copilot integrou o modelo Grok 4.7 para fluxos de trabalho agenticos e complexos.</li><li>Vercel AI SDK (@ai-sdk/xai) versões 5.0.5 e 2.0.95 adicionaram o ID do modelo Grok 4.7.</li><li>AWS Bedrock disponibilizou o Grok 4.6 com janela de 500K tokens e quatro níveis de esforço de raciocínio.</li><li>Copilot CLI v1.0.88-0 adicionou notificações OSC 777 para Ghostty e WezTerm e melhorias em MCP.</li><li>LangGraph SDK v0.4.5 e LangGraph v1.2.12 adicionaram esquema de resposta ao comando <code>interrupt()</code>.</li><li>Cloudflare Workers tornou disponível genericamente a execução nativa de Python para orquestração de IA.</li><li>AWS Strands Harness lançou harness de agentes open-source com redução de 28% no custo de tokens.</li><li>DeepSeek-V4.1-Flash e Qwen-Image-2.1 entraram no trending do Hugging Face.</li><li>GitHub Enterprise implementou a exportação de inventário de credenciais (SSH, tokens OAuth).</li><li>vLLM v0.30.0 corrigiu builds de DeepGEMM para CUDA 12.9.</li></ol>
+<div class="watch"><h2>O que observar</h2><p><strong>Consolidação do Grok 4.7:</strong> A rápida integração do modelo da xAI no GitHub Copilot e Vercel AI SDK sinaliza pressão sobre o domínio de agentes de código.</p><p><strong>Ecossistema de Agentes:</strong> A diversificação de ferramentas de suporte (Strands Harness, ECC, Foremerge) indica a transição de &quot;chatbots&quot; para pipelines de engenharia de agentes.</p><p><strong>Infraestrutura Edge:</strong> A disponibilidade geral de Python Workers na Cloudflare reduz a fricção para deploy de bibliotecas de orquestração de IA sem necessidade de servidores externos.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-github">
+<h2 id="desk-github">GitHub Trending <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/affaan-m/ECC" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/affaan-m/ECC" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>GitHub Trending (daily-javascript)</figcaption></figure><h3><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a></h3>
+<p>The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond. | ⭐ 263,715 | Lang: JavaScript <span class="meta">GitHub Trending (daily-javascript) · <b>263715</b></span></p></article>
+<ul class="brief"><li><a href="https://github.com/Significant-Gravitas/AutoGPT">Significant-Gravitas / AutoGPT</a> <span class="meta">GitHub Trending (daily-python) · <b>187466</b></span></li><li><a href="https://github.com/anthropics/claude-code">anthropics / claude-code</a> <span class="meta">GitHub Trending (daily-typescript) · <b>147107</b></span></li><li><a href="https://github.com/clash-verge-rev/clash-verge-rev">clash-verge-rev / clash-verge-rev</a> <span class="meta">GitHub Trending (daily-rust) · <b>146001</b></span></li><li><a href="https://github.com/browser-use/browser-use">browser-use / browser-use</a> <span class="meta">GitHub Trending (daily-python) · <b>115685</b></span></li><li><a href="https://github.com/supabase/supabase">supabase / supabase</a> <span class="meta">GitHub Trending (weekly) · <b>110433</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/prism-ml/Ternary-Bonsai-2-27B-gguf.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf">prism-ml/Ternary-Bonsai-2-27B-gguf</a></h3>
+<p>text-generation · 1491 likes · 1908396 downloads · trending 1385 <span class="meta">HF Trending Models · <b>1385</b></span></p></article>
+<ul class="brief"><li><a href="https://openrouter.ai/xiaomi/mimo-v2.6-pro">Xiaomi: MiMo-V2.6-Pro</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/convaiinnovations/laya">convaiinnovations/laya</a> <span class="meta">HF Trending Models · <b>1063</b></span></li><li><a href="https://openrouter.ai/xiaomi/mimo-v2.6-flash">Xiaomi: MiMo-V2.6-Flash</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash">deepseek-ai/DeepSeek-V4.1-Flash</a> <span class="meta">HF Trending Models · <b>903</b></span></li><li><a href="https://openrouter.ai/xiaomi/mimo-v2.6-pro-ultraspeed">Xiaomi: MiMo-V2.6-Pro-UltraSpeed</a> <span class="meta">OpenRouter: New Models</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/claude/comments/1wm6sv6/is_claude_the_worst_ai/">Is Claude the worst AI?</a></h3>
+<p>Don’t get me wrong, I love using Claude for coding and modeling. Claude works great in those field, but when it comes to summarizing and limitations, it suddenly makes everything worse. For example, I was working on a… <span class="meta">Reddit: Claude</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/claude/comments/1wm8088/my_weekly_fable_allowance_reset_thursday_i_used/">My weekly Fable allowance reset Thursday. I used 26k tokens on Friday. Locked out until next Thursday, on a £200/month Max 20x plan</a> <span class="meta">Reddit: Claude</span></li><li><a href="https://www.reddit.com/r/claude/comments/1wm85pl/i_built_an_opensource_governance_layer_that_makes/">I built an open-source governance layer that makes coding agents prove they’re done</a> <span class="meta">Reddit: Claude</span></li><li><a href="https://www.reddit.com/r/claude/comments/1wm8bsf/when_did_fable_turn_to_shit/">When did fable turn to shit</a> <span class="meta">Reddit: Claude</span></li><li><a href="https://www.reddit.com/r/claude/comments/1wm9pgw/i_think_opus_5_is_going_to_become_less_reliable/">I think Opus 5 is going to become less reliable again...</a> <span class="meta">Reddit: Claude</span></li><li><a href="https://www.reddit.com/r/claude/comments/1wmceir/is_there_a_daily_you_sage_thread_for_sep_21_2026/">Is there a Daily You Sage thread for Sep. 21, 2026?</a> <span class="meta">Reddit: Claude</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/jaredpalmer/kev/tree/main" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/jaredpalmer/kev" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/jaredpalmer/kev/tree/main">Kev: Tiny Jev-like family of decision models built on top of Qwen3.5</a></h3>
+<p>Kev: Tiny Jev-like family of decision models built on top of Qwen3.5 | ⬆ 26 points | 💬 12 comments | by tosh <span class="meta">Hacker News · <b>50</b></span></p></article>
+<ul class="brief"><li><a href="https://agentexecutor.io">Google&#39;s Open Agentic Orchestrator</a> <span class="meta">Hacker News · <b>136</b></span></li><li><a href="https://pluralistic.net/2026/09/21/sunsetting/">The Claude Delusion</a> <span class="meta">Hacker News · <b>128</b></span></li><li><a href="https://linear.app/now/ci-bottleneck-reworked">AI coding has made CI a bottleneck, so we reworked ours to keep up</a> <span class="meta">Hacker News · <b>106</b></span></li><li><a href="https://www.forbes.com/sites/jonmarkman/2026/09/21/amazon-blocks-metas-new-muse-ai-agent-from-shopping-on-amazoncom/">Amazon blocks Meta’s new Muse AI agent from shopping on amazon.com</a> <span class="meta">Hacker News · <b>96</b></span></li><li><a href="https://www.reddit.com/r/MacOSBeta/comments/1vlnf13/workaround_to_avoid_downloading_ai_models_and/">macOS 27: Workaround to avoid downloading AI models and save storage</a> <span class="meta">Hacker News · <b>88</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.88-0" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/github/copilot-cli" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Copilot CLI Releases</figcaption></figure><h3><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.88-0">1.0.88-0</a></h3>
+<p>Added Add optional OSC 777 terminal notifications for direct Ghostty and WezTerm sessions. Improved Support namespaced custom skills and ignored skill directories during skill discovery MCP and plugin views show server… <span class="meta">Copilot CLI Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.blog/changelog/2026-09-21-github-enterprise-adds-credential-inventory-exports">GitHub Enterprise adds credential inventory exports</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/vercel/ai/releases/tag/%40ai-sdk%2Fvue%404.0.108">@ai-sdk/vue@4.0.108</a> <span class="meta">Vercel AI SDK Releases</span></li><li><a href="https://github.com/langchain-ai/langgraph/releases/tag/sdk%3D%3D0.4.5">langgraph-sdk==0.4.5</a> <span class="meta">LangGraph Releases</span></li><li><a href="https://github.com/vllm-project/vllm/releases/tag/v0.30.0">v0.30.0: [Build] Fix DeepGEMM CUDA 12.9 release builds (#57554)</a> <span class="meta">vLLM Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.87">1.0.87</a> <span class="meta">Copilot CLI Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://openai.com/index/higgsfield-from-prompt-to-production-with-astra">Higgsfield AI ships new video features in a day with GPT-6 Astra</a></h3>
+<p>With GPT-6 Astra, Higgsfield AI makes video ad creation easier for small businesses and brings new creative tools to market faster. <span class="meta">OpenAI Blog</span></p></article>
+<ul class="brief"><li><a href="https://blog.cloudflare.com/python-workers-ga/">Python Workers are now generally available</a> <span class="meta">Cloudflare AI Blog</span></li><li><a href="https://huggingface.co/blog/tokenizers-v1">tokenizers v1: encode, decode and scaling, measured</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://openai.com/index/expanding-openai-academy-with-new-learning-paths">Expanding OpenAI Academy with new learning paths</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/MultiverseComputingCAI/pruning-llms-like-a-physicist-block-removal-as-an">Pruning LLMs Like a Physicist: Block Removal as an Ising Optimization Problem</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://openai.com/index/building-standards-next-phase-ai">Building standards for the next phase of AI</a> <span class="meta">OpenAI Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><h3><a href="https://arxiv.org/abs/2609.22049">How Researchers Use and Verify AI Coding Assistants: Tasks and Validation Practices in Scientific Programming</a></h3>
+<p>arXiv:2609.22049v1 Announce Type: new Abstract: Generative AI has entered research programming, yet there is little evidence about which tasks researchers hand to it or how they decide whether its code is correct. We… <span class="meta">arXiv cs.SE</span></p></article>
+<ul class="brief"><li><a href="https://arxiv.org/abs/2609.21843">Supporting Industrial Test-Failure Analysis with LLM-Based Systems: An Experience Report</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2609.21643">From Smarter to Hungrier: the Role of Energy Efficiency in Software-defined Vehicles</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2609.21616">Labelling Bug-Fixing Commits with Local Open-Weight Language Models</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2609.21562">GameLogicBench: Evaluating Coding Agents on Runtime Game Logic with Tick-Level State Assertions</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2609.21544">Cross-Platform vs Native Mobile Development: An Empirical Study of Software Quality Trade-offs</a> <span class="meta">arXiv cs.SE</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/langchain-ai/langchain/releases/tag/langchain-openai%3D%3D1.6.3" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/langchain-ai/langchain" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>LangChain Docs &amp; Updates</figcaption></figure><h3><a href="https://github.com/langchain-ai/langchain/releases/tag/langchain-openai%3D%3D1.6.3">langchain-openai==1.6.3</a></h3>
+<p>Changes since langchain-openai==1.6.2 release(openai): 1.6.3 ( 40719) 40715) 40629) 40443) <span class="meta">LangChain Docs &amp; Updates</span></p></article>
+<ul class="brief"><li><a href="https://dev.to/sylwia-lask/what-if-your-ai-agent-never-had-to-leave-the-browser-demo--5g">What If Your AI Agent Never Had to Leave the Browser? (Demo 🚀)</a> <span class="meta">Dev.to (ai) · <b>31</b></span></li><li><a href="https://dev.to/metalbear/how-mondaycom-runs-agent-evals-against-real-dependencies-webinar-recap-41ge">How monday.com Runs Agent Evals Against Real Dependencies: Webinar Recap</a> <span class="meta">Dev.to (agents) · <b>18</b></span></li><li><a href="https://dev.to/rijultp/why-does-rag-miss-information-thats-clearly-in-the-document-2plk">Why Does RAG Miss Information That&#39;s Clearly in the Document?</a> <span class="meta">Dev.to (llm) · <b>15</b></span></li><li><a href="https://www.tabnews.com.br/lzocateli/transactional-outbox-pattern-resolvendo-o-dual-write">Transactional Outbox Pattern: Resolvendo o Dual Write</a> <span class="meta">TabNews · <b>7</b></span></li><li><a href="https://x.com/theo/status/2038740065300676777">Theo - t3.gg on X: &quot;Claude Code being closed source is the biggest bag ...</a> <span class="meta">X/Twitter (Claude Code)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-09-21</span></footer>
+</div></body></html>
