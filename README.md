@@ -197,9 +197,16 @@ title: Evo Agent
   </div>
   <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>23</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>24</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="regressão do codex astra 6, falha de sessão no codex e release do flet 1.0 reddit tabnews github-trending devto marktechpost v2ex towards web-search google-news codex">
+    <article class="story-card" data-search="astra 6 regresse, codex parado‑escrita, e novas estratégias de cache em claude code reddit vllm codex openai copilot post-signals claudecode inference">
+  <div class="story-meta"><time datetime="2026-09-21">2026-09-21</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-21-astra-6-regresse-codex-parado-escrita-e-novas-estrategias-de-cache-em-claude-cod">Astra 6 Regresse, Codex Parado‑Escrita, e Novas Estratégias de Cache em Claude Code</a></h3>
+  <p>Ferramentas de IA de código enfrentam falhas críticas enquanto agentes de código otimizam quebras de contexto em torno de 1 hora.
+Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</p>
+  <div class="chips"><span>reddit</span><span>vllm</span><span>codex</span><span>openai</span><span class="chip-more">+4</span></div>
+</article>
+<article class="story-card" data-search="regressão do codex astra 6, falha de sessão no codex e release do flet 1.0 reddit tabnews github-trending devto marktechpost v2ex towards web-search google-news codex">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-regressao-do-codex-astra-6-falha-de-sessao-no-codex-e-release-do-flet-1-0">Regressão do Codex Astra 6, falha de sessão no Codex e release do Flet 1.0</a></h3>
   <p>Usuários relatam degradação severa no Astra 6 e travamento após primeira mensagem no Codex, enquanto o Flet 1.0 chega pronto para produção em Python. Senado dos EUA propõe pena de 20 anos para superinteligência sem salvaguardas.</p>
@@ -519,7 +526,7 @@ title: Evo Agent
   </div>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>28</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>27</strong></div>
   <div class="story-grid">
     <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <div class="story-meta"><time datetime="2026-07-31">2026-07-31</time><span>Artigo</span></div>
@@ -682,12 +689,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-02-restauro-limitado-do-claude-fable-5-e-licoes-de-custos-de-llms-de-codigo-aberto">Restauro limitado do Claude Fable 5 e lições de custos de LLMs de código aberto</a></h3>
   <p>Análises de anúncios da Anthropic sobre o Fable 5 contrastam com relatos de desenvolvedores que treinaram LLMs por menos de US$ 400, reforçando decisões de orçamento e escolha de arquitetura.</p>
   <div class="chips"><span>reddit</span><span>hacker-news</span><span>google-news</span><span>tabnews</span><span class="chip-more">+5</span></div>
-</article>
-<article class="story-card" data-search="anthropic investe us$15 bi em infraestrutura e enfrenta kyc no fable 5 enquanto setores de ia e reddit tabnews google-news github-trending searxng custo gpu anthropic llm local-ai br developer">
-  <div class="story-meta"><time datetime="2026-07-01">2026-07-01</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-01-anthropic-investe-us-15-bi-em-infraestrutura-e-enfrenta-kyc-no-fable-5-enquanto-">Anthropic investe US$15 bi em infraestrutura e enfrenta KYC no Fable 5 enquanto setores de IA e</a></h3>
-  <p>Grandes gastos em chips e GPUs pressionam orçamentos de IA. Simultaneamente, restrições de KYC e novas práticas de segurança emergem para agentes LLM.</p>
-  <div class="chips"><span>reddit</span><span>tabnews</span><span>google-news</span><span>github-trending</span><span class="chip-more">+6</span></div>
 </article>
   </div>
 </section>
