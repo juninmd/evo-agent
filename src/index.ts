@@ -460,8 +460,18 @@ async function main() {
     { timezone: config.timezone },
   );
 
+  cron.schedule(
+    config.radarCron,
+    () => {
+      cycles
+        .run("radar", radarCycle)
+        .catch((e) => log.error(`Radar cycle error: ${errMsg(e)}`));
+    },
+    { timezone: config.timezone },
+  );
+
   log.info(
-    `Scheduled: learn=${learnInterval}, article=${config.articleCron} (${config.dailyEditions}/dia), sweep=${dailySweepCron}, weekly=${weeklyCron}, ebook=${ebookCron}`,
+    `Scheduled: learn=${learnInterval}, article=${config.articleCron} (${config.dailyEditions}/dia), sweep=${dailySweepCron}, radar=${config.radarCron}, weekly=${weeklyCron}, ebook=${ebookCron}`,
   );
 
   // A cycle killed mid-run left its row 'running' until the 6h stale sweep, so

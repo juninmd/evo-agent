@@ -25,3 +25,4 @@ temp/
 dump_*.json
 homolog/.tmp/
 .playwright-mcp/
+radar-ia/

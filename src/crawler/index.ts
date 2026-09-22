@@ -18,6 +18,7 @@ import {
   summarizeSourceContent,
 } from "./feed-items.js";
 import { HF_PAPERS_SOURCE, crawlHuggingFacePapers } from "./hf-papers.js";
+import { crawlArtificialAnalysisIntelligence } from "./intelligence.js";
 import {
   HF_TRENDING_SOURCE,
   OPENROUTER_SOURCE,
@@ -1880,6 +1881,13 @@ async function crawlAllInner(): Promise<CrawlReport> {
 
   const extras: Array<{ name: string; fn: () => Promise<number> }> = [
     { name: "AI Community Posts", fn: crawlAiCommunityPosts },
+    {
+      name: "Artificial Analysis Intelligence",
+      fn: async () => {
+        const result = await crawlArtificialAnalysisIntelligence();
+        return result.models.length;
+      },
+    },
     { name: "GitHub Trending", fn: crawlGitHubTrending },
     { name: "Hacker News Algolia", fn: crawlHackerNewsAlgolia },
     { name: HF_PAPERS_SOURCE, fn: () => crawlHuggingFacePapers() },

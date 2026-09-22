@@ -62,6 +62,19 @@ describe("loadConfig", () => {
     expect(config.runMode).toBe("EBOOK");
   });
 
+  it("defaults radarCron and validates it", () => {
+    const config = loadConfig({ ...baseEnv, RUN_MODE: "CRAWL" });
+    expect(config.radarCron).toBe("0 21 * * *");
+
+    expect(() =>
+      loadConfig({
+        ...baseEnv,
+        RUN_MODE: "CRAWL",
+        RADAR_CRON: "invalid-cron",
+      }),
+    ).toThrow(/RADAR_CRON is invalid/);
+  });
+
   it("rejects invalid numeric and cron configuration", () => {
     expect(() =>
       loadConfig({

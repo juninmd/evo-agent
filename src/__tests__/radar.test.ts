@@ -1,18 +1,25 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { UNTRUSTED_MATERIAL_RULE } from "../agent/prompt-guards.js";
 import { RADAR_SYSTEM_PROMPT } from "../agent/radar-reading.js";
+
+vi.mock("../utils/ai.js", () => ({
+  ask: vi
+    .fn()
+    .mockResolvedValue("## TL;DR\n\n1. Launch\n\n## O que observar\n\n- Item"),
+}));
 import {
   bucketRadarArticles,
   dedupeByUrl,
   displayUrl,
   extractReading,
   fallbackReading,
+  generateRadar,
   radarDate,
   radarDigestForModel,
   radarTitle,
   renderRadarTables,
 } from "../agent/radar.js";
-import type { Article } from "../knowledge/store.js";
+import { type Article, db } from "../knowledge/store.js";
 
 function article(overrides: Partial<Article>): Article {
   return {
@@ -376,5 +383,55 @@ describe("radar", () => {
     expect(digest.indexOf("Codex CLI 0.155.0")).toBeLessThan(
       digest.indexOf("huge-repo"),
     );
+  });
+
+  it("embeds intelligence section, source and evidence in generateRadar when snapshot is saved", async () => {
+    const mockSnapshot = {
+      id: 1,
+      captured_at: "2026-09-21T12:00:00Z",
+      day: "2026-09-21",
+      source_url: "https://artificialanalysis.ai/models#intelligence",
+      models: [
+        {
+          name: "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)",
+          slug: "claude-fable-5-1",
+          creator: "Anthropic",
+          intelligenceIndex: 53.4,
+          isOpenWeights: false,
+          isReasoning: true,
+          rank: 1,
+        },
+      ],
+      top_model: "Claude Fable 5.1",
+      top_score: 53.4,
+      changes: { hasChanges: false, summary: "Sem alterações" },
+    };
+
+    vi.spyOn(db, "getLatestIntelligenceSnapshot").mockReturnValue(mockSnapshot);
+    vi.spyOn(db, "getIntelligenceSnapshots").mockReturnValue([mockSnapshot]);
+    vi.spyOn(db, "getArticlesSince").mockReturnValue([
+      article({
+        id: 999,
+        title: "Sample Release 1.0",
+        source: "OpenCode Releases",
+        url: "https://opencode.test/rel1",
+        summary: "Sample release",
+        engagement_score: 10,
+      }),
+    ]);
+
+    const radar = await generateRadar(new Date("2026-09-21T12:00:00Z"));
+    expect(radar.content).toContain(
+      "## Índice de Inteligência (Artificial Analysis)",
+    );
+    expect(radar.content).toContain("xychart-beta");
+    expect(radar.content).toContain("Claude Fable 5.1");
+    expect(radar.sources).toContain(
+      "https://artificialanalysis.ai/models#intelligence",
+    );
+    expect(radar.evidence.map((e) => e.sourceUrl)).toContain(
+      "https://artificialanalysis.ai/models#intelligence",
+    );
+    expect(radar.tags).toContain("benchmarks");
   });
 });

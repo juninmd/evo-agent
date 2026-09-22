@@ -30,6 +30,7 @@ import {
 } from "./editorial.js";
 import { extractEntityTags } from "./entities.js";
 import { getSystemPrompt } from "./improver.js";
+import { renderIntelligenceSection } from "./intelligence.js";
 import { expandEdition } from "./longform.js";
 import type { GeneratedArticle, ReportPeriod } from "./types.js";
 
@@ -763,8 +764,16 @@ async function generatePeriodReportMultiPass(
     );
   }
   const references = buildReferencesSection(selectedArticles);
+  const intelligenceSection = await renderIntelligenceSection();
   const content = withModelFooter(
-    [`**Periodo:** ${periodStr}`, "", ...groupSections, trends, references]
+    [
+      `**Periodo:** ${periodStr}`,
+      "",
+      ...groupSections,
+      trends,
+      intelligenceSection,
+      references,
+    ]
       .filter(Boolean)
       .join("\n\n"),
   );

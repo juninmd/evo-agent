@@ -96,7 +96,11 @@ export function validateArticle(article: GeneratedArticle): string[] {
       .replace(/^```mermaid\s*/i, "")
       .split(/\r?\n/, 1)[0]
       .trim();
-    if (!/^(graph|flowchart)\s+(TD|LR)$|^sequenceDiagram$/i.test(firstLine)) {
+    if (
+      !/^(graph|flowchart)\s+(TD|LR)$|^sequenceDiagram$|^xychart-beta$/i.test(
+        firstLine,
+      )
+    ) {
       errors.push("article contains an invalid Mermaid direction");
       break;
     }

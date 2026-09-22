@@ -78,6 +78,10 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
   if (!cron.validate(articleCron)) {
     throw new Error(`ARTICLE_CRON is invalid: ${articleCron}`);
   }
+  const radarCron = env.RADAR_CRON ?? "0 21 * * *";
+  if (!cron.validate(radarCron)) {
+    throw new Error(`RADAR_CRON is invalid: ${radarCron}`);
+  }
 
   // The schedules and localDayIso() both assume BRT wall time; a container
   // defaulting to UTC ran the 22h sweep at 01h local, into the next day.
@@ -149,6 +153,7 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
     },
     crawlIntervalMinutes: positiveNumber(env, "CRAWL_INTERVAL_MINUTES", "40"),
     articleCron,
+    radarCron,
     timezone,
     dailyEditions: positiveNumber(env, "DAILY_EDITIONS", "3"),
     dbPath: env.DB_PATH ?? join(process.cwd(), "data", "knowledge.db"),

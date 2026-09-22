@@ -109,6 +109,35 @@ describe("validateArticle", () => {
     expect(errors).toContain("article contains an invalid Mermaid direction");
   });
 
+  it("accepts valid xychart-beta Mermaid charts", () => {
+    const valid = generated({
+      content: [
+        "## Destaques",
+        "",
+        "### Modelo A",
+        "",
+        "Evidência com fatos concretos e métricas reais da capacidade analítica. ".repeat(
+          26,
+        ),
+        "",
+        "[Fonte](https://example.com)",
+        "",
+        "```mermaid",
+        "xychart-beta",
+        'title "Benchmark"',
+        'x-axis ["A", "B"]',
+        'y-axis "Score" 0 --> 100',
+        "bar [80, 90]",
+        "```",
+        "",
+        "## Fontes e Referências",
+        "",
+        "1. [Fonte](https://example.com)",
+      ].join("\n"),
+    });
+    expect(validateArticle(valid)).toEqual([]);
+  });
+
   it("rejects generic titles, placeholders, and uncited highlights", () => {
     const errors = validateArticle(
       generated({

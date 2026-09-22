@@ -225,6 +225,19 @@ function applyMigrations(db: Database.Database) {
       ON metric_events(recorded_at);
     CREATE INDEX IF NOT EXISTS idx_published_evidence_article
       ON published_evidence(article_url);
+
+    CREATE TABLE IF NOT EXISTS intelligence_snapshots (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      captured_at TEXT NOT NULL DEFAULT (datetime('now')),
+      day TEXT NOT NULL,
+      source_url TEXT NOT NULL,
+      models_json TEXT NOT NULL,
+      top_model TEXT NOT NULL,
+      top_score REAL NOT NULL,
+      changes_json TEXT DEFAULT '{}'
+    );
+    CREATE INDEX IF NOT EXISTS idx_intelligence_snapshots_day
+      ON intelligence_snapshots(day);
   `);
 
   // Databases created before engagement_score existed need the column added;
@@ -310,6 +323,47 @@ export interface SavePublishedInput {
     excerpt: string;
   }>;
   notificationStatus?: PublishedArticle["notification_status"];
+}
+
+export interface IntelligenceModelRecord {
+  name: string;
+  slug: string;
+  creator: string;
+  intelligenceIndex: number;
+  isOpenWeights: boolean;
+  isReasoning: boolean;
+  releaseDate?: string;
+  contextWindowTokens?: number;
+  rank: number;
+}
+
+export interface IntelligenceSnapshotRow {
+  id: number;
+  captured_at: string;
+  day: string;
+  source_url: string;
+  models_json: string;
+  top_model: string;
+  top_score: number;
+  changes_json: string;
+}
+
+export interface IntelligenceSnapshot {
+  id: number;
+  captured_at: string;
+  day: string;
+  source_url: string;
+  models: IntelligenceModelRecord[];
+  top_model: string;
+  top_score: number;
+  changes: Record<string, unknown>;
+}
+
+export interface SaveIntelligenceSnapshotInput {
+  day: string;
+  source_url?: string;
+  models: IntelligenceModelRecord[];
+  changes?: Record<string, unknown>;
 }
 
 let _urlExistsStmt: ReturnType<Database.Database["prepare"]> | null = null;
@@ -735,6 +789,58 @@ export const db = {
        ORDER BY id`,
     ).all(articleUrl) as PublishedEvidence[];
   },
+
+  saveIntelligenceSnapshot(input: SaveIntelligenceSnapshotInput): number {
+    const top = input.models[0];
+    const result = stmt(
+      `INSERT INTO intelligence_snapshots
+       (day, source_url, models_json, top_model, top_score, changes_json)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+    ).run(
+      input.day,
+      input.source_url ?? "https://artificialanalysis.ai/models#intelligence",
+      JSON.stringify(input.models),
+      top?.name ?? "",
+      top?.intelligenceIndex ?? 0,
+      JSON.stringify(input.changes ?? {}),
+    );
+    return Number(result.lastInsertRowid);
+  },
+
+  getLatestIntelligenceSnapshot(): IntelligenceSnapshot | null {
+    const row = stmt(
+      `SELECT * FROM intelligence_snapshots
+       ORDER BY id DESC LIMIT 1`,
+    ).get() as IntelligenceSnapshotRow | undefined;
+    if (!row) return null;
+    return {
+      id: row.id,
+      captured_at: row.captured_at,
+      day: row.day,
+      source_url: row.source_url,
+      models: safeJsonArrayOfObjects<IntelligenceModelRecord>(row.models_json),
+      top_model: row.top_model,
+      top_score: row.top_score,
+      changes: safeJsonObject(row.changes_json),
+    };
+  },
+
+  getIntelligenceSnapshots(limit = 2): IntelligenceSnapshot[] {
+    const rows = stmt(
+      `SELECT * FROM intelligence_snapshots
+       ORDER BY id DESC LIMIT ?`,
+    ).all(limit) as IntelligenceSnapshotRow[];
+    return rows.map((row) => ({
+      id: row.id,
+      captured_at: row.captured_at,
+      day: row.day,
+      source_url: row.source_url,
+      models: safeJsonArrayOfObjects<IntelligenceModelRecord>(row.models_json),
+      top_model: row.top_model,
+      top_score: row.top_score,
+      changes: safeJsonObject(row.changes_json),
+    }));
+  },
 };
 
 function safeJsonArray(value: string): string[] {
@@ -743,6 +849,15 @@ function safeJsonArray(value: string): string[] {
     return Array.isArray(parsed)
       ? parsed.filter((item): item is string => typeof item === "string")
       : [];
+  } catch {
+    return [];
+  }
+}
+
+function safeJsonArrayOfObjects<T>(value: string): T[] {
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? (parsed as T[]) : [];
   } catch {
     return [];
   }

@@ -251,6 +251,7 @@ describe("migrate - legacy database without engagement_score", () => {
     expect(tables.map((table) => table.name)).toEqual(
       expect.arrayContaining([
         "cycle_runs",
+        "intelligence_snapshots",
         "metric_events",
         "prompt_versions",
         "published_evidence",
@@ -324,5 +325,53 @@ describe("historical article queries", () => {
     expect(rows.every((row) => row.crawled_at < "2026-06-02T00:00:00Z")).toBe(
       true,
     );
+  });
+});
+
+describe("Database - intelligence_snapshots", () => {
+  it("persists intelligence snapshots and retrieves latest and history", async () => {
+    const { db: storeDb } = await import("../knowledge/store.js");
+    const models = [
+      {
+        name: "Test Leader",
+        slug: "test-leader",
+        creator: "TestCorp",
+        intelligenceIndex: 55.5,
+        isOpenWeights: false,
+        isReasoning: true,
+        rank: 1,
+      },
+    ];
+
+    const id1 = storeDb.saveIntelligenceSnapshot({
+      day: "2026-09-20",
+      models,
+      changes: { hasChanges: false },
+    });
+    expect(id1).toBeGreaterThan(0);
+
+    const id2 = storeDb.saveIntelligenceSnapshot({
+      day: "2026-09-21",
+      models: [
+        {
+          ...models[0],
+          intelligenceIndex: 56.0,
+        },
+      ],
+      changes: { hasChanges: true, summary: "Score subiu" },
+    });
+    expect(id2).toBeGreaterThan(id1);
+
+    const latest = storeDb.getLatestIntelligenceSnapshot();
+    expect(latest).not.toBeNull();
+    expect(latest?.day).toBe("2026-09-21");
+    expect(latest?.top_model).toBe("Test Leader");
+    expect(latest?.top_score).toBe(56.0);
+    expect(latest?.models[0].intelligenceIndex).toBe(56.0);
+
+    const history = storeDb.getIntelligenceSnapshots(2);
+    expect(history).toHaveLength(2);
+    expect(history[0].day).toBe("2026-09-21");
+    expect(history[1].day).toBe("2026-09-20");
   });
 });

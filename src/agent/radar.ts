@@ -1,7 +1,9 @@
+import { ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL } from "../crawler/intelligence.js";
 import { db } from "../knowledge/store.js";
 import { newspaperAttachment, newspaperLink } from "../newspaper/index.js";
 import { ask } from "../utils/ai.js";
 import { log } from "../utils/logger.js";
+import { renderIntelligenceSection } from "./intelligence.js";
 import {
   type RadarBucket,
   bucketRadarArticles,
@@ -150,6 +152,7 @@ export async function generateRadar(
 
   const day = radarDate(now);
   const selected = dedupeByUrl(buckets.flatMap((bucket) => bucket.articles));
+  const intelligenceSection = await renderIntelligenceSection(now);
   const newspaper = newspaperAttachment({
     day,
     buckets,
@@ -161,23 +164,51 @@ export async function generateRadar(
     launches,
     reading.trim(),
     "",
+    intelligenceSection,
+    "",
     renderRadarTables(buckets),
     `_Coleta automatica de ${selected.length} itens em ${buckets.length} frentes nas ultimas ${RADAR_WINDOW_HOURS} horas._`,
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const sources = [
+    ...selected.map((article) => displayUrl(article.url)),
+    ...(intelligenceSection ? [ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL] : []),
+  ];
+  const evidence = [
+    ...selected.slice(0, 30).map((article) => ({
+      sourceUrl: displayUrl(article.url),
+      sourceTitle: article.title,
+      excerpt: article.summary.slice(0, 400),
+    })),
+    ...(intelligenceSection
+      ? [
+          {
+            sourceUrl: ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL,
+            sourceTitle: "Artificial Analysis Intelligence Index",
+            excerpt:
+              "Medição e benchmarking comparativo de inteligência, raciocínio e capacidade de modelos de IA de fronteira.",
+          },
+        ]
+      : []),
+  ];
 
   return {
     title: radarTitle(day),
     slug: `radar-${day}`,
     content,
     summary: `Radar de ${selected.length} sinais de IA das ultimas ${RADAR_WINDOW_HOURS}h: ${buckets.map((bucket) => bucket.title).join(", ")}.`,
-    tags: ["radar", "ia", "trending", ...buckets.map((bucket) => bucket.key)],
+    tags: [
+      "radar",
+      "ia",
+      "trending",
+      "benchmarks",
+      ...buckets.map((bucket) => bucket.key),
+    ],
     date: day,
-    sources: selected.map((article) => displayUrl(article.url)),
-    evidence: selected.slice(0, 30).map((article) => ({
-      sourceUrl: displayUrl(article.url),
-      sourceTitle: article.title,
-      excerpt: article.summary.slice(0, 400),
-    })),
+    sources,
+    evidence,
     editorialMetrics: {
       considered: articles.length,
       selected: selected.length,
