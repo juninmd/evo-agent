@@ -5,6 +5,7 @@ import {
   diffIntelligenceSnapshots,
 } from "../crawler/intelligence.js";
 import { type IntelligenceModelRecord, db } from "../knowledge/store.js";
+import { localDayIso } from "../utils/date.js";
 import { log } from "../utils/logger.js";
 
 /**
@@ -88,21 +89,30 @@ export async function renderIntelligenceSection(
   let diff = customDiff;
 
   if (!models || models.length === 0) {
+    const today = localDayIso(now);
     const latest = db.getLatestIntelligenceSnapshot();
-    if (latest && latest.models.length > 0) {
-      models = latest.models;
-      const history = db.getIntelligenceSnapshots(2);
-      const previous = history[1]?.models;
-      diff = diff ?? diffIntelligenceSnapshots(models, previous);
-    } else {
+
+    // Prefer live crawl if snapshot is missing, outdated or holds fewer than 10 models
+    if (!latest || latest.models.length < 10 || latest.day !== today) {
       try {
         const crawled = await crawlArtificialAnalysisIntelligence(now);
         models = crawled.models;
         diff = crawled.diff;
       } catch (err) {
         log.warn(
-          `Unable to render intelligence section: ${err instanceof Error ? err.message : String(err)}`,
+          `Live intelligence crawl failed, attempting fallback to snapshot: ${err instanceof Error ? err.message : String(err)}`,
         );
+      }
+    }
+
+    if (!models || models.length === 0) {
+      if (latest && latest.models.length > 0) {
+        models = latest.models;
+        const history = db.getIntelligenceSnapshots(2);
+        const previous = history[1]?.models;
+        diff = diff ?? diffIntelligenceSnapshots(models, previous);
+      } else {
+        log.warn("No intelligence snapshot available to render");
         return "";
       }
     }
