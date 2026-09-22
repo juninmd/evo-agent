@@ -19,7 +19,13 @@ title: Evo Agent
     <h2>Relatorios</h2>
   </div>
   <div class="story-grid featured-grid" data-collapsible>
-    <article class="story-card" data-search="radar ia — 21/09/2026 radar ia trending github models reddit hackernews releases vendors papers community">
+    <article class="story-card" data-search="radar ia — 22/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community">
+  <div class="story-meta"><time datetime="2026-09-22">2026-09-22</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-22-radar-2026-09-22">Radar IA — 22/09/2026</a></h3>
+  <p>Radar de 111 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>benchmarks</span><span class="chip-more">+8</span></div>
+</article>
+<article class="story-card" data-search="radar ia — 21/09/2026 radar ia trending github models reddit hackernews releases vendors papers community">
   <div class="story-meta"><time datetime="2026-09-21">2026-09-21</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-21-radar-2026-09-21">Radar IA — 21/09/2026</a></h3>
   <p>Radar de 100 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -49,7 +55,7 @@ title: Evo Agent
   <p>DeepSeek-V4.1-Flash ataca o gargalo de prefill e KV cache em agentes de longo horizonte. Enquanto isso, o ecossistema de ferramentas movimenta-se: Claude Code passa a ler AGENTS.md nativamente e usuários do GitHub Copilot relatam incerteza sobre a descontinuação do GPT-5.4 prevista para outubro.</p>
   <div class="chips"><span>weekly-report</span><span>hf</span><span>tabnews</span><span>reddit</span><span class="chip-more">+7</span></div>
 </article>
-<article class="story-card" data-search="radar ia — 19/09/2026 radar ia trending github models reddit hackernews releases vendors papers community">
+<article class="story-card is-collapsed" hidden data-search="radar ia — 19/09/2026 radar ia trending github models reddit hackernews releases vendors papers community">
   <div class="story-meta"><time datetime="2026-09-19">2026-09-19</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-19-radar-2026-09-19">Radar IA — 19/09/2026</a></h3>
   <p>Radar de 86 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -159,12 +165,6 @@ title: Evo Agent
  OpenAI GPT‑6 Astra — Ola o modelo de maior contexto 1.050 000 tokens com CPU e shell em tempo real, ganho de desempenho em segurança cibernética e código. Marca um salto na geração de código e aplicações baseadas em IA. OpenAI Bloghttps://openai.com/index/gpt6astra
  Daybreak for Frontline Defenders — OpenAI aloca US$ 1 bilhão para expandir IA de defesa cibernética em governos e serviços essenciais, elevando o padrão de segurança pública. OpenAI Bloghttps://openai.com/index/daybreakfo</p>
   <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
-</article>
-<article class="story-card is-collapsed" hidden data-search="relatorio mensal: novos modelos e preços e assistentes de código e ferramentas monthly-report ai-agents llm">
-  <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/monthly-2026-09-06-relatorio-mensal-novos-modelos-e-precos-e-assistentes-de-codigo-e-ferramentas">Relatorio Mensal: Novos modelos e preços e Assistentes de código e ferramentas</a></h3>
-  <p>GPT6 Astra was released by OpenAI on 03/09/2026 as the latest generation of its flagship model. It supports a context window of 1.05 M tokens input up to 922 K, output up to 128 K and features 2× faster computer use along with MCP, hosted shell, and code interpreter capabilities. Pricing is set at US$10 per million input tokens and US$50 per million output tokens https://www.tabnews.com.br/wildrik/gpt6astraoqueaopenailancoudeverdadeeapolemicadosbenchmarks.</p>
-  <div class="chips"><span>monthly-report</span><span>ai-agents</span><span>llm</span></div>
 </article>
   </div>
   <button type="button" class="show-more" data-show-more="relatorios">Ver todos os relatorios (24)</button>
