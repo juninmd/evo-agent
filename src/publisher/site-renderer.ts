@@ -376,15 +376,19 @@ function buildContentScript(): string {
       import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
       var isDark = document.documentElement.dataset.theme !== "light";
       mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default", securityLevel: "strict" });
-      // kramdown/rouge wraps fenced mermaid as <div class="language-mermaid ...">...<code>...; some engines as <code class="language-mermaid">. Handle both, hand mermaid the raw source.
       document.querySelectorAll('[class*="language-mermaid"]').forEach(function(node) {
         var codeEl = node.matches("code") ? node : node.querySelector("code");
+        var text = (codeEl ? codeEl.textContent : node.textContent) || "";
+        var wrapper = document.createElement("div");
+        wrapper.className = "mermaid-wrapper";
         var holder = document.createElement("pre");
         holder.className = "mermaid";
-        holder.textContent = (codeEl ? codeEl.textContent : node.textContent);
-        node.replaceWith(holder);
+        holder.textContent = text;
+        wrapper.appendChild(holder);
+        var target = node.closest(".highlighter-rouge, div[class*='language-'], pre") || node;
+        target.replaceWith(wrapper);
       });
-      try { await mermaid.run({ querySelector: "pre.mermaid" }); } catch (e) {}
+      try { await mermaid.run({ querySelector: "pre.mermaid, .mermaid" }); } catch (e) {}
       hljs.configure({ cssSelector: "pre code:not(.language-mermaid)" });
       hljs.highlightAll();
       document.querySelectorAll("div[class*=language-]").forEach(function(div) {
@@ -924,13 +928,34 @@ main {
 
 .article-content .highlight { margin: 28px 0; }
 
-.article-content pre.mermaid {
-  background: transparent;
-  border: 0;
-  box-shadow: none;
-  margin: 28px 0;
-  padding: 0;
+.article-content .mermaid-wrapper {
+  margin: 32px 0;
+  overflow-x: auto;
+  padding: 16px 8px;
+  background: color-mix(in srgb, var(--panel) 40%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.article-content pre.mermaid,
+.article-content .mermaid {
+  background: transparent !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  min-width: 580px;
+  padding: 0 !important;
   text-align: center;
+}
+
+.article-content .mermaid svg {
+  height: auto !important;
+  max-width: 100% !important;
 }
 
 .article-content pre {
