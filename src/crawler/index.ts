@@ -1,3 +1,4 @@
+import { isSafeExternalUrl } from "@juninmd/digest-kit/core";
 import axios, { type AxiosError } from "axios";
 import type { BrowserContextOptions, Page } from "playwright";
 import { chromium } from "playwright-extra";
@@ -8,7 +9,6 @@ import { getSearchKeywords } from "../agent/improver.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
-import { isSafeExternalUrl } from "../utils/url.js";
 import { AGENT_SOURCES } from "./agent-sources.js";
 import {
   feedItemSummary,

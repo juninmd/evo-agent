@@ -52,9 +52,15 @@ git clone git@github.com:juninmd/evo-agent.git
 cd evo-agent
 cp .env.example .env
 # Edit .env with your credentials
+# @juninmd/digest-kit comes from GitHub Packages, which requires auth even for
+# public packages: a classic PAT with read:packages, kept in your user ~/.npmrc.
+npm config set //npm.pkg.github.com/:_authToken <PAT>
 npm install
 npm run build
 ```
+
+CI and the Docker build authenticate with the workflow `GITHUB_TOKEN`; the
+Dockerfile receives it as a BuildKit secret file, never as a build arg.
 
 ## Environment Variables
 
