@@ -196,9 +196,15 @@ title: Evo Agent
   </div>
   <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>25</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>26</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="claude fable 5.1 lidera índice de inteligência e mimo-v2.6-pro redefine pesos abertos artificial openrouter hf cline reddit hacker-news intelligence benchmark models launches">
+    <article class="story-card" data-search="gpt-6 luna pro e claude opus 5.5 lideram lançamentos de ia com contextos expandidos e novos openrouter claude reddit models launches claude-code anthropic coding post-signals codex">
+  <div class="story-meta"><time datetime="2026-09-23">2026-09-23</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-23-gpt-6-luna-pro-e-claude-opus-5-5-lideram-lancamentos-de-ia-com-contextos-expandi">GPT-6 Luna Pro e Claude Opus 5.5 lideram lançamentos de IA com contextos expandidos e novos</a></h3>
+  <p>OpenAI anuncia GPT-6 Luna Pro com 1,05M tokens de contexto e modo de raciocínio &#39;pro&#39;; Anthropic lança Claude Opus 5.5 como padrão. Simultaneamente, comunidade relata melhorias significativas na qualidade de código e eficiência de custo nas novas versões.</p>
+  <div class="chips"><span>openrouter</span><span>claude</span><span>reddit</span><span>models</span><span class="chip-more">+6</span></div>
+</article>
+<article class="story-card" data-search="claude fable 5.1 lidera índice de inteligência e mimo-v2.6-pro redefine pesos abertos artificial openrouter hf cline reddit hacker-news intelligence benchmark models launches">
   <div class="story-meta"><time datetime="2026-09-22">2026-09-22</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-22-claude-fable-5-1-lidera-indice-de-inteligencia-e-mimo-v2-6-pro-redefine-pesos-ab">Claude Fable 5.1 lidera índice de inteligência e MiMo-V2.6-Pro redefine pesos abertos</a></h3>
   <p>Lançamentos de modelos de alta performance contrastam com relatos de instabilidade de limites de uso e alucinações em agentes de código. Novas abordagens de RL e síntese de habilidades buscam escalar a inteligência agentica via código-fonte.</p>
@@ -531,7 +537,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
   </div>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>26</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>25</strong></div>
   <div class="story-grid">
     <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <div class="story-meta"><time datetime="2026-07-31">2026-07-31</time><span>Artigo</span></div>
@@ -682,12 +688,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-04-claude-sonnet-5-lidera-indice-de-ia-mas-custo-supera-opus-4-8-samsung-avalia-chi">Claude Sonnet 5 lidera índice de IA, mas custo supera Opus 4.8; Samsung avalia chips customizados e</a></h3>
   <p>O modelo Claude Sonnet 5 atinge alta pontuação, porém seu preço pode limitar uso em projetos de alta escala. Enquanto isso, desenvolvedores buscam alternativas de infraestrutura e otimização de tokens para conter despesas.</p>
   <div class="chips"><span>google-news</span><span>tabnews</span><span>reddit</span><span>anthropic opus 4.5 pricing</span><span class="chip-more">+5</span></div>
-</article>
-<article class="story-card" data-search="anthropic fable, ansible e vs code: custos, automação e limites da ui google-news github-trending reddit arxiv anthropic fable pricing python typescript vscode tools software-engineering">
-  <div class="story-meta"><time datetime="2026-07-03">2026-07-03</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-03-anthropic-fable-ansible-e-vs-code-custos-automacao-e-limites-da-ui">Anthropic Fable, Ansible e VS Code: custos, automação e limites da UI</a></h3>
-  <p>Análise de preços do modelo Fable da Anthropic, adoção de automação agentless com Ansible e desafios de customização no VS Code Notebook. Implicações diretas para orçamento e escolha de ferramentas em 2026.</p>
-  <div class="chips"><span>google-news</span><span>github-trending</span><span>reddit</span><span>arxiv</span><span class="chip-more">+6</span></div>
 </article>
   </div>
 </section>

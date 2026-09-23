@@ -437,6 +437,35 @@ main {
   margin-top: 2.2em;
 }
 
+.article-content h3:has(+ h4) {
+  color: var(--accent);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.article-content h4 {
+  font-size: 1.18rem;
+  line-height: 1.25;
+  margin: 2em 0 0.5em;
+}
+
+.article-content h2 + ul {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px 20px 18px 38px;
+}
+
+.article-content h2 + ul li + li { margin-top: 0.55em; }
+
+.article-content p:has(> em:only-child > a) {
+  color: var(--muted);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 0.88rem;
+}
+
 .article-content hr {
   border: 0;
   border-top: 1px solid var(--line);
