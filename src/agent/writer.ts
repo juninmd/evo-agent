@@ -4,6 +4,7 @@ import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { localDayIso } from "../utils/date.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
+import { extractJsonObject } from "../utils/json.js";
 import { log } from "../utils/logger.js";
 import {
   curateArticles,
@@ -624,10 +625,10 @@ Return JSON only, no markdown fences:
 
 Pick only genuinely interesting items. Aim to cover ${cfg.highlights[0]}-${cfg.highlights[1]} items total across all groups. Use only indices that exist in the list above; never invent indices.`;
   const text = await ask(userPrompt, systemPrompt, askOpts);
-  const match = text.match(/\{[\s\S]*\}/);
-  if (!match) return [];
+  const json = extractJsonObject(text);
+  if (!json) return [];
   try {
-    const parsed = JSON.parse(match[0]) as { groups?: HighlightGroup[] };
+    const parsed = JSON.parse(json) as { groups?: HighlightGroup[] };
     return normalizeHighlightGroups(
       parsed.groups ?? [],
       indexedContext.split("\n").length,
