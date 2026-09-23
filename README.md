@@ -74,6 +74,7 @@ npm run build
 | `GITHUB_BRANCH` | No | `gh-pages` | Target branch for published content |
 | `CRAWL_INTERVAL_MINUTES` | No | `40` | Learn cycle frequency in daemon mode |
 | `ARTICLE_CRON` | No | `0 8,13,18 * * *` | Daily edition cron (one edition per slot) |
+| `MODEL_ALERT_CRON` | No | `*/30 * * * *` | New LLM launch alert cron (OpenRouter catalog, major vendors, Telegram) |
 | `DAILY_EDITIONS` | No | `3` | Editions published per day; a 22h sweep fills missed slots |
 | `SEARXNG_URL` | No | `http://searxng.searxng.svc.cluster.local` | SearXNG instance URL |
 | `TZ` | No | `America/Sao_Paulo` | Timezone for every cron schedule and for the daily-edition day key |
@@ -96,6 +97,7 @@ Set `RUN_MODE` env var to control execution:
 | `BIMONTHLY` | Generates and publishes one bimonthly report, then exits |
 | `SEMESTER` | Generates and publishes one semester report, then exits |
 | `EBOOK` | Refines and publishes the living AI-assisted development handbook, then exits |
+| `MODEL_ALERTS` | Checks the OpenRouter catalog once and sends a Telegram alert per new LLM from a major vendor, then exits (needs only Telegram credentials; first run records a baseline silently) |
 
 ## Commands
 

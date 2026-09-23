@@ -16,13 +16,19 @@ import {
 } from "./agent/writer.js";
 import { config, loadConfig } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
+import { fetchModelCatalog } from "./crawler/model-launches.js";
 import { db, getDb } from "./knowledge/store.js";
+import { runModelAlerts } from "./notifier/model-alerts.js";
 import {
   type PendingNotification,
   processNotification,
   processNotificationOutbox,
 } from "./notifier/outbox.js";
-import { notifyNewArticle, notifyWeeklyReport } from "./notifier/telegram.js";
+import {
+  notifyModelLaunch,
+  notifyNewArticle,
+  notifyWeeklyReport,
+} from "./notifier/telegram.js";
 import {
   publishArticle,
   publishEbook,
@@ -66,6 +72,14 @@ async function flushNotificationOutbox() {
     );
   }
   return result;
+}
+
+function modelAlertCycle() {
+  return runModelAlerts({
+    store: db,
+    fetchCatalog: fetchModelCatalog,
+    send: notifyModelLaunch,
+  });
 }
 
 async function learnCycle() {
@@ -359,6 +373,12 @@ async function main() {
     closeDbAndExit(0);
   }
 
+  if (runMode === "MODEL_ALERTS") {
+    log.info("Running in MODEL_ALERTS mode");
+    const result = await modelAlertCycle();
+    closeDbAndExit(result.failed > 0 ? 1 : 0);
+  }
+
   // Default DAEMON mode
   log.info(
     `Evo Agent starting (learn every ${config.crawlIntervalMinutes}min)`,
@@ -470,8 +490,18 @@ async function main() {
     { timezone: config.timezone },
   );
 
+  // Outside the cycle coordinator: a long article cycle must not delay alerts.
+  cron.schedule(
+    config.modelAlertCron,
+    () =>
+      modelAlertCycle().catch((e) =>
+        log.error(`Model alert cycle error: ${errMsg(e)}`),
+      ),
+    { timezone: config.timezone, noOverlap: true },
+  );
+
   log.info(
-    `Scheduled: learn=${learnInterval}, article=${config.articleCron} (${config.dailyEditions}/dia), sweep=${dailySweepCron}, radar=${config.radarCron}, weekly=${weeklyCron}, ebook=${ebookCron}`,
+    `Scheduled: learn=${learnInterval}, article=${config.articleCron} (${config.dailyEditions}/dia), sweep=${dailySweepCron}, radar=${config.radarCron}, weekly=${weeklyCron}, ebook=${ebookCron}, modelAlerts=${config.modelAlertCron}`,
   );
 
   // A cycle killed mid-run left its row 'running' until the 6h stale sweep, so

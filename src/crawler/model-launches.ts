@@ -59,7 +59,7 @@ function epochSeconds(iso?: string): number | undefined {
   return Number.isNaN(time) ? undefined : Math.floor(time / 1000);
 }
 
-interface CatalogModel {
+export interface CatalogModel {
   id?: string;
   name?: string;
   created?: number;
@@ -164,12 +164,16 @@ export async function crawlTrendingModels(now = new Date()): Promise<number> {
   return saved;
 }
 
-export async function crawlModelLaunches(now = new Date()): Promise<number> {
+export async function fetchModelCatalog(): Promise<CatalogModel[]> {
   const response = await axios.get<{ data?: CatalogModel[] }>(
     "https://openrouter.ai/api/v1/models",
     { timeout: 15000 },
   );
-  const models = Array.isArray(response.data?.data) ? response.data.data : [];
+  return Array.isArray(response.data?.data) ? response.data.data : [];
+}
+
+export async function crawlModelLaunches(now = new Date()): Promise<number> {
+  const models = await fetchModelCatalog();
   const saved = save(
     OPENROUTER_SOURCE,
     ["models", "launches", "openrouter"],

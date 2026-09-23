@@ -1,5 +1,6 @@
 import axios from "axios";
 import { config } from "../config.js";
+import type { ModelSignal } from "../crawler/model-launches.js";
 import { escapeHtml } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 
@@ -73,5 +74,15 @@ export async function notifyWeeklyReport(
   summary: string,
 ): Promise<TelegramDeliveryResult> {
   const msg = `<b>Relatório Semanal — Evo Agent</b>\n\n<b>${escapeHtml(title)}</b>\n\n${escapeHtml(summary)}\n\n<a href="${escapeHtml(url)}">Ler relatório completo</a>`;
+  return sendMessage(msg);
+}
+
+export async function notifyModelLaunch(
+  launch: ModelSignal,
+): Promise<TelegramDeliveryResult> {
+  const launchedAt = launch.launchedAt
+    ? `\n\nLançado em ${new Date(launch.launchedAt * 1000).toISOString().slice(0, 10)}`
+    : "";
+  const msg = `<b>Novo modelo LLM — Evo Agent</b>\n\n<b>${escapeHtml(launch.title)}</b>\n\n${escapeHtml(launch.summary)}${launchedAt}\n\n<a href="${escapeHtml(launch.url)}">Ver modelo</a>`;
   return sendMessage(msg);
 }

@@ -62,6 +62,27 @@ describe("loadConfig", () => {
     expect(config.runMode).toBe("EBOOK");
   });
 
+  it("runs MODEL_ALERTS with Telegram only, since it never publishes Pages", () => {
+    const config = loadConfig({
+      ...baseEnv,
+      RUN_MODE: "MODEL_ALERTS",
+      TELEGRAM_BOT_TOKEN: "token",
+      TELEGRAM_CHAT_ID: "chat",
+    });
+    expect(config.runMode).toBe("MODEL_ALERTS");
+    expect(config.modelAlertCron).toBe("*/30 * * * *");
+    expect(() => loadConfig({ ...baseEnv, RUN_MODE: "MODEL_ALERTS" })).toThrow(
+      /TELEGRAM_BOT_TOKEN/,
+    );
+    expect(() =>
+      loadConfig({
+        ...baseEnv,
+        RUN_MODE: "CRAWL",
+        MODEL_ALERT_CRON: "invalid-cron",
+      }),
+    ).toThrow(/MODEL_ALERT_CRON is invalid/);
+  });
+
   it("defaults radarCron and validates it", () => {
     const config = loadConfig({ ...baseEnv, RUN_MODE: "CRAWL" });
     expect(config.radarCron).toBe("0 21 * * *");

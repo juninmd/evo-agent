@@ -13,7 +13,8 @@ export type RunMode =
   | "MONTHLY"
   | "BIMONTHLY"
   | "SEMESTER"
-  | "EBOOK";
+  | "EBOOK"
+  | "MODEL_ALERTS";
 
 type Env = Record<string, string | undefined>;
 
@@ -29,6 +30,7 @@ const RUN_MODES = new Set<RunMode>([
   "BIMONTHLY",
   "SEMESTER",
   "EBOOK",
+  "MODEL_ALERTS",
 ]);
 
 function loadEnvFile(env: NodeJS.ProcessEnv) {
@@ -82,6 +84,10 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
   if (!cron.validate(radarCron)) {
     throw new Error(`RADAR_CRON is invalid: ${radarCron}`);
   }
+  const modelAlertCron = env.MODEL_ALERT_CRON ?? "*/30 * * * *";
+  if (!cron.validate(modelAlertCron)) {
+    throw new Error(`MODEL_ALERT_CRON is invalid: ${modelAlertCron}`);
+  }
 
   // The schedules and localDayIso() both assume BRT wall time; a container
   // defaulting to UTC ran the 22h sweep at 01h local, into the next day.
@@ -93,19 +99,21 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
   }
 
   const requirePublishing = publishes && validatePublishing;
+  // Model alerts only talk to Telegram; they never publish to GitHub Pages.
+  const requireGithub = requirePublishing && runMode !== "MODEL_ALERTS";
   const telegramBotToken = requirePublishing
     ? required(env, "TELEGRAM_BOT_TOKEN")
     : (env.TELEGRAM_BOT_TOKEN ?? "");
   const telegramChatId = requirePublishing
     ? required(env, "TELEGRAM_CHAT_ID")
     : (env.TELEGRAM_CHAT_ID ?? "");
-  const githubToken = requirePublishing
+  const githubToken = requireGithub
     ? required(env, "GITHUB_TOKEN")
     : (env.GITHUB_TOKEN ?? "");
-  const githubOwner = requirePublishing
+  const githubOwner = requireGithub
     ? required(env, "GITHUB_OWNER")
     : (env.GITHUB_OWNER ?? "");
-  const githubRepo = requirePublishing
+  const githubRepo = requireGithub
     ? required(env, "GITHUB_REPO")
     : (env.GITHUB_REPO ?? "");
 
@@ -154,6 +162,7 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
     crawlIntervalMinutes: positiveNumber(env, "CRAWL_INTERVAL_MINUTES", "40"),
     articleCron,
     radarCron,
+    modelAlertCron,
     timezone,
     dailyEditions: positiveNumber(env, "DAILY_EDITIONS", "3"),
     dbPath: env.DB_PATH ?? join(process.cwd(), "data", "knowledge.db"),
