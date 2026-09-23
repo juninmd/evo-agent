@@ -1,4 +1,8 @@
-import { EDITORIAL_CLICHES, isGenericTitle } from "./editorial.js";
+import {
+  EDITORIAL_CLICHES,
+  hasPromptLeak,
+  isGenericTitle,
+} from "./editorial.js";
 import type { GeneratedArticle } from "./writer.js";
 
 /**
@@ -76,6 +80,9 @@ export function validateArticle(article: GeneratedArticle): string[] {
   }
   if (/sem conte[uú]do/i.test(article.content)) {
     errors.push("article contains placeholder content");
+  }
+  if (hasPromptLeak(article.content)) {
+    errors.push("article contains leaked prompt text");
   }
   if (article.content.length < MIN_CONTENT_CHARS) {
     errors.push(

@@ -109,6 +109,16 @@ describe("validateArticle", () => {
     expect(errors).toContain("article contains an invalid Mermaid direction");
   });
 
+  it("refuses to publish prose carrying leaked prompt text", () => {
+    const base = generated();
+    const leaked = generated({
+      content: `${base.content}\n\nVerifiquei tudo. Não há conteúdo proibido. Pronto.`,
+    });
+    expect(validateArticle(leaked)).toContain(
+      "article contains leaked prompt text",
+    );
+  });
+
   it("accepts valid xychart-beta Mermaid charts", () => {
     const valid = generated({
       content: [

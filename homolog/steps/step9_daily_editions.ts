@@ -52,7 +52,7 @@ async function sendPreview(
 }
 
 function subjectCount(article: GeneratedArticle): number {
-  return (article.content.match(/^### /gm) ?? []).length;
+  return (article.content.match(/^#### /gm) ?? []).length;
 }
 
 function report(index: number, article: GeneratedArticle) {

@@ -76,6 +76,59 @@ describe("long-form editorial pass", () => {
     );
   });
 
+  it("rejects leaked prompt text, drifted English sentences and garbled prose", () => {
+    expect(
+      proseIssues(`${FITS_BOTH_BOUNDS} Verifiquei tudo. Pronto.`, 100).join(
+        " ",
+      ),
+    ).toContain("vazad");
+    expect(
+      proseIssues(
+        `${FITS_BOTH_BOUNDS} A correção reinicia a rodada or any other content due to its size.`,
+        100,
+      ),
+    ).toContain("contém frase em inglês");
+    expect(
+      proseIssues(
+        `${FITS_BOTH_BOUNDS} O plano custa cem cento cento reais. o relato segue. a conta esgota.`,
+        100,
+      ).join(" "),
+    ).toContain("texto corrompido");
+  });
+
+  it("accepts legitimate pt-BR tech prose that names LLM concepts", () => {
+    const prose =
+      'A API permite configurar stop sequences e o agente gera helper functions reutilizáveis. A Meta lança o Llama como modelo de linguagem aberto, com técnicas de self-correction. O plano custa R$ 1.300 e a versão v0.0.85 corrige o Cline, segundo o post "I\'m afraid to use Opus 5".';
+    expect(proseIssues(prose, 0)).toEqual([]);
+  });
+
+  it("drops a highlight and the synthesis when only corrupted fallback text is left", async () => {
+    const ask = vi.fn().mockRejectedValue(new Error("LLM unavailable"));
+    const corrupted = draft();
+    corrupted.highlights.push({
+      sourceIndex: 1,
+      headline: "Pauta corrompida",
+      whatHappened:
+        "O relato indica esgotamento da conta. o uso segue alto. a cota some.",
+      whyItMatters: "Equipes perdem previsibilidade de custo.",
+      evidence: source().summary,
+    });
+    corrupted.synthesis =
+      "Leitura conjunta das pautas. Write the technical content. Verifiquei tudo.";
+
+    const expanded = await expandEdition(
+      ask,
+      corrupted,
+      [source(), { ...source(), id: 2, url: "https://example.com/2" }],
+      "12/06/2026",
+    );
+
+    expect(expanded.highlights.map((h) => h.headline)).toEqual([
+      "Claude ganha consistência",
+    ]);
+    expect(expanded.synthesis).toBe("");
+  });
+
   it("fills each highlight with long-form prose and expands the synthesis", async () => {
     const ask = vi.fn().mockResolvedValue(FITS_BOTH_BOUNDS);
 

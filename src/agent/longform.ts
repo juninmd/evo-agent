@@ -4,8 +4,12 @@ import { log } from "../utils/logger.js";
 import {
   EDITORIAL_CLICHES,
   type EditorialDraft,
+  type EditorialHighlight,
+  hasEnglishSentence,
   hasModelArtifacts,
+  hasPromptLeak,
   looksEnglish,
+  looksGarbled,
 } from "./editorial.js";
 
 const ANALYSIS_MIN_CHARS = 380;
@@ -45,6 +49,15 @@ export function proseIssues(
   if (hasModelArtifacts(trimmed)) {
     issues.push("contém token ou repetição corrompida do modelo");
   }
+  if (hasPromptLeak(trimmed)) {
+    issues.push("contém instrução ou comentário vazado do prompt");
+  }
+  if (hasEnglishSentence(trimmed)) issues.push("contém frase em inglês");
+  if (looksGarbled(trimmed)) {
+    issues.push(
+      "contém texto corrompido (palavra repetida ou frase iniciada em minúscula)",
+    );
+  }
   const cliche = trimmed.match(EDITORIAL_CLICHES);
   if (cliche) issues.push(`usa a expressão proibida "${cliche[0]}"`);
   if (looksEnglish(trimmed, 8)) issues.push("não está em português brasileiro");
@@ -63,6 +76,11 @@ function paragraphs(text: string): string {
 /** Fallback prose when the expansion pass cannot produce a usable section. */
 function agendaProse(whatHappened: string, whyItMatters: string): string {
   return paragraphs(`${whatHappened.trim()}\n\n${whyItMatters.trim()}`);
+}
+
+/** Fallbacks skip the expansion checks, so they must clear them here instead. */
+function usableFallback(text: string): string | null {
+  return text.trim() && proseIssues(text, 0).length === 0 ? text : null;
 }
 
 type Ask = (
@@ -107,10 +125,12 @@ async function expandHighlightAnalysis(
   articles: Article[],
   index: number,
   period: string,
-): Promise<string> {
+): Promise<string | null> {
   const highlight = draft.highlights[index];
   const article = articles[highlight.sourceIndex];
-  const fallback = agendaProse(highlight.whatHappened, highlight.whyItMatters);
+  const fallback = usableFallback(
+    agendaProse(highlight.whatHappened, highlight.whyItMatters),
+  );
   if (!article) return fallback;
 
   const prompt = `Escreva a seção de análise de uma edição técnica diária (período ${period}) sobre a pauta abaixo.
@@ -169,13 +189,14 @@ Responda apenas com o texto.`;
     1600,
     SYNTHESIS_MAX_CHARS,
   );
-  return prose ?? draft.synthesis;
+  return prose ?? usableFallback(draft.synthesis) ?? "";
 }
 
 /**
  * Second editorial pass: turns the validated agenda into long-form prose, one
  * model call per highlight so the text is not squeezed by a single response
- * budget. Failures degrade to the agenda text instead of losing the edition.
+ * budget. Failures degrade to the agenda text instead of losing the edition;
+ * an item whose agenda text is itself corrupted is dropped, never published.
  */
 export async function expandEdition(
   ask: Ask,
@@ -183,18 +204,20 @@ export async function expandEdition(
   articles: Article[],
   period: string,
 ): Promise<EditorialDraft> {
-  const highlights = [...draft.highlights];
-  for (let index = 0; index < highlights.length; index++) {
-    highlights[index] = {
-      ...highlights[index],
-      analysis: await expandHighlightAnalysis(
-        ask,
-        draft,
-        articles,
-        index,
-        period,
-      ),
-    };
+  const highlights: EditorialHighlight[] = [];
+  for (let index = 0; index < draft.highlights.length; index++) {
+    const analysis = await expandHighlightAnalysis(
+      ask,
+      draft,
+      articles,
+      index,
+      period,
+    );
+    if (analysis) highlights.push({ ...draft.highlights[index], analysis });
+    else
+      log.warn(
+        `Dropping corrupted highlight: ${draft.highlights[index].headline}`,
+      );
   }
   const expanded = { ...draft, highlights };
   return {

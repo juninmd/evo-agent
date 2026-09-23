@@ -291,7 +291,14 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
   const articleTags = [
     ...new Set([...entityTags, ...buildTagsFromGroups(groups)]),
   ].slice(0, 10);
-  const fullContent = `# ${draft.title}\n\n${articleBody}`;
+  // Optional enrichment: a ranking outage must not cost the whole edition.
+  const intelligence = await renderIntelligenceSection().catch((err) => {
+    log.warn(`Intelligence section skipped: ${(err as Error).message}`);
+    return "";
+  });
+  const fullContent = [`# ${draft.title}`, articleBody, intelligence]
+    .filter(Boolean)
+    .join("\n\n");
   const references = buildReferencesSection(referencedArticles);
   const fullContentWithRefs = references
     ? `${fullContent}\n\n${references}`

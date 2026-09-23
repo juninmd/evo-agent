@@ -1,6 +1,17 @@
 import type { Article } from "../knowledge/store.js";
-import { parseTags, sourceBucket } from "./curation.js";
-import type { EditorialDraft } from "./editorial.js";
+import {
+  isCommunitySignal,
+  isPrimarySource,
+  parseTags,
+  sourceBucket,
+} from "./curation.js";
+import {
+  type EditorialDraft,
+  hasEnglishSentence,
+  hasModelArtifacts,
+  hasPromptLeak,
+  looksGarbled,
+} from "./editorial.js";
 
 export function buildReferencesSection(articles: Article[]): string {
   if (articles.length === 0) return "";
@@ -34,45 +45,101 @@ function sentence(value: string): string {
   return /[.!?]$/.test(clean) ? clean : `${clean}.`;
 }
 
+function headlineText(headline: string): string {
+  return sentence(headline).replace(/\.$/, "");
+}
+
+function sourceLabel(article: Article): string {
+  const community = article.source.match(/\(([^)]+)\)/)?.[1];
+  const name =
+    sourceBucket(article.source) === "reddit" && community
+      ? `Reddit r/${community}`
+      : article.source;
+  if (isPrimarySource(article)) return `${name} · fonte primária`;
+  if (isCommunitySignal(article)) return `${name} · sinal da comunidade`;
+  return name;
+}
+
+function plural(count: number, one: string, many: string): string {
+  return `${count} ${count === 1 ? one : many}`;
+}
+
+/** First sentence of the agenda fact, bounded so the summary stays scannable. */
+function leadSentence(text: string, max = 180): string {
+  const first = text.trim().split(/(?<=[.!?])\s+/)[0] ?? "";
+  if (
+    !first ||
+    hasPromptLeak(first) ||
+    hasEnglishSentence(first) ||
+    looksGarbled(first) ||
+    hasModelArtifacts(first)
+  ) {
+    return "";
+  }
+  if (first.length <= max) return sentence(first);
+  const cut = first.slice(0, max);
+  return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[\s,;:]+$/, "")}…`;
+}
+
 export function renderEditorialDraft(
   draft: EditorialDraft,
   articles: Article[],
   period: string,
 ): string {
-  // Items are grouped by theme so related sections stay adjacent, but each one
-  // is rendered as its own long-form section instead of a labelled bullet.
-  const sections = new Map<string, string[]>();
-  for (const highlight of draft.highlights) {
+  const cited = draft.highlights.flatMap((highlight) => {
     const article = articles[highlight.sourceIndex];
-    if (!article) continue;
+    return article ? [{ highlight, article }] : [];
+  });
+
+  const sections = new Map<string, string[]>();
+  for (const { highlight, article } of cited) {
     const body =
       highlight.analysis?.trim() ||
       `${sentence(highlight.whatHappened)} ${sentence(highlight.whyItMatters)}`;
     const item = [
-      `### ${sentence(highlight.headline).replace(/\.$/, "")}`,
+      `#### ${headlineText(highlight.headline)}`,
       "",
       body,
       "",
-      `[Fonte: ${article.title}](${article.url})`,
+      `*[Fonte: ${article.title}](${article.url}) · ${sourceLabel(article)}*`,
     ].join("\n");
     const theme = editorialTheme(article);
     sections.set(theme, [...(sections.get(theme) ?? []), item]);
   }
 
-  const highlights = [...sections.values()].flat().join("\n\n");
+  const themed = [...sections.entries()].map(([theme, items]) =>
+    [`### ${theme}`, "", items.join("\n\n")].join("\n"),
+  );
+  const overview = cited.map(({ highlight }) => {
+    const lead = leadSentence(highlight.whatHappened);
+    const headline = `- **${headlineText(highlight.headline)}**`;
+    return lead ? `${headline} — ${lead}` : headline;
+  });
+  const primary = cited.filter(({ article }) => isPrimarySource(article));
+  const community = cited.filter(
+    ({ article }) => !isPrimarySource(article) && isCommunitySignal(article),
+  );
+  const stats = [
+    period,
+    plural(cited.length, "pauta", "pautas"),
+    plural(primary.length, "fonte primária", "fontes primárias"),
+    plural(community.length, "sinal da comunidade", "sinais da comunidade"),
+  ].join(" · ");
 
+  // The dek is left out on purpose: the page header already renders it.
   return [
-    `**Período analisado:** ${period}`,
+    `**Período analisado:** ${stats}`,
     "",
-    draft.dek,
+    "## Em 30 segundos",
+    "",
+    ...overview,
     "",
     "## Destaques",
     "",
-    highlights,
-    "",
-    "## Leitura do conjunto",
-    "",
-    draft.synthesis,
+    themed.join("\n\n"),
+    ...(draft.synthesis.trim()
+      ? ["", "## Leitura do conjunto", "", draft.synthesis]
+      : []),
   ].join("\n");
 }
 

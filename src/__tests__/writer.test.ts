@@ -120,7 +120,67 @@ describe("renderEditorialDraft", () => {
     );
 
     expect(markdown).toContain(analysis);
-    expect(markdown).not.toContain("Fato apurado na pauta.");
+    // The agenda fact may lead the summary list, but never the item body.
+    expect(markdown.split("## Destaques")[1]).not.toContain(
+      "Fato apurado na pauta.",
+    );
+  });
+
+  it("opens with a scannable summary and groups items under theme headings", () => {
+    const articles = [
+      article(
+        "Claude melhora tarefas longas",
+        "Anthropic News",
+        "https://anthropic.com/news/claude",
+        '["claude","agents"]',
+      ),
+      article(
+        "Limite semanal caiu",
+        "Reddit Post Signals (ClaudeCode)",
+        "https://reddit.com/r/ClaudeCode/1",
+        '["reddit","claude code"]',
+      ),
+    ];
+    const dek = "Duas mudanças concretas alteram decisões de arquitetura.";
+    const markdown = renderEditorialDraft(
+      {
+        title: "Claude reforça tarefas longas enquanto cotas encolhem",
+        dek,
+        highlights: [
+          {
+            sourceIndex: 0,
+            headline: "Claude ganha consistência",
+            whatHappened:
+              "A Anthropic descreveu melhora em tarefas longas. Detalhe extra.",
+            whyItMatters: "Execuções extensas exigem menos retomadas.",
+            evidence: articles[0].summary,
+          },
+          {
+            sourceIndex: 1,
+            headline: "Cota semanal encolhe",
+            whatHappened: "Usuários mediram queda do limite semanal de uso.",
+            whyItMatters: "Custos de contas intensivas ficam imprevisíveis.",
+            evidence: articles[1].summary,
+          },
+        ],
+        synthesis: "",
+      },
+      articles,
+      "12/06/2026",
+    );
+
+    expect(markdown).toContain(
+      "**Período analisado:** 12/06/2026 · 2 pautas · 1 fonte primária · 1 sinal da comunidade",
+    );
+    expect(markdown).toContain(
+      "- **Claude ganha consistência** — A Anthropic descreveu melhora em tarefas longas.",
+    );
+    expect(markdown).toMatch(/### [^\n]+\n\n#### Claude ganha consistência/);
+    expect(markdown).toContain("Reddit r/ClaudeCode · sinal da comunidade");
+    expect(markdown).toContain("Anthropic News · fonte primária");
+    // The page header already shows the dek; repeating it in the body is noise.
+    expect(markdown).not.toContain(dek);
+    expect(markdown).not.toContain("## Leitura do conjunto");
   });
 
   it("keeps selected sources whose URL contains markdown punctuation", () => {
