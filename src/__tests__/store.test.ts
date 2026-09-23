@@ -87,9 +87,7 @@ describe("Database schema - engagement_score column", () => {
       42,
     );
 
-    // Filter to just the two rows this test inserted: the table is shared
-    // across sibling tests in this describe block, and test order is not
-    // guaranteed (e.g. under --sequence.shuffle).
+    // Table is shared across this block; order is not guaranteed.
     const articles = db
       .prepare(
         `SELECT title, engagement_score FROM articles
@@ -141,9 +139,7 @@ describe("Database schema - engagement_score column", () => {
       `INSERT OR IGNORE INTO articles (title, source, url, summary, tags, engagement_score)
        VALUES (?, ?, ?, ?, ?, ?)`,
     );
-    // Seed the row here so this test is self-contained: it must not depend
-    // on "allows inserting articles with engagement_score" having run first
-    // (that ordering is not guaranteed, e.g. under --sequence.shuffle).
+    // Self-seeded so the test does not depend on sibling order.
     stmt.run(
       "Original",
       "Source",
