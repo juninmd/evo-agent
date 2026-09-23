@@ -1,3 +1,9 @@
+import {
+  hasEnglishSentence,
+  hasModelArtifacts,
+  hasPromptLeak,
+  looksGarbled,
+} from "@juninmd/digest-kit/core";
 import type { Article } from "../knowledge/store.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import {
@@ -41,50 +47,8 @@ const GENERIC_TITLE_PATTERNS = [
 export const EDITORIAL_CLICHES =
   /(por que (isso )?importa|interesse crescente|impacto significativo|melhorar a produtividade|produtividade e (a )?efici[eê]ncia|cada vez mais|players do mercado|o per[ií]odo foi marcado|vale (a pena )?destacar|[eé] importante (notar|destacar|ressaltar)|em resumo|nesse sentido|no fim das contas|revolucion(a|á)ri)/i;
 
-/**
- * Special/placeholder tokens a broken decode can leak into plain text, e.g. a
- * repeated run of literal "<unk>" instead of the actual generated words.
- */
-const MODEL_ARTIFACT_TOKENS = /<unk>|<pad>|\[UNK\]|<\/?s>|�/i;
-
-export function hasModelArtifacts(text: string): boolean {
-  return MODEL_ARTIFACT_TOKENS.test(text);
-}
-
-/**
- * Meta-commentary and instruction echoes a drifting model appends to prose,
- * e.g. a self-check ("Verifiquei tudo. Pronto.") or a copied prompt line.
- */
-const PROMPT_LEAK =
-  /verifiquei tudo|n[aã]o h[aá] conte[uú]do proibido|write the (technical )?content|potentially controversial content|as an ai (language )?model|como (um )?modelo de linguagem,? (eu )?n[aã]o posso/i;
-
-export function hasPromptLeak(text: string): boolean {
-  return PROMPT_LEAK.test(text);
-}
-
-const ENGLISH_FUNCTION_WORDS =
-  /\b(the|and|or|with|of|for|from|that|this|these|those|are|is|was|were|been|to|its|it|which|will|would|any|including|due|into|about|your|you|they|their|but|not|can|should)\b/gi;
-
-/** A single drifted sentence is diluted by the pt-BR around it, so check each one. */
-export function hasEnglishSentence(text: string, threshold = 4): boolean {
-  return text
-    .split(/(?<=[.!?])\s+/)
-    .some(
-      (sentence) =>
-        (sentence.match(ENGLISH_FUNCTION_WORDS) ?? []).length >= threshold,
-    );
-}
-
-const REPEATED_WORD = /(?<!\p{L})(\p{L}{3,})\s+\1(?!\p{L})/iu;
-const LOWERCASE_SENTENCE_START = /[.!?]\s+\p{Ll}/gu;
-
-/** Broken decodes stutter ("cento cento") and lose sentence casing. */
-export function looksGarbled(text: string): boolean {
-  return (
-    REPEATED_WORD.test(text) ||
-    (text.match(LOWERCASE_SENTENCE_START) ?? []).length >= 2
-  );
-}
+// Shared with fast-news through @juninmd/digest-kit; the regexes live there.
+export { hasEnglishSentence, hasModelArtifacts, hasPromptLeak, looksGarbled };
 
 const ENGLISH_STOPWORDS =
   /\b(the|and|with|of|for|from|that|this|are|is|to|show|shows|how|why|new|take|taking|first)\b/gi;

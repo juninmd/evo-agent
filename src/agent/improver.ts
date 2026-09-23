@@ -1,9 +1,9 @@
+import { isSafeExternalUrl } from "@juninmd/digest-kit/core";
 import { db } from "../knowledge/store.js";
 import type { Article } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
-import { isSafeExternalUrl } from "../utils/url.js";
 import { sourceBucket } from "./curation.js";
 import { promotePromptCandidate } from "./prompt-policy.js";
 import { getSearchKeywords, saveSearchKeywords } from "./search-keywords.js";

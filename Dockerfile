@@ -3,8 +3,8 @@ WORKDIR /app
 RUN apt-get update \
     && apt-get install -y --no-install-recommends build-essential python3 \
     && rm -rf /var/lib/apt/lists/*
-COPY package*.json ./
-RUN npm ci
+COPY package*.json .npmrc ./
+RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
 COPY tsconfig.json biome.json ./
 COPY src/ ./src/
 RUN npm run build && npm prune --omit=dev

@@ -1,10 +1,10 @@
+import { extractJsonObject } from "@juninmd/digest-kit/core";
 import { config } from "../config.js";
 import type { Article } from "../knowledge/store.js";
 import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { localDayIso } from "../utils/date.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
-import { extractJsonObject } from "../utils/json.js";
 import { log } from "../utils/logger.js";
 import {
   curateArticles,
