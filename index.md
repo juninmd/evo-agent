@@ -19,7 +19,13 @@ title: Evo Agent
     <h2>Relatorios</h2>
   </div>
   <div class="story-grid featured-grid" data-collapsible>
-    <article class="story-card" data-search="radar ia — 22/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community">
+    <article class="story-card" data-search="radar ia — 23/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community">
+  <div class="story-meta"><time datetime="2026-09-23">2026-09-23</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-23-radar-2026-09-23">Radar IA — 23/09/2026</a></h3>
+  <p>Radar de 110 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>benchmarks</span><span class="chip-more">+8</span></div>
+</article>
+<article class="story-card" data-search="radar ia — 22/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community">
   <div class="story-meta"><time datetime="2026-09-22">2026-09-22</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-22-radar-2026-09-22">Radar IA — 22/09/2026</a></h3>
   <p>Radar de 111 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -49,7 +55,7 @@ title: Evo Agent
   <p>Compression inteligente de KV cache e novos harnesses impulsionam agentes, enquanto relatos de Reddit revelam bloqueios em Codex e ajustes de cache em Claude Code.</p>
   <div class="chips"><span>weekly-report</span><span>hf</span><span>openrouter:</span><span>github</span><span class="chip-more">+7</span></div>
 </article>
-<article class="story-card" data-search="deepseek-v4.1-flash comprime kv cache; claude code adota agents.md nativo; gpt-5.4 será weekly-report hf tabnews reddit papers research br developer copilot post-signals codex">
+<article class="story-card is-collapsed" hidden data-search="deepseek-v4.1-flash comprime kv cache; claude code adota agents.md nativo; gpt-5.4 será weekly-report hf tabnews reddit papers research br developer copilot post-signals codex">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-20-deepseek-v4-1-flash-comprime-kv-cache-claude-code-adota-agents-md-nativo-gpt-5-4">DeepSeek-V4.1-Flash comprime KV Cache; Claude Code adota AGENTS.md nativo; GPT-5.4 será</a></h3>
   <p>DeepSeek-V4.1-Flash ataca o gargalo de prefill e KV cache em agentes de longo horizonte. Enquanto isso, o ecossistema de ferramentas movimenta-se: Claude Code passa a ler AGENTS.md nativamente e usuários do GitHub Copilot relatam incerteza sobre a descontinuação do GPT-5.4 prevista para outubro.</p>
@@ -156,15 +162,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-06-gpt-6-astra-hydrafusion-e-ecosistema-vs-code-desempenho-custos-e-adaptacoes-de-c">GPT‑6 Astra, HydraFusion e ecosistema VS Code: desempenho, custos e adaptações de código local</a></h3>
   <p>O GPT‑6 Astra chega com preço e desempenho que questionam modelos anteriores. A nova HydraFusion expande orquestrações multi‑modelo. Enquanto isso, a comunidade VS Code refina extensões para programação local e integração com Claude e Pi.</p>
   <div class="chips"><span>weekly-report</span><span>github</span><span>openai</span><span>google-news</span><span class="chip-more">+7</span></div>
-</article>
-<article class="story-card is-collapsed" hidden data-search="relatório quinzenal: avanços significativos em llms e agregação de agentes (23/08 – 06/09) biweekly-report ai-agents llm">
-  <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-09-06-relatorio-quinzenal-avancos-significativos-em-llms-e-agregacao-de-agentes-23-08-">Relatório Quinzenal: Avanços Significativos em LLMs e Agregação de Agentes (23/08 – 06/09)</a></h3>
-  <p>Destaques do período
- Claude Fable 5.1 / Mythos 5.1 — Anthropic lança os modelos atualizados com preços 45 % menores, cache de leitura 75 % mais barato e melhorias em detecção de falsos positivos. Crucial para quem depende de agentes de longa duração. Anthropic Bloghttps://anthropic.com/claudefableandmythos51
- OpenAI GPT‑6 Astra — Ola o modelo de maior contexto 1.050 000 tokens com CPU e shell em tempo real, ganho de desempenho em segurança cibernética e código. Marca um salto na geração de código e aplicações baseadas em IA. OpenAI Bloghttps://openai.com/index/gpt6astra
- Daybreak for Frontline Defenders — OpenAI aloca US$ 1 bilhão para expandir IA de defesa cibernética em governos e serviços essenciais, elevando o padrão de segurança pública. OpenAI Bloghttps://openai.com/index/daybreakfo</p>
-  <div class="chips"><span>biweekly-report</span><span>ai-agents</span><span>llm</span></div>
 </article>
   </div>
   <button type="button" class="show-more" data-show-more="relatorios">Ver todos os relatorios (24)</button>
