@@ -87,9 +87,14 @@ describe("Database schema - engagement_score column", () => {
       42,
     );
 
+    // Filter to just the two rows this test inserted: the table is shared
+    // across sibling tests in this describe block, and test order is not
+    // guaranteed (e.g. under --sequence.shuffle).
     const articles = db
       .prepare(
-        "SELECT title, engagement_score FROM articles ORDER BY engagement_score DESC",
+        `SELECT title, engagement_score FROM articles
+         WHERE url IN ('https://test.com/1', 'https://test.com/2')
+         ORDER BY engagement_score DESC`,
       )
       .all() as Array<{ title: string; engagement_score: number }>;
 
@@ -136,11 +141,22 @@ describe("Database schema - engagement_score column", () => {
       `INSERT OR IGNORE INTO articles (title, source, url, summary, tags, engagement_score)
        VALUES (?, ?, ?, ?, ?, ?)`,
     );
+    // Seed the row here so this test is self-contained: it must not depend
+    // on "allows inserting articles with engagement_score" having run first
+    // (that ordering is not guaranteed, e.g. under --sequence.shuffle).
+    stmt.run(
+      "Original",
+      "Source",
+      "https://test.com/uniqueness",
+      "Original",
+      "[]",
+      1,
+    );
     // Insert same URL again - should be ignored
     const result = stmt.run(
       "Duplicate",
       "Source",
-      "https://test.com/1",
+      "https://test.com/uniqueness",
       "Dup",
       "[]",
       999,
