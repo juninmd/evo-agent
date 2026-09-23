@@ -87,9 +87,12 @@ describe("Database schema - engagement_score column", () => {
       42,
     );
 
+    // Table is shared across this block; order is not guaranteed.
     const articles = db
       .prepare(
-        "SELECT title, engagement_score FROM articles ORDER BY engagement_score DESC",
+        `SELECT title, engagement_score FROM articles
+         WHERE url IN ('https://test.com/1', 'https://test.com/2')
+         ORDER BY engagement_score DESC`,
       )
       .all() as Array<{ title: string; engagement_score: number }>;
 
@@ -136,11 +139,20 @@ describe("Database schema - engagement_score column", () => {
       `INSERT OR IGNORE INTO articles (title, source, url, summary, tags, engagement_score)
        VALUES (?, ?, ?, ?, ?, ?)`,
     );
+    // Self-seeded so the test does not depend on sibling order.
+    stmt.run(
+      "Original",
+      "Source",
+      "https://test.com/uniqueness",
+      "Original",
+      "[]",
+      1,
+    );
     // Insert same URL again - should be ignored
     const result = stmt.run(
       "Duplicate",
       "Source",
-      "https://test.com/1",
+      "https://test.com/uniqueness",
       "Dup",
       "[]",
       999,
