@@ -38,6 +38,13 @@ describe("loadConfig", () => {
     ).toThrow(/TZ is invalid/);
   });
 
+  // LiteLLM owns provider choice and fallbacks; the app must only ever ask for cloud/auto.
+  it("defaults every model in the chain to cloud/auto", () => {
+    const { litellm } = loadConfig({ RUN_MODE: "CRAWL" });
+    expect(litellm.model).toBe("cloud/auto");
+    expect(litellm.fallbackModels).toEqual(["cloud/auto"]);
+  });
+
   it("supports side-effect-free module configuration in CI", () => {
     expect(() => loadConfig({}, false)).not.toThrow();
   });

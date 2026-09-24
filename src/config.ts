@@ -136,19 +136,9 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
         "http://litellm.ai.svc.cluster.local:4000/v1",
       ),
       apiKey: env.LITELLM_API_KEY ?? env.OPENCODE_API_KEY ?? "no-key",
-      // cloud/llama-70b e cloud/nemotron-super-49b estouraram 90s sem resposta
-      // no proxy em 26/07/2026; qwen3-next-80b respondeu em ~2s e sustentou a
-      // homologação das 3 edições diárias.
-      model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/qwen3-next-80b",
-      // Prioridade de provider: NVIDIA NIM > OpenRouter free > Ollama Cloud.
-      // cloud/llama-8b, cloud/nemotron-super-49b/120b e cloud/qwen3-next-80b
-      // homologados ao vivo (texto+tool_choice:"required" via proxy).
-      // cloud/maverick as vezes trava em tool forcado — mantido por ultimo
-      // entre os NVIDIA, antes do fallback OpenRouter.
-      fallbackModels: (
-        env.LITELLM_FALLBACK_MODELS ??
-        "cloud/llama-8b,cloud/nemotron-super-49b,cloud/nemotron-super-120b,cloud/qwen3-next-80b,cloud/maverick,cloud/openrouter-nemotron-120b-free"
-      )
+      // Provider choice and fallbacks live in the LiteLLM cloud/auto chain.
+      model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/auto",
+      fallbackModels: (env.LITELLM_FALLBACK_MODELS ?? "cloud/auto")
         .split(",")
         .map((model) => model.trim())
         .filter(Boolean),
