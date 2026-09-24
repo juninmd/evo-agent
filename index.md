@@ -19,7 +19,13 @@ title: Evo Agent
     <h2>Relatorios</h2>
   </div>
   <div class="story-grid featured-grid" data-collapsible>
-    <article class="story-card" data-search="radar ia — 23/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community">
+    <article class="story-card" data-search="radar ia — 24/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community">
+  <div class="story-meta"><time datetime="2026-09-24">2026-09-24</time><span>Relatorio</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-24-radar-2026-09-24">Radar IA — 24/09/2026</a></h3>
+  <p>Radar de 110 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
+  <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>benchmarks</span><span class="chip-more">+8</span></div>
+</article>
+<article class="story-card" data-search="radar ia — 23/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community">
   <div class="story-meta"><time datetime="2026-09-23">2026-09-23</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-23-radar-2026-09-23">Radar IA — 23/09/2026</a></h3>
   <p>Radar de 110 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</p>
@@ -49,7 +55,7 @@ title: Evo Agent
   <p>Radar de 68 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span class="chip-more">+5</span></div>
 </article>
-<article class="story-card" data-search="deepseek, auto‑research, e incidentes em codex e claude code weekly-report hf openrouter: github vscode reddit tabnews papers research models launches">
+<article class="story-card is-collapsed" hidden data-search="deepseek, auto‑research, e incidentes em codex e claude code weekly-report hf openrouter: github vscode reddit tabnews papers research models launches">
   <div class="story-meta"><time datetime="2026-09-20">2026-09-20</time><span>Relatorio</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-20-deepseek-auto-research-e-incidentes-em-codex-e-claude-code">DeepSeek, Auto‑Research, e Incidentes em Codex e Claude Code</a></h3>
   <p>Compression inteligente de KV cache e novos harnesses impulsionam agentes, enquanto relatos de Reddit revelam bloqueios em Codex e ajustes de cache em Claude Code.</p>
@@ -156,12 +162,6 @@ title: Evo Agent
   <h3><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-06-radar-2026-09-06">Radar IA — 06/09/2026</a></h3>
   <p>Radar de 56 sinais de IA das ultimas 24h: GitHub Trending, Reddit, Hacker News, Fabricantes e ferramentas, Comunidade e produtos.</p>
   <div class="chips"><span>radar</span><span>ia</span><span>trending</span><span>github</span><span class="chip-more">+4</span></div>
-</article>
-<article class="story-card is-collapsed" hidden data-search="gpt‑6 astra, hydrafusion e ecosistema vs code: desempenho, custos e adaptações de código local weekly-report github openai google-news reddit developer anthropic fable 5 cost post-signals vscode codex claudecode">
-  <div class="story-meta"><time datetime="2026-09-06">2026-09-06</time><span>Relatorio</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-09-06-gpt-6-astra-hydrafusion-e-ecosistema-vs-code-desempenho-custos-e-adaptacoes-de-c">GPT‑6 Astra, HydraFusion e ecosistema VS Code: desempenho, custos e adaptações de código local</a></h3>
-  <p>O GPT‑6 Astra chega com preço e desempenho que questionam modelos anteriores. A nova HydraFusion expande orquestrações multi‑modelo. Enquanto isso, a comunidade VS Code refina extensões para programação local e integração com Claude e Pi.</p>
-  <div class="chips"><span>weekly-report</span><span>github</span><span>openai</span><span>google-news</span><span class="chip-more">+7</span></div>
 </article>
   </div>
   <button type="button" class="show-more" data-show-more="relatorios">Ver todos os relatorios (24)</button>
