@@ -193,9 +193,15 @@ title: Evo Agent
   </div>
   <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>26</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>27</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="gpt-6 luna pro e claude opus 5.5 lideram lançamentos de ia com contextos expandidos e novos openrouter claude reddit models launches claude-code anthropic coding post-signals codex">
+    <article class="story-card" data-search="claude opus 5.5 domina benchmarks, enquanto discordões do github copilot e reddit afetam adoções openrouter hf litellm github reddit models launches papers research llm-framework">
+  <div class="story-meta"><time datetime="2026-09-24">2026-09-24</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-24-claude-opus-5-5-domina-benchmarks-enquanto-discordoes-do-github-copilot-e-reddit">Claude Opus 5.5 domina benchmarks, enquanto Discordões do GitHub Copilot e Reddit afetam adoções</a></h3>
+  <p>Novos modelos de alta velocidade e benchmarks de inteligência são despontados, mas relatos de usuários destacam regressões de custo e compatibilidade. A comunidade responde com ansões por ajuste de parâmetros.</p>
+  <div class="chips"><span>openrouter</span><span>hf</span><span>litellm</span><span>github</span><span class="chip-more">+6</span></div>
+</article>
+<article class="story-card" data-search="gpt-6 luna pro e claude opus 5.5 lideram lançamentos de ia com contextos expandidos e novos openrouter claude reddit models launches claude-code anthropic coding post-signals codex">
   <div class="story-meta"><time datetime="2026-09-23">2026-09-23</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-23-gpt-6-luna-pro-e-claude-opus-5-5-lideram-lancamentos-de-ia-com-contextos-expandi">GPT-6 Luna Pro e Claude Opus 5.5 lideram lançamentos de IA com contextos expandidos e novos</a></h3>
   <p>OpenAI anuncia GPT-6 Luna Pro com 1,05M tokens de contexto e modo de raciocínio &#39;pro&#39;; Anthropic lança Claude Opus 5.5 como padrão. Simultaneamente, comunidade relata melhorias significativas na qualidade de código e eficiência de custo nas novas versões.</p>
@@ -534,7 +540,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
   </div>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>25</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>24</strong></div>
   <div class="story-grid">
     <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <div class="story-meta"><time datetime="2026-07-31">2026-07-31</time><span>Artigo</span></div>
@@ -679,12 +685,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-05-claude-sonnet-5-encarece-anthropic-lanca-chip-com-samsung-e-fable-5-sofre-queda-">Claude Sonnet 5 encarece, Anthropic lança chip com Samsung e Fable 5 sofre queda de performance</a></h3>
   <p>A Anthropic eleva custos do Claude enquanto avança em hardware dedicado. Usuários reportam regressões e limites persistentes no modelo Fable, sinalizando riscos de orçamento e migração.</p>
   <div class="chips"><span>google-news</span><span>reddit</span><span>hacker-news</span><span>anthropic preço</span><span class="chip-more">+5</span></div>
-</article>
-<article class="story-card" data-search="claude sonnet 5 lidera índice de ia, mas custo supera opus 4.8; samsung avalia chips customizados e google-news tabnews reddit anthropic opus 4.5 pricing anthropic opus 4.5 modelo anthropic custo br developer claude">
-  <div class="story-meta"><time datetime="2026-07-04">2026-07-04</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-04-claude-sonnet-5-lidera-indice-de-ia-mas-custo-supera-opus-4-8-samsung-avalia-chi">Claude Sonnet 5 lidera índice de IA, mas custo supera Opus 4.8; Samsung avalia chips customizados e</a></h3>
-  <p>O modelo Claude Sonnet 5 atinge alta pontuação, porém seu preço pode limitar uso em projetos de alta escala. Enquanto isso, desenvolvedores buscam alternativas de infraestrutura e otimização de tokens para conter despesas.</p>
-  <div class="chips"><span>google-news</span><span>tabnews</span><span>reddit</span><span>anthropic opus 4.5 pricing</span><span class="chip-more">+5</span></div>
 </article>
   </div>
 </section>
