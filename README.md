@@ -193,9 +193,15 @@ title: Evo Agent
   </div>
   <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>27</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>28</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="claude opus 5.5 domina benchmarks, enquanto discordões do github copilot e reddit afetam adoções openrouter hf litellm github reddit models launches papers research llm-framework">
+    <article class="story-card" data-search="claude opus 5.5, ollama rc0 e reação comunitária sobre codex e copilot ollama claude cline reddit local-ai claude-code anthropic coding-agent codex openai">
+  <div class="story-meta"><time datetime="2026-09-25">2026-09-25</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-25-claude-opus-5-5-ollama-rc0-e-reacao-comunitaria-sobre-codex-e-copilot">Claude Opus 5.5, Ollama RC0 e Reação Comunitária sobre Codex e Copilot</a></h3>
+  <p>Novos lançamentos de IA e feedback real demonstram um balanço entre inovação e fragilidades de produção.</p>
+  <div class="chips"><span>ollama</span><span>claude</span><span>cline</span><span>reddit</span><span class="chip-more">+6</span></div>
+</article>
+<article class="story-card" data-search="claude opus 5.5 domina benchmarks, enquanto discordões do github copilot e reddit afetam adoções openrouter hf litellm github reddit models launches papers research llm-framework">
   <div class="story-meta"><time datetime="2026-09-24">2026-09-24</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-24-claude-opus-5-5-domina-benchmarks-enquanto-discordoes-do-github-copilot-e-reddit">Claude Opus 5.5 domina benchmarks, enquanto Discordões do GitHub Copilot e Reddit afetam adoções</a></h3>
   <p>Novos modelos de alta velocidade e benchmarks de inteligência são despontados, mas relatos de usuários destacam regressões de custo e compatibilidade. A comunidade responde com ansões por ajuste de parâmetros.</p>
@@ -540,7 +546,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
   </div>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>24</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>23</strong></div>
   <div class="story-grid">
     <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <div class="story-meta"><time datetime="2026-07-31">2026-07-31</time><span>Artigo</span></div>
@@ -679,12 +685,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-06-claude-fable-5-custo-de-173-por-chamada-reinicio-de-assinaturas-e-impacto-em-ado">Claude Fable 5: custo de $173 por chamada, reinício de assinaturas e impacto em adopção de IA</a></h3>
   <p>Análise dos anúncios da Anthropic sobre o retorno do Claude Fable 5 e respostas da comunidade de desenvolvedores. Evidências de custos, disponibilidade e regressões de modelo orientam decisões de orçamento e arquitetura.</p>
   <div class="chips"><span>google-news</span><span>tabnews</span><span>reddit</span><span>hacker-news</span><span class="chip-more">+6</span></div>
-</article>
-<article class="story-card" data-search="claude sonnet 5 encarece, anthropic lança chip com samsung e fable 5 sofre queda de performance google-news reddit hacker-news anthropic preço custo anthropic claude coding ml research">
-  <div class="story-meta"><time datetime="2026-07-05">2026-07-05</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-05-claude-sonnet-5-encarece-anthropic-lanca-chip-com-samsung-e-fable-5-sofre-queda-">Claude Sonnet 5 encarece, Anthropic lança chip com Samsung e Fable 5 sofre queda de performance</a></h3>
-  <p>A Anthropic eleva custos do Claude enquanto avança em hardware dedicado. Usuários reportam regressões e limites persistentes no modelo Fable, sinalizando riscos de orçamento e migração.</p>
-  <div class="chips"><span>google-news</span><span>reddit</span><span>hacker-news</span><span>anthropic preço</span><span class="chip-more">+5</span></div>
 </article>
   </div>
 </section>
