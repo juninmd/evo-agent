@@ -193,9 +193,15 @@ title: Evo Agent
   </div>
   <nav class="archive-jump" aria-label="Ir para mes"><a href="#mes-2026-09">Set/26</a><a href="#mes-2026-08">Ago/26</a><a href="#mes-2026-07">Jul/26</a></nav>
   <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>28</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Setembro</h2><strong>29</strong></div>
   <div class="story-grid">
-    <article class="story-card" data-search="claude opus 5.5, ollama rc0 e reação comunitária sobre codex e copilot ollama claude cline reddit local-ai claude-code anthropic coding-agent codex openai">
+    <article class="story-card" data-search="claude opus 5.5 lidera índice de inteligência e claude code implementa gateway hint headers artificial claude litellm vercel reddit intelligence benchmark claude-code anthropic llm-framework">
+  <div class="story-meta"><time datetime="2026-09-26">2026-09-26</time><span>Artigo</span></div>
+  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-26-claude-opus-5-5-lidera-indice-de-inteligencia-e-claude-code-implementa-gateway-h">Claude Opus 5.5 Lidera Índice de Inteligência e Claude Code Implementa Gateway Hint Headers</a></h3>
+  <p>Lançamentos de infraestrutura para agentes focam em rastreabilidade de requisições e validação de imagens Docker. Sinais de comunidade apontam instabilidades de autenticação no VS Code e conflitos de contexto entre agentes.</p>
+  <div class="chips"><span>artificial</span><span>claude</span><span>litellm</span><span>vercel</span><span class="chip-more">+6</span></div>
+</article>
+<article class="story-card" data-search="claude opus 5.5, ollama rc0 e reação comunitária sobre codex e copilot ollama claude cline reddit local-ai claude-code anthropic coding-agent codex openai">
   <div class="story-meta"><time datetime="2026-09-25">2026-09-25</time><span>Artigo</span></div>
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-25-claude-opus-5-5-ollama-rc0-e-reacao-comunitaria-sobre-codex-e-copilot">Claude Opus 5.5, Ollama RC0 e Reação Comunitária sobre Codex e Copilot</a></h3>
   <p>Novos lançamentos de IA e feedback real demonstram um balanço entre inovação e fragilidades de produção.</p>
@@ -546,7 +552,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
   </div>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>23</strong></div>
+  <div class="month-heading"><span>2026</span><h2>Julho</h2><strong>22</strong></div>
   <div class="story-grid">
     <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <div class="story-meta"><time datetime="2026-07-31">2026-07-31</time><span>Artigo</span></div>
@@ -679,12 +685,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
   <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-07-gpt-realtime-2-1-tuning-do-gpt-5-5-no-vs-code-e-desafios-de-ia-no-desenvolviment">GPT‑Realtime 2.1, Tuning do GPT‑5.5 no VS Code e Desafios de IA no Desenvolvimento Brasileiro</a></h3>
   <p>OpenAI divulga novos modelos realtime enquanto a Microsoft refina o GPT‑5.5 via prompt tuning. No Brasil, discussões sobre IA e falta de redes sociais apontam oportunidades e riscos operacionais.</p>
   <div class="chips"><span>hacker-news</span><span>vscode</span><span>tabnews</span><span>reddit</span><span class="chip-more">+6</span></div>
-</article>
-<article class="story-card" data-search="claude fable 5: custo de $173 por chamada, reinício de assinaturas e impacto em adopção de ia google-news tabnews reddit hacker-news anthropic fable5 cost anthropic fable5 preco br developer claude coding">
-  <div class="story-meta"><time datetime="2026-07-06">2026-07-06</time><span>Artigo</span></div>
-  <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-06-claude-fable-5-custo-de-173-por-chamada-reinicio-de-assinaturas-e-impacto-em-ado">Claude Fable 5: custo de $173 por chamada, reinício de assinaturas e impacto em adopção de IA</a></h3>
-  <p>Análise dos anúncios da Anthropic sobre o retorno do Claude Fable 5 e respostas da comunidade de desenvolvedores. Evidências de custos, disponibilidade e regressões de modelo orientam decisões de orçamento e arquitetura.</p>
-  <div class="chips"><span>google-news</span><span>tabnews</span><span>reddit</span><span>hacker-news</span><span class="chip-more">+6</span></div>
 </article>
   </div>
 </section>
