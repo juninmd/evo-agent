@@ -1,5 +1,6 @@
+import axios from "axios";
 import Database from "better-sqlite3";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   renderIntelligenceMermaidChart,
   renderIntelligenceSection,
@@ -8,6 +9,7 @@ import {
 } from "../agent/intelligence.js";
 import {
   type IntelligenceDiff,
+  crawlArtificialAnalysisIntelligence,
   diffIntelligenceSnapshots,
   extractIntelligenceModels,
 } from "../crawler/intelligence.js";
@@ -312,5 +314,54 @@ describe("Database intelligence snapshot persistence", () => {
     expect(rows[0].top_model).toBe(sampleModels[0].name);
     expect(rows[0].top_score).toBe(53.4);
     expect(rows[1].day).toBe("2026-09-20");
+  });
+});
+
+describe("crawlArtificialAnalysisIntelligence", () => {
+  const snapshot = (models: IntelligenceModelRecord[]) => ({
+    id: 1,
+    captured_at: "2026-09-25T10:00:00Z",
+    day: "2026-09-25",
+    source_url: "https://artificialanalysis.ai/models#intelligence",
+    models,
+    top_model: models[0].name,
+    top_score: models[0].intelligenceIndex,
+    changes: {},
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  function crawlWith(previous: IntelligenceModelRecord[]) {
+    // The live fetch fails and falls back to the cached snapshot, so the
+    // first read is "today" and the second is the previous measurement.
+    vi.spyOn(axios, "get").mockRejectedValue(new Error("offline"));
+    vi.spyOn(db, "getLatestIntelligenceSnapshot")
+      .mockReturnValueOnce(snapshot(sampleModels))
+      .mockReturnValueOnce(snapshot(previous));
+    vi.spyOn(db, "saveIntelligenceSnapshot").mockReturnValue(1);
+    vi.spyOn(db, "urlExists").mockReturnValue(false);
+    const saveArticle = vi
+      .spyOn(db, "saveArticle")
+      .mockReturnValue({ changes: 1, lastInsertRowid: 1 });
+    return saveArticle;
+  }
+
+  // An unchanged ranking became the lead story of an edition that, lower
+  // down, said "no changes since the last measurement".
+  it("does not offer an unchanged ranking as a story", async () => {
+    const saveArticle = crawlWith(sampleModels);
+    await crawlArtificialAnalysisIntelligence();
+    expect(saveArticle).not.toHaveBeenCalled();
+  });
+
+  it("offers the ranking as a story when it moved", async () => {
+    const moved = sampleModels.map((model, index) =>
+      index === 0 ? { ...model, intelligenceIndex: 51 } : model,
+    );
+    const saveArticle = crawlWith(moved);
+    await crawlArtificialAnalysisIntelligence();
+    expect(saveArticle).toHaveBeenCalledTimes(1);
   });
 });

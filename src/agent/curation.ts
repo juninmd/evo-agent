@@ -30,6 +30,8 @@ const PRIMARY_SOURCE_PATTERNS = [
   /changelog/i,
   /^hf daily papers$/i,
   /^openrouter: new models$/i,
+  // The benchmark publisher's own measurement, not commentary on it.
+  /^artificial analysis$/i,
 ];
 
 /**
