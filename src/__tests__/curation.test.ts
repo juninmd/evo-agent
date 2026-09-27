@@ -41,6 +41,13 @@ describe("editorial curation", () => {
     expect(isPrimarySource(article("x", "Reddit: ClaudeCode", gh))).toBe(false);
   });
 
+  it("counts the Artificial Analysis ranking as a primary measurement", () => {
+    const aa = "https://artificialanalysis.ai/models#intelligence#2026-09-26";
+    expect(isPrimarySource(article("Ranking", "Artificial Analysis", aa))).toBe(
+      true,
+    );
+  });
+
   it("parses malformed tags without aborting generation", () => {
     expect(parseTags("{broken")).toEqual([]);
     expect(parseTags('["AI", 1, "Agents"]')).toEqual(["ai", "agents"]);

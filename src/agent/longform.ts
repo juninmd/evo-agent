@@ -24,7 +24,33 @@ const STYLE_RULES = `Regras de escrita:
 - Não use "cada vez mais", "players do mercado", "impacto significativo", "revolucionário", "nesse contexto", "diante disso", "é fundamental", "não se trata apenas de" nem outras frases de preenchimento típicas de IA.
 - Não invente números, versões, datas, benchmarks, nomes ou capacidades que não estejam na evidência.
 - Não escreva URLs nem links; as citações são adicionadas pelo programa.
-- Prefira frases concretas: o que muda na arquitetura, no custo, no risco, na operação ou na decisão de adoção de quem lê.`;
+- Prefira frases concretas: o que muda na arquitetura, no custo, no risco, na operação ou na decisão de adoção de quem lê.
+- Nunca abra com "Para quem desenvolve/constrói/opera software com IA"; nomeie quem é afetado (quem usa a extensão, quem roda o proxy, quem paga a API).
+- Escreva variáveis de ambiente, flags, headers, comandos, pacotes e trechos de configuração entre crases, exatamente como na evidência.
+- Não deixe frases ou expressões em inglês, nem entre parênteses; traduza ou omita.`;
+
+// The analysis prompt once named the audience with this exact phrase and the
+// model echoed it into several items of one edition.
+const PROMPT_AUDIENCE_ECHO =
+  /para quem (desenvolve|constr[oó]i|opera)[^.]{0,40}software com (ia|intelig[eê]ncia artificial)/i;
+
+const ENGLISH_FUNCTION_WORDS =
+  /\b(the|to|of|and|for|with|is|are|an|by|on|into|from|that|this|it)\b/i;
+
+/**
+ * hasEnglishSentence needs a whole sentence; a drifted aside hides inside
+ * parentheses. Product names ("Model Context Protocol") carry no function word.
+ */
+function hasEnglishAside(text: string): boolean {
+  return [...text.matchAll(/\(([^()]{10,})\)/g)].some(([, inner]) => {
+    const words = inner.trim().split(/\s+/);
+    return (
+      words.length >= 4 &&
+      !/[à-ú]/i.test(inner) &&
+      ENGLISH_FUNCTION_WORDS.test(inner)
+    );
+  });
+}
 
 export function proseIssues(
   text: string,
@@ -52,7 +78,14 @@ export function proseIssues(
   if (hasPromptLeak(trimmed)) {
     issues.push("contém instrução ou comentário vazado do prompt");
   }
-  if (hasEnglishSentence(trimmed)) issues.push("contém frase em inglês");
+  if (hasEnglishSentence(trimmed) || hasEnglishAside(trimmed)) {
+    issues.push("contém frase em inglês");
+  }
+  if (PROMPT_AUDIENCE_ECHO.test(trimmed)) {
+    issues.push(
+      'repete o enquadramento do prompt ("para quem ... software com IA")',
+    );
+  }
   if (looksGarbled(trimmed)) {
     issues.push(
       "contém texto corrompido (palavra repetida ou frase iniciada em minúscula)",
@@ -73,9 +106,17 @@ function paragraphs(text: string): string {
     .join("\n\n");
 }
 
+/** Agenda fields often come telegraphic; published prose still ends its sentences. */
+function closeSentence(text: string): string {
+  const clean = text.trim();
+  return !clean || /[.!?…:]$/.test(clean) ? clean : `${clean}.`;
+}
+
 /** Fallback prose when the expansion pass cannot produce a usable section. */
 function agendaProse(whatHappened: string, whyItMatters: string): string {
-  return paragraphs(`${whatHappened.trim()}\n\n${whyItMatters.trim()}`);
+  return paragraphs(
+    `${closeSentence(whatHappened)}\n\n${closeSentence(whyItMatters)}`,
+  );
 }
 
 /** Fallbacks skip the expansion checks, so they must clear them here instead. */
@@ -142,7 +183,7 @@ Apuração já feita pela edição:
 - Fato central: ${sanitizeForPrompt(highlight.whatHappened, 600)}
 - Consequência técnica: ${sanitizeForPrompt(highlight.whyItMatters, 600)}
 
-Escreva 2 parágrafos curtos e diretos, entre ${ANALYSIS_MIN_CHARS} e ${ANALYSIS_MAX_CHARS} caracteres no total (nunca mais que isso), sem enrolação. Primeiro parágrafo: o fato, sem preâmbulo. Segundo parágrafo: o que muda na prática para quem constrói e opera software com IA, incluindo o limite ou a incerteza que a evidência ainda deixa em aberto.
+Escreva 2 parágrafos curtos e diretos, entre ${ANALYSIS_MIN_CHARS} e ${ANALYSIS_MAX_CHARS} caracteres no total (nunca mais que isso), sem enrolação. Primeiro parágrafo: o fato, sem preâmbulo. Segundo parágrafo: a consequência prática concreta (arquitetura, custo, risco, operação ou adoção) para quem é afetado, incluindo o limite ou a incerteza que a evidência ainda deixa em aberto. Se a evidência vier de um único relato da comunidade, trate-a como relato, sem generalizar para uma tendência.
 
 ${STYLE_RULES}
 

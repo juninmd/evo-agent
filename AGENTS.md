@@ -57,7 +57,8 @@ src/
   - corrected header anchors for `Arquivo` and `Relatorios`
   - canonical URL, Open Graph/Twitter metadata, Atom feed and sitemap
   - skip link and an `aria-pressed` theme toggle
-- Both layouts are generated from the shared builders in `site-renderer.ts`; do not fork them.
+  - "Nesta edição" table of contents and the primary-source/community-signal markers
+- Both layouts are generated from the shared builders in `site-renderer.ts`; do not fork them. CSS lives in `src/publisher/styles/`; bump the `site.css?v=` query when it changes.
 - Every `{{ page.* }}` interpolation must carry `| escape`: Liquid does not escape by default and titles come from crawled text.
 - Published articles may include images/videos when they improve validation or reader understanding.
 

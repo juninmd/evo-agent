@@ -393,11 +393,12 @@ export async function crawlArtificialAnalysisIntelligence(
     changes: diff as unknown as Record<string, unknown>,
   });
 
-  // Also index as an article so crawler and knowledge systems track it
+  // Also index as an article so editions can pick it up. Only a moved
+  // ranking is news: every edition already appends the ranking section.
   const top = models[0];
   const topOpen = models.find((m) => m.isOpenWeights);
   const articleUrl = `${ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL}#${day}`;
-  if (!db.urlExists(articleUrl)) {
+  if (diff.hasChanges && !db.urlExists(articleUrl)) {
     const summaryLines = [
       `Índice de Inteligência Artificial Analysis (${day}): liderança de ${top?.name ?? "N/A"} (${top?.intelligenceIndex ?? 0}).`,
       topOpen

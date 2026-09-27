@@ -1,6 +1,7 @@
 import { EBOOK_SLUG, type EbookResult } from "../agent/ebook.js";
 import type { GeneratedArticle } from "../agent/writer.js";
 import { escapeHtml } from "../utils/escape.js";
+import { buildSiteCss } from "./styles/index.js";
 
 export type PublishedItem = {
   date: string;
@@ -119,32 +120,63 @@ function buildArchiveJumpNav(groups: [string, PublishedItem[]][]): string {
     .map(([key]) => {
       const year = key.slice(0, 4);
       const month = formatMonth(`${key}-01`);
-      return `<a href="#mes-${key}">${month.slice(0, 3)}/${year.slice(2)}</a>`;
+      return `<a href="#mes-${key}">${month.slice(0, 3).toLowerCase()} ${year}</a>`;
     })
     .join("");
-  return `<nav class="archive-jump" aria-label="Ir para mes">${links}</nav>`;
+  return `<nav class="archive-jump" aria-label="Ir para o mês">${links}</nav>`;
+}
+
+/** "2026-09-26" -> "26 set": the archive rows already sit under a month. */
+function formatShortDate(date: string): string {
+  const month = formatMonth(date).slice(0, 3).toLowerCase();
+  return `${date.slice(8, 10)} ${month}`;
 }
 
 const MAX_VISIBLE_TAGS = 4;
 
-function buildItemCard(item: PublishedItem, kind: "Artigo" | "Relatorio") {
+function searchText(item: PublishedItem): string {
+  return escapeHtml(
+    `${item.title} ${(item.tags ?? []).join(" ")}`.toLowerCase(),
+  );
+}
+
+function buildItemCard(item: PublishedItem) {
   const allTags = item.tags ?? [];
-  const visibleTags = allTags.slice(0, MAX_VISIBLE_TAGS);
-  const hiddenCount = allTags.length - visibleTags.length;
   const tags = allTags.length
-    ? `<div class="chips">${visibleTags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}${hiddenCount > 0 ? `<span class="chip-more">+${hiddenCount}</span>` : ""}</div>`
+    ? `<p class="story-tags">${allTags.slice(0, MAX_VISIBLE_TAGS).map(escapeHtml).join(", ")}</p>`
     : "";
   const summary = item.summary ? `<p>${escapeHtml(item.summary)}</p>` : "";
-  const searchText = escapeHtml(
-    `${item.title} ${allTags.join(" ")}`.toLowerCase(),
-  );
 
-  return `<article class="story-card" data-search="${searchText}">
-  <div class="story-meta"><time datetime="${item.date}">${item.date}</time><span>${kind}</span></div>
-  <h3><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></h3>
-  ${summary}
-  ${tags}
+  return `<article class="story-card" data-search="${searchText(item)}">
+  <time datetime="${item.date}">${formatShortDate(item.date)}</time>
+  <div>
+    <h3><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></h3>
+    ${summary}
+    ${tags}
+  </div>
 </article>`;
+}
+
+function buildReportRow(item: PublishedItem, collapsed: boolean) {
+  const hidden = collapsed ? ' class="is-collapsed" hidden' : "";
+  return `<li data-search="${searchText(item)}"${hidden}><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></li>`;
+}
+
+function buildLatest(articles: PublishedItem[]): string {
+  const latest = [...articles].sort((a, b) => b.date.localeCompare(a.date))[0];
+  if (!latest) return "";
+  const summary = latest.summary ? `<p>${escapeHtml(latest.summary)}</p>` : "";
+  return `<section class="latest" aria-labelledby="ultima-edicao">
+  <h2 class="section-label" id="ultima-edicao">Última edição</h2>
+  <a class="latest-card" href="${escapeHtml(latest.url)}">
+    <time class="edition-date" datetime="${latest.date}"><span class="edition-day">${latest.date.slice(8, 10)}</span><span class="edition-month">${formatMonth(latest.date).toLowerCase()} ${latest.date.slice(0, 4)}</span></time>
+    <div>
+      <h3>${escapeHtml(latest.title)}</h3>
+      ${summary}
+      <span class="read-cta">Ler edição</span>
+    </div>
+  </a>
+</section>`;
 }
 
 const VISIBLE_REPORTS = 6;
@@ -154,23 +186,15 @@ export function buildIndex(
   weeklyReports: PublishedItem[],
 ) {
   const extraReportCount = weeklyReports.length - VISIBLE_REPORTS;
-  const reportCards =
+  const reportRows =
     weeklyReports.length > 0
-      ? weeklyReports
-          .map((r, index) => {
-            const card = buildItemCard(r, "Relatorio");
-            return index < VISIBLE_REPORTS
-              ? card
-              : card.replace(
-                  '<article class="story-card"',
-                  '<article class="story-card is-collapsed" hidden',
-                );
-          })
-          .join("\n")
-      : '<p class="empty-state">Nenhum relatorio publicado ainda.</p>';
+      ? `<ul class="report-list" data-collapsible>
+    ${weeklyReports.map((r, index) => buildReportRow(r, index >= VISIBLE_REPORTS)).join("\n    ")}
+  </ul>`
+      : '<p class="empty-state">Nenhum radar publicado ainda.</p>';
   const reportsToggle =
     extraReportCount > 0
-      ? `<button type="button" class="show-more" data-show-more="relatorios">Ver todos os relatorios (${weeklyReports.length})</button>`
+      ? `<button type="button" class="show-more" data-show-more="relatorios">Ver todos (${weeklyReports.length})</button>`
       : "";
 
   const yearMonthGroups = groupByYearMonth(articles);
@@ -179,11 +203,10 @@ export function buildIndex(
     .map(([key, items]) => {
       const year = key.slice(0, 4);
       const month = formatMonth(`${key}-01`);
+      const count = `${items.length} ${items.length === 1 ? "edição" : "edições"}`;
       return `<section class="month-group" id="mes-${key}">
-  <div class="month-heading"><span>${year}</span><h2>${month}</h2><strong>${items.length}</strong></div>
-  <div class="story-grid">
-    ${items.map((a) => buildItemCard(a, "Artigo")).join("\n")}
-  </div>
+  <div class="month-heading"><h2>${month} <span>${year}</span></h2><p>${count}</p></div>
+  ${items.map((a) => buildItemCard(a)).join("\n")}
 </section>`;
     })
     .join("\n");
@@ -193,54 +216,42 @@ layout: home
 title: Evo Agent
 ---
 
-<section class="hero">
-  <p class="kicker">evo-agent publishing lab</p>
-  <h1>Artigos e relatorios de um agente que aprende em producao.</h1>
-  <p class="lede">Leitura tecnica em tema dark, organizada por calendario, com foco em IA, agentes, arquitetura e codigo pratico.</p>
-  <div class="hero-stats">
-    <span><strong>${articles.length}</strong> artigos</span>
-    <span><strong>${weeklyReports.length}</strong> relatorios</span>
-  </div>
+<section class="masthead">
+  <h1>Evo Agent</h1>
+  <p class="lede">Edições diárias sobre IA aplicada ao desenvolvimento de software: modelos, agentes, ferramentas e o que a comunidade está relatando. Escritas por um agente que revisa o próprio trabalho a cada publicação.</p>
+  <p class="masthead-count"><strong>${articles.length}</strong> edições e <strong>${weeklyReports.length}</strong> radares no arquivo</p>
 </section>
 
-<section class="reports-band" id="relatorios">
-  <div class="section-title">
-    <p>Radar semanal</p>
-    <h2>Relatorios</h2>
-  </div>
-  <div class="story-grid featured-grid" data-collapsible>
-    ${reportCards}
-  </div>
-  ${reportsToggle}
-</section>
+${buildLatest(articles)}
 
-<section class="reports-band" id="ebook">
-  <div class="section-title">
-    <p>Compendio vivo</p>
-    <h2>Ebook</h2>
-  </div>
-  <div class="story-grid featured-grid">
-    <article class="story-card">
-      <div class="story-meta"><span>Atualizado pelo agente</span><span>Handbook</span></div>
-      <h3><a href="{{ '/handbooks/${EBOOK_SLUG}' | relative_url }}">Guia Pratico: Desenvolvimento de Software com IA</a></h3>
-      <p>Boas praticas, ferramentas, fluxos com agentes, prompt/contexto e anti-padroes extraidos das fontes tecnicas recentes.</p>
-      <div class="chips"><span>ebook</span><span>ai-assisted-development</span><span>agents</span></div>
-    </article>
-  </div>
-</section>
+<div class="home-grid">
+  <aside class="home-aside">
+    <section id="relatorios">
+      <h2>Radar diário</h2>
+      <p class="aside-note">Sinais coletados nas últimas 24h, sem edição.</p>
+      ${reportRows}
+      ${reportsToggle}
+    </section>
+    <section id="ebook">
+      <h2>Ebook</h2>
+      <p class="aside-note">Atualizado pelo agente a partir das fontes recentes.</p>
+      <a class="ebook-link" href="{{ '/handbooks/${EBOOK_SLUG}' | relative_url }}">
+        <strong>Guia Prático: Desenvolvimento de Software com IA</strong>
+        <span>Boas práticas, ferramentas, fluxos com agentes, prompt e contexto, anti-padrões.</span>
+      </a>
+    </section>
+  </aside>
 
-<section class="archive" id="arquivo">
-  <div class="section-title">
-    <p>Arquivo por ano e mes</p>
-    <h2>Artigos diarios</h2>
-  </div>
-  <div class="search-box">
-    <input type="search" id="story-search" placeholder="Buscar por titulo ou tag..." aria-label="Buscar artigos e relatorios por titulo ou tag">
-    <p class="search-empty" id="search-empty" hidden>Nenhum resultado encontrado.</p>
-  </div>
-  ${archiveJumpNav}
-  ${articleGroups || '<p class="empty-state">Nenhum artigo publicado ainda.</p>'}
-</section>
+  <section class="archive" id="arquivo">
+    <h2>Arquivo</h2>
+    <div class="search-box">
+      <input type="search" id="story-search" placeholder="Buscar por título ou tag" aria-label="Buscar edições e radares por título ou tag">
+      <p class="search-empty" id="search-empty" hidden>Nada encontrado. Tente outro termo ou uma tag, como "claude" ou "agents".</p>
+    </div>
+    ${archiveJumpNav}
+    ${articleGroups || '<p class="empty-state">Nenhuma edição publicada ainda.</p>'}
+  </section>
+</div>
 `;
 }
 
@@ -276,8 +287,8 @@ function buildHead(): string {
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=8' | relative_url }}">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Literata:opsz,wght@7..72,400;7..72,600&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=9' | relative_url }}">
     <script>
       // Runs before first paint: applies the theme and stamps the toggle's own
       // label, so the button never claims the opposite of what is rendered.
@@ -296,7 +307,7 @@ function buildSiteNav(): string {
       <a class="brand" href="{{ '/' | relative_url }}">Evo Agent</a>
       <nav aria-label="Principal">
         <a href="{{ '/' | relative_url }}#arquivo">Arquivo</a>
-        <a href="{{ '/' | relative_url }}#relatorios">Relatorios</a>
+        <a href="{{ '/' | relative_url }}#relatorios">Radar</a>
         <a href="{{ '/' | relative_url }}#ebook">Ebook</a>
         <a href="https://github.com/{{ site.github_owner }}/{{ site.github_repo }}">GitHub</a>
         <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Alternar tema claro e escuro">Claro</button>
@@ -340,14 +351,16 @@ function buildIndexScript(): string {
         searchInput.addEventListener("input", function() {
           var query = searchInput.value.trim().toLowerCase();
           var anyVisible = false;
-          document.querySelectorAll(".story-card[data-search]").forEach(function(card) {
+          document.querySelectorAll("[data-search]").forEach(function(card) {
             var matches = !query || card.dataset.search.includes(query);
             card.style.display = matches ? "" : "none";
+            // A collapsed radar row carries [hidden]; a match must still surface.
+            if (query && matches) card.hidden = false;
             if (matches) anyVisible = true;
           });
           document.querySelectorAll(".month-group").forEach(function(group) {
             var hasVisible = Array.prototype.some.call(
-              group.querySelectorAll(".story-card"),
+              group.querySelectorAll("[data-search]"),
               function(card) { return card.style.display !== "none"; },
             );
             group.style.display = hasVisible ? "" : "none";
@@ -368,6 +381,71 @@ function buildIndexScript(): string {
       window.addEventListener("scroll", function() {
         backToTop.classList.toggle("visible", window.scrollY > 600);
       });
+    </script>`;
+}
+
+/**
+ * Kept out of the mermaid module: a CDN failure there must not cost the
+ * reader the table of contents or the source markers.
+ */
+function buildReaderScript(): string {
+  return `    <script>
+      (function () {
+        var content = document.querySelector(".article-content");
+        if (!content) return;
+        content.querySelectorAll("p > em:only-child").forEach(function (em) {
+          var first = em.firstElementChild;
+          if (!first || first.tagName !== "A" || em.parentElement.children.length !== 1) return;
+          var p = em.parentElement;
+          var text = em.textContent.trim();
+          p.classList.add("source-line");
+          if (/fonte primária$/.test(text)) p.classList.add("is-primary");
+          else if (/sinal da comunidade$/.test(text)) p.classList.add("is-community");
+        });
+
+        var toc = document.querySelector("[data-toc]");
+        var heads = Array.prototype.filter.call(
+          content.querySelectorAll("h2[id], h4[id]"),
+          function (h) { return h.textContent.trim(); },
+        );
+        if (!toc || heads.length < 4) return;
+        var list = document.createElement("ul");
+        var links = heads.map(function (h) {
+          var li = document.createElement("li");
+          li.className = h.tagName === "H2" ? "toc-h2" : "toc-h4";
+          var a = document.createElement("a");
+          a.href = "#" + h.id;
+          a.textContent = h.textContent.trim();
+          li.appendChild(a);
+          list.appendChild(li);
+          return a;
+        });
+        toc.appendChild(list);
+        if (content.querySelector(".source-line.is-primary, .source-line.is-community")) {
+          var legend = document.createElement("p");
+          legend.className = "toc-legend";
+          [["is-primary", "Fonte primária"], ["is-community", "Sinal da comunidade"]].forEach(function (entry) {
+            var span = document.createElement("span");
+            span.className = entry[0];
+            span.textContent = entry[1];
+            legend.appendChild(span);
+          });
+          toc.appendChild(legend);
+        }
+        toc.hidden = false;
+        toc.open = window.matchMedia("(min-width: 1001px)").matches;
+
+        if (!("IntersectionObserver" in window)) return;
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            links.forEach(function (a) {
+              a.setAttribute("aria-current", a.hash === "#" + entry.target.id ? "true" : "false");
+            });
+          });
+        }, { rootMargin: "-90px 0px -70% 0px" });
+        heads.forEach(function (h) { observer.observe(h); });
+      })();
     </script>`;
 }
 
@@ -431,12 +509,13 @@ function buildLayout(main: string): string {
 ${buildHead()}
   </head>
   <body>
-    <a class="skip-link" href="#conteudo">Pular para o conteudo</a>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 ${buildSiteNav()}
     <main id="conteudo">
 ${main}
     </main>
 ${buildThemeScript()}
+${buildReaderScript()}
 ${buildContentScript()}
 ${buildIndexScript()}
   </body>
@@ -448,728 +527,33 @@ export function buildDefaultLayout() {
 }
 
 export function buildArticleLayout() {
-  return buildLayout(`      <article class="article-shell">
+  return buildLayout(`      {% assign month_index = page.date | date: "%-m" | minus: 1 %}
+      {% assign month_names = "janeiro fevereiro março abril maio junho julho agosto setembro outubro novembro dezembro" | split: " " %}
+      <article class="article-shell">
         <header class="article-hero">
-          <a class="back-link" href="{{ '/' | relative_url }}#arquivo">&larr; Todos os artigos</a>
-          <p class="kicker">{{ page.date | date: "%Y-%m-%d" }}{% if page.reading_time %} · {{ page.reading_time }} min de leitura{% endif %}</p>
-          <h1>${TITLE}</h1>
-          {% if page.summary %}<p class="article-summary">{{ page.summary | escape }}</p>{% endif %}
-          {% if page.tags %}
-          <div class="chips">
-            {% for tag in page.tags %}<span>{{ tag | escape }}</span>{% endfor %}
+          <a class="back-link" href="{{ '/' | relative_url }}#arquivo">&larr; Todas as edições</a>
+          <div class="article-masthead">
+            <time class="edition-date" datetime="{{ page.date | date: '%Y-%m-%d' }}"><span class="edition-day">{{ page.date | date: "%d" }}</span><span class="edition-month">{{ month_names[month_index] }} {{ page.date | date: "%Y" }}</span></time>
+            <div>
+              <h1>${TITLE}</h1>
+              {% if page.summary %}<p class="article-summary">{{ page.summary | escape }}</p>{% endif %}
+              <div class="article-meta">
+                {% if page.reading_time %}<span>{{ page.reading_time }} min de leitura</span>{% endif %}
+                <a class="download-md" href="https://raw.githubusercontent.com/{{ site.github_owner }}/{{ site.github_repo }}/{{ site.github_branch | default: 'gh-pages' }}/{{ page.path }}" download rel="noopener">Baixar Markdown</a>
+              </div>
+              {% if page.tags %}<p class="article-tags">Tags: {{ page.tags | join: ", " | escape }}</p>{% endif %}
+            </div>
           </div>
-          {% endif %}
-          <a class="download-md" href="https://raw.githubusercontent.com/{{ site.github_owner }}/{{ site.github_repo }}/{{ site.github_branch | default: 'gh-pages' }}/{{ page.path }}" download rel="noopener">Baixar Markdown</a>
         </header>
-        <div class="article-content">
-          {{ content }}
+        <div class="article-body">
+          <details class="article-toc" data-toc hidden>
+            <summary>Nesta edição</summary>
+          </details>
+          <div class="article-content">
+            {{ content }}
+          </div>
         </div>
       </article>`);
-}
-
-export function buildSiteCss() {
-  return `:root {
-  color-scheme: dark;
-  --bg: #080a0f;
-  --panel: #111723;
-  --panel-2: #182232;
-  --text: #f4f0e8;
-  --muted: #a9b0bd;
-  --line: #293346;
-  --accent: #5eead4;
-  --hot: #ffbf69;
-  --code: #0d1117;
-  --max: 1120px;
-}
-
-:root[data-theme="light"] {
-  color-scheme: light;
-  --bg: #ffffff;
-  --panel: #f6f8fa;
-  --panel-2: #eaeef2;
-  --text: #1f2328;
-  --muted: #656d76;
-  --line: #d0d7de;
-  --accent: #0969da;
-  --hot: #9a6700;
-  --code: #f6f8fa;
-}
-
-:root[data-theme="dark"] {
-  color-scheme: dark;
-}
-
-:root[data-theme="light"] body {
-  background: var(--bg);
-}
-
-:root[data-theme="light"] .story-card {
-  background: var(--panel);
-}
-
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-
-body {
-  margin: 0;
-  background:
-    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 34rem),
-    radial-gradient(circle at 85% 12%, color-mix(in srgb, var(--hot) 14%, transparent), transparent 28rem),
-    var(--bg);
-  color: var(--text);
-  font-family: "Source Serif 4", Georgia, Cambria, "Times New Roman", serif;
-  line-height: 1.7;
-}
-
-a { color: inherit; }
-
-.site-header {
-  align-items: center;
-  backdrop-filter: blur(18px);
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  padding: 18px clamp(18px, 4vw, 52px);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.brand {
-  color: var(--accent);
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.95rem;
-  font-weight: 800;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-nav {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-}
-
-nav a {
-  color: var(--muted);
-  text-decoration: none;
-}
-
-nav a:hover { color: var(--text); }
-
-.theme-toggle {
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--text);
-  cursor: pointer;
-  font: inherit;
-  padding: 6px 11px;
-  text-transform: uppercase;
-}
-
-.theme-toggle:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-main {
-  margin: 0 auto;
-  max-width: var(--max);
-  padding: clamp(28px, 6vw, 72px) clamp(18px, 4vw, 44px);
-}
-
-.hero {
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 48px;
-  padding: 52px 0 44px;
-}
-
-.kicker,
-.section-title p,
-.story-meta,
-.chips {
-  color: var(--muted);
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-}
-
-.hero h1 {
-  font-size: clamp(2.7rem, 7vw, 6.8rem);
-  line-height: 0.95;
-  margin: 0;
-  max-width: 980px;
-}
-
-.lede {
-  color: var(--muted);
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-  max-width: 720px;
-}
-
-.hero-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 30px;
-}
-
-.hero-stats span,
-.chips span {
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line));
-  border-radius: 999px;
-  color: var(--muted);
-  padding: 7px 12px;
-}
-
-.hero-stats strong { color: var(--accent); }
-
-.hero {
-  position: relative;
-}
-
-.kicker::before {
-  background: var(--accent);
-  border-radius: 999px;
-  content: "";
-  display: inline-block;
-  height: 6px;
-  margin-right: 8px;
-  width: 6px;
-}
-
-.section-title {
-  align-items: end;
-  display: flex;
-  justify-content: space-between;
-  margin: 38px 0 18px;
-}
-
-.section-title h2,
-.month-heading h2 {
-  font-size: clamp(1.8rem, 3vw, 3rem);
-  line-height: 1;
-  margin: 0;
-}
-
-.story-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-
-.story-card {
-  background: linear-gradient(160deg, color-mix(in srgb, var(--panel-2) 86%, transparent), color-mix(in srgb, var(--panel) 94%, transparent));
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  border-top: 3px solid color-mix(in srgb, var(--accent) 45%, var(--line));
-  box-shadow: 0 1px 2px color-mix(in srgb, var(--bg) 40%, transparent);
-  padding: 24px;
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
-}
-
-.story-card:hover {
-  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-  box-shadow: 0 14px 32px color-mix(in srgb, var(--bg) 55%, transparent);
-  transform: translateY(-4px);
-}
-
-.story-meta {
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-}
-
-.story-card h3 {
-  font-size: 1.35rem;
-  line-height: 1.2;
-  margin: 18px 0 10px;
-}
-
-.story-card h3 a { text-decoration: none; }
-.story-card h3 a:hover { color: var(--accent); }
-
-.story-card p {
-  color: var(--muted);
-  margin: 0 0 16px;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.month-group {
-  border-top: 1px solid var(--line);
-  padding: 34px 0;
-}
-
-.month-heading {
-  align-items: baseline;
-  display: grid;
-  gap: 12px;
-  grid-template-columns: 72px 1fr auto;
-  margin-bottom: 22px;
-}
-
-.month-heading h2 {
-  font-weight: 700;
-}
-
-.month-heading span,
-.month-heading strong {
-  color: var(--hot);
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-}
-
-.month-heading strong {
-  background: color-mix(in srgb, var(--hot) 12%, transparent);
-  border-radius: 999px;
-  font-size: 0.85rem;
-  padding: 4px 10px;
-}
-
-.empty-state {
-  border: 1px dashed var(--line);
-  color: var(--muted);
-  padding: 24px;
-}
-
-.archive-jump {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 24px;
-}
-
-.archive-jump a {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--muted);
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.72rem;
-  padding: 5px 10px;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.archive-jump a:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.back-link {
-  color: var(--muted);
-  display: inline-block;
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.78rem;
-  margin-bottom: 16px;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.back-link:hover { color: var(--accent); }
-
-.chip-more {
-  color: var(--muted);
-  font-style: italic;
-}
-
-.search-box {
-  margin-bottom: 20px;
-}
-
-.search-box input {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: var(--text);
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 0.95rem;
-  padding: 12px 14px;
-  width: 100%;
-}
-
-.search-box input:focus-visible {
-  border-color: var(--accent);
-  outline: none;
-}
-
-.search-empty {
-  color: var(--muted);
-  margin-top: 12px;
-}
-
-.show-more {
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  color: var(--text);
-  cursor: pointer;
-  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
-  font-size: 0.78rem;
-  margin-top: 18px;
-  padding: 9px 16px;
-  text-transform: uppercase;
-}
-
-.show-more:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.back-to-top {
-  background: var(--accent);
-  border: 0;
-  border-radius: 999px;
-  bottom: 24px;
-  box-shadow: 0 6px 18px color-mix(in srgb, var(--bg) 60%, transparent);
-  color: #08131a;
-  cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: 700;
-  height: 44px;
-  opacity: 0;
-  pointer-events: none;
-  position: fixed;
-  right: 24px;
-  transition: opacity 160ms ease;
-  width: 44px;
-  z-index: 15;
-}
-
-.back-to-top.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.article-shell {
-  margin: 0 auto;
-  max-width: 820px;
-}
-
-.article-hero {
-  border-bottom: 1px solid var(--line);
-  margin-bottom: 34px;
-  padding-bottom: 28px;
-}
-
-.article-hero h1 {
-  font-size: clamp(2.2rem, 5vw, 4.8rem);
-  line-height: 1;
-  margin: 12px 0;
-}
-
-.article-summary {
-  color: var(--muted);
-  font-size: 1.2rem;
-}
-
-.download-md {
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  border-radius: 999px;
-  color: var(--accent);
-  display: inline-flex;
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  margin-top: 24px;
-  padding: 10px 15px;
-  text-decoration: none;
-}
-
-.download-md:hover {
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-}
-
-.article-content { font-size: 1.08rem; }
-
-.article-content > h1 { display: none; }
-
-.article-content h2 {
-  border-bottom: 1px solid var(--line);
-  font-size: 1.55rem;
-  padding-bottom: 0.3em;
-}
-
-.article-content h3 { font-size: 1.2rem; }
-
-.article-content h2,
-.article-content h3 {
-  line-height: 1.15;
-  margin-top: 2.2em;
-}
-
-.article-content h3:has(+ h4) {
-  color: var(--accent);
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.article-content h4 {
-  font-size: 1.18rem;
-  line-height: 1.25;
-  margin: 2em 0 0.5em;
-}
-
-.article-content h2 + ul {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 18px 20px 18px 38px;
-}
-
-.article-content h2 + ul li + li { margin-top: 0.55em; }
-
-.article-content p:has(> em:only-child > a) {
-  color: var(--muted);
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 0.88rem;
-}
-
-.article-content hr {
-  border: 0;
-  border-top: 1px solid var(--line);
-  margin: 36px 0;
-}
-
-.article-content p,
-.article-content li { color: color-mix(in srgb, var(--text) 84%, var(--muted)); }
-
-.article-content img {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  display: block;
-  height: auto;
-  margin: 28px auto;
-  max-height: 70vh;
-  max-width: 100%;
-}
-
-.article-content .highlight { margin: 28px 0; }
-
-.article-content .mermaid-wrapper {
-  margin: 32px 0;
-  overflow-x: auto;
-  padding: 16px 8px;
-  background: color-mix(in srgb, var(--panel) 40%, transparent);
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  -webkit-overflow-scrolling: touch;
-}
-
-.article-content pre.mermaid,
-.article-content .mermaid {
-  background: transparent !important;
-  border: 0 !important;
-  border-left: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  display: flex !important;
-  justify-content: center !important;
-  margin: 0 !important;
-  min-width: 580px;
-  padding: 0 !important;
-  text-align: center;
-}
-
-.article-content .mermaid svg {
-  height: auto !important;
-  max-width: 100% !important;
-}
-
-.article-content pre {
-  background: var(--code);
-  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
-  border-left: 3px solid var(--accent);
-  border-radius: 0 8px 8px 0;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 8%, transparent);
-  line-height: 1.6;
-  margin: 0;
-  overflow-x: auto;
-  padding: 22px;
-  position: relative;
-  tab-size: 2;
-  -moz-tab-size: 2;
-}
-
-.article-content pre code {
-  background: transparent;
-  border: 0;
-  color: color-mix(in srgb, var(--text) 94%, var(--accent));
-  display: block;
-  font-size: 0.92rem;
-  padding: 0;
-  white-space: pre;
-}
-
-.article-content blockquote {
-  background: color-mix(in srgb, var(--accent) 6%, transparent);
-  border-left: 4px solid var(--accent);
-  border-radius: 0 6px 6px 0;
-  color: var(--muted);
-  margin: 28px 0 28px 0;
-  padding: 16px 18px;
-}
-
-.copy-btn {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  color: var(--muted);
-  cursor: pointer;
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  opacity: 0;
-  padding: 4px 8px;
-  position: absolute;
-  right: 8px;
-  text-transform: uppercase;
-  top: 8px;
-  transition: opacity 0.18s ease, border-color 0.18s ease, color 0.18s ease;
-  z-index: 1;
-}
-
-pre:hover .copy-btn,
-.copy-btn:focus-visible {
-  opacity: 1;
-}
-
-.copy-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.copy-btn.copied {
-  border-color: var(--accent);
-  color: var(--accent);
-  opacity: 1;
-}
-
-.article-content table {
-  border-collapse: collapse;
-  border-radius: 8px;
-  display: block;
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-size: 0.96rem;
-  margin: 28px 0;
-  overflow: hidden;
-  overflow-x: auto;
-  width: 100%;
-}
-
-.article-content th,
-.article-content td {
-  border: 1px solid var(--line);
-  padding: 12px 14px;
-  text-align: left;
-  vertical-align: top;
-}
-
-.article-content th {
-  background: color-mix(in srgb, var(--panel-2) 78%, var(--accent) 22%);
-  color: var(--text);
-  font-weight: 700;
-}
-
-.article-content tr:nth-child(even) td {
-  background: color-mix(in srgb, var(--panel) 80%, transparent);
-}
-
-.article-content tr:hover td {
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-}
-
-.hljs,
-.highlight .nx { color: var(--text); background: transparent; }
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-section,
-.hljs-title.class_,
-.highlight .kd,
-.highlight .kc,
-.highlight .kn { color: var(--accent); }
-.hljs-string,
-.hljs-selector-attr,
-.hljs-selector-pseudo,
-.hljs-addition,
-.highlight .s1,
-.highlight .s2,
-.highlight .sr { color: color-mix(in srgb, var(--hot) 90%, var(--text)); }
-.hljs-comment,
-.hljs-quote,
-.highlight .c1,
-.highlight .cm { color: var(--muted); font-style: italic; }
-.hljs-title.function_,
-.hljs-title,
-.highlight .nf,
-.highlight .nc { color: color-mix(in srgb, var(--accent) 85%, var(--text)); }
-.hljs-built_in,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.highlight .nb,
-.highlight .kt,
-.highlight .no { color: var(--hot); }
-.hljs-number,
-.hljs-attr,
-.hljs-attribute,
-.highlight .mi,
-.highlight .mh,
-.highlight .mf { color: var(--accent); }
-.hljs-meta,
-.hljs-tag,
-.highlight .o,
-.highlight .p,
-.highlight .dl { color: var(--muted); }
-.hljs-deletion { color: color-mix(in srgb, var(--hot) 60%, var(--bg)); }
-.highlight .err { color: var(--hot); }
-.highlight .gh { color: var(--accent); font-weight: 700; }
-.highlight .gu { color: var(--accent); }
-.highlight .ge { font-style: italic; }
-.highlight .gs { font-weight: 700; }
-
-.skip-link {
-  background: var(--accent);
-  border-radius: 0 0 8px 0;
-  color: #08131a;
-  font-weight: 700;
-  left: 0;
-  padding: 10px 16px;
-  position: absolute;
-  top: -100px;
-  transition: top 0.15s ease;
-  z-index: 20;
-}
-
-.skip-link:focus { top: 0; }
-
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-@media (max-width: 700px) {
-  .site-header,
-  .section-title {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .month-heading { grid-template-columns: 1fr auto; }
-  .month-heading span { grid-column: 1 / -1; }
-}`;
 }
 
 export function buildSiteFiles(

@@ -102,6 +102,54 @@ describe("long-form editorial pass", () => {
     expect(proseIssues(prose, 0)).toEqual([]);
   });
 
+  it("rejects an English aside hidden in parentheses", () => {
+    expect(
+      proseIssues(
+        "A discussão compara a natureza efêmera de agentes (summoned to complete a single task) ao personagem da série.",
+        0,
+      ).join(" "),
+    ).toContain("inglês");
+    // Product names and acronyms in parentheses are not a language drift.
+    expect(
+      proseIssues(
+        "O protocolo (Model Context Protocol) e o modo (Adaptive Reasoning, Max Effort) seguem estáveis.",
+        0,
+      ),
+    ).toEqual([]);
+  });
+
+  // The analysis prompt said "para quem constrói e opera software com IA"
+  // and the model pasted it into three items of the same edition.
+  it("rejects prose that echoes the prompt's audience framing", () => {
+    expect(
+      proseIssues(
+        "Para quem desenvolve e opera software com IA, a mudança reduz retrabalho.",
+        0,
+      ).join(" "),
+    ).toContain("enquadramento");
+  });
+
+  it("closes every fallback paragraph as a full sentence", async () => {
+    const ask = vi.fn().mockRejectedValue(new Error("LLM unavailable"));
+    const telegraphic = draft();
+    telegraphic.highlights[0] = {
+      ...telegraphic.highlights[0],
+      whatHappened: "Usuários reportam loop de autenticação na extensão",
+      whyItMatters: "Bloqueio de operação para quem depende da extensão",
+    };
+
+    const expanded = await expandEdition(
+      ask,
+      telegraphic,
+      [source()],
+      "12/06/2026",
+    );
+
+    expect(expanded.highlights[0].analysis).toBe(
+      "Usuários reportam loop de autenticação na extensão.\n\nBloqueio de operação para quem depende da extensão.",
+    );
+  });
+
   it("drops a highlight and the synthesis when only corrupted fallback text is left", async () => {
     const ask = vi.fn().mockRejectedValue(new Error("LLM unavailable"));
     const corrupted = draft();

@@ -140,6 +140,18 @@ describe("crawler transformations", () => {
     expect(summarizeSourceContent("")).toBe("");
   });
 
+  // Release notes name env vars and flags; dropping their underscores
+  // published "CLAUDE CODE GATEWAY HINT HEADERS=1" as if it were prose.
+  it("keeps underscores inside identifiers while stripping emphasis", () => {
+    expect(
+      summarizeSourceContent(
+        "Set `CLAUDE_CODE_GATEWAY_HINT_HEADERS=1` to enable _new_ headers in snake_case __apis__.",
+      ),
+    ).toBe(
+      "Set CLAUDE_CODE_GATEWAY_HINT_HEADERS=1 to enable new headers in snake_case apis .",
+    );
+  });
+
   it("only accepts real tweet permalinks as citable X/Twitter sources", () => {
     expect(
       isCitableXUrl("https://x.com/rohanpaul_ai/status/1867646111223361755"),
