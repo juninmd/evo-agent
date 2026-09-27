@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { articlesFromDraft } from "../agent/editorial-renderer.js";
+import {
+  articlesFromDraft,
+  buildReferencesSection,
+  editorialTheme,
+  leadSentence,
+} from "../agent/editorial-renderer.js";
 import type { EditorialDraft } from "../agent/editorial.js";
 import { generateArticle, renderEditorialDraft } from "../agent/writer.js";
 import { type Article, db } from "../knowledge/store.js";
@@ -181,6 +186,77 @@ describe("renderEditorialDraft", () => {
     // The page header already shows the dek; repeating it in the body is noise.
     expect(markdown).not.toContain(dek);
     expect(markdown).not.toContain("## Leitura do conjunto");
+  });
+
+  it("does not end the summary line at an abbreviation", () => {
+    expect(
+      leadSentence(
+        "A discussão compara agentes ao personagem Mr. Meeseeks da série. Outra frase.",
+      ),
+    ).toBe("A discussão compara agentes ao personagem Mr. Meeseeks da série.");
+  });
+
+  it.each([
+    [
+      "LiteLLM signs Docker images with cosign",
+      "LiteLLM Releases",
+      "Segurança e confiança",
+    ],
+    [
+      "Reddit: Claude added graceful stopping point in new update",
+      "Reddit Post Signals (ClaudeCode)",
+      "Agentes e ferramentas de desenvolvimento",
+    ],
+    [
+      "Can't authorize Claude in Vs Code bug?",
+      "Reddit: VSCode",
+      "Agentes e ferramentas de desenvolvimento",
+    ],
+    ["Novo ranking de modelos", "Artificial Analysis", "Modelos e pesquisa"],
+  ])("files %s under its real theme", (title, source, theme) => {
+    expect(editorialTheme(article(title, source, "https://x.dev", "[]"))).toBe(
+      theme,
+    );
+  });
+
+  it("names Reddit sources the same way whatever feed they came from", () => {
+    const articles = [
+      article(
+        "Can't authorize Claude in Vs Code bug?",
+        "Reddit: VSCode",
+        "https://reddit.com/r/vscode/1",
+        "[]",
+      ),
+      article(
+        "Reddit: This didn't age well",
+        "Reddit Post Signals (codex)",
+        "https://reddit.com/r/codex/1",
+        "[]",
+      ),
+    ];
+    const markdown = renderEditorialDraft(
+      {
+        title: "Relatos da comunidade sobre extensões e agentes",
+        dek: "Dois relatos concretos de uso no editor e em agentes.",
+        highlights: articles.map((_, sourceIndex) => ({
+          sourceIndex,
+          headline: `Relato ${sourceIndex}`,
+          whatHappened: "Usuários relataram falha concreta no fluxo diário.",
+          whyItMatters: "Equipes precisam de um contorno até a correção.",
+          evidence: articles[sourceIndex].summary,
+        })),
+        synthesis: "",
+      },
+      articles,
+      "12/06/2026",
+    );
+    const references = buildReferencesSection(articles);
+
+    expect(markdown).toContain("Reddit r/VSCode · sinal da comunidade");
+    expect(markdown).toContain("[Fonte: This didn't age well]");
+    expect(references).toContain("— Reddit r/codex");
+    expect(references).not.toContain("Post Signals");
+    expect(references).not.toContain("[Reddit: ");
   });
 
   it("keeps selected sources whose URL contains markdown punctuation", () => {
