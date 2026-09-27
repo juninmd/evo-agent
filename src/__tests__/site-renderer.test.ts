@@ -3,6 +3,7 @@ import type { GeneratedArticle } from "../agent/types.js";
 import {
   buildArticleLayout,
   buildDefaultLayout,
+  buildIndex,
   buildMarkdown,
   buildSiteFiles,
   estimateReadingMinutes,
@@ -121,6 +122,45 @@ describe("layouts", () => {
     const [defaultHtml, articleHtml] = layouts.map(([, html]) => html);
     const head = defaultHtml.slice(0, defaultHtml.indexOf("</head>"));
     expect(articleHtml).toContain(head.slice(head.indexOf("<meta charset")));
+  });
+});
+
+describe("buildIndex", () => {
+  const item = (date: string, title = `Edicao ${date}`) => ({
+    date,
+    title,
+    url: `https://example.test/${date}`,
+    summary: "Resumo.",
+    tags: ["ia"],
+  });
+
+  // The publisher does not guarantee order; the featured edition must still
+  // be the newest one or the home page points readers at stale news.
+  it("features the newest edition regardless of input order", () => {
+    const html = buildIndex(
+      [item("2026-09-24"), item("2026-09-26"), item("2026-09-25")],
+      [],
+    );
+    const latest = html.slice(html.indexOf('class="latest"'));
+    expect(latest).toContain("https://example.test/2026-09-26");
+    expect(latest).toContain('<span class="edition-day">26</span>');
+  });
+
+  it("escapes crawled titles in the featured edition and the archive", () => {
+    const html = buildIndex([item("2026-09-26", "<img src=x onerror=1>")], []);
+    expect(html).not.toContain("<img src=x");
+    expect(html).toContain("&lt;img src=x onerror=1&gt;");
+  });
+
+  it("collapses radar entries past the first six behind a toggle", () => {
+    const reports = Array.from({ length: 8 }, (_, i) =>
+      item(`2026-09-${String(10 + i).padStart(2, "0")}`),
+    );
+    const html = buildIndex([], reports);
+    expect(html.match(/class="is-collapsed" hidden/g)).toHaveLength(2);
+    expect(html).toContain('data-show-more="relatorios"');
+    expect(html).toContain('id="relatorios"');
+    expect(html).toContain('id="arquivo"');
   });
 });
 
