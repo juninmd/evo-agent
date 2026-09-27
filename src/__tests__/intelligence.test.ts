@@ -2,9 +2,8 @@ import axios from "axios";
 import Database from "better-sqlite3";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  renderIntelligenceMermaidChart,
+  renderIntelligenceRanking,
   renderIntelligenceSection,
-  renderIntelligenceTable,
   shortModelName,
 } from "../agent/intelligence.js";
 import {
@@ -209,62 +208,120 @@ describe("diffIntelligenceSnapshots", () => {
   });
 });
 
-describe("renderIntelligenceMermaidChart & renderIntelligenceTable", () => {
-  it("renders a valid xychart-beta Mermaid chart", () => {
-    const chart = renderIntelligenceMermaidChart(sampleModels, 4);
-    expect(chart).toContain("```mermaid");
-    expect(chart).toContain("xychart-beta");
-    expect(chart).toContain(
-      'x-axis ["Claude Fable 5.1", "GPT-6 Astra", "Claude Opus 5", "MiMo-V2.6-Pro"]',
-    );
-    expect(chart).toContain("bar [53.4, 52.7, 50.8, 46.3]");
+describe("renderIntelligenceRanking", () => {
+  const moved = (): IntelligenceDiff => ({
+    hasChanges: true,
+    summary: "Mudança",
+    newModels: ["MiMo-V2.6-Pro"],
+    rankChanges: [],
+    scoreChanges: [],
+    droppedModels: [],
+    modelChanges: [
+      {
+        name: "GPT-6 Astra (max)",
+        slug: "gpt-6-astra",
+        creator: "OpenAI",
+        currentRank: 2,
+        previousRank: 4,
+        currentScore: 52.7,
+        previousScore: 51.3,
+        rankDelta: 2,
+        scoreDelta: 1.4,
+        type: "score_changed",
+        summary: "+2 pos (+1.4 pts)",
+      },
+      {
+        name: "Claude Opus 5 (Adaptive Reasoning, Max Effort)",
+        slug: "claude-opus-5",
+        creator: "Anthropic",
+        currentRank: 3,
+        previousRank: 2,
+        currentScore: 50.8,
+        previousScore: 50.8,
+        rankDelta: -1,
+        scoreDelta: 0,
+        type: "rank_changed",
+        summary: "-1 pos",
+      },
+      {
+        name: "MiMo-V2.6-Pro",
+        slug: "mimo-v2-6-pro",
+        creator: "Xiaomi",
+        currentRank: 4,
+        currentScore: 46.3,
+        type: "new",
+        summary: "Novo",
+      },
+    ],
   });
 
-  it("renders a markdown table with ranks, scores, variations and license types", () => {
-    const diff: IntelligenceDiff = {
-      hasChanges: true,
-      summary: "Mudança",
-      newModels: [],
-      rankChanges: [],
-      scoreChanges: [],
-      droppedModels: [],
-      modelChanges: [
-        {
-          name: "MiMo-V2.6-Pro",
-          slug: "mimo-v2-6-pro",
-          creator: "Xiaomi",
-          currentRank: 4,
-          currentScore: 46.3,
-          type: "score_changed",
-          summary: "+0.5 pts",
-        },
-      ],
-    };
-    const table = renderIntelligenceTable(sampleModels, diff, 4);
-    expect(table).toContain(
-      "| # | Modelo | Criador | Score | Variação | Tipo |",
-    );
-    expect(table).toContain("| 1 | [Claude Fable 5.1]");
-    expect(table).toContain("Anthropic | 53.4 | = | Proprietário |");
-    expect(table).toContain("| 4 | [MiMo-V2.6-Pro]");
-    expect(table).toContain("Xiaomi | 46.3 | +0.5 pts | Pesos Abertos |");
+  // The Mermaid chart cut the axis at 40 and made a 1.3x gap look like 3x.
+  it("scales bars from zero to the leader", () => {
+    const html = renderIntelligenceRanking(sampleModels, undefined, 4);
+    expect(html).toContain("--w:100.0%");
+    // 46.3 / 53.4 of the leader, not stretched from an axis floor.
+    expect(html).toContain("--w:86.7%");
   });
 
-  it("renders a full intelligence section with chart, table and status alert", async () => {
+  it("lists models in rank order with short names and the open-weights mark", () => {
+    const html = renderIntelligenceRanking(sampleModels, undefined, 4);
+    const names = [...html.matchAll(/class="model">([^<]+)/g)].map((m) =>
+      m[1].trim(),
+    );
+    expect(names).toEqual([
+      "Claude Fable 5.1",
+      "GPT-6 Astra",
+      "Claude Opus 5",
+      "MiMo-V2.6-Pro",
+    ]);
+    expect(html.match(/class="open-mark"/g)).toHaveLength(1);
+  });
+
+  it("escapes crawled model and creator names", () => {
+    const hostile = [
+      { ...sampleModels[0], name: "<img src=x onerror=1>", creator: "A&B" },
+    ];
+    const html = renderIntelligenceRanking(hostile);
+    expect(html).not.toContain("<img");
+    expect(html).toContain("A&amp;B");
+  });
+
+  it("shows rank moves, score deltas and newcomers only when the ranking moved", () => {
+    const html = renderIntelligenceRanking(sampleModels, moved(), 4);
+    expect(html).toContain(">Variação<");
+    expect(html).toContain(
+      '▲2</span><span class="visually-hidden">subiu 2 posições',
+    );
+    expect(html).toContain("+1.4");
+    expect(html).toContain(
+      '▼1</span><span class="visually-hidden">caiu 1 posição',
+    );
+    expect(html).toContain('is-new">novo<');
+  });
+
+  it("hides the change column when nothing moved or on a first measurement", () => {
+    const unchanged = diffIntelligenceSnapshots(sampleModels, sampleModels);
+    const first = diffIntelligenceSnapshots(sampleModels, null);
+    for (const diff of [unchanged, first]) {
+      const html = renderIntelligenceRanking(sampleModels, diff, 4);
+      expect(html).not.toContain("Variação");
+      expect(html).not.toContain("novo");
+    }
+  });
+
+  it("renders the section as status line plus ranking, without Mermaid", async () => {
     const section = await renderIntelligenceSection(
       new Date(),
       sampleModels,
-      diffIntelligenceSnapshots(sampleModels, null),
+      diffIntelligenceSnapshots(sampleModels, sampleModels),
     );
     expect(section).toContain(
       "## Índice de Inteligência (Artificial Analysis)",
     );
-    expect(section).toContain("> **Status de Atualização:**");
-    expect(section).toContain("```mermaid\nxychart-beta");
-    expect(section).toContain("| # | Modelo | Criador |");
-    expect(section).toContain(
-      "Fonte: [Artificial Analysis Intelligence Index]",
-    );
+    expect(section).toContain('<p class="ranking-status">Sem alterações');
+    expect(section).toContain('<table class="ranking-table"');
+    expect(section).not.toContain("mermaid");
+    expect(section).toContain("Artificial Analysis Intelligence Index</a>");
   });
 });
 

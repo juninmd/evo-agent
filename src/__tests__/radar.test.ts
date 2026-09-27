@@ -424,7 +424,7 @@ describe("radar", () => {
     expect(radar.content).toContain(
       "## Índice de Inteligência (Artificial Analysis)",
     );
-    expect(radar.content).toContain("xychart-beta");
+    expect(radar.content).toContain('<table class="ranking-table"');
     expect(radar.content).toContain("Claude Fable 5.1");
     expect(radar.sources).toContain(
       "https://artificialanalysis.ai/models#intelligence",
