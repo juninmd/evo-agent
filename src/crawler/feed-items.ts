@@ -11,15 +11,19 @@ type FeedItem = Pick<
 > & { summary?: string };
 
 export function summarizeSourceContent(value: string, maxLength = 800): string {
-  return value
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    .replace(/<[^>]+>/g, " ")
-    .replace(/[#*`_>|~]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, maxLength);
+  return (
+    value
+      .replace(/```[\s\S]*?```/g, " ")
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/[#*`>|~]/g, " ")
+      // Only emphasis underscores go; the ones inside identifiers are content.
+      .replace(/(^|[^\w])_+|_+(?=[^\w]|$)/g, "$1 ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, maxLength)
+  );
 }
 
 function itemTime(item: FeedItem): number | null {
