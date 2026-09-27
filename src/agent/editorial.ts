@@ -412,5 +412,9 @@ Regras:
 - Compare ao menos um anúncio oficial com um sinal independente de Hacker News, Reddit ou TabNews quando disponível.
 - Não use os títulos genéricos "Notícias de Tecnologia", "Panorama Técnico", "Desenvolvimentos em IA" ou equivalentes.
 - O título deve citar pelo menos um produto, organização, técnica ou mudança concreta. Não comece com "Avanços em".
+- Título e headlines em caixa de frase do português: só a primeira palavra e nomes próprios com maiúscula ("Claude Code adiciona header de rastreio", nunca "Claude Code Adiciona Header De Rastreio").
+- whatHappened e whyItMatters são frases completas terminadas em ponto, não tópicos telegráficos.
+- Descarte piadas, memes e comparações culturais sem conteúdo técnico verificável, mesmo que venham de uma comunidade em foco.
+- Um ranking ou métrica sem alteração desde a medição anterior não é notícia: não o use como destaque nem no título.
 - Não inclua Markdown, links ou diagrama; o programa adicionará as citações.`;
 }
