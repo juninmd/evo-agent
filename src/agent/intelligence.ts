@@ -1,11 +1,13 @@
 import {
   ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL,
   type IntelligenceDiff,
+  type ModelChange,
   crawlArtificialAnalysisIntelligence,
   diffIntelligenceSnapshots,
 } from "../crawler/intelligence.js";
 import { type IntelligenceModelRecord, db } from "../knowledge/store.js";
 import { localDayIso } from "../utils/date.js";
+import { escapeHtml } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 
 /**
@@ -20,37 +22,42 @@ export function shortModelName(name: string): string {
     .trim();
 }
 
-/**
- * Generates Mermaid xychart-beta bar chart for top N models.
- */
-export function renderIntelligenceMermaidChart(
-  models: IntelligenceModelRecord[],
-  topN = 10,
-): string {
-  const top = models.slice(0, topN);
-  if (top.length === 0) return "";
+function plural(count: number, one: string, many: string): string {
+  return `${count} ${count === 1 ? one : many}`;
+}
 
-  const labels = top.map((m) => `"${shortModelName(m.name)}"`);
-  const values = top.map((m) => m.intelligenceIndex);
-
-  const minVal = Math.max(0, Math.floor(Math.min(...values) / 10) * 10);
-  const maxVal = Math.ceil(Math.max(...values) / 10) * 10 + 5;
-
-  return [
-    "```mermaid",
-    "xychart-beta",
-    `    title "Artificial Analysis Intelligence Index (Top ${top.length})"`,
-    `    x-axis [${labels.join(", ")}]`,
-    `    y-axis "Índice" ${minVal} --> ${maxVal}`,
-    `    bar [${values.join(", ")}]`,
-    "```",
-  ].join("\n");
+function renderChange(change: ModelChange | undefined): string {
+  if (!change) return "";
+  if (change.type === "new") {
+    return '<span class="rank-delta is-new">novo</span>';
+  }
+  const parts: string[] = [];
+  const rankDelta = change.rankDelta ?? 0;
+  if (rankDelta !== 0) {
+    const up = rankDelta > 0;
+    const moved = plural(Math.abs(rankDelta), "posição", "posições");
+    parts.push(
+      `<span class="rank-delta ${up ? "is-up" : "is-down"}"><span aria-hidden="true">${up ? "▲" : "▼"}${Math.abs(rankDelta)}</span><span class="visually-hidden">${up ? "subiu" : "caiu"} ${moved}</span></span>`,
+    );
+  }
+  const scoreDelta = change.scoreDelta ?? 0;
+  if (Math.abs(scoreDelta) >= 0.1) {
+    const sign = scoreDelta > 0 ? "+" : "−";
+    parts.push(
+      `<span class="score-delta">${sign}${Math.abs(scoreDelta).toFixed(1)}</span>`,
+    );
+  }
+  return parts.join(" ");
 }
 
 /**
- * Generates Markdown comparison table for top N models.
+ * Static HTML ranking: horizontal bars scaled from zero to the leader, so the
+ * gaps read at their real size. Replaces a Mermaid chart (CDN-dependent,
+ * overlapping labels, axis cut at 40) and a table repeating the same numbers.
+ * Explicit ARIA roles keep table semantics when the mobile layout turns rows
+ * into grids.
  */
-export function renderIntelligenceTable(
+export function renderIntelligenceRanking(
   models: IntelligenceModelRecord[],
   diff?: IntelligenceDiff,
   topN = 10,
@@ -58,27 +65,52 @@ export function renderIntelligenceTable(
   const top = models.slice(0, topN);
   if (top.length === 0) return "";
 
-  const diffMap = new Map(
-    diff?.modelChanges.map((c) => [c.slug, c.summary]) ?? [],
+  const leader = Math.max(...top.map((m) => m.intelligenceIndex), 0.1);
+  // On a first measurement every model is "new"; that is not a movement.
+  const comparable = Boolean(
+    diff?.hasChanges &&
+      diff.modelChanges.some((c) => c.previousRank !== undefined),
+  );
+  const changes = new Map(
+    comparable ? (diff?.modelChanges.map((c) => [c.slug, c]) ?? []) : [],
   );
 
   const rows = top.map((m) => {
-    const variation = diffMap.get(m.slug) ?? "=";
-    const typeLabel = m.isOpenWeights ? "Pesos Abertos" : "Proprietário";
-    const nameLabel = shortModelName(m.name);
-    return `| ${m.rank} | [${nameLabel}](${ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL}) | ${m.creator} | ${m.intelligenceIndex.toFixed(1)} | ${variation} | ${typeLabel} |`;
+    const width = Math.max(0, (m.intelligenceIndex / leader) * 100).toFixed(1);
+    const openMark = m.isOpenWeights
+      ? ' <span class="open-mark" title="Pesos abertos"><span class="visually-hidden">(pesos abertos)</span></span>'
+      : "";
+    const change = comparable
+      ? `<td role="cell" class="change">${renderChange(changes.get(m.slug))}</td>`
+      : "";
+    return `<tr role="row"><td role="cell" class="rank">${m.rank}</td><th role="rowheader" scope="row" class="model">${escapeHtml(shortModelName(m.name))}${openMark}</th><td role="cell" class="creator">${escapeHtml(m.creator)}</td><td role="cell" class="score"><div class="score-cell"><span class="bar-track" aria-hidden="true"><span class="bar" style="--w:${width}%"></span></span><span class="value">${m.intelligenceIndex.toFixed(1)}</span></div></td>${change}</tr>`;
   });
 
+  const changeHeader = comparable
+    ? '<th role="columnheader" scope="col" class="change">Variação</th>'
+    : "";
+  const legend = [
+    top.some((m) => m.isOpenWeights)
+      ? '<span class="legend-open">Pesos abertos</span>'
+      : "",
+    comparable ? "<span>▲▼ posições desde a medição anterior</span>" : "",
+    `<span>Barras proporcionais ao líder. Fonte: <a href="${ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL}">Artificial Analysis Intelligence Index</a></span>`,
+  ].join("");
+
   return [
-    "| # | Modelo | Criador | Score | Variação | Tipo |",
-    "|---|---|---|---|---|---|",
-    ...rows,
+    '<figure class="ranking">',
+    '<table class="ranking-table" role="table">',
+    `<thead role="rowgroup"><tr role="row"><th role="columnheader" scope="col" class="rank">#</th><th role="columnheader" scope="col">Modelo</th><th role="columnheader" scope="col" class="creator">Criador</th><th role="columnheader" scope="col" class="score">Índice</th>${changeHeader}</tr></thead>`,
+    `<tbody role="rowgroup">${rows.join("")}</tbody>`,
+    "</table>",
+    `<figcaption>${legend}</figcaption>`,
+    "</figure>",
   ].join("\n");
 }
 
 /**
- * Builds the complete intelligence report section containing change status,
- * Mermaid chart, ranking table and citation.
+ * Builds the complete intelligence report section: change status and the
+ * ranking with its citation.
  */
 export async function renderIntelligenceSection(
   now = new Date(),
@@ -124,19 +156,11 @@ export async function renderIntelligenceSection(
     diff = diffIntelligenceSnapshots(models, null);
   }
 
-  const chart = renderIntelligenceMermaidChart(models, 10);
-  const table = renderIntelligenceTable(models, diff, 10);
-  const changeAlert = `> **Status de Atualização:** ${diff.summary}`;
-
   return [
     "## Índice de Inteligência (Artificial Analysis)",
     "",
-    changeAlert,
+    `<p class="ranking-status">${escapeHtml(diff.summary)}</p>`,
     "",
-    chart,
-    "",
-    table,
-    "",
-    `*Fonte: [Artificial Analysis Intelligence Index](${ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL}). Monitoramento e análise diária de capacidade de modelos de fronteira.*`,
+    renderIntelligenceRanking(models, diff, 10),
   ].join("\n");
 }
