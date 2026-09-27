@@ -67,8 +67,10 @@ function historicalWindow(
   };
 }
 
+// Kept for traceability but out of the reader's view: the configured model is
+// a routing alias ("cloud/auto") that means nothing on the page.
 function withModelFooter(content: string): string {
-  return `${content}\n\n---\n\n*Gerado por: ${config.litellm.model}*`;
+  return `${content}\n\n<!-- evo-agent model: ${config.litellm.model.replace(/--/g, "-")} -->`;
 }
 
 const askOpts = { maxOutputTokens: config.litellm.maxOutputTokens };
