@@ -90,7 +90,7 @@ pre:hover .copy-btn,
   display: flex !important;
   justify-content: center !important;
   margin: 0 !important;
-  min-width: 580px;
+  min-width: 720px;
   padding: 0 !important;
   text-align: center;
 }
