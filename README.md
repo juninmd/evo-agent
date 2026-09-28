@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-09-27-claude-opus-5-5-domina-ia-copilot-atinge-nova-versao-linguagem-chegou-no-reddit">
-    <time class="edition-date" datetime="2026-09-27"><span class="edition-day">27</span><span class="edition-month">setembro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-09-28-copilot-cli-integra-regras-do-claude-code-e-gpt-6-sol-gera-criticas-de-slop">
+    <time class="edition-date" datetime="2026-09-28"><span class="edition-day">28</span><span class="edition-month">setembro 2026</span></time>
     <div>
-      <h3>Claude Opus 5.5 domina IA, Copilot atinge nova versão, linguagem chegou no Reddit</h3>
-      <p>O ranking não mudou, mas a prática mudou: Copilot recebe novas regras de UX e codificadores humanos nos comentários relatam falhas, enquanto Claude Code ganha suporte nativo a headers de rastreamento.</p>
+      <h3>Copilot CLI integra regras do Claude Code e GPT-6 Sol gera críticas de &#39;slop&#39;</h3>
+      <p>A versão 1.0.89-5 do Copilot CLI expande a compatibilidade com instruções personalizadas via .claude/rules. Usuários de Codex relatam regressões de qualidade e aumento de custos nos modelos GPT-6 Sol e Luna 5.6.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><h2>Setembro <span>2026</span></h2><p>30 edições</p></div>
-  <article class="story-card" data-search="claude opus 5.5 domina ia, copilot atinge nova versão, linguagem chegou no reddit artificial copilot vercel cline reddit intelligence benchmark coding-agent ai-sdk sdk">
+  <div class="month-heading"><h2>Setembro <span>2026</span></h2><p>31 edições</p></div>
+  <article class="story-card" data-search="copilot cli integra regras do claude code e gpt-6 sol gera críticas de &#39;slop&#39; copilot opencode reddit coding-agent post-signals codex claude coding">
+  <time datetime="2026-09-28">28 set</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-28-copilot-cli-integra-regras-do-claude-code-e-gpt-6-sol-gera-criticas-de-slop">Copilot CLI integra regras do Claude Code e GPT-6 Sol gera críticas de &#39;slop&#39;</a></h3>
+    <p>A versão 1.0.89-5 do Copilot CLI expande a compatibilidade com instruções personalizadas via .claude/rules. Usuários de Codex relatam regressões de qualidade e aumento de custos nos modelos GPT-6 Sol e Luna 5.6.</p>
+    <p class="story-tags">copilot, opencode, reddit, coding-agent</p>
+  </div>
+</article>
+<article class="story-card" data-search="claude opus 5.5 domina ia, copilot atinge nova versão, linguagem chegou no reddit artificial copilot vercel cline reddit intelligence benchmark coding-agent ai-sdk sdk">
   <time datetime="2026-09-27">27 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-27-claude-opus-5-5-domina-ia-copilot-atinge-nova-versao-linguagem-chegou-no-reddit">Claude Opus 5.5 domina IA, Copilot atinge nova versão, linguagem chegou no Reddit</a></h3>
@@ -551,7 +559,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>21 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>20 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -710,14 +718,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-09-provisioned-throughput-da-together-ai-reduz-custos-github-lanca-agentic-workflow">Provisioned Throughput da Together AI reduz custos; GitHub lança Agentic Workflows e Copilot sem DNS</a></h3>
     <p>Together AI introduziu o serviço Provisioned Throughput, que oferece capacidade reservada por token a preços até 90 % menores que APIs proprietárias. Simultaneamente, o GitHub divulgou fluxos de trabalho agentic para documentação automática e a possibilidade de implantar sites GitHub Pages sem configuração DNS, ao passo que relatos de incidentes e questões de benchmark reforçam a necessidade de monitoramento de disponibilidade e critérios de avaliação.</p>
     <p class="story-tags">together, the, openai, reddit</p>
-  </div>
-</article>
-<article class="story-card" data-search="provisioned throughput da together ai e extensões gratuitas da anthropic remodelam custos de ia together openai google-news reddit ai frontier togetherai anthropic fable5 cost anthropic fable5 pricing vscode tools">
-  <time datetime="2026-07-08">08 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-08-provisioned-throughput-da-together-ai-e-extensoes-gratuitas-da-anthropic-remodel">Provisioned Throughput da Together AI e extensões gratuitas da Anthropic remodelam custos de IA</a></h3>
-    <p>Capacidades reservadas reduzem despesas operacionais enquanto ofertas gratuitas ampliam testes de LLMs. As empresas avaliam agora o impacto orçamentário versus performance.</p>
-    <p class="story-tags">together, openai, google-news, reddit</p>
   </div>
 </article>
 </section>
