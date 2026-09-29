@@ -33,9 +33,34 @@ function paragraphs(text: string): string {
   return text
     .trim()
     .split(/\n{2,}/)
-    .map((part) => part.replace(/\s*\n\s*/g, " ").trim())
+    .map((part) =>
+      part
+        .replace(/\s*\n\s*/g, " ")
+        .replace(/[ \t]{2,}/g, " ")
+        .trim(),
+    )
     .filter(Boolean)
     .join("\n\n");
+}
+
+// The model overshoots the ceiling by a sentence or two far more often than it
+// ignores it; dropping trailing sentences keeps its analysis over the fallback.
+const TRIM_TOLERANCE = 1.3;
+
+function trimToSentences(text: string, maxChars: number): string {
+  let result = "";
+  for (const paragraph of text.split("\n\n")) {
+    for (const [position, sentence] of paragraph
+      .split(/(?<=[.!?])\s+/)
+      .entries()) {
+      const separator = !result ? "" : position === 0 ? "\n\n" : " ";
+      if (result.length + separator.length + sentence.length > maxChars) {
+        return result;
+      }
+      result += separator + sentence;
+    }
+  }
+  return result;
 }
 
 /** Agenda fields often come telegraphic; published prose still ends its sentences. */
@@ -107,7 +132,14 @@ async function writeProse(
       );
       return null;
     }
-    const clean = paragraphs(text);
+    let clean = paragraphs(text);
+    if (
+      maxChars &&
+      clean.length > maxChars &&
+      clean.length <= maxChars * TRIM_TOLERANCE
+    ) {
+      clean = trimToSentences(clean, maxChars);
+    }
     const issues = [
       ...proseIssues(clean, minChars, maxChars),
       ...extraIssues(clean),

@@ -276,6 +276,27 @@ describe("long-form editorial pass", () => {
     expect(expanded.synthesis).toBe(FITS_BOTH_BOUNDS.trim());
   });
 
+  // Homolog run of 29/09: 764, 778 and 822-char analyses were rejected against
+  // the 750 ceiling and the items fell back to one-line agenda text.
+  it("trims a slight overshoot to whole sentences instead of falling back", async () => {
+    const overshoot = `${FITS_BOTH_BOUNDS}Segunda  frase extra sobre custo de operação. Terceira frase extra sobre risco. Quarta frase extra sobre adoção e migração de fluxos. Quinta frase extra sobre adoção e migração de fluxos.`;
+    const ask = vi.fn().mockResolvedValue(overshoot);
+
+    const expanded = await expandEdition(
+      ask,
+      draft(),
+      [source()],
+      "12/06/2026",
+    );
+
+    const analysis = expanded.highlights[0].analysis ?? "";
+    expect(overshoot.length).toBeGreaterThan(750);
+    expect(analysis.length).toBeLessThanOrEqual(750);
+    expect(analysis).toMatch(/\.$/);
+    expect(analysis).not.toContain("  ");
+    expect(ask).toHaveBeenCalledTimes(2);
+  });
+
   it("rejects prose that blows past the length ceiling", async () => {
     const ask = vi.fn().mockResolvedValue(LONG);
 
@@ -286,13 +307,14 @@ describe("long-form editorial pass", () => {
       "12/06/2026",
     );
 
-    // Both phases retry once against the same too-long response, then fall
-    // back to the agenda text instead of publishing an unbounded wall of text.
-    expect(ask).toHaveBeenCalledTimes(4);
+    // 1080 chars is past the analysis tolerance (750 * 1.3): it retries once,
+    // then falls back to the agenda text instead of an unbounded wall of text.
+    // The synthesis ceiling (1000) tolerates it, so it is trimmed, not retried.
+    expect(ask).toHaveBeenCalledTimes(3);
     expect(expanded.highlights[0].analysis).toContain(
       "A Anthropic descreveu melhorias em tarefas longas.",
     );
-    expect(expanded.synthesis).toBe("Síntese curta da pauta.");
+    expect(expanded.synthesis.length).toBeLessThanOrEqual(1000);
   });
 
   it("keeps the agenda text when the expansion pass cannot deliver", async () => {
