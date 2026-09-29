@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-09-29-claude-sonnet-5-5-e-a-ascensao-de-modelos-de-decisao">
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-09-29-fusereg-quantizacao-disgregada-evolucao-de-raes-llms-e-custos-de-api">
     <time class="edition-date" datetime="2026-09-29"><span class="edition-day">29</span><span class="edition-month">setembro 2026</span></time>
     <div>
-      <h3>Claude Sonnet 5.5 e a ascensão de modelos de decisão</h3>
-      <p>Anthropic expande a família 5.5 com foco em eficiência de custos e contexto de 1M de tokens. Modelos de decisão especializados emergem para substituir a geração de texto em fluxos de roteamento.</p>
+      <h3>FuseReg &amp; Quantização Disgregada: evolução de RAEs, LLMs e custos de API</h3>
+      <p>RAEs incorporam novas camadas de latentes, LLMs ganham quantização direcionada e usuários relatam mudanças bruscas nos planos de API e na qualidade dos modelos.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><h2>Setembro <span>2026</span></h2><p>32 edições</p></div>
-  <article class="story-card" data-search="claude sonnet 5.5 e a ascensão de modelos de decisão openrouter claude artificial ollama reddit models launches claude-code anthropic intelligence">
+  <div class="month-heading"><h2>Setembro <span>2026</span></h2><p>33 edições</p></div>
+  <article class="story-card" data-search="fusereg &amp; quantização disgregada: evolução de raes, llms e custos de api hf-daily-papers microsoft-agent-framework reddit papers research microsoft agents codex openai copilot">
+  <time datetime="2026-09-29">29 set</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-29-fusereg-quantizacao-disgregada-evolucao-de-raes-llms-e-custos-de-api">FuseReg &amp; Quantização Disgregada: evolução de RAEs, LLMs e custos de API</a></h3>
+    <p>RAEs incorporam novas camadas de latentes, LLMs ganham quantização direcionada e usuários relatam mudanças bruscas nos planos de API e na qualidade dos modelos.</p>
+    <p class="story-tags">hf-daily-papers, microsoft-agent-framework, reddit, papers</p>
+  </div>
+</article>
+<article class="story-card" data-search="claude sonnet 5.5 e a ascensão de modelos de decisão openrouter claude artificial ollama reddit models launches claude-code anthropic intelligence">
   <time datetime="2026-09-29">29 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-29-claude-sonnet-5-5-e-a-ascensao-de-modelos-de-decisao">Claude Sonnet 5.5 e a ascensão de modelos de decisão</a></h3>
@@ -567,7 +575,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>19 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>18 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -710,14 +718,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-11-copilot-deutsche-telekom-e-loop-engineer-reducao-de-custos-e-evolucao-de-arquite">Copilot, Deutsche Telekom e Loop Engineer: Redução de Custos e Evolução de Arquiteturas IA</a></h3>
     <p>Ferramentas compartilhadas diminuem o custo de revisão de código no Copilot, enquanto a Deutsche Telekom demonstra integração profunda de OpenAI. Estudos de Karpathy introduzem loops autônomos que redefinem a construção de agentes IA.</p>
     <p class="story-tags">the, openai, tabnews, reddit</p>
-  </div>
-</article>
-<article class="story-card" data-search="github valida propriedade de repositórios e ia avança em telecom e produtividade the openai anthropic tabnews hacker-news developer claude br">
-  <time datetime="2026-07-10">10 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-10-github-valida-propriedade-de-repositorios-e-ia-avanca-em-telecom-e-produtividade">GitHub valida propriedade de repositórios e IA avança em telecom e produtividade</a></h3>
-    <p>A GitHub reforçou a governança de código ao atribuir donos a todos os repositórios ativos. Paralelamente, telecoms e ferramentas de produtividade adotam modelos OpenAI, ampliando automação e qualidade.</p>
-    <p class="story-tags">the, openai, anthropic, tabnews</p>
   </div>
 </article>
 </section>
