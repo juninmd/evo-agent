@@ -168,6 +168,14 @@ describe("generateTechleadDigest", () => {
     expect(digest.sources).toEqual([tracked]);
   });
 
+  // Homolog run of 29/09: the model bolded the label and ended lines with two
+  // spaces, so every source stayed a bare URL.
+  it("links a bolded source label with trailing markdown line breaks", () => {
+    expect(renderReading("**Fonte:** https://x.example/a  ")).toBe(
+      "Fonte: [x.example](https://x.example/a)",
+    );
+  });
+
   it("keeps the link destination intact with trailing punctuation or parentheses", () => {
     expect(renderReading("Fonte: https://x.example/a.")).toBe(
       "Fonte: [x.example](https://x.example/a)",

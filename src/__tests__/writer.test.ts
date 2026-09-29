@@ -131,6 +131,42 @@ describe("renderEditorialDraft", () => {
     );
   });
 
+  it("summarizes from the analysis when the agenda sentence is rejected", () => {
+    const articles = [
+      article(
+        "What does a GHCP seat give to the dev?",
+        "Reddit: GithubCopilot",
+        "https://reddit.com/r/GithubCopilot/1",
+        '["reddit","copilot"]',
+      ),
+    ];
+    const markdown = renderEditorialDraft(
+      {
+        title: "Assento do Copilot ainda deixa dúvidas de custo",
+        dek: "Uma dúvida recorrente de custo aparece na comunidade.",
+        highlights: [
+          {
+            sourceIndex: 0,
+            headline: "GHCP oferece licença mensal",
+            whatHappened:
+              "The user asks what the seat gives to the developer in practice.",
+            whyItMatters: "Consequência técnica da pauta.",
+            evidence: articles[0].summary,
+            analysis:
+              "Um usuário questiona o que o assento do Copilot oferece na prática.\n\nO custo por tarefa segue incerto.",
+          },
+        ],
+        synthesis: "Confiabilidade e custo passam a ser avaliados juntos.",
+      },
+      articles,
+      "12/06/2026",
+    );
+
+    expect(markdown).toContain(
+      "- **GHCP oferece licença mensal** — Um usuário questiona o que o assento do Copilot oferece na prática.",
+    );
+  });
+
   it("opens with a scannable summary and groups items under theme headings", () => {
     const articles = [
       article(
