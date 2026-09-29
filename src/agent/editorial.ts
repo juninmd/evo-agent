@@ -177,6 +177,17 @@ export function validateEditorialDraft(
   if (hasPrimaryCandidate && !cited.some(isPrimarySource)) {
     errors.push("draft lacks a primary source");
   }
+  // Official records anchor the edition; community reports complement them.
+  const requiredPrimary = Math.min(
+    sources.filter(isPrimarySource).length,
+    Math.floor(draft.highlights.length / 2),
+  );
+  const citedPrimary = cited.filter(isPrimarySource).length;
+  if (citedPrimary < requiredPrimary) {
+    errors.push(
+      `draft cites ${citedPrimary} primary sources, minimum is ${requiredPrimary}`,
+    );
+  }
   const hasCommunityCandidate = sources.some((source) =>
     /reddit|hacker news|tabnews|community/i.test(source.source),
   );
@@ -337,12 +348,6 @@ export function buildEditorialPrompt(
   const redditIndexes = articles.flatMap((article, index) =>
     isReddit(article) ? [index] : [],
   );
-  const minReddit = requiredRedditCitations(articles, maxHighlights);
-  const targetReddit = Math.min(redditIndexes.length, minReddit + 2);
-  const redditQuota =
-    targetReddit > minReddit
-      ? `de ${minReddit} a ${targetReddit} sinais do Reddit`
-      : `${minReddit} sinais do Reddit`;
   const focusLines = Object.keys(FOCUS_COMMUNITIES).flatMap((community) => {
     const indexes = articles.flatMap((article, index) =>
       focusCommunity(article) === community ? [index] : [],
@@ -385,7 +390,7 @@ Regras:
 - Cada destaque usa exatamente um sourceIndex existente.
 - ${
     primaryIndexes.length > 0
-      ? `Inclua obrigatoriamente ao menos um destes sourceIndex primários: ${primaryIndexes.join(", ")}.`
+      ? `Ao menos metade das pautas deve vir destes sourceIndex primários: ${primaryIndexes.join(", ")}. Menos que isso invalida a edição, salvo quando não houver primárias suficientes; nunca menos de uma.`
       : "Não há fonte primária disponível nesta seleção."
   }
 - ${
@@ -400,7 +405,7 @@ Regras:
   }
 - ${
     redditIndexes.length > 0
-      ? `Use ${redditQuota} entre estes sourceIndex: ${redditIndexes.join(", ")}. Menos de ${minReddit} invalida a edição. Prefira os que trazem relatos técnicos, limitações reais, regressões, benchmarks, custos ou padrões de adoção observados por quem usa a ferramenta.`
+      ? `Entre um terço e metade das pautas devem ser sinais do Reddit, escolhidos entre estes sourceIndex: ${redditIndexes.join(", ")}. Menos de um terço invalida a edição. Prefira os que trazem relatos técnicos, limitações reais, regressões, benchmarks, custos ou padrões de adoção observados por quem usa a ferramenta.`
       : "Não há sinais do Reddit nesta seleção."
   }
 - Trate os posts do Reddit como pauta própria, com o mesmo espaço dos anúncios oficiais: descreva o relato concreto (versão, erro, custo, fluxo) em vez de citá-los apenas como reação.

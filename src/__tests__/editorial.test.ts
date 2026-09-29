@@ -125,10 +125,57 @@ describe("editorial contracts", () => {
     );
 
     expect(prompt).toContain("sinais do Reddit");
-    // Three Reddit sources are available, so the floor is the whole supply and
-    // the prompt asks for it explicitly by index.
-    expect(prompt).toContain("Use 3 sinais do Reddit");
+    // The floor is a share of the edition, matching validateEditorialDraft:
+    // a count derived from the 36-slot pool once demanded 6 Reddit items of 10.
+    expect(prompt).toContain("Entre um terço e metade das pautas");
     expect(prompt).toContain("sourceIndex: 1, 2, 3");
+    expect(prompt).not.toMatch(/Menos de \d+ invalida/);
+  });
+
+  it("rejects an edition where community posts crowd out available primary sources", () => {
+    const primaries = Array.from({ length: 8 }, (_, index) =>
+      article("2026-06-12T08:00:00Z", `https://anthropic.com/news/${index}`),
+    );
+    const reddit = Array.from({ length: 6 }, (_, index) => ({
+      ...article("2026-06-12T09:00:00Z", `https://reddit.com/r/x/${index}`),
+      source: "Reddit Community Signals (LocalLLaMA)",
+      tags: '["reddit","community-signals","localllama"]',
+    }));
+    const sources = [...primaries, ...reddit];
+    const draft = (indexes: number[]) => ({
+      title: "Anthropic reforça consistência em tarefas longas de código",
+      dek: "A atualização altera decisões de arquitetura para fluxos extensos e exige nova avaliação operacional.",
+      highlights: indexes.map((sourceIndex) => ({
+        sourceIndex,
+        headline: "Pauta",
+        whatHappened:
+          "A fonte descreveu variação de comportamento em execuções longas do agente.",
+        whyItMatters:
+          "Times precisam decidir quando fixar versão antes de migrar fluxos críticos.",
+        evidence: sources[sourceIndex].summary,
+      })),
+      synthesis:
+        "Os relatos da comunidade ainda não confirmam o comportamento anunciado, o que mantém a decisão de adoção em aberto.",
+    });
+
+    expect(
+      validateEditorialDraft(
+        draft([0, 1, 2, 3, 8, 9, 10, 11, 12, 13]),
+        sources,
+        {
+          maxHighlights: 36,
+        },
+      ),
+    ).toContain("draft cites 4 primary sources, minimum is 5");
+    expect(
+      validateEditorialDraft(
+        draft([0, 1, 2, 3, 4, 8, 9, 10, 11, 12]),
+        sources,
+        {
+          maxHighlights: 36,
+        },
+      ).join(" "),
+    ).not.toContain("primary sources, minimum");
   });
 
   it("bounds an otherwise valid generated title without another model call", () => {

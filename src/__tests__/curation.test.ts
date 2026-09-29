@@ -329,6 +329,97 @@ describe("editorial curation", () => {
     expect(result.selected.some((item) => item.primary)).toBe(true);
   });
 
+  it("merges a launch listing and a community repost of the same model", () => {
+    const result = curateArticles([
+      article(
+        "Introducing Claude Sonnet 5.5, the second model in the Claude 5.5 family",
+        "Reddit Community Signals (ClaudeCode)",
+        "https://reddit.com/r/claudecode/sonnet",
+        900,
+        '["reddit","community-signals","claudecode"]',
+      ),
+      article(
+        "Anthropic: Claude Sonnet 5.5",
+        "OpenRouter: New Models",
+        "https://openrouter.ai/anthropic/claude-sonnet-5.5",
+        1,
+      ),
+      article(
+        "GPT-6 Astra gera modelos 3D",
+        "Reddit: codex",
+        "https://reddit.com/r/codex/astra",
+      ),
+      article(
+        "GPT-6 Sol recebe críticas",
+        "Reddit: codex",
+        "https://reddit.com/r/codex/sol",
+      ),
+    ]);
+
+    const sonnet = result.selected.filter((item) =>
+      /sonnet/i.test(item.article.title),
+    );
+    expect(sonnet).toHaveLength(1);
+    expect(sonnet[0].primary).toBe(true);
+    expect(sonnet[0].evidenceUrls).toContain(
+      "https://reddit.com/r/claudecode/sonnet",
+    );
+    // Distinct variants of one generation are distinct stories.
+    expect(
+      result.selected.filter((item) => /GPT-6/.test(item.article.title)),
+    ).toHaveLength(2);
+  });
+
+  it("guarantees a primary quota when community posts outscore official releases", () => {
+    const reddit = Array.from({ length: 8 }, (_, index) =>
+      article(
+        `Relato popular ${index} sobre agentes`,
+        "Reddit Community Signals (ClaudeCode)",
+        `https://reddit.com/r/claudecode/${index}`,
+        900 - index,
+        '["reddit","community-signals","claudecode"]',
+      ),
+    );
+    const trending = Array.from({ length: 3 }, (_, index) =>
+      article(
+        `Repositório em alta ${index}`,
+        "GitHub Trending (daily)",
+        `https://github.com/trending/${index}`,
+        500,
+      ),
+    );
+    const primaries = [
+      "Claude Code Releases",
+      "Ollama Releases",
+      "OpenAI Blog",
+      "Anthropic News",
+      "HF Daily Papers",
+    ].map((source, index) =>
+      article(
+        `Versão oficial ${index}`,
+        source,
+        `https://vendor.example/${index}`,
+      ),
+    );
+    primaries[0].crawled_at = "2026-06-01T10:00:00Z";
+
+    const result = curateArticles([...reddit, ...trending, ...primaries], {
+      perBucket: 3,
+      perBucketOverrides: { reddit: 6 },
+      max: 10,
+      requirePrimary: true,
+      maxPrimaryShare: 0.5,
+      minPrimarySources: 5,
+      minCommunitySignals: 4,
+      minRedditSignals: 3,
+      now: Date.parse("2026-06-12T12:00:00Z"),
+    });
+
+    expect(result.selected).toHaveLength(10);
+    expect(result.metrics.primarySources).toBe(5);
+    expect(result.metrics.redditSignals).toBeGreaterThanOrEqual(3);
+  });
+
   it("maps only Reddit sources to focus communities", () => {
     expect(
       focusCommunity(
