@@ -105,6 +105,14 @@ describe("layouts", () => {
     },
   );
 
+  // Telegram and X only render a large preview card when an image is declared.
+  it.each(layouts)("declares a large link-preview image (%s)", (_n, html) => {
+    expect(html).toContain(
+      '<meta property="og:image" content="{{ \'/assets/og-card.png\' | absolute_url }}">',
+    );
+    expect(html).toContain('content="summary_large_image"');
+  });
+
   it.each(layouts)("keeps the theme toggle operable (%s)", (_name, html) => {
     expect(html).toContain('aria-pressed="false"');
     expect(html).toContain('aria-label="Alternar tema claro e escuro"');
@@ -171,5 +179,14 @@ describe("buildSiteFiles", () => {
     );
     expect(config?.content).toContain("jekyll-feed");
     expect(config?.content).toContain("jekyll-sitemap");
+  });
+
+  it("ships the preview image the layouts point to as a real PNG", () => {
+    const image = buildSiteFiles("owner", "repo", "gh-pages").find(
+      (file) => file.path === "assets/og-card.png",
+    );
+    expect(image?.encoding).toBe("base64");
+    const bytes = Buffer.from(image?.content ?? "", "base64");
+    expect(bytes.subarray(1, 4).toString("ascii")).toBe("PNG");
   });
 });

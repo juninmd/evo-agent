@@ -73,6 +73,28 @@ describe("atomic GitHub publication", () => {
     expect(updateRef).not.toHaveBeenCalled();
   });
 
+  it("uploads binary assets with their encoding instead of as UTF-8 text", async () => {
+    const { client } = githubClient();
+
+    await commitFiles(
+      "owner",
+      "repo",
+      "gh-pages",
+      [
+        { path: "a.md", content: "text" },
+        { path: "a.png", content: "iVBORw0KGgo=", encoding: "base64" },
+      ],
+      "assets: test",
+      client,
+    );
+
+    const blobs = vi.mocked(client.git.createBlob).mock.calls.map((c) => c[0]);
+    expect(blobs).toEqual([
+      expect.objectContaining({ content: "text", encoding: "utf-8" }),
+      expect.objectContaining({ content: "iVBORw0KGgo=", encoding: "base64" }),
+    ]);
+  });
+
   it("builds one atomic batch for multiple historical articles", () => {
     const generated = (date: string, slug: string): GeneratedArticle => ({
       title: `Edição ${date}`,

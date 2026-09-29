@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { EBOOK_SLUG, type EbookResult } from "../agent/ebook.js";
 import type { GeneratedArticle } from "../agent/writer.js";
 import { escapeHtml } from "../utils/escape.js";
@@ -14,6 +15,8 @@ export type PublishedItem = {
 export type SiteFile = {
   path: string;
   content: string;
+  /** Binary assets travel base64-encoded through the Git blob API. */
+  encoding?: "base64";
 };
 
 /**
@@ -268,6 +271,9 @@ const TITLE = "{{ page.title | escape }}";
 const SUMMARY =
   "{{ page.summary | default: site.description | strip_newlines | escape }}";
 
+// Link previews (Telegram, X, Slack) only render a large card with an image.
+const OG_IMAGE = "{{ '/assets/og-card.png' | absolute_url }}";
+
 function buildHead(): string {
   return `    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -280,9 +286,14 @@ function buildHead(): string {
     <meta property="og:description" content="${SUMMARY}">
     <meta property="og:url" content="{{ page.url | absolute_url }}">
     <meta property="og:locale" content="pt_BR">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="${OG_IMAGE}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Evo Agent: radar diário de IA para devs">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${TITLE}">
     <meta name="twitter:description" content="${SUMMARY}">
+    <meta name="twitter:image" content="${OG_IMAGE}">
     {% if page.date %}<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">{% endif %}
     <link rel="alternate" type="application/atom+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -579,6 +590,13 @@ plugins:
     { path: "_layouts/home.html", content: buildDefaultLayout() },
     { path: "_layouts/article.html", content: buildArticleLayout() },
     { path: "assets/site.css", content: buildSiteCss() },
+    {
+      path: "assets/og-card.png",
+      content: readFileSync(
+        new URL("./assets/og-card.png", import.meta.url),
+      ).toString("base64"),
+      encoding: "base64",
+    },
   ];
 }
 

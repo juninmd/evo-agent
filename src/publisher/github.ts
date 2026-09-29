@@ -99,7 +99,7 @@ export async function commitFiles(
         owner,
         repo,
         content: file.content,
-        encoding: "utf-8",
+        encoding: file.encoding ?? "utf-8",
       });
       return {
         path: file.path,
