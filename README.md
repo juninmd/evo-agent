@@ -41,7 +41,7 @@ flowchart TD
 - **Atomic GitHub Pages publishing**: Article, layouts, and indexes land in one Git commit
 - **Discoverable pages**: Canonical URL, Open Graph/Twitter metadata, Atom feed and sitemap on every published page
 - **Escaped by construction**: Crawled titles and summaries are HTML-escaped in the Jekyll layouts and flattened in the YAML front matter
-- **Telegram outbox**: Failed delivery retries with exponential backoff and dead-letter isolation
+- **Telegram outbox**: Failed delivery retries with exponential backoff and dead-letter isolation; the hourly `CRAWL` job drains it in production, and pings not delivered within 24h are suppressed instead of sent late
 - **Operational health**: Structured logs, persistent metrics, primary-source alerts, and a machine-readable health command
 - **Playwright stealth fallback**: Automatic browser-based fetch when RSS sources return 403/429
 
