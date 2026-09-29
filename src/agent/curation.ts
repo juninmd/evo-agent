@@ -1,5 +1,6 @@
 import type { Article } from "../knowledge/store.js";
 import { isLaunchOfDay } from "../utils/launch.js";
+import { modelKey } from "./model-key.js";
 
 // Above the ~144 ceiling of every other score term combined.
 const LAUNCH_OF_DAY_BOOST = 200;
@@ -101,6 +102,8 @@ export interface CurationPolicy {
   requirePrimary?: boolean;
   minSummaryLength?: number;
   maxPrimaryShare?: number;
+  /** Primary sources kept even when community posts outscore them. */
+  minPrimarySources?: number;
   minCommunitySignals?: number;
   minRedditSignals?: number;
   /** Keep at least one post from each community in FOCUS_COMMUNITIES. */
@@ -269,10 +272,13 @@ export function curateArticles(
 
   const deduped: CuratedArticle[] = [];
   for (const candidate of candidates) {
+    const candidateModel = modelKey(candidate.article.title);
     const duplicate = deduped.find(
       (existing) =>
         titleSimilarity(existing.article.title, candidate.article.title) >=
-        0.72,
+          0.72 ||
+        (candidateModel !== null &&
+          modelKey(existing.article.title) === candidateModel),
     );
     if (duplicate) {
       duplicate.evidenceUrls.push(candidate.article.url);
@@ -343,6 +349,37 @@ export function curateArticles(
       }
       selected.push(primary);
     }
+  }
+
+  // Community posts carry engagement and focus boosts official releases lack;
+  // without a floor they crowded a daily edition down to 4 primaries of 10.
+  const minPrimary = Math.min(policy.minPrimarySources ?? 0, maxPrimary, max);
+  const bucketSize = (bucket: string) =>
+    selected.filter((item) => sourceBucket(item.article.source) === bucket)
+      .length;
+  for (const primary of deduped) {
+    if (selected.filter((item) => item.primary).length >= minPrimary) break;
+    if (!primary.primary || selected.includes(primary)) continue;
+    const bucket = sourceBucket(primary.article.source);
+    if (
+      bucketSize(bucket) >= (policy.perBucketOverrides?.[bucket] ?? perBucket)
+    )
+      continue;
+    const cheapest = selected
+      .map((item, index) => ({ item, index }))
+      .filter(({ item }) => !item.primary)
+      .sort((a, b) => a.item.score - b.item.score)[0];
+    if (selected.length >= max && !cheapest) break;
+    const promoted = rejected.findIndex(
+      (item) => item.article === primary.article,
+    );
+    if (promoted >= 0) rejected.splice(promoted, 1);
+    if (selected.length < max) {
+      selected.push(primary);
+      continue;
+    }
+    rejected.push({ article: cheapest.item.article, reason: "max-limit" });
+    selected[cheapest.index] = primary;
   }
 
   const minCommunity = Math.min(

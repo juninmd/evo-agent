@@ -164,6 +164,7 @@ export async function generateArticle(
       requirePrimary: true,
       minSummaryLength: 80,
       maxPrimaryShare: 0.5,
+      minPrimarySources: Math.ceil(maxHighlights / 4),
       minCommunitySignals: type === "weekly" ? 7 : 4,
       minRedditSignals: type === "weekly" ? 5 : 3,
       requireFocusCommunities: true,

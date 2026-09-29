@@ -17,6 +17,8 @@ export const TECHLEAD_MAX_ITEMS = 5;
 const PER_SOURCE = 3;
 const PRERELEASE = /-(rc|alpha|beta)\.?\d*\b|\b(nightly|canary|preview)\b/i;
 const URL_PATTERN = /https?:\/\/[^\s)<>\]]+/g;
+// Older prompts asked for the unaccented label; models still echo it.
+const ACTION_LABEL = /\*\*A[cç][aã]o:\*\*/g;
 
 /** Newest stable items, capped per source and interleaved so no feed dominates. */
 export function techleadCandidates(articles: Article[]): Article[] {
@@ -50,15 +52,15 @@ export function candidatesForModel(candidates: Article[]): string {
 }
 
 const TECHLEAD_SYSTEM_PROMPT = [
-  "Voce seleciona leitura semanal para um tech lead que opera Bun, Hono, React,",
+  "Você seleciona leitura semanal para um tech lead que opera Bun, Hono, React,",
   "TypeScript, Node, k3s, Argo CD, Traefik, LiteLLM e PostgreSQL, e lidera um time.",
-  `Escolha no maximo ${TECHLEAD_MAX_ITEMS} itens do material, priorizando mudanca que exige acao`,
-  "(breaking change, seguranca, deprecacao) e ideias de lideranca aplicaveis.",
-  "Responda em pt-BR, sem introducao nem conclusao. Para cada item, exatamente:",
-  "'### <titulo curto>', '**O que mudou:** <fato concreto>',",
+  `Escolha no máximo ${TECHLEAD_MAX_ITEMS} itens do material, priorizando mudança que exige ação`,
+  "(breaking change, segurança, deprecação) e ideias de liderança aplicáveis.",
+  "Responda em pt-BR com acentuação correta, sem introdução nem conclusão. Para cada item, exatamente:",
+  "'### <título curto>', '**O que mudou:** <fato concreto>',",
   "'**Por que importa:** <impacto nesse stack ou time>',",
-  "'**Acao:** testar | ler | ignorar', 'Fonte: <url exata do material>'.",
-  "Use apenas URLs do material. Nao invente versoes nem numeros.",
+  "'**Ação:** testar | ler | ignorar', 'Fonte: <url exata do material>'.",
+  "Use apenas URLs do material. Não invente versões nem números.",
   UNTRUSTED_MATERIAL_RULE,
 ].join(" ");
 
@@ -75,7 +77,7 @@ export function validateReading(
 ): string | null {
   const items = markdown.match(/^### /gm)?.length ?? 0;
   if (items === 0 || items > TECHLEAD_MAX_ITEMS) return null;
-  if ((markdown.match(/\*\*Acao:\*\*/g)?.length ?? 0) !== items) return null;
+  if ((markdown.match(ACTION_LABEL)?.length ?? 0) !== items) return null;
   const pool = new Set(candidates.map((article) => article.url));
   const urls = citedUrls(markdown);
   if (urls.length === 0 || urls.some((url) => !pool.has(url))) return null;
@@ -89,12 +91,35 @@ export function fallbackReading(candidates: Article[]): string {
       [
         `### ${article.title}`,
         `**O que mudou:** ${article.summary.replace(/\s+/g, " ").slice(0, 200) || "ver fonte"}`,
-        `**Por que importa:** selecao automatica sem sintese (${article.source})`,
-        "**Acao:** ler",
+        `**Por que importa:** seleção automática sem síntese (${article.source})`,
+        "**Ação:** ler",
         `Fonte: ${article.url}`,
       ].join("\n"),
     )
     .join("\n\n");
+}
+
+function withoutTracking(url: string): string {
+  const parsed = new URL(url);
+  for (const key of [...parsed.searchParams.keys()]) {
+    if (key.startsWith("utm_")) parsed.searchParams.delete(key);
+  }
+  return parsed.toString();
+}
+
+/** Validation runs on raw URLs; readers get a link without feed tracking. */
+export function renderReading(markdown: string): string {
+  return markdown
+    .replace(ACTION_LABEL, "**Ação:**")
+    .replace(/^Fonte: (https?:\/\/\S+?)[.,;:]*$/gm, (line, url: string) => {
+      if (!URL.canParse(url)) return line;
+      // Parentheses would close the markdown link destination early.
+      const clean = withoutTracking(url)
+        .replace(/\(/g, "%28")
+        .replace(/\)/g, "%29");
+      const host = new URL(clean).hostname.replace(/^www\./, "");
+      return `Fonte: [${host}](${clean})`;
+    });
 }
 
 export function techleadTitle(day: string): string {
@@ -128,7 +153,7 @@ export async function generateTechleadDigest(
   try {
     reading = validateReading(
       await deps.ask(
-        `Material dos ultimos ${TECHLEAD_WINDOW_DAYS} dias:\n\n${candidatesForModel(candidates)}`,
+        `Material dos últimos ${TECHLEAD_WINDOW_DAYS} dias:\n\n${candidatesForModel(candidates)}`,
         TECHLEAD_SYSTEM_PROMPT,
         { maxOutputTokens: 1500 },
       ),
@@ -150,8 +175,8 @@ export async function generateTechleadDigest(
   return {
     title: techleadTitle(day),
     slug: `techlead-${day}`,
-    content: `${content}\n\n_${candidates.length} candidatos de ${sourceCount} fontes nos ultimos ${TECHLEAD_WINDOW_DAYS} dias._`,
-    summary: `${selected.length} leituras da semana sobre o stack e lideranca.`,
+    content: `${renderReading(content)}\n\n_${candidates.length} candidatos de ${sourceCount} fontes nos últimos ${TECHLEAD_WINDOW_DAYS} dias._`,
+    summary: `${selected.length} leituras da semana sobre o stack e liderança.`,
     tags: ["techlead", "stack", "lideranca"],
     date: day,
     sources: selected.map((article) => article.url),

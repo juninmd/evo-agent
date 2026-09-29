@@ -6,6 +6,7 @@ describe("operational health", () => {
     expect(
       evaluateHealth({
         pendingNotifications: 0,
+        stalePendingNotifications: 0,
         deadLetterNotifications: 0,
         failedCycles24h: 0,
         staleRunningCycles: 0,
@@ -16,9 +17,26 @@ describe("operational health", () => {
     ).toEqual({ status: "healthy", reasons: [] });
   });
 
+  it("degrades when a notification sits in the outbox past its retry window", () => {
+    const result = evaluateHealth({
+      pendingNotifications: 1,
+      stalePendingNotifications: 1,
+      deadLetterNotifications: 0,
+      failedCycles24h: 0,
+      staleRunningCycles: 0,
+      successfulCycles24h: 3,
+      recentArticles: 20,
+      recentPrimarySources: 4,
+    });
+
+    expect(result.status).toBe("degraded");
+    expect(result.reasons).toContain("notifications stuck in outbox");
+  });
+
   it("degrades when no primary source was collected", () => {
     const result = evaluateHealth({
       pendingNotifications: 1,
+      stalePendingNotifications: 0,
       deadLetterNotifications: 0,
       failedCycles24h: 0,
       staleRunningCycles: 0,
@@ -34,6 +52,7 @@ describe("operational health", () => {
   it("is critical on dead-letter or no successful cycle", () => {
     const result = evaluateHealth({
       pendingNotifications: 0,
+      stalePendingNotifications: 0,
       deadLetterNotifications: 1,
       failedCycles24h: 2,
       staleRunningCycles: 0,
@@ -50,6 +69,7 @@ describe("operational health", () => {
   it("is critical when stale cycles are still marked running", () => {
     const result = evaluateHealth({
       pendingNotifications: 0,
+      stalePendingNotifications: 0,
       deadLetterNotifications: 0,
       failedCycles24h: 0,
       staleRunningCycles: 1,

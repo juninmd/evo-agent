@@ -413,12 +413,37 @@ describe("crawlArtificialAnalysisIntelligence", () => {
     expect(saveArticle).not.toHaveBeenCalled();
   });
 
-  it("offers the ranking as a story when it moved", async () => {
-    const moved = sampleModels.map((model, index) =>
-      index === 0 ? { ...model, intelligenceIndex: 51 } : model,
-    );
-    const saveArticle = crawlWith(moved);
+  it("offers the ranking as a story when the leader changes", async () => {
+    const swapped = [
+      { ...sampleModels[1], rank: 1 },
+      { ...sampleModels[0], rank: 2 },
+      ...sampleModels.slice(2),
+    ];
+    const saveArticle = crawlWith(swapped);
     await crawlArtificialAnalysisIntelligence();
     expect(saveArticle).toHaveBeenCalledTimes(1);
+    expect(saveArticle.mock.calls[0][0].title).toBe(
+      "Artificial Analysis: Claude Fable 5.1 assume a liderança do Índice de Inteligência",
+    );
+  });
+
+  it("names the newcomer when a model enters the top", async () => {
+    const saveArticle = crawlWith(
+      sampleModels.filter((model) => model.slug !== "mimo-v2-6-pro"),
+    );
+    await crawlArtificialAnalysisIntelligence();
+    expect(saveArticle.mock.calls[0][0].title).toBe(
+      "Artificial Analysis: MiMo-V2.6-Pro entra no top 10 do Índice de Inteligência",
+    );
+  });
+
+  // "Opus 5.5 lidera o ranking" led seven editions in a row on score wiggles.
+  it("does not offer a score move under an unchanged leader as a story", async () => {
+    const wiggled = sampleModels.map((model, index) =>
+      index === 0 ? { ...model, intelligenceIndex: 51 } : model,
+    );
+    const saveArticle = crawlWith(wiggled);
+    await crawlArtificialAnalysisIntelligence();
+    expect(saveArticle).not.toHaveBeenCalled();
   });
 });

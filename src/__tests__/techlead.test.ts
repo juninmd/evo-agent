@@ -13,6 +13,7 @@ const { UNTRUSTED_MATERIAL_RULE } = await import("../agent/prompt-guards.js");
 const {
   TECHLEAD_MAX_ITEMS,
   generateTechleadDigest,
+  renderReading,
   techleadCandidates,
   validateReading,
 } = await import("../agent/techlead.js");
@@ -145,9 +146,35 @@ describe("generateTechleadDigest", () => {
 
   it("publishes the model reading and cites what it chose", async () => {
     const digest = await run(async () => item("https://s/2"));
-    expect(digest.content).toContain("**Acao:** testar");
+    expect(digest.content).toContain("**Ação:** testar");
     expect(digest.sources).toEqual(["https://s/2"]);
     expect(digest.reportPeriod).toBe("techlead");
+  });
+
+  // The 28/09 digest printed "Fonte: https://leaddev.com/...?utm_source=..."
+  // as bare text and wrote "ultimos" without its accent.
+  it("renders the source as a clean link and writes pt-BR accents", async () => {
+    const tracked =
+      "https://leaddev.com/ai/agent-loop?utm_source=leaddev&utm_medium=RSS&id=7";
+    const digest = await run(
+      async () => item(tracked),
+      () => [article({ source: "Techlead: LeadDev", url: tracked })],
+    );
+    expect(digest.content).toContain(
+      "Fonte: [leaddev.com](https://leaddev.com/ai/agent-loop?id=7)",
+    );
+    expect(digest.content).not.toContain("utm_");
+    expect(digest.content).toContain("nos últimos 7 dias");
+    expect(digest.sources).toEqual([tracked]);
+  });
+
+  it("keeps the link destination intact with trailing punctuation or parentheses", () => {
+    expect(renderReading("Fonte: https://x.example/a.")).toBe(
+      "Fonte: [x.example](https://x.example/a)",
+    );
+    expect(renderReading("Fonte: https://x.example/wiki/A_(b)")).toBe(
+      "Fonte: [x.example](https://x.example/wiki/A_%28b%29)",
+    );
   });
 
   it("falls back to the ranking when the model invents a source", async () => {

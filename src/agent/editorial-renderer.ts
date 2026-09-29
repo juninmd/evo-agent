@@ -188,6 +188,14 @@ export function articlesFromDraft(
   });
 }
 
+/** The whole name: splitting on the first space tagged "Artificial Analysis" as "artificial". */
+function sourceTopic(source: string): string {
+  return source
+    .split(":")[0]
+    .replace(/\s+(releases|blog|news|changelog|updates)$/i, "")
+    .trim();
+}
+
 export function groupBySourceType(articles: Article[]): Map<string, Article[]> {
   const groups = new Map<string, Article[]>();
   for (const article of articles) {
@@ -205,7 +213,7 @@ export function groupBySourceType(articles: Article[]): Map<string, Article[]> {
                 ? "Google News"
                 : bucket === "websearch"
                   ? "Web Search"
-                  : article.source.split(/[\s:]/)[0];
+                  : sourceTopic(article.source);
     groups.set(label, [...(groups.get(label) ?? []), article]);
   }
   return groups;
@@ -229,6 +237,13 @@ export function buildTagsFromGroups(groups: Map<string, Article[]>): string[] {
     "github-trending",
     // Internal crawl-engine identifier (crawler/index.ts), never a topic.
     "searxng",
+    // Feed descriptors the crawler stamps on every item of a source.
+    "models",
+    "launches",
+    "intelligence",
+    "releases",
+    "community-signals",
+    "search",
   ]);
   const slugifyTag = (tag: string) =>
     tag

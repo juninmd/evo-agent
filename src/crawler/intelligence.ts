@@ -12,6 +12,34 @@ export const ARTIFICIAL_ANALYSIS_MODELS_URL =
 export const ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL =
   "https://artificialanalysis.ai/models#intelligence";
 
+/**
+ * Shortens model names for compact chart display.
+ * Example: "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)" -> "Claude Fable 5.1"
+ */
+export function shortModelName(name: string): string {
+  return name
+    .replace(/\s*\([^)]*\)/g, "")
+    .replace(/:(?!\/)/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Only a new leader or a newcomer is news: every edition prints the ranking. */
+function rankingStoryTitle(
+  models: IntelligenceModelRecord[],
+  previous: IntelligenceModelRecord[] | undefined,
+  diff: IntelligenceDiff,
+): string | null {
+  if (!previous?.length || !models[0]) return null;
+  if (models[0].slug !== previous[0]?.slug) {
+    return `Artificial Analysis: ${shortModelName(models[0].name)} assume a liderança do Índice de Inteligência`;
+  }
+  if (diff.newModels.length === 0) return null;
+  const names = diff.newModels.map(shortModelName);
+  const verb = names.length === 1 ? "entra" : "entram";
+  return `Artificial Analysis: ${names.join(", ")} ${verb} no top 10 do Índice de Inteligência`;
+}
+
 export interface ModelChange {
   name: string;
   slug: string;
@@ -393,12 +421,13 @@ export async function crawlArtificialAnalysisIntelligence(
     changes: diff as unknown as Record<string, unknown>,
   });
 
-  // Also index as an article so editions can pick it up. Only a moved
-  // ranking is news: every edition already appends the ranking section.
+  // Also index as an article so editions can pick it up. Score wiggles under
+  // the same leader made "X lidera o ranking" the lead story for a week.
   const top = models[0];
   const topOpen = models.find((m) => m.isOpenWeights);
   const articleUrl = `${ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL}#${day}`;
-  if (diff.hasChanges && !db.urlExists(articleUrl)) {
+  const storyTitle = rankingStoryTitle(models, previousSnapshot?.models, diff);
+  if (storyTitle && !db.urlExists(articleUrl)) {
     const summaryLines = [
       `Índice de Inteligência Artificial Analysis (${day}): liderança de ${top?.name ?? "N/A"} (${top?.intelligenceIndex ?? 0}).`,
       topOpen
@@ -410,7 +439,7 @@ export async function crawlArtificialAnalysisIntelligence(
       .join(" ");
 
     db.saveArticle({
-      title: `Artificial Analysis: Ranking de Inteligência (${top?.name ?? "Modelos"})`,
+      title: storyTitle,
       source: "Artificial Analysis",
       url: articleUrl,
       summary: summaryLines.slice(0, 500),
