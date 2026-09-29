@@ -139,7 +139,10 @@ export function renderEditorialDraft(
     [`### ${theme}`, "", items.join("\n\n")].join("\n"),
   );
   const overview = cited.map(({ highlight }) => {
-    const lead = leadSentence(highlight.whatHappened);
+    // A rejected agenda sentence left "- **GHCP oferece ...**" with no summary.
+    const lead =
+      leadSentence(highlight.whatHappened) ||
+      leadSentence(highlight.analysis ?? "");
     const headline = `- **${headlineText(highlight.headline)}**`;
     return lead ? `${headline} — ${lead}` : headline;
   });
