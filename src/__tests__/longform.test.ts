@@ -135,7 +135,7 @@ describe("long-form editorial pass", () => {
     telegraphic.highlights[0] = {
       ...telegraphic.highlights[0],
       whatHappened: "Usuários reportam loop de autenticação na extensão",
-      whyItMatters: "Bloqueio de operação para quem depende da extensão",
+      whyItMatters: "Quem depende da extensão fica sem operar",
     };
 
     const expanded = await expandEdition(
@@ -146,8 +146,89 @@ describe("long-form editorial pass", () => {
     );
 
     expect(expanded.highlights[0].analysis).toBe(
-      "Usuários reportam loop de autenticação na extensão.\n\nBloqueio de operação para quem depende da extensão.",
+      "Usuários reportam loop de autenticação na extensão.\n\nQuem depende da extensão fica sem operar.",
     );
+  });
+
+  it("drops a highlight whose fallback consequence is a bare noun phrase", async () => {
+    const ask = vi.fn().mockRejectedValue(new Error("LLM unavailable"));
+    const fragments = draft();
+    fragments.highlights[0] = {
+      ...fragments.highlights[0],
+      whatHappened: "O Ollama passou a expor modelos de decisão.",
+      whyItMatters:
+        "Migração de pipelines de classificação para modelos determinísticos.",
+    };
+
+    const expanded = await expandEdition(
+      ask,
+      fragments,
+      [source()],
+      "12/06/2026",
+    );
+
+    // A heading-like fragment reads as a broken edition, not as analysis.
+    expect(expanded.highlights).toEqual([]);
+  });
+
+  it("tells the model a primary source is official and rejects calling it a community report", async () => {
+    const hedged = `${FITS_BOTH_BOUNDS}A evidência baseia-se apenas em um único relato da comunidade.`;
+    const ask = vi
+      .fn()
+      .mockResolvedValueOnce(hedged)
+      .mockResolvedValue(FITS_BOTH_BOUNDS);
+
+    const expanded = await expandEdition(
+      ask,
+      draft(),
+      [source()],
+      "12/06/2026",
+    );
+
+    expect(ask.mock.calls[0][0]).toContain("TIPO DE FONTE: fonte primária");
+    expect(ask.mock.calls[1][0]).toContain("fonte primária como relato");
+    expect(expanded.highlights[0].analysis).toBe(FITS_BOTH_BOUNDS.trim());
+  });
+
+  it("rewrites a synthesis that names a product no highlight covers", async () => {
+    const drifted = `${FITS_BOTH_BOUNDS}A integração chega ao GitHub Copilot e ao Claude Code.`;
+    const ask = vi
+      .fn()
+      .mockResolvedValueOnce(FITS_BOTH_BOUNDS)
+      .mockResolvedValueOnce(drifted)
+      .mockResolvedValue(FITS_BOTH_BOUNDS);
+
+    const expanded = await expandEdition(
+      ask,
+      draft(),
+      [source()],
+      "12/06/2026",
+    );
+
+    expect(ask.mock.calls[2][0]).toContain("GitHub, Copilot");
+    expect(expanded.synthesis).toBe(FITS_BOTH_BOUNDS.trim());
+  });
+
+  it("keeps the report framing for community signals", async () => {
+    const hedged = `${FITS_BOTH_BOUNDS}A evidência é um único relato da comunidade.`;
+    const ask = vi.fn().mockResolvedValue(hedged);
+    const community = {
+      ...source(),
+      source: "Reddit r/ClaudeCode",
+      url: "https://www.reddit.com/r/ClaudeCode/comments/x/post/",
+    };
+
+    const expanded = await expandEdition(
+      ask,
+      draft(),
+      [community],
+      "12/06/2026",
+    );
+
+    expect(ask.mock.calls[0][0]).toContain(
+      "TIPO DE FONTE: sinal da comunidade",
+    );
+    expect(expanded.highlights[0].analysis).toBe(hedged);
   });
 
   it("drops a highlight and the synthesis when only corrupted fallback text is left", async () => {

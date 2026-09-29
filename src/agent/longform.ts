@@ -1,16 +1,16 @@
 import type { Article } from "../knowledge/store.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
+import { isCommunitySignal, isPrimarySource } from "./curation.js";
+import type { EditorialDraft, EditorialHighlight } from "./editorial.js";
 import {
-  EDITORIAL_CLICHES,
-  type EditorialDraft,
-  type EditorialHighlight,
-  hasEnglishSentence,
-  hasModelArtifacts,
-  hasPromptLeak,
-  looksEnglish,
-  looksGarbled,
-} from "./editorial.js";
+  COMMUNITY_HEDGE,
+  isNominalFragment,
+  proseIssues,
+  unsupportedNames,
+} from "./prose-checks.js";
+
+export { proseIssues } from "./prose-checks.js";
 
 const ANALYSIS_MIN_CHARS = 380;
 const ANALYSIS_MAX_CHARS = 750;
@@ -28,74 +28,6 @@ const STYLE_RULES = `Regras de escrita:
 - Nunca abra com "Para quem desenvolve/constrói/opera software com IA"; nomeie quem é afetado (quem usa a extensão, quem roda o proxy, quem paga a API).
 - Escreva variáveis de ambiente, flags, headers, comandos, pacotes e trechos de configuração entre crases, exatamente como na evidência.
 - Não deixe frases ou expressões em inglês, nem entre parênteses; traduza ou omita.`;
-
-// The analysis prompt once named the audience with this exact phrase and the
-// model echoed it into several items of one edition.
-const PROMPT_AUDIENCE_ECHO =
-  /para quem (desenvolve|constr[oó]i|opera)[^.]{0,40}software com (ia|intelig[eê]ncia artificial)/i;
-
-const ENGLISH_FUNCTION_WORDS =
-  /\b(the|to|of|and|for|with|is|are|an|by|on|into|from|that|this|it)\b/i;
-
-/**
- * hasEnglishSentence needs a whole sentence; a drifted aside hides inside
- * parentheses. Product names ("Model Context Protocol") carry no function word.
- */
-function hasEnglishAside(text: string): boolean {
-  return [...text.matchAll(/\(([^()]{10,})\)/g)].some(([, inner]) => {
-    const words = inner.trim().split(/\s+/);
-    return (
-      words.length >= 4 &&
-      !/[à-ú]/i.test(inner) &&
-      ENGLISH_FUNCTION_WORDS.test(inner)
-    );
-  });
-}
-
-export function proseIssues(
-  text: string,
-  minChars: number,
-  maxChars?: number,
-): string[] {
-  const issues: string[] = [];
-  const trimmed = text.trim();
-  if (trimmed.length < minChars) {
-    issues.push(
-      `texto curto demais (${trimmed.length}/${minChars} caracteres)`,
-    );
-  }
-  if (maxChars && trimmed.length > maxChars) {
-    issues.push(
-      `texto longo demais (${trimmed.length}/${maxChars} caracteres) — corte pela metade`,
-    );
-  }
-  if (/^\s*[-*+]\s+/m.test(trimmed)) issues.push("contém lista com bullets");
-  if (/^\s*#{1,6}\s+/m.test(trimmed)) issues.push("contém subtítulo markdown");
-  if (/https?:\/\//i.test(trimmed)) issues.push("contém URL");
-  if (hasModelArtifacts(trimmed)) {
-    issues.push("contém token ou repetição corrompida do modelo");
-  }
-  if (hasPromptLeak(trimmed)) {
-    issues.push("contém instrução ou comentário vazado do prompt");
-  }
-  if (hasEnglishSentence(trimmed) || hasEnglishAside(trimmed)) {
-    issues.push("contém frase em inglês");
-  }
-  if (PROMPT_AUDIENCE_ECHO.test(trimmed)) {
-    issues.push(
-      'repete o enquadramento do prompt ("para quem ... software com IA")',
-    );
-  }
-  if (looksGarbled(trimmed)) {
-    issues.push(
-      "contém texto corrompido (palavra repetida ou frase iniciada em minúscula)",
-    );
-  }
-  const cliche = trimmed.match(EDITORIAL_CLICHES);
-  if (cliche) issues.push(`usa a expressão proibida "${cliche[0]}"`);
-  if (looksEnglish(trimmed, 8)) issues.push("não está em português brasileiro");
-  return issues;
-}
 
 function paragraphs(text: string): string {
   return text
@@ -121,8 +53,30 @@ function agendaProse(whatHappened: string, whyItMatters: string): string {
 
 /** Fallbacks skip the expansion checks, so they must clear them here instead. */
 function usableFallback(text: string): string | null {
-  return text.trim() && proseIssues(text, 0).length === 0 ? text : null;
+  if (!text.trim() || proseIssues(text, 0).length > 0) return null;
+  return text.split(/\n{2,}/).some(isNominalFragment) ? null : text;
 }
+
+function sourceKind(article: Article): "primary" | "community" | "coverage" {
+  if (isPrimarySource(article)) return "primary";
+  return isCommunitySignal(article) ? "community" : "coverage";
+}
+
+const SOURCE_KIND_PROMPT = {
+  primary: {
+    label:
+      "fonte primária (registro oficial de quem lançou; trate o conteúdo como fato)",
+    rule: "A evidência é o registro oficial: não a chame de relato nem diga que depende de confirmação da comunidade.",
+  },
+  community: {
+    label: "sinal da comunidade (relato de usuário, ainda não confirmado)",
+    rule: "A evidência é um relato da comunidade: trate-a como relato, sem generalizar para uma tendência.",
+  },
+  coverage: {
+    label: "cobertura de terceiros (não é o registro oficial)",
+    rule: "Não trate como confirmado nada além do que a evidência afirma.",
+  },
+} as const;
 
 type Ask = (
   userPrompt: string,
@@ -137,6 +91,7 @@ async function writeProse(
   minChars: number,
   maxOutputTokens: number,
   maxChars?: number,
+  extraIssues: (text: string) => string[] = () => [],
 ): Promise<string | null> {
   let feedback = "";
   for (let attempt = 1; attempt <= 2; attempt++) {
@@ -152,7 +107,10 @@ async function writeProse(
       return null;
     }
     const clean = paragraphs(text);
-    const issues = proseIssues(clean, minChars, maxChars);
+    const issues = [
+      ...proseIssues(clean, minChars, maxChars),
+      ...extraIssues(clean),
+    ];
     if (issues.length === 0) return clean;
     log.warn(`Long-form attempt ${attempt} rejected: ${issues.join("; ")}`);
     feedback = `\n\nA versão anterior foi rejeitada porque: ${issues.join("; ")}. Reescreva o texto inteiro corrigindo exatamente esses problemas.`;
@@ -173,17 +131,19 @@ async function expandHighlightAnalysis(
     agendaProse(highlight.whatHappened, highlight.whyItMatters),
   );
   if (!article) return fallback;
+  const kind = sourceKind(article);
 
   const prompt = `Escreva a seção de análise de uma edição técnica diária (período ${period}) sobre a pauta abaixo.
 
 PAUTA: ${sanitizeForPrompt(highlight.headline, 200)}
 FONTE: ${sanitizeForPrompt(article.source, 120)} — ${sanitizeForPrompt(article.title, 240)}
+TIPO DE FONTE: ${SOURCE_KIND_PROMPT[kind].label}
 EVIDÊNCIA (única base factual permitida): ${sanitizeForPrompt(article.summary, 900)}
 Apuração já feita pela edição:
 - Fato central: ${sanitizeForPrompt(highlight.whatHappened, 600)}
 - Consequência técnica: ${sanitizeForPrompt(highlight.whyItMatters, 600)}
 
-Escreva 2 parágrafos curtos e diretos, entre ${ANALYSIS_MIN_CHARS} e ${ANALYSIS_MAX_CHARS} caracteres no total (nunca mais que isso), sem enrolação. Primeiro parágrafo: o fato, sem preâmbulo. Segundo parágrafo: a consequência prática concreta (arquitetura, custo, risco, operação ou adoção) para quem é afetado, incluindo o limite ou a incerteza que a evidência ainda deixa em aberto. Se a evidência vier de um único relato da comunidade, trate-a como relato, sem generalizar para uma tendência.
+Escreva 2 parágrafos curtos e diretos, entre ${ANALYSIS_MIN_CHARS} e ${ANALYSIS_MAX_CHARS} caracteres no total (nunca mais que isso), sem enrolação. Primeiro parágrafo: o fato, sem preâmbulo. Segundo parágrafo: a consequência prática concreta (arquitetura, custo, risco, operação ou adoção) para quem é afetado, incluindo o limite ou a incerteza que a evidência ainda deixa em aberto. ${SOURCE_KIND_PROMPT[kind].rule}
 
 ${STYLE_RULES}
 
@@ -196,6 +156,10 @@ Responda apenas com o texto da análise.`;
     ANALYSIS_MIN_CHARS,
     1600,
     ANALYSIS_MAX_CHARS,
+    (text) =>
+      kind === "primary" && COMMUNITY_HEDGE.test(text)
+        ? ["trata uma fonte primária como relato da comunidade"]
+        : [],
   );
   return prose ?? fallback;
 }
@@ -205,6 +169,16 @@ async function expandSynthesis(
   draft: EditorialDraft,
   period: string,
 ): Promise<string> {
+  const corpus = draft.highlights
+    .map((highlight) =>
+      [
+        highlight.headline,
+        highlight.whatHappened,
+        highlight.whyItMatters,
+        highlight.analysis ?? "",
+      ].join(" "),
+    )
+    .join(" ");
   const agenda = draft.highlights
     .map(
       (highlight) =>
@@ -229,6 +203,12 @@ Responda apenas com o texto.`;
     SYNTHESIS_MIN_CHARS,
     1600,
     SYNTHESIS_MAX_CHARS,
+    (text) => {
+      const names = unsupportedNames(text, corpus);
+      return names.length > 0
+        ? [`cita nomes que nenhuma pauta menciona (${names.join(", ")})`]
+        : [];
+    },
   );
   return prose ?? usableFallback(draft.synthesis) ?? "";
 }
