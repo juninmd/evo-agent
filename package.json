@@ -12,7 +12,7 @@
     "prompt:rollback": "tsx src/agent/prompt-rollback-cli.ts",
     "backfill:articles": "node dist/agent/backfill-cli.js",
     "smoke:reddit-comments": "tsx src/crawler/reddit-smoke.ts",
-    "build": "tsc",
+    "build": "tsc && node -e \"require('node:fs').cpSync('src/publisher/assets','dist/publisher/assets',{recursive:true})\"",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/",
     "test": "vitest run",
