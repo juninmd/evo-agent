@@ -5,10 +5,25 @@ import { escapeHtml } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 
 const BASE = `https://api.telegram.org/bot${config.telegram.botToken}`;
+const MAX_SOURCE_HOSTS = 6;
 
 export interface TelegramDeliveryResult {
   delivered: boolean;
   error?: string;
+}
+
+/** The button target, plus the page previewed as the card's header. */
+export interface TelegramCardLink {
+  url: string;
+  label: string;
+  previewUrl?: string;
+}
+
+export interface ArticleCardInput {
+  kind: "article" | "report";
+  title: string;
+  summary: string;
+  sources: string[];
 }
 
 function telegramError(err: unknown): string {
@@ -32,6 +47,7 @@ function telegramError(err: unknown): string {
 
 export async function sendMessage(
   text: string,
+  link?: TelegramCardLink,
 ): Promise<TelegramDeliveryResult> {
   try {
     await axios.post(
@@ -40,7 +56,18 @@ export async function sendMessage(
         chat_id: config.telegram.chatId,
         text,
         parse_mode: "HTML",
-        disable_web_page_preview: false,
+        // Pinning the url matters: by default Telegram previews the first link
+        // in the text, which is a source, not our own site.
+        ...(link && {
+          link_preview_options: {
+            url: link.previewUrl ?? link.url,
+            prefer_large_media: true,
+            show_above_text: true,
+          },
+          reply_markup: {
+            inline_keyboard: [[{ text: link.label, url: link.url }]],
+          },
+        }),
       },
       { timeout: 10000 },
     );
@@ -53,19 +80,75 @@ export async function sendMessage(
   }
 }
 
+function hostOf(url: string): string | null {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return null;
+    }
+    return parsed.hostname.replace(/^www\./, "") || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Pages serves a new article only after its build finishes, and Telegram caches
+ * whatever it fetched first; the site root always answers with the brand card.
+ */
+export function siteRootOf(articleUrl: string): string {
+  try {
+    const { origin, pathname } = new URL(articleUrl);
+    const repo = pathname.split("/").find(Boolean);
+    return repo ? `${origin}/${repo}/` : `${origin}/`;
+  } catch {
+    return articleUrl;
+  }
+}
+
+/** One link per host, so ten Reddit threads read as one signal, not a wall. */
+function sourcesLine(sources: string[]): string {
+  if (sources.length === 0) return "";
+  const byHost = new Map<string, string>();
+  for (const source of sources) {
+    const host = hostOf(source);
+    const key = host ?? source;
+    if (!byHost.has(key)) {
+      byHost.set(
+        key,
+        host
+          ? `<a href="${escapeHtml(source)}">${escapeHtml(host)}</a>`
+          : escapeHtml(source.slice(0, 60)),
+      );
+    }
+  }
+  const shown = [...byHost.values()].slice(0, MAX_SOURCE_HOSTS);
+  const hidden = byHost.size - shown.length;
+  const more = hidden > 0 ? ` · +${hidden}` : "";
+  return `\n\n🔗 <b>Fontes</b> · ${sources.length}\n${shown.join(" · ")}${more}`;
+}
+
+export function buildArticleCard(input: ArticleCardInput): string {
+  const badge =
+    input.kind === "report" ? "📊 <b>Relatório</b>" : "🗞️ <b>Nova edição</b>";
+  const summary = input.summary.trim()
+    ? `\n\n<blockquote expandable>${escapeHtml(input.summary.trim())}</blockquote>`
+    : "";
+  return `${badge} · Evo Agent\n\n<b>${escapeHtml(input.title)}</b>${summary}${sourcesLine(input.sources)}`;
+}
+
 export async function notifyNewArticle(
   title: string,
   url: string,
   summary: string,
   sources: string[] = [],
 ): Promise<TelegramDeliveryResult> {
-  const sourcesText =
-    sources.length > 0
-      ? `\n\n<b>Fontes originais:</b>\n${sources.map((s) => `• ${escapeHtml(s)}`).join("\n")}`
-      : "";
-
-  const msg = `<b>Novo Artigo — Evo Agent</b>\n\n<b>${escapeHtml(title)}</b>\n\n${escapeHtml(summary)}${sourcesText}\n\n<a href="${escapeHtml(url)}">Ler artigo completo</a>`;
-  return sendMessage(msg);
+  const card = buildArticleCard({ kind: "article", title, summary, sources });
+  return sendMessage(card, {
+    url,
+    label: "📖 Ler edição completa",
+    previewUrl: siteRootOf(url),
+  });
 }
 
 export async function notifyWeeklyReport(
@@ -73,16 +156,25 @@ export async function notifyWeeklyReport(
   url: string,
   summary: string,
 ): Promise<TelegramDeliveryResult> {
-  const msg = `<b>Relatório Semanal — Evo Agent</b>\n\n<b>${escapeHtml(title)}</b>\n\n${escapeHtml(summary)}\n\n<a href="${escapeHtml(url)}">Ler relatório completo</a>`;
-  return sendMessage(msg);
+  const card = buildArticleCard({
+    kind: "report",
+    title,
+    summary,
+    sources: [],
+  });
+  return sendMessage(card, {
+    url,
+    label: "📖 Ler relatório completo",
+    previewUrl: siteRootOf(url),
+  });
 }
 
 export async function notifyModelLaunch(
   launch: ModelSignal,
 ): Promise<TelegramDeliveryResult> {
   const launchedAt = launch.launchedAt
-    ? `\n\nLançado em ${new Date(launch.launchedAt * 1000).toISOString().slice(0, 10)}`
+    ? `\n\n📅 Lançado em ${new Date(launch.launchedAt * 1000).toLocaleDateString("pt-BR", { timeZone: config.timezone })}`
     : "";
-  const msg = `<b>Novo modelo LLM — Evo Agent</b>\n\n<b>${escapeHtml(launch.title)}</b>\n\n${escapeHtml(launch.summary)}${launchedAt}\n\n<a href="${escapeHtml(launch.url)}">Ver modelo</a>`;
-  return sendMessage(msg);
+  const msg = `🚀 <b>Novo modelo</b> · Evo Agent\n\n<b>${escapeHtml(launch.title)}</b>\n\n<blockquote>${escapeHtml(launch.summary)}</blockquote>${launchedAt}`;
+  return sendMessage(msg, { url: launch.url, label: "🔎 Ver modelo" });
 }
