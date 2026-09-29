@@ -1,5 +1,5 @@
 const MODEL_NAME =
-  /\b(claude|gpt|gemini|llama|qwen|deepseek|grok|mistral|glm|kimi|minimax|muse)[\s-]+((?:opus|sonnet|haiku|fable|v)?[\s-]*\d+(?:\.\d+)*)(?:[\s-]+(astra|sol|luna|pro|max|flash|lite|mini|nano|turbo|codex|coder|omni|ultra)\b)?/i;
+  /\b(claude|gpt|gemini|llama|qwen|deepseek|grok|mistral|glm|kimi|minimax|muse)[\s-]+((?:opus|sonnet|haiku|fable|v)?[\s-]*\d+(?:\.\d+)*)(?!\w|\.\d)(?:[\s-]+(astra|sol|luna|pro|max|flash|lite|mini|nano|turbo|codex|coder|omni|ultra)\b)?/i;
 
 /**
  * "Claude Sonnet 5.5" in a launch listing and in a community repost of the

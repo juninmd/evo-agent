@@ -354,6 +354,16 @@ describe("editorial curation", () => {
         "Reddit: codex",
         "https://reddit.com/r/codex/sol",
       ),
+      article(
+        "GPT-4o sai do ChatGPT",
+        "OpenAI Blog",
+        "https://openai.com/gpt-4o",
+      ),
+      article(
+        "GPT-4 ganha preço menor",
+        "Hacker News",
+        "https://news.ycombinator.com/gpt-4",
+      ),
     ]);
 
     const sonnet = result.selected.filter((item) =>
@@ -367,6 +377,9 @@ describe("editorial curation", () => {
     // Distinct variants of one generation are distinct stories.
     expect(
       result.selected.filter((item) => /GPT-6/.test(item.article.title)),
+    ).toHaveLength(2);
+    expect(
+      result.selected.filter((item) => /GPT-4/.test(item.article.title)),
     ).toHaveLength(2);
   });
 

@@ -111,9 +111,12 @@ function withoutTracking(url: string): string {
 export function renderReading(markdown: string): string {
   return markdown
     .replace(ACTION_LABEL, "**Ação:**")
-    .replace(/^Fonte: (https?:\/\/\S+)$/gm, (line, url: string) => {
+    .replace(/^Fonte: (https?:\/\/\S+?)[.,;:]*$/gm, (line, url: string) => {
       if (!URL.canParse(url)) return line;
-      const clean = withoutTracking(url);
+      // Parentheses would close the markdown link destination early.
+      const clean = withoutTracking(url)
+        .replace(/\(/g, "%28")
+        .replace(/\)/g, "%29");
       const host = new URL(clean).hostname.replace(/^www\./, "");
       return `Fonte: [${host}](${clean})`;
     });

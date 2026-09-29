@@ -150,7 +150,7 @@ describe("long-form editorial pass", () => {
     );
   });
 
-  it("drops a highlight whose fallback consequence is a bare noun phrase", async () => {
+  it("publishes only the fact when the fallback consequence is a bare noun phrase", async () => {
     const ask = vi.fn().mockRejectedValue(new Error("LLM unavailable"));
     const fragments = draft();
     fragments.highlights[0] = {
@@ -167,8 +167,11 @@ describe("long-form editorial pass", () => {
       "12/06/2026",
     );
 
-    // A heading-like fragment reads as a broken edition, not as analysis.
-    expect(expanded.highlights).toEqual([]);
+    // A heading-like fragment reads as a broken edition, not as analysis; the
+    // item itself stays so editorial floors checked before expansion still hold.
+    expect(expanded.highlights[0].analysis).toBe(
+      "O Ollama passou a expor modelos de decisão.",
+    );
   });
 
   it("tells the model a primary source is official and rejects calling it a community report", async () => {

@@ -46,15 +46,16 @@ function closeSentence(text: string): string {
 
 /** Fallback prose when the expansion pass cannot produce a usable section. */
 function agendaProse(whatHappened: string, whyItMatters: string): string {
-  return paragraphs(
-    `${closeSentence(whatHappened)}\n\n${closeSentence(whyItMatters)}`,
-  );
+  const consequence = closeSentence(whyItMatters);
+  // A heading-like consequence reads as a broken edition; the fact stands alone.
+  if (isNominalFragment(consequence))
+    return paragraphs(closeSentence(whatHappened));
+  return paragraphs(`${closeSentence(whatHappened)}\n\n${consequence}`);
 }
 
 /** Fallbacks skip the expansion checks, so they must clear them here instead. */
 function usableFallback(text: string): string | null {
-  if (!text.trim() || proseIssues(text, 0).length > 0) return null;
-  return text.split(/\n{2,}/).some(isNominalFragment) ? null : text;
+  return text.trim() && proseIssues(text, 0).length === 0 ? text : null;
 }
 
 function sourceKind(article: Article): "primary" | "community" | "coverage" {

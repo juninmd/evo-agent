@@ -318,12 +318,16 @@ async function main() {
 
   if (runMode === "CRAWL") {
     log.info("Running in CRAWL mode");
-    await cycles.run("crawl", learnCycle);
-    // Production runs one-shot CronJobs, so the hourly crawl is the only
-    // recurring process left to retry failed Telegram deliveries.
-    await flushNotificationOutbox().catch((e) =>
-      log.error(`Notification outbox failed: ${errMsg(e)}`),
-    );
+    try {
+      await cycles.run("crawl", learnCycle);
+    } finally {
+      // Production runs one-shot CronJobs, so the hourly crawl is the only
+      // recurring process left to retry failed Telegram deliveries, even
+      // when the crawl itself failed.
+      await flushNotificationOutbox().catch((e) =>
+        log.error(`Notification outbox failed: ${errMsg(e)}`),
+      );
+    }
     closeDbAndExit(0);
   }
 

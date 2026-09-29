@@ -13,6 +13,7 @@ const { UNTRUSTED_MATERIAL_RULE } = await import("../agent/prompt-guards.js");
 const {
   TECHLEAD_MAX_ITEMS,
   generateTechleadDigest,
+  renderReading,
   techleadCandidates,
   validateReading,
 } = await import("../agent/techlead.js");
@@ -165,6 +166,15 @@ describe("generateTechleadDigest", () => {
     expect(digest.content).not.toContain("utm_");
     expect(digest.content).toContain("nos últimos 7 dias");
     expect(digest.sources).toEqual([tracked]);
+  });
+
+  it("keeps the link destination intact with trailing punctuation or parentheses", () => {
+    expect(renderReading("Fonte: https://x.example/a.")).toBe(
+      "Fonte: [x.example](https://x.example/a)",
+    );
+    expect(renderReading("Fonte: https://x.example/wiki/A_(b)")).toBe(
+      "Fonte: [x.example](https://x.example/wiki/A_%28b%29)",
+    );
   });
 
   it("falls back to the ranking when the model invents a source", async () => {
