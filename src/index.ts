@@ -65,6 +65,11 @@ async function sendPendingNotification(item: PendingNotification) {
 }
 
 async function flushNotificationOutbox() {
+  const suppressed = db.suppressStaleNotifications(24);
+  if (suppressed > 0) {
+    db.recordMetric("notification.suppressed_stale", suppressed);
+    log.warn(`Notification outbox: suppressed ${suppressed} stale pending`);
+  }
   const result = await processNotificationOutbox(db, sendPendingNotification);
   if (result.delivered + result.retried + result.deadLetter > 0) {
     log.info(
@@ -314,6 +319,11 @@ async function main() {
   if (runMode === "CRAWL") {
     log.info("Running in CRAWL mode");
     await cycles.run("crawl", learnCycle);
+    // Production runs one-shot CronJobs, so the hourly crawl is the only
+    // recurring process left to retry failed Telegram deliveries.
+    await flushNotificationOutbox().catch((e) =>
+      log.error(`Notification outbox failed: ${errMsg(e)}`),
+    );
     closeDbAndExit(0);
   }
 

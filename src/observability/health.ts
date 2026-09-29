@@ -1,5 +1,7 @@
 export interface OperationalStats {
   pendingNotifications: number;
+  /** Pending longer than the whole retry schedule: the outbox is not draining. */
+  stalePendingNotifications: number;
   deadLetterNotifications: number;
   failedCycles24h: number;
   staleRunningCycles: number;
@@ -36,6 +38,10 @@ export function evaluateHealth(stats: OperationalStats): HealthResult {
   if (stats.pendingNotifications > 5) {
     if (status === "healthy") status = "degraded";
     reasons.push("notification backlog above limit");
+  }
+  if (stats.stalePendingNotifications > 0) {
+    if (status === "healthy") status = "degraded";
+    reasons.push("notifications stuck in outbox");
   }
   if (stats.recentArticles === 0) {
     if (status === "healthy") status = "degraded";

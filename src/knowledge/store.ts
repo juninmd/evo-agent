@@ -561,13 +561,20 @@ export const db = {
           (SELECT count(*) FROM published_articles
            WHERE notification_status = 'pending') AS pendingNotifications,
           (SELECT count(*) FROM published_articles
+           WHERE notification_status = 'pending'
+             AND datetime(published_at) < datetime('now', '-2 hours'))
+            AS stalePendingNotifications,
+          (SELECT count(*) FROM published_articles
            WHERE notification_status = 'dead_letter') AS deadLetterNotifications,
-          (SELECT count(*) FROM cycle_runs
-           WHERE status = 'failed'
-             AND started_at >= datetime('now', '-24 hours')
-             AND started_at > COALESCE(
-               (SELECT max(started_at) FROM cycle_runs WHERE status = 'succeeded'),
-               '1970-01-01'
+          -- Per type: an hourly crawl success must not hide a failed radar.
+          (SELECT count(*) FROM cycle_runs failed
+           WHERE failed.status = 'failed'
+             AND failed.started_at >= datetime('now', '-24 hours')
+             AND NOT EXISTS (
+               SELECT 1 FROM cycle_runs later
+               WHERE later.type = failed.type
+                 AND later.status = 'succeeded'
+                 AND later.started_at > failed.started_at
              ))
             AS failedCycles24h,
           (SELECT count(*) FROM cycle_runs
@@ -750,6 +757,18 @@ export const db = {
            notification_error = ?
        WHERE url = ?`,
     ).run(deadLetter ? "dead_letter" : "pending", nextAttemptAt, error, url);
+  },
+
+  /** A ping for an edition that is days old is noise, not news: drop it. */
+  suppressStaleNotifications(maxAgeHours: number): number {
+    return stmt(
+      `UPDATE published_articles
+       SET notification_status = 'suppressed',
+           notification_error = COALESCE(notification_error || ' | ', '') ||
+             'not delivered within ' || ? || 'h'
+       WHERE notification_status = 'pending'
+         AND datetime(published_at) < datetime('now', ?)`,
+    ).run(maxAgeHours, `-${maxAgeHours} hours`).changes;
   },
 
   /**
