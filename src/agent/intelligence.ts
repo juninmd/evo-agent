@@ -4,23 +4,14 @@ import {
   type ModelChange,
   crawlArtificialAnalysisIntelligence,
   diffIntelligenceSnapshots,
+  shortModelName,
 } from "../crawler/intelligence.js";
 import { type IntelligenceModelRecord, db } from "../knowledge/store.js";
 import { localDayIso } from "../utils/date.js";
 import { escapeHtml } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 
-/**
- * Shortens model names for compact chart display.
- * Example: "Claude Fable 5.1 (Adaptive Reasoning, Max Effort, Default Fallback)" -> "Claude Fable 5.1"
- */
-export function shortModelName(name: string): string {
-  return name
-    .replace(/\s*\([^)]*\)/g, "")
-    .replace(/:(?!\/)/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
+export { shortModelName };
 
 function plural(count: number, one: string, many: string): string {
   return `${count} ${count === 1 ? one : many}`;
