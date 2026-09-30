@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-09-29-fusereg-quantizacao-disgregada-evolucao-de-raes-llms-e-custos-de-api">
-    <time class="edition-date" datetime="2026-09-29"><span class="edition-day">29</span><span class="edition-month">setembro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-09-30-claude-code-2-1-285-adiciona-claude-code-disable-web-fetch-e-claude-v4-1-22-padr">
+    <time class="edition-date" datetime="2026-09-30"><span class="edition-day">30</span><span class="edition-month">setembro 2026</span></time>
     <div>
-      <h3>FuseReg &amp; Quantização Disgregada: evolução de RAEs, LLMs e custos de API</h3>
-      <p>RAEs incorporam novas camadas de latentes, LLMs ganham quantização direcionada e usuários relatam mudanças bruscas nos planos de API e na qualidade dos modelos.</p>
+      <h3>Claude Code 2.1.285 adiciona CLAUDE_CODE_DISABLE_WEB_FETCH e Claude v4.1.22 padrão para OpenAI</h3>
+      <p>A versão 2.1.285 do Claude Code introduz uma variável de ambiente para desativar a busca web e integração de plugins MCP configuráveis. No Cline v4.1.22, o GPT-6.1 Sol passa a ser o modelo padrão para OpenAI e OpenRouter, com fallback aprimorado para provedores alternativos quando bloqueados por filtros de conteúdo.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-09">
-  <div class="month-heading"><h2>Setembro <span>2026</span></h2><p>33 edições</p></div>
-  <article class="story-card" data-search="fusereg &amp; quantização disgregada: evolução de raes, llms e custos de api hf-daily-papers microsoft-agent-framework reddit papers research microsoft agents codex openai copilot">
+  <div class="month-heading"><h2>Setembro <span>2026</span></h2><p>34 edições</p></div>
+  <article class="story-card" data-search="claude code 2.1.285 adiciona claude_code_disable_web_fetch e claude v4.1.22 padrão para openai claude-code cline reddit copilot-cli anthropic coding-agent codex openai vscode tools">
+  <time datetime="2026-09-30">30 set</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-30-claude-code-2-1-285-adiciona-claude-code-disable-web-fetch-e-claude-v4-1-22-padr">Claude Code 2.1.285 adiciona CLAUDE_CODE_DISABLE_WEB_FETCH e Claude v4.1.22 padrão para OpenAI</a></h3>
+    <p>A versão 2.1.285 do Claude Code introduz uma variável de ambiente para desativar a busca web e integração de plugins MCP configuráveis. No Cline v4.1.22, o GPT-6.1 Sol passa a ser o modelo padrão para OpenAI e OpenRouter, com fallback aprimorado para provedores alternativos quando bloqueados por filtros de conteúdo.</p>
+    <p class="story-tags">claude-code, cline, reddit, copilot-cli</p>
+  </div>
+</article>
+<article class="story-card" data-search="fusereg &amp; quantização disgregada: evolução de raes, llms e custos de api hf-daily-papers microsoft-agent-framework reddit papers research microsoft agents codex openai copilot">
   <time datetime="2026-09-29">29 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-29-fusereg-quantizacao-disgregada-evolucao-de-raes-llms-e-custos-de-api">FuseReg &amp; Quantização Disgregada: evolução de RAEs, LLMs e custos de API</a></h3>
@@ -575,7 +583,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>18 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>17 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -710,14 +718,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-13-fabula-5-gratis-llm-finetuning-e-automacao-de-discord-decisoes-de-engenharia-de-">Fábula 5 grátis, LLM finetuning, e automação de Discord: decisões de engenharia de 12/07/2026</a></h3>
     <p>Enquanto o Anthropic mantém o Fábula 5 gratuito até 19 de julho, engenheiros exploram finetuning de LLMs, automação de servidores Discord com Gemini e reimplementação de printf para minimizar dependências.</p>
     <p class="story-tags">hacker-news, google-news, tabnews, reddit</p>
-  </div>
-</article>
-<article class="story-card" data-search="copilot, deutsche telekom e loop engineer: redução de custos e evolução de arquiteturas ia the openai tabnews reddit developer br claude">
-  <time datetime="2026-07-11">11 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-11-copilot-deutsche-telekom-e-loop-engineer-reducao-de-custos-e-evolucao-de-arquite">Copilot, Deutsche Telekom e Loop Engineer: Redução de Custos e Evolução de Arquiteturas IA</a></h3>
-    <p>Ferramentas compartilhadas diminuem o custo de revisão de código no Copilot, enquanto a Deutsche Telekom demonstra integração profunda de OpenAI. Estudos de Karpathy introduzem loops autônomos que redefinem a construção de agentes IA.</p>
-    <p class="story-tags">the, openai, tabnews, reddit</p>
   </div>
 </article>
 </section>
