@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-09-30-claude-code-2-1-285-adiciona-claude-code-disable-web-fetch-e-claude-v4-1-22-padr">
-    <time class="edition-date" datetime="2026-09-30"><span class="edition-day">30</span><span class="edition-month">setembro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-01-gemini-4-argon-entra-no-top-10-de-inteligencia-e-copilot-cli-lanca-sandbox-ca">
+    <time class="edition-date" datetime="2026-10-01"><span class="edition-day">01</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>Claude Code 2.1.285 adiciona CLAUDE_CODE_DISABLE_WEB_FETCH e Claude v4.1.22 padrão para OpenAI</h3>
-      <p>A versão 2.1.285 do Claude Code introduz uma variável de ambiente para desativar a busca web e integração de plugins MCP configuráveis. No Cline v4.1.22, o GPT-6.1 Sol passa a ser o modelo padrão para OpenAI e OpenRouter, com fallback aprimorado para provedores alternativos quando bloqueados por filtros de conteúdo.</p>
+      <h3>Gemini 4 Argon entra no top 10 de inteligência e Copilot CLI lança sandbox CA</h3>
+      <p>O índice Artificial Analysis registra a estreia do Gemini 4 Argon entre os dez modelos mais capazes. O Copilot CLI 1.0.91-1 adiciona gerenciamento de autoridade certificadora para sandboxes, enquanto usuários relatam instabilidade no GPT-6.1 Sol.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -70,8 +70,19 @@ title: Evo Agent
       <input type="search" id="story-search" placeholder="Buscar por título ou tag" aria-label="Buscar edições e radares por título ou tag">
       <p class="search-empty" id="search-empty" hidden>Nada encontrado. Tente outro termo ou uma tag, como "claude" ou "agents".</p>
     </div>
-    <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
-    <section class="month-group" id="mes-2026-09">
+    <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
+    <section class="month-group" id="mes-2026-10">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>1 edição</p></div>
+  <article class="story-card" data-search="gemini 4 argon entra no top 10 de inteligência e copilot cli lança sandbox ca artificial-analysis copilot-cli claude-code hf-daily-papers reddit microsoft-agent-framework github openai vllm hacker-news">
+  <time datetime="2026-10-01">01 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-01-gemini-4-argon-entra-no-top-10-de-inteligencia-e-copilot-cli-lanca-sandbox-ca">Gemini 4 Argon entra no top 10 de inteligência e Copilot CLI lança sandbox CA</a></h3>
+    <p>O índice Artificial Analysis registra a estreia do Gemini 4 Argon entre os dez modelos mais capazes. O Copilot CLI 1.0.91-1 adiciona gerenciamento de autoridade certificadora para sandboxes, enquanto usuários relatam instabilidade no GPT-6.1 Sol.</p>
+    <p class="story-tags">artificial-analysis, copilot-cli, claude-code, hf-daily-papers</p>
+  </div>
+</article>
+</section>
+<section class="month-group" id="mes-2026-09">
   <div class="month-heading"><h2>Setembro <span>2026</span></h2><p>34 edições</p></div>
   <article class="story-card" data-search="claude code 2.1.285 adiciona claude_code_disable_web_fetch e claude v4.1.22 padrão para openai claude-code cline reddit copilot-cli anthropic coding-agent codex openai vscode tools">
   <time datetime="2026-09-30">30 set</time>
@@ -583,7 +594,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>17 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>16 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -710,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-14-vs-code-lanca-selecao-automatica-de-modelo-suporte-mcp-e-copilot-coding-agent">VS Code lança seleção automática de modelo, suporte MCP e Copilot Coding Agent</a></h3>
     <p>VS Code refina a IA, incorporando seleção automática de modelo e suporte completo ao MCP, enquanto a Copilot Coding Agent expande a automação de tarefas. J‑Space ganha atenção no Hacker News e a DeepMind lança ATL Saathi no Brasil.</p>
     <p class="story-tags">vscode, hacker-news, google, tools</p>
-  </div>
-</article>
-<article class="story-card" data-search="fábula 5 grátis, llm finetuning, e automação de discord: decisões de engenharia de 12/07/2026 hacker-news google-news tabnews reddit ml research anthropic fable5 pricing br developer claude">
-  <time datetime="2026-07-13">13 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-13-fabula-5-gratis-llm-finetuning-e-automacao-de-discord-decisoes-de-engenharia-de-">Fábula 5 grátis, LLM finetuning, e automação de Discord: decisões de engenharia de 12/07/2026</a></h3>
-    <p>Enquanto o Anthropic mantém o Fábula 5 gratuito até 19 de julho, engenheiros exploram finetuning de LLMs, automação de servidores Discord com Gemini e reimplementação de printf para minimizar dependências.</p>
-    <p class="story-tags">hacker-news, google-news, tabnews, reddit</p>
   </div>
 </article>
 </section>
