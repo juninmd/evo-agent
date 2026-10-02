@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-01-gemini-4-argon-entra-no-top-10-de-inteligencia-e-copilot-cli-lanca-sandbox-ca">
-    <time class="edition-date" datetime="2026-10-01"><span class="edition-day">01</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-02-o-jeito-de-estabelecer-distilacao-de-politicas-em-multimodal-novos-mods-do-claud">
+    <time class="edition-date" datetime="2026-10-02"><span class="edition-day">02</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>Gemini 4 Argon entra no top 10 de inteligência e Copilot CLI lança sandbox CA</h3>
-      <p>O índice Artificial Analysis registra a estreia do Gemini 4 Argon entre os dez modelos mais capazes. O Copilot CLI 1.0.91-1 adiciona gerenciamento de autoridade certificadora para sandboxes, enquanto usuários relatam instabilidade no GPT-6.1 Sol.</p>
+      <h3>O jeito de estabelecer distilação de políticas em multimodal, novos mods do Claude Code e relatos</h3>
+      <p>A partir de técnicas de distilação on‑policy, a nova versão do Claude Code expande a personalização de mods e usuários relatam falhas de paralelização em Copilot no VS Code.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>1 edição</p></div>
-  <article class="story-card" data-search="gemini 4 argon entra no top 10 de inteligência e copilot cli lança sandbox ca artificial-analysis copilot-cli claude-code hf-daily-papers reddit microsoft-agent-framework github openai vllm hacker-news">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>2 edições</p></div>
+  <article class="story-card" data-search="o jeito de estabelecer distilação de políticas em multimodal, novos mods do claude code e relatos hf-daily-papers github copilot-cli cline reddit papers research copilot changelog coding-agent">
+  <time datetime="2026-10-02">02 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-02-o-jeito-de-estabelecer-distilacao-de-politicas-em-multimodal-novos-mods-do-claud">O jeito de estabelecer distilação de políticas em multimodal, novos mods do Claude Code e relatos</a></h3>
+    <p>A partir de técnicas de distilação on‑policy, a nova versão do Claude Code expande a personalização de mods e usuários relatam falhas de paralelização em Copilot no VS Code.</p>
+    <p class="story-tags">hf-daily-papers, github, copilot-cli, cline</p>
+  </div>
+</article>
+<article class="story-card" data-search="gemini 4 argon entra no top 10 de inteligência e copilot cli lança sandbox ca artificial-analysis copilot-cli claude-code hf-daily-papers reddit microsoft-agent-framework github openai vllm hacker-news">
   <time datetime="2026-10-01">01 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-01-gemini-4-argon-entra-no-top-10-de-inteligencia-e-copilot-cli-lanca-sandbox-ca">Gemini 4 Argon entra no top 10 de inteligência e Copilot CLI lança sandbox CA</a></h3>
@@ -594,7 +602,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>16 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>15 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-15-fable-5-atl-saathi-e-automacao-de-provas-decisoes-de-infra-e-produto">Fable 5, ATL Saathi e Automação de Provas: Decisões de Infra e Produto</a></h3>
     <p>Este mês cobre a reversão de preços do Fable 5, o lançamento do ATL Saathi e a automação de provas em educação, mostrando impactos concretos em orçamentos, infra e design de produto.</p>
     <p class="story-tags">openai, google, google-news, tabnews</p>
-  </div>
-</article>
-<article class="story-card" data-search="vs code lança seleção automática de modelo, suporte mcp e copilot coding agent vscode hacker-news google tools developer ai frontier googledeepmind">
-  <time datetime="2026-07-14">14 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-14-vs-code-lanca-selecao-automatica-de-modelo-suporte-mcp-e-copilot-coding-agent">VS Code lança seleção automática de modelo, suporte MCP e Copilot Coding Agent</a></h3>
-    <p>VS Code refina a IA, incorporando seleção automática de modelo e suporte completo ao MCP, enquanto a Copilot Coding Agent expande a automação de tarefas. J‑Space ganha atenção no Hacker News e a DeepMind lança ATL Saathi no Brasil.</p>
-    <p class="story-tags">vscode, hacker-news, google, tools</p>
   </div>
 </article>
 </section>
