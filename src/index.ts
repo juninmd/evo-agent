@@ -4,6 +4,7 @@ import {
   editorialQualityScore,
 } from "./agent/article-validation.js";
 import { isPrimarySource } from "./agent/curation.js";
+import { generateDevTips } from "./agent/dev-tips.js";
 import { refineEbook } from "./agent/ebook.js";
 import { runImprovementCycle } from "./agent/improver.js";
 import { rollbackPrompt } from "./agent/prompt-policy.js";
@@ -250,6 +251,31 @@ async function techleadCycle() {
   };
 }
 
+async function devTipsCycle() {
+  log.info("=== Dev tips cycle start ===");
+  const tips = await generateDevTips();
+  db.recordMetric("devtips.selected_sources", tips.sources.length);
+  const url = await publishWeeklyReport(tips, "devtips");
+  const notificationStatus = await processNotification(
+    db,
+    sendPendingNotification,
+    {
+      url,
+      title: tips.title,
+      summary: tips.summary,
+      kind: "report",
+      notification_attempts: 0,
+    },
+  );
+  db.setState("last_devtips_at", new Date().toISOString());
+  log.info(`=== Dev tips published: ${url} ===`);
+  return {
+    url,
+    notified: notificationStatus === "delivered",
+    selectedSources: tips.sources.length,
+  };
+}
+
 async function ebookCycle() {
   log.info("=== Ebook cycle start ===");
   const ebook = await refineEbook();
@@ -348,6 +374,12 @@ async function main() {
   if (runMode === "TECHLEAD") {
     log.info("Running in TECHLEAD mode");
     await cycles.run("techlead", techleadCycle);
+    closeDbAndExit(0);
+  }
+
+  if (runMode === "DEV_TIPS") {
+    log.info("Running in DEV_TIPS mode");
+    await cycles.run("devtips", devTipsCycle);
     closeDbAndExit(0);
   }
 
