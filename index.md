@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-02-o-jeito-de-estabelecer-distilacao-de-politicas-em-multimodal-novos-mods-do-claud">
-    <time class="edition-date" datetime="2026-10-02"><span class="edition-day">02</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-03-claude-code-v2-1-288-e-instabilidades-de-custo-no-copilot-e-codex">
+    <time class="edition-date" datetime="2026-10-03"><span class="edition-day">03</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>O jeito de estabelecer distilação de políticas em multimodal, novos mods do Claude Code e relatos</h3>
-      <p>A partir de técnicas de distilação on‑policy, a nova versão do Claude Code expande a personalização de mods e usuários relatam falhas de paralelização em Copilot no VS Code.</p>
+      <h3>Claude Code v2.1.288 e instabilidades de custo no Copilot e Codex</h3>
+      <p>Atualizações no ecossistema MCP e Claude Code expandem a automação de terminal. Relatos de usuários apontam anomalias de consumo de tokens e custos elevados em modelos de raciocínio máximo.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>2 edições</p></div>
-  <article class="story-card" data-search="o jeito de estabelecer distilação de políticas em multimodal, novos mods do claude code e relatos hf-daily-papers github copilot-cli cline reddit papers research copilot changelog coding-agent">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>3 edições</p></div>
+  <article class="story-card" data-search="claude code v2.1.288 e instabilidades de custo no copilot e codex claude-code mcp-typescript-sdk microsoft-agent-framework openai-agents-sdk reddit anthropic mcp sdk microsoft agents">
+  <time datetime="2026-10-03">03 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-03-claude-code-v2-1-288-e-instabilidades-de-custo-no-copilot-e-codex">Claude Code v2.1.288 e instabilidades de custo no Copilot e Codex</a></h3>
+    <p>Atualizações no ecossistema MCP e Claude Code expandem a automação de terminal. Relatos de usuários apontam anomalias de consumo de tokens e custos elevados em modelos de raciocínio máximo.</p>
+    <p class="story-tags">claude-code, mcp-typescript-sdk, microsoft-agent-framework, openai-agents-sdk</p>
+  </div>
+</article>
+<article class="story-card" data-search="o jeito de estabelecer distilação de políticas em multimodal, novos mods do claude code e relatos hf-daily-papers github copilot-cli cline reddit papers research copilot changelog coding-agent">
   <time datetime="2026-10-02">02 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-02-o-jeito-de-estabelecer-distilacao-de-politicas-em-multimodal-novos-mods-do-claud">O jeito de estabelecer distilação de políticas em multimodal, novos mods do Claude Code e relatos</a></h3>
@@ -602,7 +610,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>15 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>14 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-16-github-lanca-guia-para-iniciantes-together-ai-reforca-clusters-gpu-openai-aprese">GitHub lança guia para iniciantes, Together AI reforça clusters GPU, OpenAI apresenta GPT‑Red e</a></h3>
     <p>Novas publicações de grandes provedores revelam foco em capacitação, confiabilidade de infraestrutura e segurança de IA. Usuários da comunidade já testam o modelo Fable 5 em projetos de escala galáctica.</p>
     <p class="story-tags">the, together, openai, google-news</p>
-  </div>
-</article>
-<article class="story-card" data-search="fable 5, atl saathi e automação de provas: decisões de infra e produto openai google google-news tabnews ai frontier googledeepmind anthropic fable5 pricing br developer">
-  <time datetime="2026-07-15">15 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-15-fable-5-atl-saathi-e-automacao-de-provas-decisoes-de-infra-e-produto">Fable 5, ATL Saathi e Automação de Provas: Decisões de Infra e Produto</a></h3>
-    <p>Este mês cobre a reversão de preços do Fable 5, o lançamento do ATL Saathi e a automação de provas em educação, mostrando impactos concretos em orçamentos, infra e design de produto.</p>
-    <p class="story-tags">openai, google, google-news, tabnews</p>
   </div>
 </article>
 </section>
