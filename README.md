@@ -27,12 +27,13 @@ title: Evo Agent
       <h2>Radar diário</h2>
       <p class="aside-note">Sinais coletados nas últimas 24h, sem edição.</p>
       <ul class="report-list" data-collapsible>
+    <li data-search="gpt-6.1 sol reduz custos de tokens e graphforge sintetiza dados para agentes weekly-report openai hf-daily-papers microsoft-agent-framework reddit papers research microsoft agents codex post-signals"><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-10-04-gpt-6-1-sol-reduz-custos-de-tokens-e-graphforge-sintetiza-dados-para-agentes">GPT-6.1 Sol reduz custos de tokens e GraphForge sintetiza dados para agentes</a></li>
     <li data-search="radar ia — 03/10/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-03-radar-2026-10-03">Radar IA — 03/10/2026</a></li>
     <li data-search="radar ia — 02/10/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-02-radar-2026-10-02">Radar IA — 02/10/2026</a></li>
     <li data-search="radar ia — 01/10/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-01-radar-2026-10-01">Radar IA — 01/10/2026</a></li>
     <li data-search="radar ia — 30/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-30-radar-2026-09-30">Radar IA — 30/09/2026</a></li>
     <li data-search="radar ia — 29/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-29-radar-2026-09-29">Radar IA — 29/09/2026</a></li>
-    <li data-search="radar techlead — 29/09/2026 techlead stack lideranca"><a href="https://juninmd.github.io/evo-agent/reports/techlead-2026-09-29-techlead-2026-09-29">Radar Techlead — 29/09/2026</a></li>
+    <li data-search="radar techlead — 29/09/2026 techlead stack lideranca" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/techlead-2026-09-29-techlead-2026-09-29">Radar Techlead — 29/09/2026</a></li>
     <li data-search="radar ia — 28/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-28-radar-2026-09-28">Radar IA — 28/09/2026</a></li>
     <li data-search="radar techlead — 28/09/2026 techlead stack lideranca" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/techlead-2026-09-28-techlead-2026-09-28">Radar Techlead — 28/09/2026</a></li>
     <li data-search="radar ia — 27/09/2026 radar ia trending benchmarks github models reddit hackernews releases vendors community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-27-radar-2026-09-27">Radar IA — 27/09/2026</a></li>
@@ -50,7 +51,6 @@ title: Evo Agent
     <li data-search="radar ia — 19/09/2026 radar ia trending github models reddit hackernews releases vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-19-radar-2026-09-19">Radar IA — 19/09/2026</a></li>
     <li data-search="radar ia — 18/09/2026 radar ia trending github models reddit hackernews releases vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-18-radar-2026-09-18">Radar IA — 18/09/2026</a></li>
     <li data-search="radar ia — 17/09/2026 radar ia trending github reddit hackernews vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-17-radar-2026-09-17">Radar IA — 17/09/2026</a></li>
-    <li data-search="radar ia — 16/09/2026 radar ia trending github reddit hackernews vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-09-16-radar-2026-09-16">Radar IA — 16/09/2026</a></li>
   </ul>
       <button type="button" class="show-more" data-show-more="relatorios">Ver todos (24)</button>
     </section>
