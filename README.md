@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-04-graphforge-lora-e-o-peso-dos-tokens-em-ia">
-    <time class="edition-date" datetime="2026-10-04"><span class="edition-day">04</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-05-ollama-0-40-0-adota-mlx-padrao-no-apple-silicon-copilot-cli-1-0-92-4-melhora-mcp">
+    <time class="edition-date" datetime="2026-10-05"><span class="edition-day">05</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>GraphForge, LoRA e o Peso dos Tokens em IA</h3>
-      <p>A nova técnica de síntese de dados dos agentes encontra respaldo em um método baseado em grafos, ao mesmo tempo em que Pequenum LoRA restitui a lembrança de contextos profundos em modelos de última geração. Paralelamente, relatos reais de consumo de tokens mostram que modelos em produção de mercado sofrem de volatilidade.</p>
+      <h3>Ollama 0.40.0 adota MLX padrão no Apple Silicon; Copilot CLI 1.0.92-4 melhora MCP e config</h3>
+      <p>Ollama muda runtime padrão para MLX em Macs com Apple Silicon e expande suporte a Qwen 3.8. Copilot CLI ganha subcomandos de configuração e corrige travamento em conexões HTTP+SSE legadas.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>4 edições</p></div>
-  <article class="story-card" data-search="graphforge, lora e o peso dos tokens em ia hf-daily-papers litellm openai-agents-sdk github openai reddit papers research llm-framework sdk">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>5 edições</p></div>
+  <article class="story-card" data-search="ollama 0.40.0 adota mlx padrão no apple silicon; copilot cli 1.0.92-4 melhora mcp e config ollama copilot-cli openai reddit marktechpost arxiv-csse tabnews github-trending local-ai copilot">
+  <time datetime="2026-10-05">05 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-05-ollama-0-40-0-adota-mlx-padrao-no-apple-silicon-copilot-cli-1-0-92-4-melhora-mcp">Ollama 0.40.0 adota MLX padrão no Apple Silicon; Copilot CLI 1.0.92-4 melhora MCP e config</a></h3>
+    <p>Ollama muda runtime padrão para MLX em Macs com Apple Silicon e expande suporte a Qwen 3.8. Copilot CLI ganha subcomandos de configuração e corrige travamento em conexões HTTP+SSE legadas.</p>
+    <p class="story-tags">ollama, copilot-cli, openai, reddit</p>
+  </div>
+</article>
+<article class="story-card" data-search="graphforge, lora e o peso dos tokens em ia hf-daily-papers litellm openai-agents-sdk github openai reddit papers research llm-framework sdk">
   <time datetime="2026-10-04">04 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-04-graphforge-lora-e-o-peso-dos-tokens-em-ia">GraphForge, LoRA e o Peso dos Tokens em IA</a></h3>
@@ -618,7 +626,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>13 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>12 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-19-claude-fable-5-e-a-revolucao-nos-limites-de-uso">Claude Fable 5 e a Revolução nos Limites de Uso</a></h3>
     <p>Anthropic altera os limites de uso de Claude Fable 5 e abala a indústria de IA.</p>
     <p class="story-tags">hacker-news, google-news, reddit, developer</p>
-  </div>
-</article>
-<article class="story-card" data-search="uptime 99.9% em inferência e adoção de ia: lições da together ai, openai e deepmind together openai google tabnews ai frontier togetherai googledeepmind br developer">
-  <time datetime="2026-07-17">17 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-17-uptime-99-9-em-inferencia-e-adocao-de-ia-licoes-da-together-ai-openai-e-deepmind">Uptime 99.9% em inferência e adoção de IA: lições da Together AI, OpenAI e DeepMind</a></h3>
-    <p>Analisamos requisitos de disponibilidade para serviços de inferência e mostramos como grandes players estão operacionalizando IA em escala, ao mesmo tempo em que abordam segurança e inclusão.</p>
-    <p class="story-tags">together, openai, google, tabnews</p>
   </div>
 </article>
 </section>
