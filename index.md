@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-05-ollama-0-40-0-adota-mlx-padrao-no-apple-silicon-copilot-cli-1-0-92-4-melhora-mcp">
-    <time class="edition-date" datetime="2026-10-05"><span class="edition-day">05</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-06-qwen-3-8-roda-por-padrao-em-mlx-no-apple-silicon">
+    <time class="edition-date" datetime="2026-10-06"><span class="edition-day">06</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>Ollama 0.40.0 adota MLX padrão no Apple Silicon; Copilot CLI 1.0.92-4 melhora MCP e config</h3>
-      <p>Ollama muda runtime padrão para MLX em Macs com Apple Silicon e expande suporte a Qwen 3.8. Copilot CLI ganha subcomandos de configuração e corrige travamento em conexões HTTP+SSE legadas.</p>
+      <h3>Qwen 3.8 roda por padrão em MLX no Apple Silicon</h3>
+      <p>O Rho desejado agora se dá em dispositivos Apple Silicon com MLX, simplificando a execução de modelos de maior escala. Junto com novidades em Claude Code, Copiloto e benchmarks de long‑conversation, o cenário se expande.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>5 edições</p></div>
-  <article class="story-card" data-search="ollama 0.40.0 adota mlx padrão no apple silicon; copilot cli 1.0.92-4 melhora mcp e config ollama copilot-cli openai reddit marktechpost arxiv-csse tabnews github-trending local-ai copilot">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>6 edições</p></div>
+  <article class="story-card" data-search="qwen 3.8 roda por padrão em mlx no apple silicon ollama hf-daily-papers github langgraph reddit local-ai papers research copilot changelog">
+  <time datetime="2026-10-06">06 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-06-qwen-3-8-roda-por-padrao-em-mlx-no-apple-silicon">Qwen 3.8 roda por padrão em MLX no Apple Silicon</a></h3>
+    <p>O Rho desejado agora se dá em dispositivos Apple Silicon com MLX, simplificando a execução de modelos de maior escala. Junto com novidades em Claude Code, Copiloto e benchmarks de long‑conversation, o cenário se expande.</p>
+    <p class="story-tags">ollama, hf-daily-papers, github, langgraph</p>
+  </div>
+</article>
+<article class="story-card" data-search="ollama 0.40.0 adota mlx padrão no apple silicon; copilot cli 1.0.92-4 melhora mcp e config ollama copilot-cli openai reddit marktechpost arxiv-csse tabnews github-trending local-ai copilot">
   <time datetime="2026-10-05">05 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-05-ollama-0-40-0-adota-mlx-padrao-no-apple-silicon-copilot-cli-1-0-92-4-melhora-mcp">Ollama 0.40.0 adota MLX padrão no Apple Silicon; Copilot CLI 1.0.92-4 melhora MCP e config</a></h3>
@@ -626,7 +634,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>12 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>11 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-21-anthropic-fable-5-e-open-source-mudancas-em-precos-e-integracao">Anthropic Fable 5 e Open Source: Mudanças em Preços e Integração</a></h3>
     <p>A Anthropic anunciou mudanças em preços para o Fable 5, enquanto a GitHub celebra o seu 100 milhão de dólares em contribuições para o Open Source.</p>
     <p class="story-tags">the, google-news, openai, together</p>
-  </div>
-</article>
-<article class="story-card" data-search="claude fable 5 e a revolução nos limites de uso hacker-news google-news reddit developer anthropic fable5 pricing vscode tools">
-  <time datetime="2026-07-19">19 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-19-claude-fable-5-e-a-revolucao-nos-limites-de-uso">Claude Fable 5 e a Revolução nos Limites de Uso</a></h3>
-    <p>Anthropic altera os limites de uso de Claude Fable 5 e abala a indústria de IA.</p>
-    <p class="story-tags">hacker-news, google-news, reddit, developer</p>
   </div>
 </article>
 </section>
