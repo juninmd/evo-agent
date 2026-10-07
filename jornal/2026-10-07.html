@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 07/10/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>110 itens · 48 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>07/10/2026</strong></span><span>Coleta das últimas 24 horas</span><span>8 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Lançamento do dia</p><h1><a href="https://openrouter.ai/anthropic/claude-haiku-5.5">Anthropic: Claude Haiku 5.5</a></h1><p class="dek">1000000 tokens de contexto. Claude Haiku 5.5 is Anthropic&#39;s small, fast model for high-volume, cost-sensitive work such as summarization, subagents, and browser use. It succeeds Claude Haiku 4.5 with stronger coding,…</p>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li><strong>Anthropic: Claude Haiku 5.5</strong> – modelo pequeno com 1 000 000 tokens de contexto, agora padrão na Anthropic API.</li><li><strong>GitHub Copilot CLI 1.0.94‑0</strong> – suporte para descobrir modelos locais via <code>/model</code>.</li><li><strong>VS Code 1.142 (Insiders)</strong> – nova série de melhorias na interface e extensões (inclui suporte simplificado a depuração de LLMs).</li><li><strong>Codex CLI 0.161.0</strong> – atualização focada em estabilidade do comando <code>codex run</code>.</li><li><strong>LiteLLM v1.104.1</strong> – assinatura Docker da imagem confirmada por cosign; compatível com todas as versões.</li><li><strong>LangGraph CLI 0.4.33</strong> – opção <code>--image-uri</code> para deploy de imagens já pushes e lista de listeners via <code>langgraph deploy listeners list</code>.</li><li><strong>Cline CLI v4.1.23</strong> – nova LLM recomendada: <strong>GPT‑6.1 Sol</strong> e tolerância aprimorada para respostas sem finish reason.</li><li><strong>Cursor Remote Control</strong> – controle e resposta a agentes locais de forma remota via app iOS.</li><li><strong>OpenAI Blog</strong> – lançamento global de <strong>GPT‑6</strong> com UI inteligente; interações visuais e interativas agora em ChatGPT.</li><li><strong>Google AI Blog</strong> – introdução do <strong>Playground</strong>, plataforma experimental para criação e compartilhamento de jogos customizados.</li><li><strong>HF Trending Models – Cloudflare/clef (sinal 1536)</strong> – modelo multimodal image‑text‑to‑text, 1672 likes e 7255 downloads.</li><li><strong>HF Trending Models – autotrust/JEV‑27B‑VL (sinal 788)</strong> – modelo multimodal 974 likes e 1 525 286 downloads.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Impacto da adoção do Claude Haiku 5.5 em fluxos de trabalho de baixo custo versus modelos maiores.</p><p>Depuração e integração de agentes via JS/TS em frameworks como <strong>GitHub Copilot CLI</strong> e <strong>LangGraph</strong>.</p><p>Tendências de modelos multimodais trending no Hugging Face (clef, JEV‑27B‑VL) e suas aplicações emergentes.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-github">
+<h2 id="desk-github">GitHub Trending <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/mattpocock/skills" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/mattpocock/skills" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>GitHub Trending (daily)</figcaption></figure><h3><a href="https://github.com/mattpocock/skills">mattpocock / skills</a></h3>
+<p>Skills for Real Engineers. Straight from my .agents directory. | ⭐ 278,104 | Lang: Shell <span class="meta">GitHub Trending (daily) · <b>278104</b></span></p></article>
+<ul class="brief"><li><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a> <span class="meta">GitHub Trending (daily-javascript) · <b>274288</b></span></li><li><a href="https://github.com/ollama/ollama">ollama / ollama</a> <span class="meta">GitHub Trending (daily-go) · <b>182396</b></span></li><li><a href="https://github.com/msitarzewski/agency-agents">msitarzewski / agency-agents</a> <span class="meta">GitHub Trending (daily) · <b>157813</b></span></li><li><a href="https://github.com/DietrichGebert/ponytail">DietrichGebert / ponytail</a> <span class="meta">GitHub Trending (daily-javascript) · <b>156826</b></span></li><li><a href="https://github.com/anthropics/claude-code">anthropics / claude-code</a> <span class="meta">GitHub Trending (daily-typescript) · <b>149696</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/Cloudflare/clef" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/Cloudflare/clef.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/Cloudflare/clef">Cloudflare/clef</a></h3>
+<p>image-text-to-text · 1672 likes · 7255 downloads · trending 1536 <span class="meta">HF Trending Models · <b>1536</b></span></p></article>
+<ul class="brief"><li><a href="https://openrouter.ai/anthropic/claude-haiku-5.5">Anthropic: Claude Haiku 5.5</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/autotrust/JEV-27B-VL">autotrust/JEV-27B-VL</a> <span class="meta">HF Trending Models · <b>788</b></span></li><li><a href="https://huggingface.co/Aleph-Alpha/Kolibri-1">Aleph-Alpha/Kolibri-1</a> <span class="meta">HF Trending Models · <b>680</b></span></li><li><a href="https://huggingface.co/abenzerps/Qwen-Image-2.1-Uncensored-GGUF">abenzerps/Qwen-Image-2.1-Uncensored-GGUF</a> <span class="meta">HF Trending Models · <b>680</b></span></li><li><a href="https://huggingface.co/Cloudflare/clef-flash">Cloudflare/clef-flash</a> <span class="meta">HF Trending Models · <b>564</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/ClaudeAI/comments/1x07kvt/gpt_luna_6_and_claude_haiku_55_same_prompt/">GPT Luna 6 and Claude Haiku 5.5. Same prompt.</a></h3>
+<p>Which zombie burner would you actually play? Play both:https://bench.bdx.market/play/emberfall vs https://bench.bdx.market/play/claude-haiku-5-5 submitted by /u/Mousse_External [link] [comments] <span class="meta">Reddit: ClaudeAI</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x0829f/haiku_55_token_usage/">Haiku 5.5 token usage</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x08rwi/this_is_incredible_value_for_max_plans/">This is incredible value for Max plans</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x09pjt/show_us_what_youve_created_with_claude/">Show us what you&#39;ve created with Claude!</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x06hmp/claude_fixed_a_bug_in_a_dos_game_from_1991_and/">Claude fixed a bug in a DOS game from 1991 and now my kid can relive the magic</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x07354/haiku_55_pelican_benchmark_is_in/">Haiku 5.5 Pelican Benchmark is in!</a> <span class="meta">Reddit: ClaudeAI</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/Queuingtheorydotcom/11SquaresFormalized" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/Queuingtheorydotcom/11SquaresFormalized" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/Queuingtheorydotcom/11SquaresFormalized">AI-assisted proof of optimal packing for 11 squares</a></h3>
+<p>AI-assisted proof of optimal packing for 11 squares | ⬆ 26 points | 💬 19 comments | by bluepeter <span class="meta">Hacker News · <b>64</b></span></p></article>
+<ul class="brief"><li><a href="https://www.anthropic.com/claude-haiku-5-5">Claude Haiku 5.5</a> <span class="meta">Hacker News · <b>442</b></span></li><li><a href="https://openai.com/index/gpt-6-for-everyone/">GPT‑6 and Intelligent UI for everyone</a> <span class="meta">Hacker News · <b>242</b></span></li><li><a href="https://www.techspot.com/news/114111-utah-become-first-state-ai-examine-patients-prescribe.html">Utah to let AI examine patients and prescribe medication without human oversight</a> <span class="meta">Hacker News · <b>234</b></span></li><li><a href="https://openai.com/index/sharing-ai-progress-in-mathematics/">Sharing AI Progress in Mathematics</a> <span class="meta">Hacker News · <b>234</b></span></li><li><a href="https://blog.google/innovation-and-ai/technology/developers-tools/embeddinggemma-2/">EmbeddingGemma 2: An open, lightweight multimodal embedding model</a> <span class="meta">Hacker News · <b>219</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.293" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.293">v2.1.293</a></h3>
+<p>What&#39;s changed Added Claude Haiku 5.5 (claude-haiku-5-5), now the default Haiku model on the Anthropic API — 1M context, $0.10/$0.50 per Mtok ($0.50/$2.50 for prompts over 100K) Added agentType to the subagentStatusLine… <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://code.visualstudio.com/updates/v1_142">Visual Studio Code 1.142 (Insiders)</a> <span class="meta">VSCode Updates</span></li><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.161.0">rust-v0.161.0</a> <span class="meta">Codex CLI Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.94-1">1.0.94-1</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://cursor.com/changelog/remote-control-local-agents">Remote control for local agents</a> <span class="meta">Cursor Changelog</span></li><li><a href="https://github.blog/changelog/2026-10-07-claude-haiku-5-5-in-github-copilot">Claude Haiku 5.5 in GitHub Copilot</a> <span class="meta">GitHub Changelog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://research.google/blog/does-better-work-always-mean-better-workers/">Does better work always mean better workers?</a></h3>
+<p> <span class="meta">Google Research</span></p></article>
+<ul class="brief"><li><a href="https://devblogs.microsoft.com/foundry/choosing-azure-document-intelligence-and-content-understanding/">Azure Document Intelligence and Azure Content Understanding: a practical guide</a> <span class="meta">Microsoft Foundry Blog</span></li><li><a href="https://openai.com/index/gpt-6-for-everyone">GPT-6 and Intelligent UI for everyone</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/">Secret protection must scale with software</a> <span class="meta">GitHub Blog</span></li><li><a href="https://huggingface.co/blog/LiquidAI/open-d1">Multimodal open d1 decision models for the edge</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://blog.google/innovation-and-ai/technology/ai/playground-experimental-gaming-platform/">Introducing Playground: Create and play custom games</a> <span class="meta">Google AI Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2610.05608" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2610.05608.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2610.05608">Kandinsky 6.0 Video: Foundation Models for Synchronized Video and Audio Generation</a></h3>
+<p>We present Kandinsky 6.0 Video, a family of foundation diffusion models for synchronized text-to-audio-video generation, comprising Kandinsky 6.0 Video Lite (3B parameters) and Kandinsky 6.0 Video Pro (29B parameters).… <span class="meta">HF Daily Papers · <b>117</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2610.04198">ALoDLM: Adaptively Looped Diffusion Language Models</a> <span class="meta">HF Daily Papers · <b>57</b></span></li><li><a href="https://huggingface.co/papers/2610.03120">In-Distribution Forcing for Long Video Generation at Test Time</a> <span class="meta">HF Daily Papers · <b>30</b></span></li><li><a href="https://huggingface.co/papers/2610.05162">Memadapter: Counterfactual Adaptation Against Memory-induced Sycophancy</a> <span class="meta">HF Daily Papers · <b>29</b></span></li><li><a href="https://huggingface.co/papers/2609.24890">OSWorld-Pro: Process-based Evaluation for Computer Use Agents</a> <span class="meta">HF Daily Papers · <b>26</b></span></li><li><a href="https://huggingface.co/papers/2610.04292">LMBuild: Evaluating LLM Agents for Generating Buildable and Functional Structures</a> <span class="meta">HF Daily Papers · <b>26</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/langchain-ai/langchain/releases/tag/langchain-huggingface%3D%3D1.2.3" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/langchain-ai/langchain" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>LangChain Docs &amp; Updates</figcaption></figure><h3><a href="https://github.com/langchain-ai/langchain/releases/tag/langchain-huggingface%3D%3D1.2.3">langchain-huggingface==1.2.3</a></h3>
+<p>Changes since langchain-huggingface==1.2.2 fix(huggingface): use a supported Scaleway model in streaming test ( 41095) 41098) 41076) 41092) 41077) 41088) 41058) huggingfacehub_api_token from repr ( 41047) 40959) 40957)… <span class="meta">LangChain Docs &amp; Updates</span></p></article>
+<ul class="brief"><li><a href="https://dev.to/james_anderson_h/i-think-were-forgetting-how-to-be-bored-3pe5">I Think We&#39;re Forgetting How to Be Bored</a> <span class="meta">Dev.to (ai) · <b>45</b></span></li><li><a href="https://dev.to/aws/how-to-use-the-openai-decisions-api-with-strands-agents-4eok">How to use the OpenAI Decisions API with Strands Agents</a> <span class="meta">Dev.to (agents) · <b>15</b></span></li><li><a href="https://dev.to/devstackcommunity/top-7-enterprise-ai-gateways-i-wish-i-knew-before-i-deployed-one-1oki">Top 7 Enterprise AI Gateways I Wish I Knew Before I Deployed One</a> <span class="meta">Dev.to (llm) · <b>15</b></span></li><li><a href="https://www.tabnews.com.br/arpavan/pitch-criei-a-aal-agent-architecture-language-uma-especificacao-em-yaml-para-desenhar-sistemas-de-ia">[Pitch] Criei a AAL (Agent Architecture Language): uma especificação em YAML para desenhar sistemas de IA</a> <span class="meta">TabNews · <b>6</b></span></li><li><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxOQ01fOXgtYmJ4NTVFOVY4dEVuYVc1c05nam1PcnNTNnpjNEgtVHBnV0lNRHJFV2VZNlRJNWkwQmhxZnlFRUs1T1cyZU4zR1JjTmhqSGZGS3pUOE5KamxLWFMyX29yWFJ6cXY5MXdTMTgtclh0bGJvZUl0TWVPc3BGUzhidVVQaE9EeHNmdjZ6eVhnZzRRbVdDdkR4SGVBNEozMC1Dbg?oc=5">Microsoft (MSFT) Launches AI Computer Equipped with Desktop Coding Agent - TipRanks</a> <span class="meta">Google News (AI coding agent)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-10-07</span></footer>
+</div></body></html>
