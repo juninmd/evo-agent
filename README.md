@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-06-qwen-3-8-roda-por-padrao-em-mlx-no-apple-silicon">
-    <time class="edition-date" datetime="2026-10-06"><span class="edition-day">06</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-07-mistral-large-4-e-a-convergencia-de-fluxos-no-ecossistema-openai">
+    <time class="edition-date" datetime="2026-10-07"><span class="edition-day">07</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>Qwen 3.8 roda por padrão em MLX no Apple Silicon</h3>
-      <p>O Rho desejado agora se dá em dispositivos Apple Silicon com MLX, simplificando a execução de modelos de maior escala. Junto com novidades em Claude Code, Copiloto e benchmarks de long‑conversation, o cenário se expande.</p>
+      <h3>Mistral Large 4 e a convergência de fluxos no ecossistema OpenAI</h3>
+      <p>Lançamentos de modelos multimodais de alta janela de contexto contrastam com relatos de instabilidade e mudanças de interface em ferramentas de codificação. A infraestrutura de agentes avança com a introdução de MLX no Ollama e sandboxing no Copilot CLI.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>6 edições</p></div>
-  <article class="story-card" data-search="qwen 3.8 roda por padrão em mlx no apple silicon ollama hf-daily-papers github langgraph reddit local-ai papers research copilot changelog">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>7 edições</p></div>
+  <article class="story-card" data-search="mistral large 4 e a convergência de fluxos no ecossistema openai openrouter ollama copilot-cli claude-code reddit launched-1791294122 local-ai copilot coding-agent anthropic">
+  <time datetime="2026-10-07">07 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-07-mistral-large-4-e-a-convergencia-de-fluxos-no-ecossistema-openai">Mistral Large 4 e a convergência de fluxos no ecossistema OpenAI</a></h3>
+    <p>Lançamentos de modelos multimodais de alta janela de contexto contrastam com relatos de instabilidade e mudanças de interface em ferramentas de codificação. A infraestrutura de agentes avança com a introdução de MLX no Ollama e sandboxing no Copilot CLI.</p>
+    <p class="story-tags">openrouter, ollama, copilot-cli, claude-code</p>
+  </div>
+</article>
+<article class="story-card" data-search="qwen 3.8 roda por padrão em mlx no apple silicon ollama hf-daily-papers github langgraph reddit local-ai papers research copilot changelog">
   <time datetime="2026-10-06">06 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-06-qwen-3-8-roda-por-padrao-em-mlx-no-apple-silicon">Qwen 3.8 roda por padrão em MLX no Apple Silicon</a></h3>
@@ -634,7 +642,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>11 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>10 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-23-openai-rapid-mlx-e-skypilot-6-tendencias-de-ia-de-front-end-em-23-07">OpenAI, Rapid‑MLX e SkyPilot: 6 Tendências de IA de Front‑End em 23/07</a></h3>
     <p>Do uso de LLMs na redação jornalística ao código gerado em tempo real em dispositivos móveis, passando por compressão de modelos, até plataformas que transformam fragmentos de computação em supercomputadores.</p>
     <p class="story-tags">openai, reddit, github-trending, blog</p>
-  </div>
-</article>
-<article class="story-card" data-search="anthropic fable 5 e open source: mudanças em preços e integração the google-news openai together tabnews reddit developer anthropic fable5 pricing ai frontier togetherai">
-  <time datetime="2026-07-21">21 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-21-anthropic-fable-5-e-open-source-mudancas-em-precos-e-integracao">Anthropic Fable 5 e Open Source: Mudanças em Preços e Integração</a></h3>
-    <p>A Anthropic anunciou mudanças em preços para o Fable 5, enquanto a GitHub celebra o seu 100 milhão de dólares em contribuições para o Open Source.</p>
-    <p class="story-tags">the, google-news, openai, together</p>
   </div>
 </article>
 </section>
