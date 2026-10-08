@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 08/10/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>108 itens · 41 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>08/10/2026</strong></span><span>Coleta das últimas 24 horas</span><span>8 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.295">Claude Code v2.1.295</a></h1><p class="dek">adiciona onFailure:&quot;block&quot; em hooks de comando e HTTP, e suporte ao Program Status Protocol (OSC 7501).</p>
+<figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.295" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure></div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li><strong>Claude Code v2.1.295</strong> – adiciona <code>onFailure:&quot;block&quot;</code> em hooks de comando e HTTP, e suporte ao Program Status Protocol (OSC 7501).</li><li><strong>Copilot CLI 1.0.94</strong> – nova seleção de modelos inclui Claude Haiku 5.5; recuperação limpa após aborto de <code>mcp add</code>.</li><li><strong>Ollama v0.40.2</strong> – suporte ao contexto máximo de Claude Max e integração da comunidade Oxi.</li><li><strong>Vercel AI SDK @ai-sdk/workflow 2.0.66</strong> – patch de suporte ao Workflow SDK 5.1.0 e atualização de dependências.</li><li><strong>Microsoft Agent Framework python‑1.21.0</strong> – adiciona <code>tool‑result standing guidance</code> e <code>full‑buffer Purview policy evaluation</code>.</li><li><strong>LiteLLM v1.104.2</strong> – todas as imagens Docker assinadas com cosign; uso de hash fixo.</li><li><strong>LangChain‑core 1.6.9</strong> – correções de API e melhorias de compatibilidade.</li><li><strong>HF Trending</strong> – Cloudflare/clef (classificação imagem‑texto‑texto) recebe 1813 likes e 9513 downloads, trending 1624.</li><li><strong>HF Trending</strong> – autotrust/JEV‑27B‑VL (imagem‑texto‑texto) alcança 1916 likes, 1 529 210 downloads, trending 1600.</li><li><strong>HF Trending</strong> – abenzerps/Qwen‑Image‑2.1‑Uncensored‑GGUF (texto‑para‑imagem) coleta 3558 likes e 1 820 627 downloads, trending 676.</li><li><strong>HF Trending</strong> – Lightricks/LTX‑2.5 (imagem‑para‑vídeo) possui 6793 likes e 1 674 291 downloads, trending 478.</li><li><strong>HF Trending</strong> – Aleph‑Alpha/Kolibri‑1 (text‑generation) recebe 774 likes e 5775 downloads, trending 739.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>A rápida adoção de agentes de código que suportam bloqueio em caso de falha e protocolos de status (Claude Code, Copilot).</p><p>A área de inference edge: LiteLLM, Vercel, e Microsoft Agent Framework lançam melhorias de segurança e controle de custo.</p><p>A ascensão de modelos multimodais e de grande porte (Qwen‑Image‑2.1‑Uncensored‑GGUF, Lightricks/LTX‑2.5) que indicam crescimento em geração de vídeo e imagem.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-github">
+<h2 id="desk-github">GitHub Trending <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/mattpocock/skills" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/mattpocock/skills" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>GitHub Trending (weekly)</figcaption></figure><h3><a href="https://github.com/mattpocock/skills">mattpocock / skills</a></h3>
+<p>Skills for Real Engineers. Straight from my .agents directory. | ⭐ 280,461 | Lang: Shell <span class="meta">GitHub Trending (weekly) · <b>280461</b></span></p></article>
+<ul class="brief"><li><a href="https://github.com/ollama/ollama">ollama / ollama</a> <span class="meta">GitHub Trending (daily-go) · <b>182499</b></span></li><li><a href="https://github.com/anthropics/claude-code">anthropics / claude-code</a> <span class="meta">GitHub Trending (daily-typescript) · <b>149776</b></span></li><li><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a> <span class="meta">GitHub Trending (daily-javascript) · <b>102794</b></span></li><li><a href="https://github.com/thedotmack/claude-mem">thedotmack / claude-mem</a> <span class="meta">GitHub Trending (daily-typescript) · <b>97700</b></span></li><li><a href="https://github.com/Leonxlnx/taste-skill">Leonxlnx / taste-skill</a> <span class="meta">GitHub Trending (daily-javascript) · <b>93663</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/Cloudflare/clef" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/Cloudflare/clef.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/Cloudflare/clef">Cloudflare/clef</a></h3>
+<p>image-text-to-text · 1813 likes · 9513 downloads · trending 1624 <span class="meta">HF Trending Models · <b>1624</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/autotrust/JEV-27B-VL">autotrust/JEV-27B-VL</a> <span class="meta">HF Trending Models · <b>1600</b></span></li><li><a href="https://huggingface.co/autotrust/GEV-26B-Decide">autotrust/GEV-26B-Decide</a> <span class="meta">HF Trending Models · <b>1085</b></span></li><li><a href="https://huggingface.co/google/embeddinggemma-2">google/embeddinggemma-2</a> <span class="meta">HF Trending Models · <b>917</b></span></li><li><a href="https://huggingface.co/Aleph-Alpha/Kolibri-1">Aleph-Alpha/Kolibri-1</a> <span class="meta">HF Trending Models · <b>739</b></span></li><li><a href="https://huggingface.co/abenzerps/Qwen-Image-2.1-Uncensored-GGUF">abenzerps/Qwen-Image-2.1-Uncensored-GGUF</a> <span class="meta">HF Trending Models · <b>676</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/ClaudeAI/comments/1x11k9j/abuse_claude_get_banned_coming_november_12th_2026/">Abuse Claude, get banned coming November 12th, 2026</a></h3>
+<p>Anthropic knows what&#39;s going on. Serious enough that it is creating an official policy on how you talk to its AI. What do they know which we don&#39;t? submitted by /u/Responsible-Jump-322 [link] [comments] <span class="meta">Reddit: ClaudeAI</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x11ltq/does_claude_think_in_a_different_language_or_is/">Does Claude &quot;think&quot; in a different language or is this a bug/glitch?</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x120gj/opus_55_can_make_games_for_2_decade_old_phones/">Opus 5.5 can make games for 2 decade old phones</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x10tx3/opus_55_is_so_good/">Opus 5.5 is so good</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x0vzax/i_love_to_watch_claude_do_its_thing/">I love to watch Claude do its thing</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1x0wled/artifacts_have_turned_10minute_tasks_into_3hour/">Artifacts have turned 10-minute tasks into 3-hour side quests</a> <span class="meta">Reddit: ClaudeAI</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/pingdotgg/ts-rust" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/pingdotgg/ts-rust" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/pingdotgg/ts-rust">Port of the TypeScript compiler, checker and lsp to Rust, by LLM</a></h3>
+<p>Port of the TypeScript compiler, checker and lsp to Rust, by LLM | ⬆ 48 points | 💬 77 comments | by jcbhmr <span class="meta">Hacker News · <b>202</b></span></p></article>
+<ul class="brief"><li><a href="https://www.cnbc.com/2026/10/08/open-ai-revenue-nvidia-oracle-coreweave.html">OpenAI annualised revenues $20B less than previously signalled</a> <span class="meta">Hacker News · <b>489</b></span></li><li><a href="https://mathstodon.xyz/@tao/117395269325940185">Terence Tao Responds to the OpenAI Math Drop</a> <span class="meta">Hacker News · <b>132</b></span></li><li><a href="https://www.ft.com/content/b66a9858-f8fb-46cb-b506-44bfe26fca2a">OpenAI annualised revenues $20B less than previously signalled</a> <span class="meta">Hacker News · <b>89</b></span></li><li><a href="https://twitter.com/danintheory/status/2108065033070789090">OpenAI withdraws three mathematical results</a> <span class="meta">Hacker News · <b>70</b></span></li><li><a href="https://www.dgt.is/blog/2026-10-07-deepseek-freek-out/">Why isn&#39;t the industry freaking out about DeepSeek 4.1 Flash?</a> <span class="meta">Hacker News · <b>69</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.295" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.295">v2.1.295</a></h3>
+<p>What&#39;s changed Added onFailure: &quot;block&quot; for command and HTTP hooks: a hook that can&#39;t start, times out, or exits with an unexpected code blocks the action instead of letting it through Added Program Status Protocol (OSC… <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.162.0">rust-v0.162.0</a> <span class="meta">Codex CLI Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.94">1.0.94</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-10-08-triage-role-users-or-higher-can-now-archive-pull-requests">Triage role users or higher can now archive pull requests</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/ollama/ollama/releases/tag/v0.40.2">v0.40.2</a> <span class="meta">Ollama Releases</span></li><li><a href="https://github.com/vercel/ai/releases/tag/%40ai-sdk%2Fworkflow%402.0.66">@ai-sdk/workflow@2.0.66</a> <span class="meta">Vercel AI SDK Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://www.anthropic.com/research/the-missing-map-of-the-sky">The missing map of the sky</a></h3>
+<p> <span class="meta">Anthropic Research</span></p></article>
+<ul class="brief"><li><a href="https://www.anthropic.com/news/anthropic-cyber-mission">Introducing the Anthropic Cyber Mission</a> <span class="meta">Anthropic News</span></li><li><a href="https://github.blog/security/how-one-bug-bounty-researcher-chooses-the-features-they-investigate/">How one bug bounty researcher chooses the features they investigate</a> <span class="meta">GitHub Blog</span></li><li><a href="https://openai.com/index/oracle">How Oracle turns days of work into minutes with ChatGPT and Codex</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/tiiuae/falcon-asr">Introducing Falcon ASR</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://www.anthropic.com/research/launching-opt-in-vuln-finding-service-for-open-source">Launching an opt-in vulnerability-finding service for open-source software</a> <span class="meta">Anthropic Research</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2610.08448" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2610.08448.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2610.08448">Rethinking Cross-Tokenizer On-Policy Distillation: From Alignment Coverage to Supervision Reliability</a></h3>
+<p>On-Policy Distillation (OPD) trains a student on its own generations using teacher feedback. With different tokenizers, comparing teacher and student predictions requires alignment at both sequence and vocabulary… <span class="meta">HF Daily Papers · <b>155</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2610.07767">TRACE: Rollout-Guided Quantization-Aware Training for FP4 Reinforcement Learning of MoE Language Models</a> <span class="meta">HF Daily Papers · <b>76</b></span></li><li><a href="https://huggingface.co/papers/2610.03543">DuoMatching: Joint-Marginal Distribution Matching for Few-Step Video Generation</a> <span class="meta">HF Daily Papers · <b>70</b></span></li><li><a href="https://huggingface.co/papers/2610.07753">From Evidence to Action: How Tool-Using Agents Fail</a> <span class="meta">HF Daily Papers · <b>38</b></span></li><li><a href="https://huggingface.co/papers/2610.05030">EVISKILL: Grounding Skill Evolution in Replayable Evidence</a> <span class="meta">HF Daily Papers · <b>38</b></span></li><li><a href="https://huggingface.co/papers/2610.00864">Kinematic MeanFlow: One-Step Action Generation Policy for Robotic Foundation Models</a> <span class="meta">HF Daily Papers · <b>29</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/crewAIInc/crewAI/releases/tag/1.15.26" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/crewAIInc/crewAI" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>CrewAI Framework</figcaption></figure><h3><a href="https://github.com/crewAIInc/crewAI/releases/tag/1.15.26">1.15.26</a></h3>
+<p>What&#39;s Changed Bug Fixes Fix ownership retention of rwlock when acquisition is interrupted. Resolve issue with documentation site source URLs not being preserved. Fix task output display in log-tasks-outputs to show… <span class="meta">CrewAI Framework</span></p></article>
+<ul class="brief"><li><a href="https://dev.to/robertadam987_/the-more-context-you-give-your-ai-coding-agent-the-worse-it-can-get-4d40">The More Context You Give Your AI Coding Agent, the Worse It Can Get</a> <span class="meta">Dev.to (ai) · <b>105</b></span></li><li><a href="https://dev.to/pierrelaurentmedori/the-model-swap-was-the-trigger-the-bug-was-ours-ngf">The model swap was the trigger. The bug was ours.</a> <span class="meta">Dev.to (llm) · <b>27</b></span></li><li><a href="https://dev.to/reidmarlow/agents-score-97-on-static-tool-judgments-and-still-break-interactive-workflows-538g">Agents Score 97% on Static Tool Judgments and Still Break Interactive Workflows</a> <span class="meta">Dev.to (agents) · <b>23</b></span></li><li><a href="https://www.tabnews.com.br/EvandroCarvalho/como-uma-simples-pagina-web-ou-pdf-lido-por-um-agente-de-ia-pode-sequestrar-todo-o-seu-sistema-ai-hijacking-na-pratica">Como uma simples página web ou PDF lido por um agente de IA pode sequestrar todo o seu sistema (AI Hijacking na prática)</a> <span class="meta">TabNews · <b>6</b></span></li><li><a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE5FTGlxcC1Da3VvNUpoYnRxVlZBYmxCd0hIUjBONnVrVG1ZNlU0aVM5eU5seUNFa0Q0WDBCNEt2YTRZT09DYjVHTS1rTkJqS1pyRUZnYkFmRVFKZDg0aEtGbmFFVGdyNWdmeWc?oc=5">Unified Radix Cache: One Tree for Hybrid Model Prefix Caching - LMSYS Org</a> <span class="meta">Google News (session-aware inference)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-10-08</span></footer>
+</div></body></html>
