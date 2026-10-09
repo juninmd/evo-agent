@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-07-mistral-large-4-e-a-convergencia-de-fluxos-no-ecossistema-openai">
-    <time class="edition-date" datetime="2026-10-07"><span class="edition-day">07</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-09-stepquant-revela-gargalos-de-quantizacao-long-wam-amplia-contexto-em-tempo-real-">
+    <time class="edition-date" datetime="2026-10-09"><span class="edition-day">09</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>Mistral Large 4 e a convergência de fluxos no ecossistema OpenAI</h3>
-      <p>Lançamentos de modelos multimodais de alta janela de contexto contrastam com relatos de instabilidade e mudanças de interface em ferramentas de codificação. A infraestrutura de agentes avança com a introdução de MLX no Ollama e sandboxing no Copilot CLI.</p>
+      <h3>STEPQuant revela gargalos de quantização, Long-WAM amplia contexto em tempo real, e comunidade</h3>
+      <p>Quantização de estados recorrentes causa perda de acurácia, novos modelos exigem contexto pré‑treinado autogerativo e usuários enfrentam bugs em copilots e agentes.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>7 edições</p></div>
-  <article class="story-card" data-search="mistral large 4 e a convergência de fluxos no ecossistema openai openrouter ollama copilot-cli claude-code reddit launched-1791294122 local-ai copilot coding-agent anthropic">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>8 edições</p></div>
+  <article class="story-card" data-search="stepquant revela gargalos de quantização, long-wam amplia contexto em tempo real, e comunidade hf-daily-papers hacker-news copilot-cli reddit papers research front-page copilot coding-agent post-signals">
+  <time datetime="2026-10-09">09 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-09-stepquant-revela-gargalos-de-quantizacao-long-wam-amplia-contexto-em-tempo-real-">STEPQuant revela gargalos de quantização, Long-WAM amplia contexto em tempo real, e comunidade</a></h3>
+    <p>Quantização de estados recorrentes causa perda de acurácia, novos modelos exigem contexto pré‑treinado autogerativo e usuários enfrentam bugs em copilots e agentes.</p>
+    <p class="story-tags">hf-daily-papers, hacker-news, copilot-cli, reddit</p>
+  </div>
+</article>
+<article class="story-card" data-search="mistral large 4 e a convergência de fluxos no ecossistema openai openrouter ollama copilot-cli claude-code reddit launched-1791294122 local-ai copilot coding-agent anthropic">
   <time datetime="2026-10-07">07 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-07-mistral-large-4-e-a-convergencia-de-fluxos-no-ecossistema-openai">Mistral Large 4 e a convergência de fluxos no ecossistema OpenAI</a></h3>
@@ -642,7 +650,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>10 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>9 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-24-btl-3-splitbr-e-crawlee-tres-inovacoes-que-remodelam-codificacao-pagamento-e-col">BTL‑3, Splitbr e Crawlee: Três Inovações que Remodelam Codificação, Pagamento e Coleta de Dados</a></h3>
     <p>O modelo BTL‑3 traz 27B pesos livres para codificação autônoma, enquanto o Splitbr alivia a perda de acesso a split payment. Crawlee reforça pipelines RAG e dados multimodais com FLUX 3.</p>
     <p class="story-tags">hacker-news, tabnews, github-trending, reddit</p>
-  </div>
-</article>
-<article class="story-card" data-search="openai, rapid‑mlx e skypilot: 6 tendências de ia de front‑end em 23/07 openai reddit github-trending blog post-signals fallback daily-python python">
-  <time datetime="2026-07-23">23 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-23-openai-rapid-mlx-e-skypilot-6-tendencias-de-ia-de-front-end-em-23-07">OpenAI, Rapid‑MLX e SkyPilot: 6 Tendências de IA de Front‑End em 23/07</a></h3>
-    <p>Do uso de LLMs na redação jornalística ao código gerado em tempo real em dispositivos móveis, passando por compressão de modelos, até plataformas que transformam fragmentos de computação em supercomputadores.</p>
-    <p class="story-tags">openai, reddit, github-trending, blog</p>
   </div>
 </article>
 </section>
