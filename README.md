@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-10-agentgarten-cria-mundos-virtuais-para-agentes-e-tokenrouter-resolve-gargalo-de-c">
-    <time class="edition-date" datetime="2026-10-10"><span class="edition-day">10</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-11-gpt-6-1-sol-reduz-custos-da-asana-e-litellm-implementa-assinaturas-cosign">
+    <time class="edition-date" datetime="2026-10-11"><span class="edition-day">11</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>AgentGarten cria mundos virtuais para agentes e TokenRouter resolve gargalo de cache em roteamento</h3>
-      <p>Novos frameworks atacam limitações fundamentais de ambientes de treino e inferência roteada. Relatos de usuários expõem custos ocultos, instabilidade de CLI e exaustão de disco em workflows autônomos.</p>
+      <h3>GPT-6.1 Sol reduz custos da Asana e LiteLLM implementa assinaturas Cosign</h3>
+      <p>A Asana otimizou custos de agentes de navegador em 76 vezes utilizando o modelo Sol. Novas atualizações de segurança em Docker e extensões de monitoramento de créditos para Copilot alteram a operação de IDEs.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>9 edições</p></div>
-  <article class="story-card" data-search="agentgarten cria mundos virtuais para agentes e tokenrouter resolve gargalo de cache em roteamento hf-daily-papers github copilot-cli claude-code reddit tabnews openai github-trending hacker-news devto-ai">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>10 edições</p></div>
+  <article class="story-card" data-search="gpt-6.1 sol reduz custos da asana e litellm implementa assinaturas cosign openai litellm github opencode copilot-cli reddit llm-framework copilot changelog coding-agent">
+  <time datetime="2026-10-11">11 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-11-gpt-6-1-sol-reduz-custos-da-asana-e-litellm-implementa-assinaturas-cosign">GPT-6.1 Sol reduz custos da Asana e LiteLLM implementa assinaturas Cosign</a></h3>
+    <p>A Asana otimizou custos de agentes de navegador em 76 vezes utilizando o modelo Sol. Novas atualizações de segurança em Docker e extensões de monitoramento de créditos para Copilot alteram a operação de IDEs.</p>
+    <p class="story-tags">openai, litellm, github, opencode</p>
+  </div>
+</article>
+<article class="story-card" data-search="agentgarten cria mundos virtuais para agentes e tokenrouter resolve gargalo de cache em roteamento hf-daily-papers github copilot-cli claude-code reddit tabnews openai github-trending hacker-news devto-ai">
   <time datetime="2026-10-10">10 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-10-agentgarten-cria-mundos-virtuais-para-agentes-e-tokenrouter-resolve-gargalo-de-c">AgentGarten cria mundos virtuais para agentes e TokenRouter resolve gargalo de cache em roteamento</a></h3>
@@ -658,7 +666,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>8 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>7 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-26-deepseek-r1-em-2026-claude-opus-5-e-benchmarks-relevantes-na-semana">DeepSeek R1 em 2026, Claude Opus 5 e Benchmarks Relevantes na Semana</a></h3>
     <p>Modelos de IA de baixo custo demonstram viabilidade prática, enquanto benchmarks em GPUs acessíveis consolidam métricas de desempenho local.</p>
     <p class="story-tags">google-news, tabnews, reddit, hacker-news</p>
-  </div>
-</article>
-<article class="story-card" data-search="claude opus 5, kimi k3, vosk e brasil‑torrent: avaliação de custo, desempenho e aplicações locais together google-news tabnews reddit ai frontier togetherai anthropic fable5 pricing br developer post-signals">
-  <time datetime="2026-07-25">25 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-25-claude-opus-5-kimi-k3-vosk-e-brasil-torrent-avaliacao-de-custo-desempenho-e-apli">Claude Opus 5, Kimi K3, Vosk e Brasil‑Torrent: Avaliação de Custo, Desempenho e Aplicações Locais</a></h3>
-    <p>A retrospectiva traz dados críticos sobre eficiência de LLMs, o novo preço do Claude Opus 5 e insights práticos de projetos locais, como o Brasil‑torrent e reconhecimento offline de wake‑word.</p>
-    <p class="story-tags">together, google-news, tabnews, reddit</p>
   </div>
 </article>
 </section>
