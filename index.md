@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-12-litellm-faz-nova-assinatura-claude-code-amplia-visualizacao-copilot-controla-ini">
-    <time class="edition-date" datetime="2026-10-12"><span class="edition-day">12</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-13-muse-wonder-entra-no-top-10-claude-code-expande-rastreio-vs-code-copilot-surpree">
+    <time class="edition-date" datetime="2026-10-13"><span class="edition-day">13</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>LiteLLM faz nova assinatura; Claude Code amplia visualização; Copilot controla início de sessão</h3>
-      <p>Versões recentes de LiteLLM reforçam segurança com cosign. Claude Code expande suporte a mídia no terminal. Copilot introduz controle de inicialização para equipes corporativas.</p>
+      <h3>Muse Wonder entra no Top 10; Claude Code expande rastreio; VS Code Copilot surpreende com orçamento</h3>
+      <p>A Meta lança o modelo Muse Wonder com 1 M tokens de contexto, enquanto o Claude Code começa a registrar histórico de builds. O Copilot do VS Code revela erros de quota em ambientes empresariais.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>11 edições</p></div>
-  <article class="story-card" data-search="litellm faz nova assinatura; claude code amplia visualização; copilot controla início de sessão litellm opencode reddit llm-framework coding-agent post-signals claudecode githubcopilot codex">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>12 edições</p></div>
+  <article class="story-card" data-search="muse wonder entra no top 10; claude code expande rastreio; vs code copilot surpreende com orçamento openrouter artificial-analysis hf-daily-papers ollama reddit launched-1791807945 benchmark papers research local-ai">
+  <time datetime="2026-10-13">13 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-13-muse-wonder-entra-no-top-10-claude-code-expande-rastreio-vs-code-copilot-surpree">Muse Wonder entra no Top 10; Claude Code expande rastreio; VS Code Copilot surpreende com orçamento</a></h3>
+    <p>A Meta lança o modelo Muse Wonder com 1 M tokens de contexto, enquanto o Claude Code começa a registrar histórico de builds. O Copilot do VS Code revela erros de quota em ambientes empresariais.</p>
+    <p class="story-tags">openrouter, artificial-analysis, hf-daily-papers, ollama</p>
+  </div>
+</article>
+<article class="story-card" data-search="litellm faz nova assinatura; claude code amplia visualização; copilot controla início de sessão litellm opencode reddit llm-framework coding-agent post-signals claudecode githubcopilot codex">
   <time datetime="2026-10-12">12 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-12-litellm-faz-nova-assinatura-claude-code-amplia-visualizacao-copilot-controla-ini">LiteLLM faz nova assinatura; Claude Code amplia visualização; Copilot controla início de sessão</a></h3>
@@ -674,7 +682,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>6 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>5 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-28-github-copilot-harness-phishing-defense-edge-asr-precise-quantization">GitHub Copilot Harness, Phishing Defense, Edge ASR &amp; Precise Quantization</a></h3>
     <p>Semana repleta de adoção prática de ferramentas de IA, reforço de segurança contra phishing, e avanços em ASR e quantização.</p>
     <p class="story-tags">github, tabnews, reddit, developer</p>
-  </div>
-</article>
-<article class="story-card" data-search="kimi k3 vs gpt‑5.6 sol: vantagem de custo e roteamento híbrido, nova pesquisa da openai e ascensão together openai reddit ai frontier togetherai post-signals fallback">
-  <time datetime="2026-07-27">27 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-27-kimi-k3-vs-gpt-5-6-sol-vantagem-de-custo-e-roteamento-hibrido-nova-pesquisa-da-o">Kimi K3 vs GPT‑5.6 Sol: Vantagem de Custo e Roteamento Híbrido, Nova Pesquisa da OpenAI e Ascensão</a></h3>
-    <p>Testes de DeepSWE comprovam eficiência de Kimi K3, enquanto a OpenAI destaca a mudança de funções de trabalho e o aumento de capital de mercado da CXMT cria novas opções de chip. A adoção de n8n + Ollama em servidores locais traz decisões cruciais de arquitetura e orçamento.</p>
-    <p class="story-tags">together, openai, reddit, ai frontier</p>
   </div>
 </article>
 </section>
