@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-13-muse-wonder-entra-no-top-10-claude-code-expande-rastreio-vs-code-copilot-surpree">
-    <time class="edition-date" datetime="2026-10-13"><span class="edition-day">13</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-14-gemini-4-argon-agentswe-e-ajustes-de-seguranca-em-copilot-e-claude-code">
+    <time class="edition-date" datetime="2026-10-14"><span class="edition-day">14</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>Muse Wonder entra no Top 10; Claude Code expande rastreio; VS Code Copilot surpreende com orçamento</h3>
-      <p>A Meta lança o modelo Muse Wonder com 1 M tokens de contexto, enquanto o Claude Code começa a registrar histórico de builds. O Copilot do VS Code revela erros de quota em ambientes empresariais.</p>
+      <h3>Gemini 4 Argon, AgentSWE, e Ajustes de Segurança em Copilot e Claude Code</h3>
+      <p>O Google lança seu modelo de raciocínio mais potente, enquanto o GitHub e o Anthropic continuam refinando controles de acesso e personalização de agentes. Usuários reportam migrações forçadas e ajustes emLint e inline suggestions.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>12 edições</p></div>
-  <article class="story-card" data-search="muse wonder entra no top 10; claude code expande rastreio; vs code copilot surpreende com orçamento openrouter artificial-analysis hf-daily-papers ollama reddit launched-1791807945 benchmark papers research local-ai">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>13 edições</p></div>
+  <article class="story-card" data-search="gemini 4 argon, agentswe, e ajustes de segurança em copilot e claude code openrouter hf-daily-papers github copilot-cli reddit launched-1791907477 papers research copilot changelog">
+  <time datetime="2026-10-14">14 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-14-gemini-4-argon-agentswe-e-ajustes-de-seguranca-em-copilot-e-claude-code">Gemini 4 Argon, AgentSWE, e Ajustes de Segurança em Copilot e Claude Code</a></h3>
+    <p>O Google lança seu modelo de raciocínio mais potente, enquanto o GitHub e o Anthropic continuam refinando controles de acesso e personalização de agentes. Usuários reportam migrações forçadas e ajustes emLint e inline suggestions.</p>
+    <p class="story-tags">openrouter, hf-daily-papers, github, copilot-cli</p>
+  </div>
+</article>
+<article class="story-card" data-search="muse wonder entra no top 10; claude code expande rastreio; vs code copilot surpreende com orçamento openrouter artificial-analysis hf-daily-papers ollama reddit launched-1791807945 benchmark papers research local-ai">
   <time datetime="2026-10-13">13 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-13-muse-wonder-entra-no-top-10-claude-code-expande-rastreio-vs-code-copilot-surpree">Muse Wonder entra no Top 10; Claude Code expande rastreio; VS Code Copilot surpreende com orçamento</a></h3>
@@ -682,7 +690,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>5 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>4 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-29-claude-openai-e-github-redefinem-cenario-de-ia-e-seguranca">Claude, OpenAI e GitHub redefinem cenário de IA e segurança</a></h3>
     <p>Vulnerabilidades criptográficas, travamento de plugins e medidas anti‑cadeia de suprimentos em 2026</p>
     <p class="story-tags">hacker-news, reddit, github, developer</p>
-  </div>
-</article>
-<article class="story-card" data-search="github copilot harness, phishing defense, edge asr &amp; precise quantization github tabnews reddit developer br post-signals fallback">
-  <time datetime="2026-07-28">28 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-28-github-copilot-harness-phishing-defense-edge-asr-precise-quantization">GitHub Copilot Harness, Phishing Defense, Edge ASR &amp; Precise Quantization</a></h3>
-    <p>Semana repleta de adoção prática de ferramentas de IA, reforço de segurança contra phishing, e avanços em ASR e quantização.</p>
-    <p class="story-tags">github, tabnews, reddit, developer</p>
   </div>
 </article>
 </section>
