@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-14-gemini-4-argon-agentswe-e-ajustes-de-seguranca-em-copilot-e-claude-code">
-    <time class="edition-date" datetime="2026-10-14"><span class="edition-day">14</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-15-modelos-system-one-e-a-transicao-para-arquiteturas-de-decisao-estruturada">
+    <time class="edition-date" datetime="2026-10-15"><span class="edition-day">15</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>Gemini 4 Argon, AgentSWE, e Ajustes de Segurança em Copilot e Claude Code</h3>
-      <p>O Google lança seu modelo de raciocínio mais potente, enquanto o GitHub e o Anthropic continuam refinando controles de acesso e personalização de agentes. Usuários reportam migrações forçadas e ajustes emLint e inline suggestions.</p>
+      <h3>Modelos System One e a transição para arquiteturas de decisão estruturada</h3>
+      <p>Novos modelos Jeva e VideoJev substituem a decodificação autorregressiva por cabeças de pontuação para reduzir latência em decisões. Relatos de usuários apontam custos inesperados no roteamento de modelos do GitHub HydraFusion.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>13 edições</p></div>
-  <article class="story-card" data-search="gemini 4 argon, agentswe, e ajustes de segurança em copilot e claude code openrouter hf-daily-papers github copilot-cli reddit launched-1791907477 papers research copilot changelog">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>14 edições</p></div>
+  <article class="story-card" data-search="modelos system one e a transição para arquiteturas de decisão estruturada hf-daily-papers google-ai reddit microsoft-agent-framework papers research google post-signals githubcopilot claudecode">
+  <time datetime="2026-10-15">15 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-15-modelos-system-one-e-a-transicao-para-arquiteturas-de-decisao-estruturada">Modelos System One e a transição para arquiteturas de decisão estruturada</a></h3>
+    <p>Novos modelos Jeva e VideoJev substituem a decodificação autorregressiva por cabeças de pontuação para reduzir latência em decisões. Relatos de usuários apontam custos inesperados no roteamento de modelos do GitHub HydraFusion.</p>
+    <p class="story-tags">hf-daily-papers, google-ai, reddit, microsoft-agent-framework</p>
+  </div>
+</article>
+<article class="story-card" data-search="gemini 4 argon, agentswe, e ajustes de segurança em copilot e claude code openrouter hf-daily-papers github copilot-cli reddit launched-1791907477 papers research copilot changelog">
   <time datetime="2026-10-14">14 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-14-gemini-4-argon-agentswe-e-ajustes-de-seguranca-em-copilot-e-claude-code">Gemini 4 Argon, AgentSWE, e Ajustes de Segurança em Copilot e Claude Code</a></h3>
@@ -690,7 +698,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>4 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>3 edições</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
@@ -713,14 +721,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-29-vscode-terminals-codex-ui-claude-code-billing-context-compaction-cross-device-se">VSCode Terminals, Codex UI, Claude Code Billing, Context Compaction, Cross‑Device Settings, e</a></h3>
     <p>O cenário técnico de julho destaca questões de experiência do usuário em IDEs, os limites de UI dos modelos GPT‑5.6, falhas de verificação de licenças do Claude Code, a necessidade de compactação de contexto e a chegada dos novos modelos de transcrição da OpenAI.</p>
     <p class="story-tags">reddit, hacker-news, post-signals, fallback</p>
-  </div>
-</article>
-<article class="story-card" data-search="claude, openai e github redefinem cenário de ia e segurança hacker-news reddit github developer post-signals fallback">
-  <time datetime="2026-07-29">29 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-29-claude-openai-e-github-redefinem-cenario-de-ia-e-seguranca">Claude, OpenAI e GitHub redefinem cenário de IA e segurança</a></h3>
-    <p>Vulnerabilidades criptográficas, travamento de plugins e medidas anti‑cadeia de suprimentos em 2026</p>
-    <p class="story-tags">hacker-news, reddit, github, developer</p>
   </div>
 </article>
 </section>
