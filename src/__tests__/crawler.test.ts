@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  describeCrawlerError,
   focusRetryDelayMs,
   hackerNewsEngagement,
   isCitableXUrl,
@@ -7,6 +8,7 @@ import {
   isUsefulComment,
   orderedCommunitySubreddits,
   parseGitHubStarCount,
+  redditBudgetDelayMs,
   redditFeedDue,
   redditRateLimitDelayMs,
   redditSignalsDue,
@@ -87,6 +89,66 @@ describe("crawler transformations", () => {
     expect(redditRateLimitDelayMs("2")).toBe(2000);
     expect(redditRateLimitDelayMs("120")).toBe(60000);
     expect(redditRateLimitDelayMs(undefined)).toBe(3000);
+  });
+
+  // O 429 anonimo do Reddit nao manda retry-after: so x-ratelimit-reset, em
+  // segundos. Com o retry cego de 3s a fonte era perdida pelo resto do ciclo.
+  it("falls back to x-ratelimit-reset when retry-after is absent", () => {
+    expect(redditRateLimitDelayMs(undefined, "12")).toBe(12000);
+    expect(redditRateLimitDelayMs(undefined, 15)).toBe(15000);
+    // retry-after continua tendo precedencia quando vem.
+    expect(redditRateLimitDelayMs("2", "30")).toBe(2000);
+    // e o teto segue valendo para o reset.
+    expect(redditRateLimitDelayMs(undefined, "600")).toBe(60000);
+  });
+
+  it("only slows the pace when the anonymous Reddit budget is exhausted", () => {
+    expect(
+      redditBudgetDelayMs({
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "12",
+      }),
+    ).toBe(12000);
+    expect(
+      redditBudgetDelayMs({
+        "x-ratelimit-remaining": "0.0",
+        "x-ratelimit-reset": "7",
+      }),
+    ).toBe(7000);
+    // Ainda ha orcamento: o ritmo normal do crawler vale.
+    expect(
+      redditBudgetDelayMs({
+        "x-ratelimit-remaining": "1",
+        "x-ratelimit-reset": "12",
+      }),
+    ).toBeNull();
+    // Sem os cabecalhos nao ha o que respeitar.
+    expect(redditBudgetDelayMs({})).toBeNull();
+    expect(redditBudgetDelayMs(undefined)).toBeNull();
+    expect(redditBudgetDelayMs({ "x-ratelimit-remaining": "0" })).toBeNull();
+    // E o teto vale aqui tambem.
+    expect(
+      redditBudgetDelayMs({
+        "x-ratelimit-remaining": "0",
+        "x-ratelimit-reset": "900",
+      }),
+    ).toBe(60000);
+  });
+
+  // "Crawler failed for Google Research: " nao dizia nada; o status HTTP e o
+  // codigo do axios e o que sobra para agir.
+  it("describes a crawler failure even when the message is empty", () => {
+    const axiosLike = Object.assign(new Error(""), {
+      isAxiosError: true,
+      code: "ERR_BAD_RESPONSE",
+      response: { status: 500 },
+    });
+    expect(describeCrawlerError(axiosLike)).toBe("HTTP 500 · ERR_BAD_RESPONSE");
+
+    expect(describeCrawlerError(new Error(""))).toBe("Error");
+    expect(describeCrawlerError(new Error("timeout"))).toBe("timeout");
+    expect(describeCrawlerError("   ")).toBe("falha sem detalhe");
+    expect(describeCrawlerError("quebrou")).toBe("quebrou");
   });
 
   it("keys GitHub Trending signals by day so a repo can trend again", () => {
