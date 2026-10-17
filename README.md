@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-16-nvidia-nemotron-3-5-super-vl-e-nouveautes-de-copilot-e-claude-code">
-    <time class="edition-date" datetime="2026-10-16"><span class="edition-day">16</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-17-deepseek-v4-1-flash-leva-ia-multimodal-a-nova-linha-de-referencia">
+    <time class="edition-date" datetime="2026-10-17"><span class="edition-day">17</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>NVIDIA Nemotron 3.5 Super VL e Nouveautés de Copilot e Claude Code</h3>
-      <p>A nova geração multimodal da NVIDIA amplia o limite de contexto enquanto o GitHub Copilot ganha suporte multi‑repo e o Claude Code revela comportamentos de sessão mais agressivos. Nove anúncios e relatos de usuários ilustram a evolução do ecossistema de agentes.</p>
+      <h3>DeepSeek V4.1 Flash leva IA multimodal a nova linha de referência</h3>
+      <p>Modelo DeepSeek desbloqueia vídeo, áudio e linguagem com 1M tokens, enquanto o Claude Code aprimora revisão automática e o GitHub Copilot ajusta modo interativo em tempo real.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>15 edições</p></div>
-  <article class="story-card" data-search="nvidia nemotron 3.5 super vl e nouveautés de copilot e claude code openrouter hf-daily-papers github copilot-cli reddit launched-1792076662 launched-1792030434 papers research copilot">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>16 edições</p></div>
+  <article class="story-card" data-search="deepseek v4.1 flash leva ia multimodal a nova linha de referência hf-trending-models reddit langgraph huggingface launched-1792204838 post-signals claudecode codex vscode agents">
+  <time datetime="2026-10-17">17 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-17-deepseek-v4-1-flash-leva-ia-multimodal-a-nova-linha-de-referencia">DeepSeek V4.1 Flash leva IA multimodal a nova linha de referência</a></h3>
+    <p>Modelo DeepSeek desbloqueia vídeo, áudio e linguagem com 1M tokens, enquanto o Claude Code aprimora revisão automática e o GitHub Copilot ajusta modo interativo em tempo real.</p>
+    <p class="story-tags">hf-trending-models, reddit, langgraph, huggingface</p>
+  </div>
+</article>
+<article class="story-card" data-search="nvidia nemotron 3.5 super vl e nouveautés de copilot e claude code openrouter hf-daily-papers github copilot-cli reddit launched-1792076662 launched-1792030434 papers research copilot">
   <time datetime="2026-10-16">16 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-16-nvidia-nemotron-3-5-super-vl-e-nouveautes-de-copilot-e-claude-code">NVIDIA Nemotron 3.5 Super VL e Nouveautés de Copilot e Claude Code</a></h3>
@@ -706,21 +714,13 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </article>
 </section>
 <section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>2 edições</p></div>
+  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>1 edição</p></div>
   <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
   <time datetime="2026-07-31">31 jul</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-31-codex-anthropic-opus-e-nf-e-descobertas-taticas-de-31-07-2026">Codex, Anthropic Opus e NF‑e: Descobertas Táticas de 31/07/2026</a></h3>
     <p>Os usuários do Codex reportam automação de créditos até a depreciação rápida; o lançamento do Opus 5 reduz custos pela metade; e a nova regra de validação da NF‑e modifica os emissores. Alerta aos operadores: adequação técnica e governança de IA são obrigatórias.</p>
     <p class="story-tags">reddit, tabnews, openai, google-news</p>
-  </div>
-</article>
-<article class="story-card" data-search="mai-code‑1‑flash, sol e thunderagent ampliam throughput e experiência de qa vscode github together reddit openai tools developer ai frontier togetherai post-signals">
-  <time datetime="2026-07-29">29 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-29-mai-code-1-flash-sol-e-thunderagent-ampliam-throughput-e-experiencia-de-qa">MAI-Code‑1‑Flash, Sol e ThunderAgent Ampliam Throughput e Experiência de QA</a></h3>
-    <p>O pacote MAI-Code‑1‑Flash entrega inferência rápida no VS Code, enquanto Sol reduz sobre‑engineering e refina UI de ditado. ThunderAgent duplica throughput de inferência e Copilot ganha visibilidade de QA humana.</p>
-    <p class="story-tags">vscode, github, together, reddit</p>
   </div>
 </article>
 </section>
