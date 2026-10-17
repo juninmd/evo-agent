@@ -230,6 +230,13 @@ const REDDIT_MIN_COMMENT_LENGTH = 80;
 const REDDIT_FOCUS_RETRY_DELAYS_MS = [30_000, 60_000, 120_000];
 const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 3000;
 const REDDIT_RATE_LIMIT_MAX_RETRY_MS = 60000;
+/**
+ * O 429 anonimo do Reddit nao traz `retry-after`; traz `x-ratelimit-remaining: 0`
+ * e `x-ratelimit-reset` em segundos (medido: 7-15s). O retry cego de 3s batia
+ * antes da janela reabrir e a fonte era perdida pelo resto do ciclo, inclusive
+ * as comunidades que o gate editorial exige.
+ */
+const REDDIT_RATE_LIMIT_RETRIES = 2;
 /** Spacing every call keeps the crawl under the anonymous per-IP budget. */
 const REDDIT_MIN_REQUEST_INTERVAL_MS = 1100;
 /** A throttled community is skipped after this pause instead of killing the run. */
@@ -1004,6 +1011,10 @@ function buildRedditPostSignalSummary(post: RedditPostCandidate): string {
 }
 
 function retryAfterMs(value: unknown): number | null {
+  // Cabecalho HTTP chega como string, mas alguns clientes ja entregam numero.
+  if (typeof value === "number") {
+    return Number.isFinite(value) && value >= 0 ? value * 1000 : null;
+  }
   if (typeof value !== "string" || value.trim() === "") return null;
   const seconds = Number(value);
   if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
@@ -1012,15 +1023,60 @@ function retryAfterMs(value: unknown): number | null {
   return null;
 }
 
-export function redditRateLimitDelayMs(value: unknown): number {
+/**
+ * `retry-after` tem precedencia; na ausencia dele vale o `x-ratelimit-reset`, que
+ * e o unico cabecalho que o Reddit manda no 429 anonimo.
+ */
+export function redditRateLimitDelayMs(
+  value: unknown,
+  resetSeconds?: unknown,
+): number {
   return Math.min(
-    retryAfterMs(value) ?? REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS,
+    retryAfterMs(value) ??
+      retryAfterMs(resetSeconds) ??
+      REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS,
     REDDIT_RATE_LIMIT_MAX_RETRY_MS,
   );
 }
 
+/**
+ * Com o orcamento anonimo esgotado, `x-ratelimit-reset` diz quantos segundos
+ * faltam para reabrir. Devolve null quando ainda ha orcamento, para o ritmo
+ * normal do crawler continuar valendo.
+ */
+export function redditBudgetDelayMs(
+  headers: Record<string, unknown> | undefined,
+): number | null {
+  const remaining = Number(headers?.["x-ratelimit-remaining"]);
+  if (!Number.isFinite(remaining) || remaining > 0) return null;
+  const reset = retryAfterMs(headers?.["x-ratelimit-reset"]);
+  return reset === null
+    ? null
+    : Math.min(reset, REDDIT_RATE_LIMIT_MAX_RETRY_MS);
+}
+
 function isRedditRateLimit(err: unknown): err is AxiosError {
   return axios.isAxiosError(err) && err.response?.status === 429;
+}
+
+/**
+ * "Crawler failed for Google Research: " nao diz nada. Um erro sem mensagem
+ * ainda carrega status HTTP, codigo e tipo; e o que permite agir depois.
+ */
+export function describeCrawlerError(err: unknown): string {
+  if (axios.isAxiosError(err)) {
+    const parts = [
+      err.response?.status ? `HTTP ${err.response.status}` : null,
+      err.code ?? null,
+      err.message || null,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(" · ") : "erro HTTP sem detalhe";
+  }
+  if (err instanceof Error) {
+    return err.message || err.name || "Error sem mensagem";
+  }
+  const text = String(err).trim();
+  return text === "" ? "falha sem detalhe" : text;
 }
 
 function isRedditSource(source: FeedSource): boolean {
@@ -1045,27 +1101,47 @@ async function redditGet<T = unknown>(
   url: string,
   config: Parameters<typeof axios.get>[1],
 ): Promise<T> {
-  await redditPace();
-  try {
-    const response = await axios.get<T>(url, config);
-    return response.data;
-  } catch (err) {
-    if (!isRedditRateLimit(err)) throw err;
-    const retryAfter = err.response?.headers?.["retry-after"];
-    const delayMs = jitterDelay(redditRateLimitDelayMs(retryAfter));
-    log.warn(`Reddit rate limited; retrying once in ${delayMs}ms`);
-    await sleep(delayMs);
+  for (let attempt = 0; ; attempt++) {
     await redditPace();
     try {
       const response = await axios.get<T>(url, config);
+      noteRedditBudget(response.headers);
       return response.data;
-    } catch (retryErr) {
-      if (!isRedditRateLimit(retryErr)) throw retryErr;
-      throw new RedditRateLimitError(
-        redditRateLimitDelayMs(retryErr.response?.headers?.["retry-after"]),
+    } catch (err) {
+      if (!isRedditRateLimit(err)) throw err;
+      const headers = err.response?.headers as
+        | Record<string, unknown>
+        | undefined;
+      const retryAfter = headers?.["retry-after"];
+      const resetSeconds = headers?.["x-ratelimit-reset"];
+      if (attempt >= REDDIT_RATE_LIMIT_RETRIES) {
+        throw new RedditRateLimitError(
+          redditRateLimitDelayMs(retryAfter, resetSeconds),
+        );
+      }
+      const delayMs = jitterDelay(
+        redditRateLimitDelayMs(retryAfter, resetSeconds),
       );
+      // Reserva a janela inteira: sem isto as fontes seguintes repetiriam a
+      // mesma colisao, uma atras da outra.
+      noteRedditBudget(headers);
+      log.warn(
+        `Reddit rate limited; retry ${attempt + 1}/${REDDIT_RATE_LIMIT_RETRIES} in ${delayMs}ms`,
+      );
+      await sleep(delayMs);
     }
   }
+}
+
+/**
+ * Quando o Reddit diz que o orcamento anonimo acabou, empurra o proximo pedido
+ * para depois da janela. Sem isto o ritmo de 1,1s segue batendo em 429: medido,
+ * o reset fica entre 7 e 15s.
+ */
+function noteRedditBudget(headers: Record<string, unknown> | undefined): void {
+  const delay = redditBudgetDelayMs(headers);
+  if (delay === null) return;
+  redditNextRequestAt = Math.max(redditNextRequestAt, Date.now() + delay);
 }
 
 /** ±20% jitter so parallel sources don't retry in lockstep. */
@@ -1790,7 +1866,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
       metrics[source.name].failed = true;
       circuitFailure(source.name);
       log.warn(
-        `Crawler failed for ${source.name}: ${err instanceof Error ? err.message : String(err)}`,
+        `Crawler failed for ${source.name}: ${describeCrawlerError(err)}`,
       );
     }
   };

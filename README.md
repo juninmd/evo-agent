@@ -101,7 +101,8 @@ Set `RUN_MODE` env var to control execution:
 |---|---|
 | `DAEMON` (default) | Runs learn cycle immediately, then schedules crawling + daily editions + weekly report via cron |
 | `CRAWL` | Single crawl + improve cycle, then exits |
-| `DAILY` | Generates and publishes one daily article, then exits |
+| `DAILY` | Generates and publishes one daily article (fills the day's edition budget one slot at a time), then exits |
+| `DAILY_SWEEP` | Publishes whatever is missing from today's edition budget, recovering a slot that failed earlier; no-op when the day is complete |
 | `DEV_TIPS` | Turns the week's Claude Code, VS Code and OpenCode release notes into practical tips (what changed, how to use, best practice), published as `devtips-<date>`, then exits; fails without candidates, falls back to a ranking when the model output cites anything outside the material |
 | `WEEKLY` | Generates and publishes one weekly article, then exits |
 | `BIWEEKLY` | Generates and publishes one biweekly report, then exits |

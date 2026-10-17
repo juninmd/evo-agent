@@ -6,6 +6,7 @@ export type RunMode =
   | "DAEMON"
   | "CRAWL"
   | "DAILY"
+  | "DAILY_SWEEP"
   | "RADAR"
   | "TECHLEAD"
   | "DEV_TIPS"
@@ -24,6 +25,7 @@ const RUN_MODES = new Set<RunMode>([
   "DAEMON",
   "CRAWL",
   "DAILY",
+  "DAILY_SWEEP",
   "RADAR",
   "TECHLEAD",
   "DEV_TIPS",
