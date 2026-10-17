@@ -27,6 +27,7 @@ Core flow:
 src/
   config.ts
   index.ts
+  api/                  # RUN_MODE=API: HTTP server for the desktop console
   crawler/index.ts
   crawler/reddit-smoke.ts
   knowledge/store.ts
@@ -35,6 +36,10 @@ src/
   publisher/github.ts
   notifier/telegram.ts
   utils/
+desktop/                # Tauri 2 + React 19 + Tailwind v4 console (own package)
+  src/lib/api.ts        # the only place that calls invoke(); IPC types live here
+  src/components/       # AppHeader, TabBar, one component per file, tabs in tabs/
+  src-tauri/src/        # client.rs, commands.rs, cmd_feeds.rs, cmd_runs.rs, settings.rs
 ```
 
 ## Development Rules
@@ -75,4 +80,22 @@ src/
 npm run build
 npm run lint
 npm run smoke:reddit-comments
+
+# desktop/ has its own package and its own gate
+cd desktop && npm run lint && npm test && npm run build && npm run e2e
+cd desktop/src-tauri && cargo clippy --all-targets -- -D warnings && cargo test
 ```
+
+## Console rules
+
+- Every `/api/v1` payload is camelCase, including SQL aliases, because the Rust structs in
+  `desktop/src-tauri/src/types.rs` mirror the keys field by field. A `snake_case` key that
+  escapes is a runtime break, not a compile error.
+- A Rust command name must equal its `invoke` name in `desktop/src/lib/api.ts`; the vitest
+  suite in `src/lib/api.test.ts` pins both sides.
+- The API is read-only: `POST /api/v1/runs` executes a child process instead of running the
+  cycle in the API process. `API_ALLOW_RUNS` defaults to false.
+- The `API_TOKEN` lives in the Rust process and in `settings.json` in the app config dir. It
+  must never cross the IPC: `settings_get` answers `hasToken`, never the value.
+- Run `cargo test --test live_api -- --ignored` against a live agent after changing the API
+  contract: it is the only test that compares the structs with the JSON Node really returns.

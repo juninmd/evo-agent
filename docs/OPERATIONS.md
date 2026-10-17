@@ -22,6 +22,13 @@ Degraded:
 - more than five pending notifications
 - no article or no primary source collected in 48 hours
 
+## API surface
+
+`RUN_MODE=API` serves the read-only REST API the desktop console consumes. It needs only
+`API_TOKEN`, binds to loopback by default, and never writes to the database: on-demand runs
+are executed as a child process. The contract is in [`API.md`](API.md); `/healthz` is the
+only route outside the bearer token and is what the Kubernetes probes should use.
+
 ## Editorial gates
 
 ```bash
