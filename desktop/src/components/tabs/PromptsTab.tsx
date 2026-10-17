@@ -9,6 +9,17 @@ import CopyButton from "../CopyButton";
 import EmptyState from "../EmptyState";
 import ErrorBanner from "../ErrorBanner";
 import Skeleton from "../Skeleton";
+import {
+  CELL,
+  CELL_LAST,
+  CELL_NUM,
+  MONO,
+  ROW,
+  TH,
+  THEAD,
+  TH_LAST,
+  TH_NUM,
+} from "../table";
 
 const TONES: Record<string, Tone> = {
   promoted: "ok",
@@ -29,20 +40,11 @@ export default function PromptsTab() {
       />
     );
   }
-  if (!poll.data) return <Skeleton label={t("app.loading")} />;
 
-  const { active, items } = poll.data;
+  const { active, items } = poll.data ?? { active: null, items: [] };
 
   return (
-    <div className="flex flex-col gap-3">
-      {poll.error && (
-        <ErrorBanner
-          message={t("common.loadFailed", { error: poll.error })}
-          busy={poll.loading}
-          onRetry={poll.reload}
-        />
-      )}
-
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
       <Card
         title={t("prompts.active")}
         hint={
@@ -68,67 +70,63 @@ export default function PromptsTab() {
           )
         }
       >
-        {active ? (
+        {!poll.data && !poll.error ? (
+          <Skeleton label={t("app.loading")} />
+        ) : active ? (
           showPrompt ? (
-            <pre className="max-h-72 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-edge bg-ink p-2 text-[11px] text-muted">
+            <pre className="max-h-56 overflow-auto whitespace-pre-wrap break-words rounded-lg border border-edge bg-ink p-2.5 text-[11px] leading-relaxed text-muted">
               {active.prompt}
             </pre>
           ) : (
-            <p className="text-xs text-faint">••••••••</p>
+            <p className="text-xs text-faint">
+              ••••••••••••••••••••••••••••••••••
+            </p>
           )
         ) : (
           <EmptyState message={t("prompts.none")} />
         )}
       </Card>
 
-      <Card title={t("prompts.versions")} hint={t("prompts.gate")}>
+      <Card fill title={t("prompts.versions")} hint={t("prompts.gate")}>
         {items.length === 0 ? (
           <EmptyState message={t("prompts.none")} />
         ) : (
-          <div className="overflow-x-auto">
+          <>
             <table className="w-full border-collapse text-xs">
-              <thead>
-                <tr className="text-left text-[11px] uppercase tracking-wide text-faint">
-                  <th className="py-1 pr-3 font-medium">{t("cycles.id")}</th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("prompts.score")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("cycles.status")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("prompts.chars")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("prompts.created")}
-                  </th>
-                  <th className="py-1 font-medium">{t("prompts.reason")}</th>
+              <thead className={THEAD}>
+                <tr>
+                  <th className={TH}>{t("cycles.id")}</th>
+                  <th className={TH_NUM}>{t("prompts.score")}</th>
+                  <th className={TH}>{t("cycles.status")}</th>
+                  <th className={TH_NUM}>{t("prompts.chars")}</th>
+                  <th className={TH}>{t("prompts.created")}</th>
+                  <th className={TH_LAST}>{t("prompts.reason")}</th>
                 </tr>
               </thead>
               <tbody>
                 {items.map((version) => (
-                  <tr
-                    key={version.id}
-                    className="border-t border-edge/70 align-top"
-                  >
-                    <td className="evo-num py-1.5 pr-3 text-faint">
+                  <tr key={version.id} className={ROW}>
+                    <td className={`${CELL} evo-num ${MONO} text-faint`}>
                       {version.id}
                     </td>
-                    <td className="evo-num py-1.5 pr-3 text-fg">
+                    <td className={`${CELL_NUM} evo-num font-semibold text-fg`}>
                       {version.score}
                     </td>
-                    <td className="py-1.5 pr-3">
+                    <td className={CELL}>
                       <Badge tone={TONES[version.status] ?? "neutral"}>
                         {promptStatusLabel(version.status)}
                       </Badge>
                     </td>
-                    <td className="evo-num py-1.5 pr-3 text-muted">
+                    <td className={`${CELL_NUM} evo-num text-muted`}>
                       {formatCount(version.promptChars)}
                     </td>
-                    <td className="py-1.5 pr-3 whitespace-nowrap text-muted">
+                    <td className={`${CELL} whitespace-nowrap text-muted`}>
                       {formatDateTime(version.createdAt)}
                     </td>
-                    <td className="py-1.5 text-muted" title={version.reason}>
+                    <td
+                      className={`${CELL_LAST} text-muted`}
+                      title={version.reason}
+                    >
                       <span className="line-clamp-2">{version.reason}</span>
                     </td>
                   </tr>
@@ -138,7 +136,7 @@ export default function PromptsTab() {
             <p className="pt-2 text-[11px] text-faint">
               {t("prompts.rollbackHint")}
             </p>
-          </div>
+          </>
         )}
       </Card>
     </div>

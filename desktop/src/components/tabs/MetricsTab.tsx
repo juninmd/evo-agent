@@ -8,8 +8,31 @@ import EmptyState from "../EmptyState";
 import ErrorBanner from "../ErrorBanner";
 import Skeleton from "../Skeleton";
 import Sparkline from "../Sparkline";
+import {
+  CELL,
+  CELL_LAST,
+  CELL_NUM,
+  MONO,
+  ROW,
+  TH,
+  THEAD,
+  TH_LAST,
+  TH_NUM,
+} from "../table";
 
 const WINDOWS = [6, 24, 48, 168, 720];
+
+/** Maximo, media e minimo da serie, para dar escala ao grafico. */
+function Caption({ label, value }: { label: string; value: number }) {
+  return (
+    <span className="flex flex-col">
+      <span className="text-[10px] uppercase tracking-wide text-faint">
+        {label}
+      </span>
+      <span className="evo-num text-xs text-fg">{formatNumber(value, 2)}</span>
+    </span>
+  );
+}
 
 export default function MetricsTab() {
   const [hours, setHours] = useState(48);
@@ -33,8 +56,9 @@ export default function MetricsTab() {
   const values = [...points].reverse().map((point) => point.value);
 
   return (
-    <div className="grid min-h-0 items-start gap-3 lg:grid-cols-[minmax(0,1fr)_24rem]">
+    <div className="grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1fr)_26rem]">
       <Card
+        fill
         title={t("metrics.title")}
         hint={t("metrics.hours", { hours })}
         actions={
@@ -68,38 +92,35 @@ export default function MetricsTab() {
         ) : rows.length === 0 ? (
           <EmptyState message={t("metrics.empty")} />
         ) : (
-          <div className="overflow-x-auto">
+          <>
             <table className="w-full border-collapse text-xs">
-              <thead>
-                <tr className="text-left text-[11px] uppercase tracking-wide text-faint">
-                  <th className="py-1 pr-3 font-medium">{t("metrics.name")}</th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("metrics.samples")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("metrics.average")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("metrics.minimum")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("metrics.maximum")}
-                  </th>
-                  <th className="py-1 font-medium">{t("metrics.last")}</th>
+              <thead className={THEAD}>
+                <tr>
+                  <th className={TH}>{t("metrics.name")}</th>
+                  <th className={TH_NUM}>{t("metrics.samples")}</th>
+                  <th className={TH_NUM}>{t("metrics.average")}</th>
+                  <th className={TH_NUM}>{t("metrics.minimum")}</th>
+                  <th className={TH_NUM}>{t("metrics.maximum")}</th>
+                  <th className={TH_LAST}>{t("metrics.last")}</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row) => (
                   <tr
                     key={row.name}
-                    className={`border-t border-edge/70 ${
-                      selected === row.name ? "bg-active" : ""
+                    className={`${ROW} ${
+                      selected === row.name ? "bg-active" : "hover:bg-hover"
                     }`}
                   >
-                    <td className="py-1.5 pr-3">
+                    <td className={CELL}>
                       <button
                         type="button"
-                        className="text-left text-accent-text hover:underline"
+                        aria-pressed={selected === row.name}
+                        className={`${MONO} text-left ${
+                          selected === row.name
+                            ? "text-fg"
+                            : "text-accent-text hover:underline"
+                        }`}
                         onClick={() =>
                           setSelected((current) =>
                             current === row.name ? null : row.name,
@@ -109,30 +130,34 @@ export default function MetricsTab() {
                         {row.name}
                       </button>
                     </td>
-                    <td className="evo-num py-1.5 pr-3 text-muted">
+                    <td className={`${CELL_NUM} evo-num text-muted`}>
                       {formatCount(row.samples)}
                     </td>
-                    <td className="evo-num py-1.5 pr-3 text-fg">
+                    <td className={`${CELL_NUM} evo-num text-fg`}>
                       {formatNumber(row.average, 2)}
                     </td>
-                    <td className="evo-num py-1.5 pr-3 text-muted">
+                    <td className={`${CELL_NUM} evo-num text-muted`}>
                       {formatNumber(row.minimum, 2)}
                     </td>
-                    <td className="evo-num py-1.5 pr-3 text-muted">
+                    <td className={`${CELL_NUM} evo-num text-muted`}>
                       {formatNumber(row.maximum, 2)}
                     </td>
-                    <td className="py-1.5 whitespace-nowrap text-faint">
+                    <td className={`${CELL_LAST} whitespace-nowrap text-faint`}>
                       {formatDateTime(row.lastRecorded)}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
+            {!selected && (
+              <p className="pt-2 text-[11px] text-faint">{t("metrics.tip")}</p>
+            )}
+          </>
         )}
       </Card>
 
       <Card
+        fill
         title={
           selected
             ? t("metrics.series", { name: selected })
@@ -155,13 +180,23 @@ export default function MetricsTab() {
         ) : points.length === 0 ? (
           <EmptyState message={t("metrics.empty")} />
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-end justify-between gap-4">
+              <Caption label={t("metrics.max")} value={Math.max(...values)} />
+              <Caption
+                label={t("metrics.avg")}
+                value={
+                  values.reduce((sum, value) => sum + value, 0) / values.length
+                }
+              />
+              <Caption label={t("metrics.min")} value={Math.min(...values)} />
+            </div>
             <Sparkline points={values} label={selected} />
-            <ul className="max-h-56 overflow-auto text-[11px]">
+            <ul className="text-[11px]">
               {points.map((point) => (
                 <li
                   key={`${point.recordedAt}-${point.value}`}
-                  className="flex items-center justify-between gap-2 border-b border-edge/60 py-0.5 last:border-b-0"
+                  className="flex items-center justify-between gap-2 border-b border-edge/60 py-1 last:border-b-0"
                 >
                   <span className="text-faint">
                     {formatDateTime(point.recordedAt)}

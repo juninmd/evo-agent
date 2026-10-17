@@ -73,6 +73,9 @@ test("navega por todas as seções", async ({ page }) => {
 
   await page.getByRole("tab", { name: "Ciclos" }).click();
   await expect(page.getByRole("cell", { name: "300 s" })).toBeVisible();
+  // O tipo vem em minusculas do banco e o rotulo tem que sair capitalizado.
+  await expect(page.getByRole("cell", { name: "Daily", exact: true })).toBeVisible();
+  await expect(page.getByRole("cell", { name: "Radar", exact: true })).toBeVisible();
   await page.screenshot({ path: "../docs/prints/console-ciclos.png", fullPage: true });
 
   await page.getByRole("tab", { name: "Prompts" }).click();
@@ -97,6 +100,34 @@ test("navega por todas as seções", async ({ page }) => {
   await page.screenshot({ path: "../docs/prints/console-ajustes.png", fullPage: true });
 });
 
+test("as abas sinalizam o que exige olhar", async ({ page }) => {
+  await open(page);
+
+  // Os badges saem da visao geral: 2 pendentes, 4 fontes com falha, 1 ciclo falho.
+  await expect(page.getByRole("tab", { name: /2 notificações/ })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /4 fontes com falha/ })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /1 ciclos com falha/ })).toBeVisible();
+});
+
+test("sem nada pendente, nenhuma aba ganha badge", async ({ page }) => {
+  await open(page, {
+    overview: {
+      ...responses.overview,
+      stats: {
+        ...responses.overview.stats,
+        pendingNotifications: 0,
+        deadLetterNotifications: 0,
+        failedCycles24h: 0,
+      },
+      sources: { total: 51, failing: 0, primary: 12 },
+    },
+  });
+
+  await expect(page.getByRole("tab", { name: /notificações/ })).toHaveCount(0);
+  await expect(page.getByRole("tab", { name: /fontes com falha/ })).toHaveCount(0);
+  await expect(page.getByRole("tab", { name: /ciclos com falha/ })).toHaveCount(0);
+});
+
 test("as abas respondem ao teclado", async ({ page }) => {
   await open(page);
 
@@ -118,11 +149,37 @@ test("as abas respondem ao teclado", async ({ page }) => {
   );
 });
 
+test("o tema claro troca as cores, não só o atributo", async ({ page }) => {
+  await mockIpc(page);
+  await page.addInitScript(() =>
+    localStorage.setItem("evo-console.theme", "claro"),
+  );
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Console do Evo Agent" })).toBeVisible();
+
+  await expect(page.locator("html")).toHaveAttribute("data-skin", "claro");
+  // O token precisa chegar ao fundo: um atributo trocado com a skin antiga
+  // deixaria o texto escuro sobre fundo escuro.
+  const background = await page.evaluate(
+    () => getComputedStyle(document.body).backgroundColor,
+  );
+  expect(background).toBe("rgb(241, 245, 249)");
+
+  await page.getByRole("tab", { name: "Fontes" }).click();
+  await expect(page.getByRole("cell", { name: "Reddit: LocalLLaMA" })).toBeVisible();
+  await page.screenshot({ path: "../docs/prints/console-tema-claro.png", fullPage: true });
+});
+
 test("sem token salvou, o console pede a configuração e esconde as abas", async ({ page }) => {
   await open(page, { settings_get: { ...settingsView, hasToken: false } });
 
-  await expect(page.getByText("Informe a URL e o token do agente para começar.")).toBeVisible();
+  await expect(
+    page.getByText("Informe a URL e o token do agente para começar."),
+  ).toBeVisible();
   await expect(page.getByRole("tablist")).toHaveCount(0);
+  // Nada para conectar: o card de conexao nao pode ficar carregando para sempre.
+  await expect(page.getByText("Conexão do agente")).toHaveCount(0);
+  await expect(page.getByRole("group", { name: "Tema" })).toBeVisible();
   await page.screenshot({ path: "../docs/prints/console-sem-configuracao.png", fullPage: true });
 });
 

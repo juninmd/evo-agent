@@ -10,6 +10,7 @@ import {
 import type { EditionDetail } from "../lib/types";
 import Badge, { type Tone } from "./Badge";
 import ErrorBanner from "./ErrorBanner";
+import { CloseIcon, ExternalIcon } from "./Icons";
 import Skeleton from "./Skeleton";
 
 const TONES: Record<string, Tone> = {
@@ -56,9 +57,17 @@ export default function EditionDetailPanel({
 
   return (
     <aside className="evo-card flex min-h-0 flex-col overflow-hidden">
-      <header className="flex items-center justify-between gap-2 border-b border-edge px-3 py-2">
-        <h2 className="truncate text-sm font-semibold text-fg">{slug}</h2>
-        <button type="button" className="evo-btn" onClick={onClose}>
+      <header className="flex shrink-0 items-center justify-between gap-2 border-b border-edge px-3 py-2">
+        <h2 className="truncate font-mono text-xs font-semibold text-fg">
+          {slug}
+        </h2>
+        <button
+          type="button"
+          className="evo-btn"
+          onClick={onClose}
+          aria-label={t("editions.close")}
+        >
+          <CloseIcon className="size-3.5" />
           {t("editions.close")}
         </button>
       </header>
@@ -134,6 +143,7 @@ export default function EditionDetailPanel({
                 className="evo-btn evo-btn-primary"
                 onClick={() => void api.openExternal(detail.edition.url)}
               >
+                <ExternalIcon className="size-3.5" />
                 {t("common.openInBrowser")}
               </button>
             </div>

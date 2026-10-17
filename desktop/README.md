@@ -38,7 +38,17 @@ npm run build              # tsc + vite build -> dist/ (obrigatório antes do ca
 npm run tauri build        # instalador do sistema atual
 ```
 
-O tema acompanha o sistema ou fica fixo em escuro/claro em **Ajustes**.
+O `npm run e2e` também regera as capturas em [`../docs/prints/`](../docs/prints): qualquer
+mudança de UI precisa passar por ele e trazer os PNGs atualizados no mesmo PR.
+
+As abas mostram um badge quando algo exige olhar — notificações pendentes ou em dead-letter,
+fontes com falha e ciclos com falha. Sem pendência, nenhuma aba ganha badge.
+
+## Tema
+
+Acompanha o sistema ou fica fixo em escuro/claro, pelo botão no cabeçalho ou por **Ajustes**:
+
+![Tema claro](../../docs/prints/console-tema-claro.png)
 
 ## Disparo de ciclos
 

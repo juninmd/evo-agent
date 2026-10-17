@@ -8,6 +8,17 @@ import Card from "../Card";
 import EmptyState from "../EmptyState";
 import ErrorBanner from "../ErrorBanner";
 import Skeleton from "../Skeleton";
+import {
+  CELL,
+  CELL_NUM,
+  CELL_NUM_LAST,
+  MONO,
+  ROW,
+  TH,
+  THEAD,
+  TH_NUM,
+  TH_NUM_LAST,
+} from "../table";
 
 const WINDOWS = [1, 3, 7, 30];
 
@@ -22,9 +33,13 @@ export default function SourcesTab() {
     60_000,
   );
 
+  const rows = sources.data?.items ?? [];
+  const recent = articles.data?.items ?? [];
+
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
       <Card
+        fill
         title={t("sources.health")}
         hint={t("sources.days", { days })}
         actions={
@@ -55,77 +70,67 @@ export default function SourcesTab() {
         )}
         {!sources.data && !sources.error ? (
           <Skeleton label={t("app.loading")} />
+        ) : rows.length === 0 ? (
+          <EmptyState message={t("sources.empty")} />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse text-xs">
-              <thead>
-                <tr className="text-left text-[11px] uppercase tracking-wide text-faint">
-                  <th className="py-1 pr-3 font-medium">
-                    {t("sources.source")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("sources.primary")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("sources.articles")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("sources.lastSeen")}
-                  </th>
-                  <th className="py-1 pr-3 font-medium">
-                    {t("sources.failures")}
-                  </th>
-                  <th className="py-1 font-medium">{t("sources.skipped")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(sources.data?.items ?? []).map((item) => (
-                  <tr key={item.source} className="border-t border-edge/70">
-                    <td
-                      className="max-w-[32ch] truncate py-1.5 pr-3 text-fg"
+          <table className="w-full border-collapse text-xs">
+            <thead className={THEAD}>
+              <tr>
+                <th className={TH}>{t("sources.source")}</th>
+                <th className={TH}>{t("sources.primary")}</th>
+                <th className={TH_NUM}>{t("sources.articles")}</th>
+                <th className={TH}>{t("sources.lastSeen")}</th>
+                <th className={TH_NUM}>{t("sources.failures")}</th>
+                <th className={TH_NUM_LAST}>{t("sources.skipped")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((item) => (
+                <tr key={item.source} className={ROW}>
+                  <td className={`${CELL} text-fg`}>
+                    <span
+                      className="block max-w-[38ch] truncate"
                       title={item.source}
                     >
                       {item.source}
-                    </td>
-                    <td className="py-1.5 pr-3">
-                      {item.primary ? (
-                        <Badge tone="accent">sim</Badge>
-                      ) : (
-                        <span className="text-faint">—</span>
-                      )}
-                    </td>
-                    <td className="evo-num py-1.5 pr-3 text-muted">
-                      {formatCount(item.recentArticles)}
-                    </td>
-                    <td className="py-1.5 pr-3 text-muted">
-                      {item.lastSeenAt ? formatRelative(item.lastSeenAt) : "—"}
-                    </td>
-                    <td className="py-1.5 pr-3">
-                      {item.consecutiveFailures > 0 ? (
-                        <Badge tone="warn">
-                          {formatCount(item.consecutiveFailures)}
-                        </Badge>
-                      ) : (
-                        <span className="text-faint">—</span>
-                      )}
-                    </td>
-                    <td className="evo-num py-1.5 text-faint">
-                      {item.skipRemaining > 0
-                        ? formatCount(item.skipRemaining)
-                        : "—"}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {(sources.data?.items ?? []).length === 0 && (
-              <EmptyState message={t("sources.empty")} />
-            )}
-          </div>
+                    </span>
+                  </td>
+                  <td className={`${CELL} ${MONO}`}>
+                    {item.primary ? (
+                      <Badge tone="accent">{t("common.yes")}</Badge>
+                    ) : (
+                      <span className="text-faint">—</span>
+                    )}
+                  </td>
+                  <td className={`${CELL_NUM} evo-num text-muted`}>
+                    {formatCount(item.recentArticles)}
+                  </td>
+                  <td className={`${CELL} whitespace-nowrap text-muted`}>
+                    {item.lastSeenAt ? formatRelative(item.lastSeenAt) : "—"}
+                  </td>
+                  <td className={CELL}>
+                    {item.consecutiveFailures > 0 ? (
+                      <Badge tone="warn">
+                        {formatCount(item.consecutiveFailures)}
+                      </Badge>
+                    ) : (
+                      <span className="text-faint">—</span>
+                    )}
+                  </td>
+                  <td className={`${CELL_NUM_LAST} evo-num text-faint`}>
+                    {item.skipRemaining > 0
+                      ? formatCount(item.skipRemaining)
+                      : "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </Card>
 
       <Card
+        fill
         title={t("sources.recent")}
         hint={t("sources.days", { days })}
         actions={
@@ -150,12 +155,14 @@ export default function SourcesTab() {
         )}
         {!articles.data && !articles.error ? (
           <Skeleton label={t("app.loading")} />
+        ) : recent.length === 0 ? (
+          <EmptyState message={t("sources.empty")} />
         ) : (
-          <ul className="flex flex-col gap-1">
-            {(articles.data?.items ?? []).map((article) => (
+          <ul className="flex flex-col">
+            {recent.map((article) => (
               <li
                 key={article.id}
-                className="flex items-start justify-between gap-2 border-b border-edge/60 pb-1 last:border-b-0"
+                className="flex items-start justify-between gap-2 border-b border-edge/60 py-1.5 last:border-b-0"
               >
                 <div className="min-w-0">
                   <button

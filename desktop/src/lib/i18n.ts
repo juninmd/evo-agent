@@ -10,6 +10,7 @@ const catalog = {
   "app.loading": "Carregando…",
   "app.statusLabel": "Saúde do agente",
   "app.refresh": "Atualizar",
+  "app.refreshing": "Atualizando…",
   "app.updatedAt": "Atualizado {time}",
   "app.theme.toDark": "Tema escuro",
   "app.theme.toLight": "Tema claro",
@@ -26,7 +27,6 @@ const catalog = {
   "tabs.settings": "Ajustes",
 
   "common.empty": "Nada para mostrar",
-  "common.emptyHint": "Nenhum registro atende ao filtro atual.",
   "common.loadFailed": "Não foi possível carregar: {error}",
   "common.retry": "Tentar de novo",
   "common.all": "Todas",
@@ -163,6 +163,10 @@ const catalog = {
   "metrics.points": "{count} leituras",
   "metrics.empty": "Nenhuma métrica registrada nesta janela.",
   "metrics.selectHint": "Selecione uma métrica para ver a série.",
+  "metrics.max": "Máx",
+  "metrics.avg": "Média",
+  "metrics.min": "Mín",
+  "metrics.tip": "Clique no nome de uma métrica para ver a série ao lado.",
 
   "settings.title": "Ajustes",
   "settings.apiUrl": "URL da API",
@@ -197,6 +201,13 @@ const catalog = {
   "settings.themeLight": "Claro",
   "settings.themeSystem": "Seguir o sistema",
   "settings.notConfigured": "Informe a URL e o token do agente para começar.",
+
+  // Badges de atencao nas abas: um numero que exige olhar, nao decoracao.
+  "attention.pendingNotifications":
+    "{count} notificações pendentes ou em dead-letter",
+  "attention.failingSources": "{count} fontes com falha",
+  "attention.failedCycles": "{count} ciclos com falha em 24h",
+  "attention.running": "Ciclo em execução",
 } as const;
 
 export type MessageKey = keyof typeof catalog;
@@ -269,6 +280,7 @@ export function promptStatusLabel(status: string): string {
 export function runModeLabel(mode: string): string {
   return mode
     .split("_")
-    .map((part) => part.charAt(0) + part.slice(1).toLowerCase())
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
     .join(" ");
 }

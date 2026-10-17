@@ -6,21 +6,26 @@ import type { ThemeId } from "../../lib/theme";
 import type { Meta, SettingsView } from "../../lib/types";
 import Card from "../Card";
 import ErrorBanner from "../ErrorBanner";
+import { MonitorIcon, MoonIcon, SunIcon } from "../Icons";
 import Skeleton from "../Skeleton";
 
-const THEME_KEYS: { id: ThemeId; label: () => string }[] = [
-  { id: "escuro", label: () => t("settings.themeDark") },
-  { id: "claro", label: () => t("settings.themeLight") },
-  { id: "sistema", label: () => t("settings.themeSystem") },
+const THEME_OPTIONS: {
+  id: ThemeId;
+  label: () => string;
+  Icon: (props: { className?: string }) => React.ReactElement;
+}[] = [
+  { id: "escuro", label: () => t("settings.themeDark"), Icon: MoonIcon },
+  { id: "claro", label: () => t("settings.themeLight"), Icon: SunIcon },
+  { id: "sistema", label: () => t("settings.themeSystem"), Icon: MonitorIcon },
 ];
 
 function ConnectionCard({ meta }: { meta: Meta | undefined }) {
   if (!meta) return <Skeleton label={t("app.loading")} />;
 
-  const rows: [string, string][] = [
-    [t("settings.runMode"), meta.runMode],
-    [t("settings.timezone"), meta.timezone],
-    [t("settings.database"), meta.database.path],
+  const rows: [string, string, boolean?][] = [
+    [t("settings.runMode"), meta.runMode, true],
+    [t("settings.timezone"), meta.timezone, true],
+    [t("settings.database"), meta.database.path, true],
     [
       t("settings.uptime"),
       `${formatDuration(meta.uptimeSeconds)} · ${formatDateTime(meta.startedAt)}`,
@@ -29,9 +34,10 @@ function ConnectionCard({ meta }: { meta: Meta | undefined }) {
     [
       t("settings.article"),
       `${meta.schedule.articleCron} · ${meta.dailyEditions}/dia`,
+      true,
     ],
-    [t("settings.radar"), meta.schedule.radarCron],
-    [t("settings.modelAlerts"), meta.schedule.modelAlertCron],
+    [t("settings.radar"), meta.schedule.radarCron, true],
+    [t("settings.modelAlerts"), meta.schedule.modelAlertCron, true],
     [
       t("settings.runsEnabled"),
       meta.runsEnabled
@@ -44,12 +50,16 @@ function ConnectionCard({ meta }: { meta: Meta | undefined }) {
 
   return (
     <dl className="grid gap-2 sm:grid-cols-2">
-      {rows.map(([label, value]) => (
+      {rows.map(([label, value, mono]) => (
         <div key={label} className="rounded-lg border border-edge px-2 py-1.5">
           <dt className="text-[10px] uppercase tracking-wide text-faint">
             {label}
           </dt>
-          <dd className="break-words text-xs text-fg">{value}</dd>
+          <dd
+            className={`break-words text-xs text-fg ${mono ? "font-mono text-[11px]" : ""}`}
+          >
+            {value}
+          </dd>
         </div>
       ))}
     </dl>
@@ -107,16 +117,17 @@ export default function SettingsTab({
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex min-h-0 flex-1 flex-col gap-3">
       <Card title={t("settings.title")}>
-        <div className="flex flex-col gap-3">
+        {/* Os campos ficam contidos: um input de 1000 px nao se le. */}
+        <div className="flex max-w-2xl flex-col gap-3">
           <label className="flex flex-col gap-1 text-xs text-muted">
             {t("settings.apiUrl")}
             <input
               type="url"
               inputMode="url"
               spellCheck={false}
-              className="evo-field px-2 py-1 text-xs"
+              className="evo-field px-2 py-1 font-mono text-xs"
               placeholder="https://evo-agent.exemplo.svc"
               value={baseUrl}
               onChange={(event) => setBaseUrl(event.target.value)}
@@ -132,7 +143,7 @@ export default function SettingsTab({
               type="password"
               autoComplete="off"
               spellCheck={false}
-              className="evo-field px-2 py-1 text-xs"
+              className="evo-field px-2 py-1 font-mono text-xs"
               placeholder={settings?.hasToken ? "••••••••" : "API_TOKEN"}
               value={token}
               onChange={(event) => setToken(event.target.value)}
@@ -175,33 +186,44 @@ export default function SettingsTab({
             )}
           </div>
 
-          {notice && <p className="text-[11px] text-ok">{notice}</p>}
-          {error && <ErrorBanner message={error} onRetry={undefined} />}
+          {notice && (
+            <output className="block text-[11px] text-ok">{notice}</output>
+          )}
+          {error && <ErrorBanner message={error} />}
         </div>
       </Card>
 
-      <Card title={t("settings.connection")}>
-        <ConnectionCard meta={meta} />
-      </Card>
+      <div className="grid items-start gap-3 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        {/* Sem token nao ha o que conectar: um "Carregando..." permanente era um
+            spinner que nunca resolvia. */}
+        {settings?.hasToken && (
+          <Card title={t("settings.connection")}>
+            <ConnectionCard meta={meta} />
+          </Card>
+        )}
 
-      <Card title={t("settings.theme")}>
-        <fieldset
-          aria-label={t("settings.theme")}
-          className="flex flex-wrap gap-1.5"
-        >
-          {THEME_KEYS.map((option) => (
-            <button
-              key={option.id}
-              type="button"
-              aria-pressed={theme === option.id}
-              className={`evo-btn ${theme === option.id ? "evo-btn-primary" : ""}`}
-              onClick={() => onTheme(option.id)}
-            >
-              {option.label()}
-            </button>
-          ))}
-        </fieldset>
-      </Card>
+        <Card title={t("settings.theme")}>
+          <fieldset
+            aria-label={t("settings.theme")}
+            className="flex flex-col gap-1.5"
+          >
+            {THEME_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                aria-pressed={theme === option.id}
+                className={`evo-btn justify-start ${
+                  theme === option.id ? "evo-btn-primary" : ""
+                }`}
+                onClick={() => onTheme(option.id)}
+              >
+                <option.Icon className="size-3.5" />
+                {option.label()}
+              </button>
+            ))}
+          </fieldset>
+        </Card>
+      </div>
     </div>
   );
 }

@@ -99,3 +99,9 @@ cd desktop/src-tauri && cargo clippy --all-targets -- -D warnings && cargo test
   must never cross the IPC: `settings_get` answers `hasToken`, never the value.
 - Run `cargo test --test live_api -- --ignored` against a live agent after changing the API
   contract: it is the only test that compares the structs with the JSON Node really returns.
+- A UI change goes through `npm run e2e` and ships the regenerated screenshots in
+  `docs/prints/` in the same PR. The specs are the only place that renders the interface, so a
+  component that nothing asserts and that no screenshot shows is unverified.
+- Tab labels are pt-BR and so are the labels derived from API enums (`runModeLabel`,
+  `healthReasonLabel`). Raw contract values (English health reasons, SQL slugs) are translated
+  at the edge, in `src/lib/i18n.ts`, never printed as they arrive.

@@ -106,20 +106,20 @@ export default function OverviewTab({
       )}
 
       {health.reasons.length > 0 && (
-        <div
+        <section
           className={`rounded-lg border px-3 py-2 text-xs ${
             health.status === "critical"
               ? "border-danger/40 bg-danger/10 text-danger"
               : "border-warn/40 bg-warn/10 text-warn"
           }`}
         >
-          <p className="font-semibold">{t("overview.healthReasons")}</p>
+          <h2 className="font-semibold">{t("overview.healthReasons")}</h2>
           <ul className="mt-0.5 list-inside list-disc">
             {health.reasons.map((reason) => (
               <li key={reason}>{healthReasonLabel(reason)}</li>
             ))}
           </ul>
-        </div>
+        </section>
       )}
 
       <section aria-label={t("overview.stats")}>
@@ -165,7 +165,7 @@ export default function OverviewTab({
               })}
             </Badge>
           </div>
-          {overview.intelligence ? (
+          {overview.intelligence && (
             <div className="mt-2 border-t border-edge pt-2">
               <p className="text-[11px] uppercase tracking-wide text-faint">
                 {t("overview.intelligence")}
@@ -182,7 +182,7 @@ export default function OverviewTab({
                 })}
               </p>
             </div>
-          ) : null}
+          )}
         </Card>
       </div>
 
