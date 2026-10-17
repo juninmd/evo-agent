@@ -20,7 +20,9 @@ homolog/*.db-wal
 homolog-e2e.sh
 check_providers*.ts
 homolog.ts
-test-*.ts
+# Ancorado na raiz: sem a barra o padrao alcancava desktop/src/test-*.ts e um
+# arquivo novo era ignorado em silencio.
+/test-*.ts
 temp/
 dump_*.json
 homolog/.tmp/

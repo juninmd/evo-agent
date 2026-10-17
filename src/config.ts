@@ -15,7 +15,8 @@ export type RunMode =
   | "BIMONTHLY"
   | "SEMESTER"
   | "EBOOK"
-  | "MODEL_ALERTS";
+  | "MODEL_ALERTS"
+  | "API";
 
 type Env = Record<string, string | undefined>;
 
@@ -33,6 +34,7 @@ const RUN_MODES = new Set<RunMode>([
   "SEMESTER",
   "EBOOK",
   "MODEL_ALERTS",
+  "API",
 ]);
 
 function loadEnvFile(env: NodeJS.ProcessEnv) {
@@ -65,6 +67,14 @@ function validUrl(env: Env, key: string, fallback: string): string {
   return value.replace(/\/$/, "");
 }
 
+function port(env: Env, key: string, fallback: string): number {
+  const value = positiveNumber(env, key, fallback);
+  if (!Number.isInteger(value) || value > 65535) {
+    throw new Error(`${key} must be a valid TCP port`);
+  }
+  return value;
+}
+
 function required(env: Env, key: string): string {
   const value = env[key]?.trim();
   if (!value) throw new Error(`Missing env: ${key}`);
@@ -77,7 +87,8 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
     throw new Error(`RUN_MODE is invalid: ${rawMode}`);
   }
   const runMode = rawMode as RunMode;
-  const publishes = runMode !== "CRAWL";
+  // API mode only reads the database; the CronJobs stay the only publishers.
+  const publishes = runMode !== "CRAWL" && runMode !== "API";
   const articleCron = env.ARTICLE_CRON ?? "0 8,13,18 * * *";
   if (!cron.validate(articleCron)) {
     throw new Error(`ARTICLE_CRON is invalid: ${articleCron}`);
@@ -119,6 +130,11 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
     ? required(env, "GITHUB_REPO")
     : (env.GITHUB_REPO ?? "");
 
+  // Serving operational data is only meaningful with a credential; the API
+  // refuses to start without one instead of exposing the console anonymously.
+  const apiToken =
+    runMode === "API" ? required(env, "API_TOKEN") : (env.API_TOKEN ?? "");
+
   return {
     runMode,
     telegram: {
@@ -130,6 +146,19 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
       owner: githubOwner,
       repo: githubRepo,
       branch: env.GITHUB_BRANCH ?? "gh-pages",
+    },
+    api: {
+      // Loopback by default: a cluster manifest has to opt in to 0.0.0.0.
+      host: env.API_HOST?.trim() || "127.0.0.1",
+      port: port(env, "API_PORT", "8787"),
+      token: apiToken,
+      // Off by default: the console is an observability surface first, and a
+      // writable endpoint on a published deployment is an explicit decision.
+      allowRuns: env.API_ALLOW_RUNS?.trim().toLowerCase() === "true",
+      corsOrigins: (env.API_CORS_ORIGINS ?? "")
+        .split(",")
+        .map((origin) => origin.trim())
+        .filter(Boolean),
     },
     litellm: {
       apiBase: validUrl(

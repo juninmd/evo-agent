@@ -83,6 +83,11 @@ Dockerfile receives it as a BuildKit secret file, never as a build arg.
 | `MODEL_ALERT_CRON` | No | `*/30 * * * *` | New LLM launch alert cron (OpenRouter catalog, major vendors, Telegram) |
 | `DAILY_EDITIONS` | No | `3` | Editions published per day; a 22h sweep fills missed slots |
 | `SEARXNG_URL` | No | `http://searxng.searxng.svc.cluster.local` | SearXNG instance URL |
+| `API_HOST` | No | `127.0.0.1` | Bind address of `RUN_MODE=API` |
+| `API_PORT` | No | `8787` | Port of `RUN_MODE=API` |
+| `API_TOKEN` | Only `API` | — | Bearer token for `/api/v1`; the API refuses to start without it |
+| `API_ALLOW_RUNS` | No | `false` | Enables `POST /api/v1/runs` |
+| `API_CORS_ORIGINS` | No | — | Comma-separated browser origins allowed to call the API |
 | `TZ` | No | `America/Sao_Paulo` | Timezone for every cron schedule and for the daily-edition day key |
 | `LOG_LEVEL` | No | `info` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
 | `LOG_FORMAT` | No | `json` | Structured `json` logs or local `text` output |
@@ -105,6 +110,7 @@ Set `RUN_MODE` env var to control execution:
 | `SEMESTER` | Generates and publishes one semester report, then exits |
 | `EBOOK` | Refines and publishes the living AI-assisted development handbook, then exits |
 | `MODEL_ALERTS` | Checks the OpenRouter catalog once and sends a Telegram alert per new LLM from a major vendor, then exits (needs only Telegram credentials; first run records a baseline silently) |
+| `API` | Serves the read-only REST API the desktop console consumes (`docs/API.md`); needs only `API_TOKEN` |
 
 ## Commands
 
@@ -122,10 +128,26 @@ npm run dev                    # Watch mode with tsx
 npm start                      # Run compiled output
 ```
 
+## Desktop console
+
+`desktop/` is a Tauri 2 + React 19 + Tailwind v4 app that reads the agent's REST API:
+health, published editions with their preserved evidence, source health, cycle history,
+prompt versions and metrics, plus optional on-demand cycle runs. The token lives in the
+Rust process and never reaches the webview.
+
+```bash
+RUN_MODE=API API_TOKEN=<secret> npm start   # at the repository root
+cd desktop && npm install && npm run tauri dev
+```
+
+See [`desktop/README.md`](desktop/README.md) for the app and [`docs/API.md`](docs/API.md)
+for the REST contract.
+
 ## Project Structure
 
 ```
 src/
+  api/                  # RUN_MODE=API: node:http server, auth, routes and run spawning
   index.ts              # Entry point, cron scheduling, run modes
   config.ts             # Env loading, validation, frozen config
   crawler/

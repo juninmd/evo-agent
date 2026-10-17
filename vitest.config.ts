@@ -2,7 +2,8 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    exclude: ["dist/**", "node_modules/**"],
+    // desktop/ tem pacote e runner proprios; seus *.spec.ts sao do Playwright.
+    exclude: ["dist/**", "node_modules/**", "desktop/**"],
     setupFiles: ["src/__tests__/setup/isolate-db.ts"],
     coverage: {
       provider: "v8",

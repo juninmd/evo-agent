@@ -147,8 +147,13 @@ export function sourceBucket(source: string): string {
   return source.toLowerCase().split(/[:(]/)[0].trim();
 }
 
+/** Label-only variant: the API reports source health without loading a row. */
+export function isPrimarySourceName(source: string): boolean {
+  return PRIMARY_SOURCE_PATTERNS.some((pattern) => pattern.test(source));
+}
+
 export function isPrimarySource(article: Article): boolean {
-  if (PRIMARY_SOURCE_PATTERNS.some((pattern) => pattern.test(article.source))) {
+  if (isPrimarySourceName(article.source)) {
     return true;
   }
   try {

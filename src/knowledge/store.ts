@@ -73,6 +73,39 @@ export interface PublishedEvidence {
   observed_at: string;
 }
 
+export interface CycleRun {
+  id: number;
+  type: string;
+  status: "running" | "succeeded" | "failed" | "skipped";
+  metrics_json: string;
+  error: string | null;
+  started_at: string;
+  finished_at: string | null;
+}
+
+export interface MetricEvent {
+  id: number;
+  name: string;
+  value: number;
+  labels_json: string;
+  recorded_at: string;
+}
+
+export interface MetricSummary {
+  name: string;
+  samples: number;
+  average: number;
+  minimum: number;
+  maximum: number;
+  last_recorded: string;
+}
+
+export interface SourceTotal {
+  source: string;
+  total: number;
+  last_seen: string;
+}
+
 let _db: Database.Database | null = null;
 
 export function getDb(): Database.Database {
@@ -859,6 +892,131 @@ export const db = {
       top_score: row.top_score,
       changes: safeJsonObject(row.changes_json),
     }));
+  },
+
+  /** Bounded instead of `getPublished()`: the console never loads months of editions. */
+  getPublishedRecent(
+    limit = 50,
+    kind?: "article" | "report",
+    notificationStatus?: PublishedArticle["notification_status"],
+  ): PublishedArticle[] {
+    const where: string[] = [];
+    const params: Array<string | number> = [];
+    if (kind) {
+      where.push("kind = ?");
+      params.push(kind);
+    }
+    if (notificationStatus) {
+      where.push("notification_status = ?");
+      params.push(notificationStatus);
+    }
+    const rows = stmt(
+      `SELECT * FROM published_articles
+       ${where.length > 0 ? `WHERE ${where.join(" AND ")}` : ""}
+       ORDER BY published_at DESC, id DESC
+       LIMIT ?`,
+    ).all(...params, limit) as PublishedRow[];
+    return rows.map(hydratePublished);
+  },
+
+  getPublishedBySlug(slug: string): PublishedArticle | null {
+    const row = stmt("SELECT * FROM published_articles WHERE slug = ?").get(
+      slug,
+    ) as PublishedRow | undefined;
+    return row ? hydratePublished(row) : null;
+  },
+
+  getCycleRuns(
+    limit = 50,
+    filters: { type?: string; status?: string } = {},
+  ): CycleRun[] {
+    const where: string[] = [];
+    const params: Array<string | number> = [];
+    if (filters.type) {
+      where.push("type = ?");
+      params.push(filters.type);
+    }
+    if (filters.status) {
+      where.push("status = ?");
+      params.push(filters.status);
+    }
+    return stmt(
+      `SELECT * FROM cycle_runs
+       ${where.length > 0 ? `WHERE ${where.join(" AND ")}` : ""}
+       ORDER BY started_at DESC, id DESC
+       LIMIT ?`,
+    ).all(...params, limit) as CycleRun[];
+  },
+
+  getPromptVersions(limit = 50): PromptVersion[] {
+    return stmt("SELECT * FROM prompt_versions ORDER BY id DESC LIMIT ?").all(
+      limit,
+    ) as PromptVersion[];
+  },
+
+  /**
+   * One row per state key; the caller decides which keys are safe to publish.
+   */
+  getStateEntries(limit = 200): AgentState[] {
+    return stmt("SELECT * FROM agent_state ORDER BY key ASC LIMIT ?").all(
+      limit,
+    ) as AgentState[];
+  },
+
+  getSourceHealthAll(limit = 200): SourceHealth[] {
+    return stmt(
+      `SELECT * FROM source_health
+       ORDER BY consecutive_failures DESC, source ASC
+       LIMIT ?`,
+    ).all(limit) as SourceHealth[];
+  },
+
+  /** Crawl volume per source label over the recency window. */
+  getSourceTotals(sinceDays: number, limit = 200): SourceTotal[] {
+    return stmt(
+      `SELECT source, count(*) AS total, max(crawled_at) AS last_seen
+       FROM articles
+       WHERE crawled_at >= datetime('now', ?)
+       GROUP BY source
+       ORDER BY total DESC, source ASC
+       LIMIT ?`,
+    ).all(`-${sinceDays} days`, limit) as SourceTotal[];
+  },
+
+  getMetricSummary(
+    sinceHours: number,
+    name?: string,
+    limit = 50,
+  ): MetricSummary[] {
+    const filter = name ? "AND name = ?" : "";
+    const params: Array<string | number> = [`-${sinceHours} hours`];
+    if (name) params.push(name);
+    return stmt(
+      `SELECT name,
+              count(*) AS samples,
+              avg(value) AS average,
+              min(value) AS minimum,
+              max(value) AS maximum,
+              max(recorded_at) AS lastRecorded
+       FROM metric_events
+       WHERE recorded_at >= datetime('now', ?) ${filter}
+       GROUP BY name
+       ORDER BY lastRecorded DESC
+       LIMIT ?`,
+    ).all(...params, limit) as MetricSummary[];
+  },
+
+  getMetricPoints(
+    name: string,
+    sinceHours: number,
+    limit = 120,
+  ): MetricEvent[] {
+    return stmt(
+      `SELECT * FROM metric_events
+       WHERE name = ? AND recorded_at >= datetime('now', ?)
+       ORDER BY recorded_at DESC, id DESC
+       LIMIT ?`,
+    ).all(name, `-${sinceHours} hours`, limit) as MetricEvent[];
   },
 };
 
