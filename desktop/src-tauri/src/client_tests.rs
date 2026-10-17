@@ -97,7 +97,10 @@ fn keeps_a_path_prefix_from_the_base_url() {
         "https://gw.example/evo-agent/api/v1/meta"
     );
     assert_eq!(
-        client.url("/api/v1/editions/radar-2026-09-22").unwrap().as_str(),
+        client
+            .url("/api/v1/editions/radar-2026-09-22")
+            .unwrap()
+            .as_str(),
         "https://gw.example/evo-agent/api/v1/editions/radar-2026-09-22"
     );
 }

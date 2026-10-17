@@ -27,8 +27,5 @@ fn normalizes_a_run_mode_and_rejects_anything_else() {
     assert_eq!(require_mode(" daily ").unwrap(), "DAILY");
     assert!(require_mode("").is_err());
     assert!(require_mode("DAILY; rm -rf /").is_err());
-    assert!(matches!(
-        require_mode("DAEMON!!"),
-        Err(AppError::Config(_))
-    ));
+    assert!(matches!(require_mode("DAEMON!!"), Err(AppError::Config(_))));
 }

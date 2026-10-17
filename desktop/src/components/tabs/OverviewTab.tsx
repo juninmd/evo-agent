@@ -1,5 +1,5 @@
 import { formatCount, formatDateTime, formatNumber } from "../../lib/format";
-import { t } from "../../lib/i18n";
+import { healthReasonLabel, t } from "../../lib/i18n";
 import type { TabId } from "../../lib/tabs";
 import type { Overview, Stats } from "../../lib/types";
 import Badge from "../Badge";
@@ -116,7 +116,7 @@ export default function OverviewTab({
           <p className="font-semibold">{t("overview.healthReasons")}</p>
           <ul className="mt-0.5 list-inside list-disc">
             {health.reasons.map((reason) => (
-              <li key={reason}>{reason}</li>
+              <li key={reason}>{healthReasonLabel(reason)}</li>
             ))}
           </ul>
         </div>
@@ -126,7 +126,7 @@ export default function OverviewTab({
         <StatGrid stats={overview.stats} overview={overview} />
       </section>
 
-      <div className="grid gap-3 lg:grid-cols-2">
+      <div className="grid items-start gap-3 lg:grid-cols-2">
         <Card title={t("overview.runTitle")}>
           <RunPanel overview={overview} modes={runModes} onStarted={onRetry} />
         </Card>
@@ -150,13 +150,19 @@ export default function OverviewTab({
         >
           <div className="flex flex-wrap gap-1.5">
             <Badge tone={overview.sources.failing > 0 ? "warn" : "ok"}>
-              {formatCount(overview.sources.failing)} {t("sources.failures")}
+              {t("overview.sourcesFailing", {
+                count: formatCount(overview.sources.failing),
+              })}
             </Badge>
             <Badge tone="accent">
-              {formatCount(overview.sources.primary)} {t("sources.primary")}
+              {t("overview.sourcesPrimary", {
+                count: formatCount(overview.sources.primary),
+              })}
             </Badge>
             <Badge>
-              {formatCount(overview.sources.total)} {t("sources.title")}
+              {t("overview.sourcesTotal", {
+                count: formatCount(overview.sources.total),
+              })}
             </Badge>
           </div>
           {overview.intelligence ? (

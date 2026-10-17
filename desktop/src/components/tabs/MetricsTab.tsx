@@ -33,7 +33,7 @@ export default function MetricsTab() {
   const values = [...points].reverse().map((point) => point.value);
 
   return (
-    <div className="grid min-h-0 gap-3 lg:grid-cols-[minmax(0,1fr)_24rem]">
+    <div className="grid min-h-0 items-start gap-3 lg:grid-cols-[minmax(0,1fr)_24rem]">
       <Card
         title={t("metrics.title")}
         hint={t("metrics.hours", { hours })}

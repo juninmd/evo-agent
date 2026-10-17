@@ -135,7 +135,7 @@ export default function SourcesTab() {
               checked={primaryOnly}
               onChange={(event) => setPrimaryOnly(event.target.checked)}
             />
-            {t("sources.primary")}
+            {t("common.primaryOnly")}
           </label>
         }
       >

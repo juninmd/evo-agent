@@ -46,10 +46,7 @@ fn reads_every_console_endpoint_from_a_live_agent() {
         let health: Health = client.get("/api/v1/health", &[]).await.expect("health");
         println!("health: {} ({:?})", health.status, health.reasons);
 
-        let overview: Overview = client
-            .get("/api/v1/overview", &[])
-            .await
-            .expect("overview");
+        let overview: Overview = client.get("/api/v1/overview", &[]).await.expect("overview");
         println!(
             "overview: {} edições hoje de {}, {} ciclos, {} fontes ({} com falha)",
             overview.editions_today,

@@ -38,9 +38,10 @@ impl AppState {
         base_url: String,
         token: Option<String>,
     ) -> Result<Settings, AppError> {
-        let mut guard = self.settings.write().map_err(|_| {
-            AppError::Config("estado da configuração indisponível".to_string())
-        })?;
+        let mut guard = self
+            .settings
+            .write()
+            .map_err(|_| AppError::Config("estado da configuração indisponível".to_string()))?;
         guard.base_url = base_url;
         if let Some(value) = token {
             guard.token = value.trim().to_string();

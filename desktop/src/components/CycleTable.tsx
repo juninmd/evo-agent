@@ -35,9 +35,7 @@ export default function CycleTable({
             <th className="py-1 pr-3 font-medium">{t("cycles.status")}</th>
             <th className="py-1 pr-3 font-medium">{t("cycles.started")}</th>
             <th className="py-1 pr-3 font-medium">{t("cycles.duration")}</th>
-            {!compact && (
-              <th className="py-1 font-medium">{t("cycles.error")}</th>
-            )}
+            <th className="py-1 font-medium">{t("cycles.error")}</th>
           </tr>
         </thead>
         <tbody>
@@ -60,17 +58,17 @@ export default function CycleTable({
                   ? "—"
                   : `${run.durationSeconds} s`}
               </td>
-              {!compact && (
-                <td className="py-1.5 text-danger">
-                  {run.error ? (
-                    <span className="line-clamp-2" title={run.error}>
-                      {run.error}
-                    </span>
-                  ) : (
-                    <span className="text-faint">—</span>
-                  )}
-                </td>
-              )}
+              {/* O motivo da falha continua na visão geral: é a linha mais
+                  útil de um painel de operação. */}
+              <td className="py-1.5 text-danger">
+                {run.error ? (
+                  <span className="line-clamp-2" title={run.error}>
+                    {run.error}
+                  </span>
+                ) : (
+                  <span className="text-faint">—</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

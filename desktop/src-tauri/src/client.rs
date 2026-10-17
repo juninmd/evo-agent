@@ -62,8 +62,7 @@ impl ApiClient {
     /// in the base (a deployment behind `https://gw.example/evo-agent`).
     fn url(&self, path: &str) -> Result<Url, AppError> {
         let base = self.base.as_str().trim_end_matches('/');
-        Url::parse(&format!("{base}{path}"))
-            .map_err(|error| AppError::Config(error.to_string()))
+        Url::parse(&format!("{base}{path}")).map_err(|error| AppError::Config(error.to_string()))
     }
 
     pub async fn get<T: DeserializeOwned>(

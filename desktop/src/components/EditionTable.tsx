@@ -32,7 +32,7 @@ export default function EditionTable({
             <th className="py-1 pr-3 font-medium">
               {t("editions.filterKind")}
             </th>
-            <th className="py-1 pr-3 font-medium">{t("editions.title")}</th>
+            <th className="py-1 pr-3 font-medium">{t("common.title")}</th>
             <th className="py-1 pr-3 font-medium">
               {t("editions.filterStatus")}
             </th>

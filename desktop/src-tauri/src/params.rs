@@ -29,8 +29,13 @@ pub fn require_slug(raw: &str) -> Result<String, AppError> {
 /// Modes are matched against the API's own list; the console never invents one.
 pub fn require_mode(raw: &str) -> Result<String, AppError> {
     let mode = raw.trim().to_ascii_uppercase();
-    if mode.is_empty() || mode.len() > 32 || !mode.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
-        return Err(AppError::Config(format!("modo de execução inválido: {raw}")));
+    if mode.is_empty()
+        || mode.len() > 32
+        || !mode.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
+    {
+        return Err(AppError::Config(format!(
+            "modo de execução inválido: {raw}"
+        )));
     }
     Ok(mode)
 }

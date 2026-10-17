@@ -30,6 +30,9 @@ const catalog = {
   "common.loadFailed": "Não foi possível carregar: {error}",
   "common.retry": "Tentar de novo",
   "common.all": "Todas",
+  "common.title": "Título",
+  "common.primary": "Primária",
+  "common.primaryOnly": "Só primárias",
   "common.yes": "sim",
   "common.no": "não",
   "common.openInBrowser": "Abrir no navegador",
@@ -59,6 +62,9 @@ const catalog = {
   "overview.sources": "Fontes",
   "overview.sourcesHint":
     "{failing} com falha de {total} acompanhadas · {primary} primárias",
+  "overview.sourcesFailing": "{count} com falha",
+  "overview.sourcesPrimary": "{count} primárias",
+  "overview.sourcesTotal": "{count} fontes",
   "overview.intelligence": "Ranking de modelos",
   "overview.intelligenceHint": "Medido em {day}",
   "overview.latestEditions": "Últimas edições",
@@ -85,8 +91,12 @@ const catalog = {
   "editions.status.delivered": "Entregue",
   "editions.status.dead_letter": "Dead-letter",
   "editions.status.suppressed": "Suprimida",
-  "editions.quality": "Qualidade",
-  "editions.sources": "Fontes",
+  "editions.quality": "Primárias",
+  "editions.sources": "Selecionadas",
+  "editions.metrics.considered": "Consideradas",
+  "editions.metrics.selected": "Selecionadas",
+  "editions.metrics.rejected": "Rejeitadas",
+  "editions.metrics.primarySources": "Primárias",
   "editions.attempts": "Tentativas",
   "editions.evidence": "Evidência preservada",
   "editions.evidenceHint": "{count} fontes citadas nesta publicação",
@@ -206,6 +216,25 @@ export function t(
 
 export function healthLabel(status: HealthStatus): string {
   return t(`health.${status}` as MessageKey);
+}
+
+/**
+ * Os motivos viajam em ingles porque sao o contrato documentado de `/health`
+ * (docs/OPERATIONS.md); traduzir e responsabilidade de quem exibe.
+ */
+const HEALTH_REASONS: Record<string, string> = {
+  "notifications in dead-letter": "notificações em dead-letter",
+  "no successful cycle in 24h": "nenhum ciclo concluído em 24h",
+  "failed cycles in 24h": "ciclos com falha em 24h",
+  "stale running cycles": "ciclos presos em execução",
+  "notification backlog above limit": "fila de notificações acima do limite",
+  "notifications stuck in outbox": "notificações presas no outbox",
+  "no articles collected in 48h": "nenhum artigo coletado em 48h",
+  "no recent primary sources": "nenhuma fonte primária recente",
+};
+
+export function healthReasonLabel(reason: string): string {
+  return HEALTH_REASONS[reason] ?? reason;
 }
 
 export function editionKindLabel(

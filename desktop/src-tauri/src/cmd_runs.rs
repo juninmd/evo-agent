@@ -9,10 +9,7 @@ use crate::types::RunAccepted;
 /// One-shot cycle in the agent, not in the console: the API answers 202 and the
 /// run shows up in Ciclos like any scheduled one.
 #[tauri::command]
-pub async fn run_start(
-    state: State<'_, AppState>,
-    mode: String,
-) -> Result<RunAccepted, AppError> {
+pub async fn run_start(state: State<'_, AppState>, mode: String) -> Result<RunAccepted, AppError> {
     let mode = require_mode(&mode)?;
     client_for(&state)?
         .post("/api/v1/runs", serde_json::json!({ "mode": mode }))

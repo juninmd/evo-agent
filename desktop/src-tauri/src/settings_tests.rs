@@ -24,7 +24,12 @@ fn normalizes_http_urls_and_strips_the_trailing_slash() {
 
 #[test]
 fn rejects_a_scheme_that_is_not_http() {
-    for raw in ["file:///etc/passwd", "ftp://host", "data:text/plain,x", "host"] {
+    for raw in [
+        "file:///etc/passwd",
+        "ftp://host",
+        "data:text/plain,x",
+        "host",
+    ] {
         assert!(normalize_base_url(raw).is_err(), "{raw} should be rejected");
     }
     assert!(normalize_base_url("   ").is_err());
@@ -83,6 +88,9 @@ fn the_environment_url_only_wins_when_it_is_usable() {
         pick_default_base_url(Some("https://cluster.example/".to_string())),
         "https://cluster.example"
     );
-    assert_eq!(pick_default_base_url(Some("file:///etc/passwd".to_string())), DEFAULT_BASE_URL);
+    assert_eq!(
+        pick_default_base_url(Some("file:///etc/passwd".to_string())),
+        DEFAULT_BASE_URL
+    );
     assert_eq!(pick_default_base_url(None), DEFAULT_BASE_URL);
 }

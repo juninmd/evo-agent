@@ -66,7 +66,7 @@ export default function EditionsTab() {
   const items = useMemo(() => poll.data?.items ?? [], [poll.data]);
 
   return (
-    <div className="grid min-h-0 gap-3 lg:grid-cols-[minmax(0,1fr)_22rem]">
+    <div className="grid min-h-0 items-start gap-3 lg:grid-cols-[minmax(0,1fr)_22rem]">
       <Card
         title={t("editions.title")}
         hint={t("editions.count", { total: items.length })}

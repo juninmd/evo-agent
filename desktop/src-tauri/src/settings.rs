@@ -78,8 +78,8 @@ impl Settings {
         };
         // A hand-edited file that no longer parses must not brick the app.
         let parsed: Settings = serde_json::from_str(&raw).unwrap_or_default();
-        let base_url = normalize_base_url(&parsed.base_url)
-            .unwrap_or_else(|_| Settings::default().base_url);
+        let base_url =
+            normalize_base_url(&parsed.base_url).unwrap_or_else(|_| Settings::default().base_url);
         Self {
             base_url,
             token: parsed.token,

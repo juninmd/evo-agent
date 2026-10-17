@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { api, errText } from "../lib/api";
 import { formatCount, formatFullDateTime, metricNumber } from "../lib/format";
-import { editionKindLabel, notificationLabel, t } from "../lib/i18n";
+import {
+  type MessageKey,
+  editionKindLabel,
+  notificationLabel,
+  t,
+} from "../lib/i18n";
 import type { EditionDetail } from "../lib/types";
 import Badge, { type Tone } from "./Badge";
 import ErrorBanner from "./ErrorBanner";
@@ -13,6 +18,14 @@ const TONES: Record<string, Tone> = {
   dead_letter: "danger",
   suppressed: "neutral",
 };
+
+/** Chaves de `EditorialMetrics` (src/agent/types.ts) com rotulo pt-BR. */
+const EDITORIAL_METRICS: { key: string; label: MessageKey }[] = [
+  { key: "considered", label: "editions.metrics.considered" },
+  { key: "selected", label: "editions.metrics.selected" },
+  { key: "rejected", label: "editions.metrics.rejected" },
+  { key: "primarySources", label: "editions.metrics.primarySources" },
+];
 
 export default function EditionDetailPanel({
   slug,
@@ -87,22 +100,17 @@ export default function EditionDetailPanel({
             )}
 
             <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {(
-                [
-                  "considered",
-                  "selected",
-                  "rejected",
-                  "primarySources",
-                ] as const
-              ).map((key) => (
+              {EDITORIAL_METRICS.map((metric) => (
                 <div
-                  key={key}
+                  key={metric.key}
                   className="rounded-lg border border-edge px-2 py-1.5"
                 >
-                  <dt className="text-[10px] uppercase text-faint">{key}</dt>
+                  <dt className="text-[10px] uppercase text-faint">
+                    {t(metric.label)}
+                  </dt>
                   <dd className="evo-num text-sm text-fg">
                     {formatCount(
-                      metricNumber(detail.edition.editorialMetrics, key),
+                      metricNumber(detail.edition.editorialMetrics, metric.key),
                     )}
                   </dd>
                 </div>

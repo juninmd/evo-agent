@@ -7,3 +7,8 @@ node_modules/
 stats.json
 
 scripts/icon.png
+
+# Artefatos do Playwright
+test-results/
+playwright-report/
+
