@@ -53,7 +53,8 @@ describe("formatNumber", () => {
 });
 
 describe("formatDateTime", () => {
-  it("renders day, month, hour and minute", () => {
+  // O fuso da suite esta fixado em src/test-setup.ts: 12:00Z e 09:00 em BRT.
+  it("renders day, month, hour and minute in the local zone", () => {
     expect(formatDateTime("2026-10-17 12:00:00")).toBe("17/10, 09:00");
     expect(formatDateTime(null)).toBe("—");
   });
