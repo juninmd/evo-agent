@@ -6,3 +6,7 @@ process.env.DB_PATH = join(
   tmpdir(),
   `evo-test-isolated-${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}.db`,
 );
+
+// The API refuses to serve without a credential; give the suite a known one
+// instead of weakening that check to make tests pass.
+process.env.API_TOKEN = "test-api-token";

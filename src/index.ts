@@ -15,6 +15,7 @@ import {
   generateArticle,
   generatePeriodReport,
 } from "./agent/writer.js";
+import { startApiServer } from "./api/server.js";
 import { config, loadConfig } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
 import { fetchModelCatalog } from "./crawler/model-launches.js";
@@ -423,6 +424,13 @@ async function main() {
     log.info("Running in MODEL_ALERTS mode");
     const result = await modelAlertCycle();
     closeDbAndExit(result.failed > 0 ? 1 : 0);
+  }
+
+  if (runMode === "API") {
+    log.info("Running in API mode");
+    // Keeps the event loop alive on its own; the server owns its shutdown.
+    await startApiServer();
+    return;
   }
 
   // Default DAEMON mode
