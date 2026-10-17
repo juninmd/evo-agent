@@ -4,6 +4,7 @@ import { formatDateTime } from "../lib/format";
 import { runModeLabel, t } from "../lib/i18n";
 import type { Overview } from "../lib/types";
 import Badge from "./Badge";
+import { PlayIcon } from "./Icons";
 
 /** Os modos vem do agente: o console nao mantem uma segunda lista. */
 export default function RunPanel({
@@ -54,6 +55,7 @@ export default function RunPanel({
               disabled={!enabled || busy !== null}
               onClick={() => void start(mode)}
             >
+              <PlayIcon className="size-3" />
               {busy === mode ? t("common.loadingShort") : runModeLabel(mode)}
             </button>
           ))}

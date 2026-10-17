@@ -148,6 +148,30 @@ body,
   .evo-num {
     font-variant-numeric: tabular-nums;
   }
+
+  /* Leitura em andamento: uma varredura fina no topo, nunca um spinner central
+     que apaga o painel anterior. */
+  .evo-progress {
+    animation: evo-varredura 1.1s ease-in-out infinite;
+  }
+}
+
+@keyframes evo-varredura {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(410%);
+  }
+}
+
+/* Sem movimento, a barra vira uma linha cheia: o estado continua legivel. */
+@media (prefers-reduced-motion: reduce) {
+  .evo-progress {
+    width: 100%;
+    animation: none;
+    transform: none;
+  }
 }
 
 /* Texto sem linhas viuvas e titulos equilibrados (CSS Text 4). */

@@ -26,6 +26,7 @@ export default function CyclesTab({ modes }: { modes: string[] }) {
 
   return (
     <Card
+      fill
       title={t("cycles.title")}
       hint={t("cycles.count", { total: items.length })}
       actions={
