@@ -360,9 +360,19 @@ async function main() {
 
   if (runMode === "DAILY") {
     log.info("Running in DAILY mode");
-    await cycles.run("daily", () =>
-      articleCycle("daily", { excludeUrls: sourcesUsedToday() }),
-    );
+    // Pelo `ensureDailyEditions`, e nao por um `articleCycle` solto: assim o
+    // orcamento do dia e respeitado e um retry do job (backoffLimit) nao
+    // publica uma edicao extra.
+    await ensureDailyEditions("scheduled");
+    closeDbAndExit(0);
+  }
+
+  if (runMode === "DAILY_SWEEP") {
+    log.info("Running in DAILY_SWEEP mode");
+    // Fecha o dia: publica o que faltar do orcamento, inclusive o slot que
+    // falhou de manha. Um dia sem edicao nao se recuperava sozinho, porque no
+    // cluster nao existe o sweep do modo DAEMON.
+    await ensureDailyEditions("end-of-day sweep", true);
     closeDbAndExit(0);
   }
 

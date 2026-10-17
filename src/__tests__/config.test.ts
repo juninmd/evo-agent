@@ -55,6 +55,24 @@ describe("loadConfig", () => {
     );
   });
 
+  // O sweep fecha o dia publicando o que faltar do orcamento; sem ele, um
+  // daily que falha deixa o dia com zero edicoes.
+  it("accepts DAILY_SWEEP as a publishing job", () => {
+    const config = loadConfig({
+      ...baseEnv,
+      RUN_MODE: "DAILY_SWEEP",
+      TELEGRAM_BOT_TOKEN: "token",
+      TELEGRAM_CHAT_ID: "chat",
+      GITHUB_TOKEN: "github",
+      GITHUB_OWNER: "owner",
+      GITHUB_REPO: "repo",
+    });
+    expect(config.runMode).toBe("DAILY_SWEEP");
+    expect(() => loadConfig({ ...baseEnv, RUN_MODE: "DAILY_SWEEP" })).toThrow(
+      /TELEGRAM_BOT_TOKEN/,
+    );
+  });
+
   it("supports EBOOK mode as a publishing job", () => {
     const config = loadConfig({
       ...baseEnv,
