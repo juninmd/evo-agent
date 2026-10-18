@@ -8,8 +8,11 @@ import {
   db,
 } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
+import { buildAtomFeed } from "./feed.js";
 import {
   type PublishedItem,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
   type SiteFile,
   buildEbookMarkdown,
   buildIndex,
@@ -266,10 +269,14 @@ export function buildPublicationBatch(
     else articles.unshift(publishedItem);
   }
 
-  const indexContent = buildIndex(
-    uniqueByUrl(articles).slice(0, 80),
-    uniqueByUrl(reports).slice(0, 24),
-  );
+  const indexArticles = uniqueByUrl(articles).slice(0, 80);
+  const indexReports = uniqueByUrl(reports).slice(0, 24);
+  const indexContent = buildIndex(indexArticles, indexReports);
+  const feed = buildAtomFeed([...indexArticles, ...indexReports], {
+    baseUrl: `https://${target.owner}.github.io/${target.repo}/`,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  });
   return {
     items,
     files: [
@@ -277,6 +284,7 @@ export function buildPublicationBatch(
       ...items.flatMap((item) => [item.file, ...item.attachments]),
       { path: "index.md", content: indexContent },
       { path: "README.md", content: indexContent },
+      { path: "feed.xml", content: feed },
     ],
   };
 }

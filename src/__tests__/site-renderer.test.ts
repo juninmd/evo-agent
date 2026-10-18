@@ -173,11 +173,11 @@ describe("buildIndex", () => {
 });
 
 describe("buildSiteFiles", () => {
-  it("enables the feed and sitemap plugins", () => {
+  it("enables the sitemap plugin and leaves feed.xml to the publisher", () => {
     const config = buildSiteFiles("owner", "repo", "gh-pages").find(
       (file) => file.path === "_config.yml",
     );
-    expect(config?.content).toContain("jekyll-feed");
+    expect(config?.content).not.toContain("jekyll-feed");
     expect(config?.content).toContain("jekyll-sitemap");
   });
 
