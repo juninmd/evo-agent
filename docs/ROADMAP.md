@@ -4,12 +4,14 @@ Ideias ancoradas no que o código já coleta. Ordem = valor / esforço.
 
 ## Mais útil para quem lê
 
-1. **Busca no site.** O arquivo só agrupa por ano/mês. O publisher já tem título, slug e
-   resumo de cada edição: emitir `search.json` e filtrar no cliente na página
-   `Arquivo`. Sem backend. Toca `site-renderer.ts`.
-2. **Feed Atom por ferramenta.** `AGENT_SOURCES` já separa Claude Code, Codex, Copilot CLI,
-   Gemini CLI, Cursor e MCP, e o Reddit tem comunidades-foco para as mesmas. Publicar
-   `feed/<ferramenta>.xml` deixa o leitor assinar só o que usa.
+1. **Busca no site além de título e tag.** A busca client-side (`#story-search`) já existe e
+   filtra por título e tags; incluir o `summary` em `data-search` cobre assuntos que não estão
+   no título. (A primeira versão deste roadmap propunha a busca do zero: estava errado, o
+   código já a tinha.)
+2. **Feed Atom por ferramenta.** Pré-requisito já entregue: o `feed.xml` global tinha 0
+   entradas (jekyll-feed só lê `_posts`) e passou a ser gerado em `publisher/feed.ts`. As tags
+   são livres (vêm do LLM), então o feed por ferramenta precisa antes de um vocabulário
+   controlado (Claude Code, Codex, Copilot CLI, Gemini CLI, Cursor, MCP).
 3. **Changelog consolidado.** Uma página com versão → o que mudou, por ferramenta, sempre
    apontando para a fonte primária (já marcada como tal). O `DEV_TIPS` semanal vira
    consequência dessa tabela, não um texto separado.
@@ -31,8 +33,9 @@ Ideias ancoradas no que o código já coleta. Ordem = valor / esforço.
 
 ## Mais direto (estrutura e operação)
 
-8. **`RUN_MODE` como tabela.** `src/index.ts` (~590 linhas) despacha por `if`; um mapa
-   `modo → handler` permite `npm start -- --help` gerado da mesma tabela do README.
+8. **`RUN_MODE` como tabela.** Entregue: `ONE_SHOT_MODES` em `src/index.ts`,
+   `RUN_MODE_SUMMARY` em `src/run-modes.ts` e `npm start -- --help`; o teste de drift cobre o
+   README.
 9. **Quebrar arquivos acima de 300 linhas.** `crawler/index.ts` (~1370), `reddit.ts` (~650),
    `store.ts` (~1050), `writer.ts` (~820). Cortes naturais: `sources.ts`
    (`DEFAULT_SOURCES`), HN/TabNews, `store` por entidade (articles, cycles, outbox, state).
