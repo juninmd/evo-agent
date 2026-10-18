@@ -64,7 +64,7 @@ async function closeSharedBrowser() {
 }
 
 const STEALTH_USER_AGENT =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
+  "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
 
 /**
  * Owns the Playwright context lifecycle. Contexts are not reclaimed until the
@@ -115,7 +115,7 @@ const parser = new Parser({
   timeout: 10000,
   headers: {
     "User-Agent":
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
   },
 });
 
@@ -125,6 +125,385 @@ interface FeedSource {
   tags: string[];
   // HTML sources are scraped via Playwright instead of RSS parsing.
   html?: { hrefPrefix: string; baseUrl: string; excludePrefix?: string };
+}
+
+interface RedditComment {
+  body: string;
+  score: number;
+  depth: number;
+}
+
+interface RedditCommentNode {
+  kind?: string;
+  data?: {
+    body?: string;
+    score?: number;
+    author?: string;
+    replies?: string | RedditListing;
+  };
+}
+
+interface RedditListing {
+  data?: {
+    children?: RedditCommentNode[];
+  };
+}
+
+interface RedditPostCandidate {
+  subreddit: string;
+  title: string;
+  url: string;
+  summary: string;
+}
+
+const REDDIT_COMMUNITY_SUBREDDITS = [
+  // IA/LLM Core
+  "LocalLLaMA",
+  "MachineLearning",
+  "OpenAI",
+  "ClaudeAI",
+  "ClaudeCode",
+  "ChatGPTCoding",
+  "LLMDevs",
+  "AI_Agents",
+  "AgenticAI",
+  "LangChain",
+  "ollama",
+  "artificial",
+  "singularity",
+  "ChatGPT",
+  "ArtificialIntelligence",
+  "deeplearning",
+  "MLQuestions",
+  "StableDiffusion",
+  "comfyui",
+  "SoraAi",
+  // Development tools com IA
+  "Cursor",
+  "CursorIDE",
+  "WindsurfAI",
+  "GithubCopilot",
+  "codex",
+  "vscode",
+  "vibecoding",
+  "kilocode",
+  "opencode",
+  "MCP",
+  // Linguagens de programação (foco em IA/agents)
+  "Python",
+  "TypeScript",
+  "node",
+  "golang",
+  "rust",
+  // IA/ML específicos
+  "neuralnetworks",
+  "LanguageModels",
+  "Tensorflow",
+  "learnmachinelearning",
+  "reinforcementlearning",
+  "datascience",
+  // Development & Tools
+  "learnprogramming",
+  "coding",
+];
+
+/**
+ * Communities the editions must cover every day. They are crawled by "top of the
+ * week" on top of the usual "new" feed so the best recent posts are collected,
+ * not only whatever happened to be posted last.
+ */
+const REDDIT_FOCUS_SUBREDDITS = new Set([
+  "ClaudeCode",
+  "codex",
+  "vscode",
+  "GithubCopilot",
+]);
+
+const REDDIT_USER_AGENT =
+  "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+const REDDIT_POSTS_PER_SUBREDDIT = 12;
+const REDDIT_FOCUS_POSTS_PER_SUBREDDIT = 20;
+/**
+ * Comments cost one request per post, which is what exhausts the rate limit.
+ * Only the top slice of each feed is enriched; the remaining posts still reach
+ * the edition as post signals, for free.
+ */
+const REDDIT_COMMENT_POSTS_PER_SUBREDDIT = 4;
+const REDDIT_FOCUS_COMMENT_POSTS_PER_SUBREDDIT = 8;
+const REDDIT_SORTS: ("top" | "new")[] = ["top", "new"];
+const REDDIT_COMMENTS_PER_POST = 30;
+const REDDIT_MIN_COMMENT_SCORE = 3;
+const REDDIT_MIN_COMMENT_LENGTH = 80;
+/** Reddit throttles by IP, so the focus feeds wait it out instead of giving up. */
+const REDDIT_FOCUS_RETRY_DELAYS_MS = [30_000, 60_000, 120_000];
+const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 3000;
+const REDDIT_RATE_LIMIT_MAX_RETRY_MS = 60000;
+/**
+ * `retry-after` tem precedencia; na ausencia dele vale o `x-ratelimit-reset`, que
+ * e o unico cabecalho que o Reddit manda no 429 anonimo.
+ */
+export function redditRateLimitDelayMs(
+  value: unknown,
+  resetSeconds?: unknown,
+): number {
+  const retryAfterMs = (val: unknown): number | null => {
+    if (typeof val === "number" && Number.isFinite(val) && val >= 0) return val * 1000;
+    if (typeof val !== "string" || val.trim() === "") return null;
+    const seconds = Number(val);
+    if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
+    const date = Date.parse(val);
+    if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
+    return null;
+  };
+
+  return Math.min(
+    retryAfterMs(value) ??
+      retryAfterMs(resetSeconds) ??
+      REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS,
+    REDDIT_RATE_LIMIT_MAX_RETRY_MS,
+  );
+}
+
+/**
+ * Com o orcamento anonimo esgotado, `x-ratelimit-reset` diz quantos segundos
+ * faltam para reabrir. Devolve null quando ainda ha orcamento, para o ritmo
+ * normal do crawler continuar valendo.
+ */
+export function redditBudgetDelayMs(
+  headers: Record<string, unknown> | undefined,
+): number | null {
+  const remaining = Number(headers?.["x-ratelimit-remaining"]);
+  if (!Number.isFinite(remaining) || remaining > 0) return null;
+  const reset = retryAfterMs(headers?.["x-ratelimit-reset"]);
+  return reset === null
+    ? null
+    : Math.min(reset, REDDIT_RATE_LIMIT_MAX_RETRY_MS);
+}
+
+const retryAfterMs = (value: unknown): number | null => {
+  if (typeof value === "number") {
+    return Number.isFinite(value) && value >= 0 ? value * 1000 : null;
+  }
+  if (typeof value !== "string" || value.trim() === "") return null;
+  const seconds = Number(value);
+  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
+  const date = Date.parse(value);
+  if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
+  return null;
+};
+
+function isRedditRateLimit(err: unknown): err is AxiosError {
+  return (
+    axios.isAxiosError(err) &&
+    err.response?.status === 429 &&
+    err.response?.headers?.["retry-after"]
+  );
+}
+
+/**
+ * "Crawler failed for Google Research: " nao diz nada. Um erro sem mensagem
+ * ainda carrega status HTTP, codigo e tipo; e o que permite agir depois.
+ */
+export function describeCrawlerError(err: unknown): string {
+  if (axios.isAxiosError(err)) {
+    const parts = [
+      err.response?.status ? `HTTP ${err.response.status}` : null,
+      err.code ?? null,
+      err.message || null,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(" · ") : "erro HTTP sem detalhe";
+  }
+  if (err instanceof Error) {
+    return err.message || err.name || "Error sem mensagem";
+  }
+  const text = String(err).trim();
+  return text === "" ? "falha sem detalhe" : text;
+}
+
+export function isUsefulComment(comment: RedditComment): boolean {
+  const body = comment.body.toLowerCase();
+  return (
+    comment.score >= REDDIT_MIN_COMMENT_SCORE &&
+    comment.body.length >= REDDIT_MIN_COMMENT_LENGTH &&
+    body !== "[deleted]" &&
+    body !== "[removed]" &&
+    !body.startsWith("i am a bot")
+  );
+}
+
+function isUsefulRedditPost(title: string): boolean {
+  const normalized = title.toLowerCase();
+  const lowSignalPatterns = [
+    "drop your projects",
+    "share what you're working on",
+    "share what you are working on",
+    "shout out",
+    "shoutout",
+    "instagram",
+  ];
+  return !lowSignalPatterns.some((pattern) => normalized.includes(pattern));
+}
+
+function flattenComments(
+  listing: RedditListing | undefined,
+  depth = 0,
+): RedditComment[] {
+  const children = listing?.data?.children ?? [];
+  const comments: RedditComment[] = [];
+
+  for (const child of children) {
+    if (child.kind !== "t1" || !child.data?.body) continue;
+
+    comments.push({
+      body: child.data.body,
+      score: child.data.score ?? 0,
+      depth,
+    });
+
+    if (typeof child.data.replies === "object") {
+      comments.push(...flattenComments(child.data.replies, depth + 1));
+    }
+  }
+
+  return comments;
+}
+
+function redditJsonUrl(postUrl: string): string {
+  const cleanUrl = postUrl.split("?")[0].replace(/\/$/, "");
+  return `${cleanUrl}.json?limit=50&depth=3&sort=top`;
+}
+
+function signalUrl(postUrl: string): string {
+  return `${postUrl.split("#")[0]}#community-signals`;
+}
+
+function buildCommunitySignalSummary(
+  post: RedditPostCandidate,
+  comments: RedditComment[],
+): string {
+  const topComments = comments
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8)
+    .map((comment) => {
+      const body = comment.body.length > 220
+        ? `${comment.body.slice(0, 217).trim()}...`
+        : comment.body;
+      return `score ${comment.score}: ${body}`;
+    });
+
+  const positiveCount = comments.filter((comment) => comment.score > 0).length;
+  return normalizeTitle(
+    [
+      `Sinais da comunidade em r/${post.subreddit} sobre "${post.title}".`,
+      `Comentários úteis analisados: ${comments.length}.`,
+      `Comentários com score positivo: ${positiveCount}.`,
+      `Top comments: ${topComments.join(" | ")}`,
+    ].join(" "),
+  ).slice(0, 2600);
+}
+
+function buildRedditPostSignalSummary(post: RedditPostCandidate): string {
+  return normalizeTitle(
+    [
+      `Post da comunidade em r/${post.subreddit} sobre "${post.title}".`,
+      "Relato do autor, sem os comentarios da discussao.",
+      post.summary,
+    ].join(" "),
+  ).slice(0, 1200);
+}
+
+function focusRetryDelayMs(attempt: number): number | null {
+  return REDDIT_FOCUS_RETRY_DELAYS_MS[attempt] ?? null;
+}
+
+async function getRedditPostCandidates(
+  subreddit: string,
+  sort: "new" | "top" = "new",
+): Promise<RedditPostCandidate[]> {
+  const limit = REDDIT_FOCUS_SUBREDDITS.has(subreddit)
+    ? REDDIT_FOCUS_POSTS_PER_SUBREDDIT
+    : REDDIT_POSTS_PER_SUBREDDIT;
+  const data = await redditGet<string>(
+    `https://www.reddit.com/r/${subreddit}/${sort}/.rss${sort === "top" ? "?t=week" : ""}`,
+    {
+      headers: {
+        Accept: "application/atom+xml, application/xml",
+        "User-Agent": REDDIT_USER_AGENT,
+      },
+      timeout: 8000,
+    },
+  );
+  const feed = await parser.parseString(data);
+
+  return feed.items.slice(0, limit).flatMap((item) => {
+    if (!item.title || !item.link) return [];
+    if (!isUsefulRedditPost(item.title)) return [];
+    const summary = summarizeSourceContent(
+      item.contentSnippet ?? item.content ?? "",
+      1000,
+    );
+    return [{ subreddit, title: item.title, url: item.link, summary }];
+  });
+}
+
+async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
+  const data = await redditGet<unknown[]>(redditJsonUrl(postUrl), {
+    headers: { "User-Agent": REDDIT_USER_AGENT },
+    timeout: 8000,
+  });
+  const listing = data?.[1] as RedditListing | undefined;
+  return flattenComments(listing)
+    .filter(isUsefulComment)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, REDDIT_COMMENTS_PER_POST);
+}
+
+async function getFocusPostCandidates(
+  subreddit: string,
+  sort: "new" | "top",
+): Promise<RedditPostCandidate[]> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await getRedditPostCandidates(subreddit, sort);
+    } catch (err) {
+      const delay =
+        err instanceof RedditRateLimitError ? focusRetryDelayMs(attempt) : null;
+      if (delay === null) throw err;
+      const jittered = jitterDelay(delay);
+      log.warn(
+        `Reddit rate limited on focus r/${subreddit}; waiting ${jittered}ms before retry ${attempt + 1}`,
+      );
+      await sleep(jittered);
+    }
+  }
+}
+
+function isV2exAiRelevant(title: string): boolean {
+  const lower = title.toLowerCase();
+  const keywords = [
+    "ai",
+    "agent",
+    "claude",
+    "codex",
+    "copilot",
+    "gpt",
+    "llm",
+    "mimo",
+    "模型",
+    "智能体",
+    "deepseek",
+    "gemini",
+    "opus",
+    "qwen",
+    "cursor",
+    "litellm",
+    "vibecoding",
+    "vibe coding",
+    "向量",
+    "脱敏",
+    "屎山",
+  ];
+  return keywords.some((kw) => lower.includes(kw));
 }
 
 const V2EX_AI_KEYWORDS = [
@@ -463,8 +842,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
 ];
 
-// Circuit breaker: track consecutive failures per source name.
-// After CIRCUIT_OPEN_THRESHOLD failures, skip the source for CIRCUIT_SKIP_CYCLES crawl cycles.
 const CIRCUIT_OPEN_THRESHOLD = 3;
 const CIRCUIT_SKIP_CYCLES = 5;
 function circuitAllow(name: string): boolean {
@@ -589,7 +966,6 @@ async function crawlGitHubTrending(): Promise<number> {
   let newCount = 0;
 
   await withStealthPage(async (page) => {
-    // Trending geral + trending por linguagem de IA
     const queries: Array<{ label: string; url: string }> = [
       {
         label: "daily",
@@ -601,7 +977,6 @@ async function crawlGitHubTrending(): Promise<number> {
       },
     ];
 
-    // Add language-specific trending
     for (const lang of GITHUB_TRENDING_LANGUAGES) {
       queries.push({
         label: `daily-${lang.toLowerCase()}`,
@@ -623,7 +998,9 @@ async function crawlGitHubTrending(): Promise<number> {
             .map((article) => {
               const link = article.querySelector("h2 a");
               const desc = article.querySelector("p");
-              const starsEl = article.querySelector('a[href$="/stargazers"]');
+              const starsEl = article.querySelector(
+                'a[href$="/stargazers"]',
+              );
               const langEl = article.querySelector(
                 '[itemprop="programmingLanguage"]',
               );
@@ -642,8 +1019,6 @@ async function crawlGitHubTrending(): Promise<number> {
         const day = todayIso();
         for (const repo of repos) {
           if (!repo.url || !repo.name) continue;
-          // A repo trending again is today's news, so the signal is keyed by
-          // day. Keying by repo URL alone hid every repo already seen once.
           const signalUrl = trendingSignalUrl(repo.url, label, day);
           if (db.urlExists(signalUrl)) continue;
 
@@ -769,29 +1144,15 @@ async function fetchWithPlaywright(url: string): Promise<string> {
   );
 }
 
-function isV2exAiRelevant(title: string): boolean {
+function isHackerNewsRelevant(title: string): boolean {
   const lower = title.toLowerCase();
-  return V2EX_AI_KEYWORDS.some((kw) => lower.includes(kw));
-}
-
-/**
- * "Crawler failed for Google Research: " nao diz nada. Um erro sem mensagem
- * ainda carrega status HTTP, codigo e tipo; e o que permite agir depois.
- */
-export function describeCrawlerError(err: unknown): string {
-  if (axios.isAxiosError(err)) {
-    const parts = [
-      err.response?.status ? `HTTP ${err.response.status}` : null,
-      err.code ?? null,
-      err.message || null,
-    ].filter(Boolean);
-    return parts.length > 0 ? parts.join(" · ") : "erro HTTP sem detalhe";
-  }
-  if (err instanceof Error) {
-    return err.message || err.name || "Error sem mensagem";
-  }
-  const text = String(err).trim();
-  return text === "" ? "falha sem detalhe" : text;
+  const words = lower.split(/[^a-z0-9+.]+/);
+  return HACKER_NEWS_KEYWORDS.some((keyword) => {
+    if (keyword.includes(" ")) return lower.includes(keyword);
+    return keyword.length <= 3
+      ? words.includes(keyword)
+      : words.some((word) => word.startsWith(keyword));
+  });
 }
 
 const HACKER_NEWS_MIN_POINTS = 20;
@@ -819,24 +1180,8 @@ const HACKER_NEWS_KEYWORDS = [
   "neural",
 ];
 
-export function isHackerNewsRelevant(title: string): boolean {
-  const lower = title.toLowerCase();
-  const words = lower.split(/[^a-z0-9+.]+/);
-  return HACKER_NEWS_KEYWORDS.some((keyword) => {
-    if (keyword.includes(" ")) return lower.includes(keyword);
-    // Short keywords match whole words only, or "Spain" reads as AI news.
-    // Longer ones match as a prefix, so "agentic" and "qwen3.8" still count.
-    return keyword.length <= 3
-      ? words.includes(keyword)
-      : words.some((word) => word.startsWith(keyword));
-  });
-}
-
 async function crawlHackerNewsAlgolia(): Promise<number> {
   let newCount = 0;
-  // The full-text index lags — on 06/08/2026 a broad "AI OR LLM" query returned
-  // nothing newer than 23/07. The front page is always current, so relevance is
-  // filtered here instead of being delegated to the query.
   const queries = [
     {
       tag: "front-page",
@@ -845,7 +1190,9 @@ async function crawlHackerNewsAlgolia(): Promise<number> {
     },
     {
       tag: "ai",
-      url: `https://hn.algolia.com/api/v1/search_by_date?query=${encodeURIComponent("AI OR LLM OR GPT OR Claude OR agent")}&tags=story&hitsPerPage=30&numericFilters=points>${HACKER_NEWS_MIN_POINTS}`,
+      url: `https://hn.algolia.com/api/v1/search_by_date?query=${encodeURIComponent(
+        "AI OR LLM OR GPT OR Claude OR agent",
+      )}&tags=story&hitsPerPage=30&numericFilters=points>${HACKER_NEWS_MIN_POINTS}`,
       filter: false,
     },
   ];
@@ -923,7 +1270,6 @@ async function crawlTabNews(): Promise<number> {
       )
       .slice(0, 20);
 
-    // Bodies are fetched in bounded parallel; the list call stays cheap.
     const missingBodies = contents.filter((item) => !item.body);
     const fetchedBodies = await mapLimit(missingBodies, 5, async (item) => {
       try {
@@ -975,7 +1321,6 @@ async function crawlAiCommunityPosts(): Promise<number> {
   let newCount = 0;
   const aiTags = ["ai", "llm", "machine-learning", "agents"];
 
-  // Dev.to (AI-focused)
   for (const tag of aiTags) {
     try {
       const url = `https://dev.to/api/articles?tag=${tag}&top=7&per_page=25`;
@@ -1005,7 +1350,6 @@ async function crawlAiCommunityPosts(): Promise<number> {
     }
   }
 
-  // Hashnode (AI-focused)
   const hashnoteTags = ["artificial-intelligence", "llm", "machine-learning"];
   for (const tag of hashnoteTags) {
     try {
@@ -1062,13 +1406,14 @@ async function crawlHtmlSource(source: FeedSource): Promise<number> {
               const title = titleEl
                 ? titleEl.textContent?.trim()
                 : a.textContent?.trim();
-              // Description often lives in the card wrapper, not inside the <a>.
               const card = a.closest('[class*="card"]') ?? a.parentElement ?? a;
               const descEl = a.querySelector("p") ?? card.querySelector("p");
               const summary = descEl ? descEl.textContent?.trim() : "";
               return {
                 title: title ?? "",
-                url: href.startsWith("http") ? href : `${baseUrl}${href}`,
+                url: href.startsWith("http")
+                  ? href
+                  : `${baseUrl}${href}`,
                 summary: summary ?? "",
               };
             })
@@ -1138,9 +1483,6 @@ async function crawlAllInner(): Promise<CrawlReport> {
     metrics[source.name] = { saved: 0, failed: false };
   }
 
-  // Non-Reddit feeds are independent, so bounded concurrency cuts the crawl
-  // tail instead of waiting on 60+ sources in a row; Reddit stays serialized
-  // by its own pace limiter and the shared rate-limit flag.
   const crawlSource = async (source: FeedSource): Promise<void> => {
     if (redditRateLimited && isRedditSource(source)) {
       log.debug(`Reddit rate limit active: skipping "${source.name}"`);
@@ -1243,12 +1585,12 @@ async function crawlAllInner(): Promise<CrawlReport> {
   const keywords = getSearchKeywords();
   let googleNewsSaved = 0;
   let googleNewsFailed = 0;
-  // Google News links are redirect URLs unique per query, so the same story
-  // would be saved once per keyword; normalized titles dedupe the pass.
   const googleNewsTitles = new Set<string>();
   for (const keyword of keywords) {
     try {
-      const queryUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keyword)}&hl=en-US&gl=US&ceid=US:en`;
+      const queryUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(
+        keyword,
+      )}&hl=en-US&gl=US&ceid=US:en`;
       const feed = await parser.parseURL(queryUrl);
       for (const item of feed.items.slice(0, 5)) {
         if (!item.link || !item.title) continue;
@@ -1270,7 +1612,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
     } catch (err) {
       googleNewsFailed++;
       log.warn(
-        `Google News search crawler failed for '${keyword}': ${err instanceof Error ? err.message : String(err)}`,
+        `Google News search crawler failed for '${keyword}': ${(err as Error).message}`,
       );
     }
   }
@@ -1285,7 +1627,9 @@ async function crawlAllInner(): Promise<CrawlReport> {
     try {
       const cleanKeyword = keyword.slice(0, 60).trim();
       const query = `(site:reddit.com OR site:x.com) "${cleanKeyword}"`;
-      const searxngUrl = `${config.searxngUrl}/search?q=${encodeURIComponent(query)}&format=json`;
+      const searxngUrl = `${config.searxngUrl}/search?q=${encodeURIComponent(
+        query,
+      )}&format=json`;
       const response = await axios.get(searxngUrl, { timeout: 5000 });
       const results = response.data?.results ?? [];
       for (const result of results.slice(0, 5)) {
@@ -1297,8 +1641,8 @@ async function crawlAllInner(): Promise<CrawlReport> {
         const sourceName = result.url.includes("reddit.com")
           ? `Reddit (${cleanKeyword})`
           : result.url.includes("x.com")
-            ? `X/Twitter (${cleanKeyword})`
-            : `Web Search (${cleanKeyword})`;
+          ? `X/Twitter (${cleanKeyword})`
+          : `Web Search (${cleanKeyword})`;
         db.saveArticle({
           title: result.title,
           source: sourceName,
@@ -1313,7 +1657,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
     } catch (err) {
       searxngFailed++;
       log.warn(
-        `SearXNG failed for '${keyword.slice(0, 40)}': ${err instanceof Error ? err.message : String(err)}`,
+        `SearXNG failed for '${keyword.slice(0, 40)}': ${(err as Error).message}`,
       );
     }
   }
@@ -1353,7 +1697,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
       metrics[extra.name] = { saved: 0, failed: true };
       circuitFailure(extra.name);
       log.warn(
-        `${extra.name} crawler failed: ${err instanceof Error ? err.message : String(err)}`,
+        `${extra.name} crawler failed: ${(err as Error).message}`,
       );
     }
   }
@@ -1366,7 +1710,9 @@ async function crawlAllInner(): Promise<CrawlReport> {
     .map(([k, v]) => `${k}:${v.saved}`)
     .join(", ");
   log.info(
-    `Crawl complete — ${newCount} new articles. Saved by source: [${summary || "none"}]${failed.length ? `. Failed: [${failed.join(", ")}]` : ""}`,
+    `Crawl complete — ${newCount} new articles. Saved by source: [${summary || "none"}]${
+      failed.length ? `. Failed: [${failed.join(", ")}]` : ""
+    }`,
   );
   return { totalSaved: newCount, sources: metrics, failedSources: failed };
 }
