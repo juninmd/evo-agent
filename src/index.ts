@@ -16,7 +16,7 @@ import {
   generatePeriodReport,
 } from "./agent/writer.js";
 import { startApiServer } from "./api/server.js";
-import { config, loadConfig } from "./config.js";
+import { type RunMode, config, loadConfig } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
 import { fetchModelCatalog } from "./crawler/model-launches.js";
 import { db, getDb } from "./knowledge/store.js";
@@ -36,6 +36,7 @@ import {
   publishEbook,
   publishWeeklyReport,
 } from "./publisher/github.js";
+import { runModeHelp } from "./run-modes.js";
 import { setAiMetricRecorder } from "./utils/ai.js";
 import { CycleCoordinator } from "./utils/cycle.js";
 import { localDayIso } from "./utils/date.js";
@@ -335,16 +336,13 @@ async function ensureDailyEditions(reason: string, fill = false) {
   log.info(`Daily editions complete for today (${reason})`);
 }
 
-async function main() {
-  loadConfig(process.env);
-  const staleCycles = db.failStaleRunningCycles();
-  if (staleCycles > 0) {
-    log.warn(`Marked stale running cycles as failed: ${staleCycles}`);
-  }
-  const runMode = config.runMode;
-
-  if (runMode === "CRAWL") {
-    log.info("Running in CRAWL mode");
+// One-shot modes run a single job and exit; the value is the exit code.
+// DAILY goes through ensureDailyEditions (not a bare articleCycle) so the day's
+// budget holds and a job retry (backoffLimit) never publishes an extra edition.
+// DAILY_SWEEP closes the day, including a morning slot that failed, because the
+// cluster has no DAEMON sweep.
+const ONE_SHOT_MODES: Partial<Record<RunMode, () => Promise<number>>> = {
+  CRAWL: async () => {
     try {
       await cycles.run("crawl", learnCycle);
     } finally {
@@ -355,85 +353,48 @@ async function main() {
         log.error(`Notification outbox failed: ${errMsg(e)}`),
       );
     }
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "DAILY") {
-    log.info("Running in DAILY mode");
-    // Pelo `ensureDailyEditions`, e nao por um `articleCycle` solto: assim o
-    // orcamento do dia e respeitado e um retry do job (backoffLimit) nao
-    // publica uma edicao extra.
+    return 0;
+  },
+  DAILY: async () => {
     await ensureDailyEditions("scheduled");
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "DAILY_SWEEP") {
-    log.info("Running in DAILY_SWEEP mode");
-    // Fecha o dia: publica o que faltar do orcamento, inclusive o slot que
-    // falhou de manha. Um dia sem edicao nao se recuperava sozinho, porque no
-    // cluster nao existe o sweep do modo DAEMON.
+    return 0;
+  },
+  DAILY_SWEEP: async () => {
     await ensureDailyEditions("end-of-day sweep", true);
-    closeDbAndExit(0);
-  }
+    return 0;
+  },
+  RADAR: () => runCycle("radar", radarCycle),
+  TECHLEAD: () => runCycle("techlead", techleadCycle),
+  DEV_TIPS: () => runCycle("devtips", devTipsCycle),
+  WEEKLY: () => runCycle("weekly", () => reportCycle("weekly")),
+  BIWEEKLY: () => runCycle("biweekly", () => reportCycle("biweekly")),
+  MONTHLY: () => runCycle("monthly", () => reportCycle("monthly")),
+  BIMONTHLY: () => runCycle("bimonthly", () => reportCycle("bimonthly")),
+  SEMESTER: () => runCycle("semester", () => reportCycle("semester")),
+  EBOOK: () => runCycle("ebook", ebookCycle),
+  MODEL_ALERTS: async () => ((await modelAlertCycle()).failed > 0 ? 1 : 0),
+};
 
-  if (runMode === "RADAR") {
-    log.info("Running in RADAR mode");
-    await cycles.run("radar", radarCycle);
-    closeDbAndExit(0);
-  }
+async function runCycle(
+  type: Parameters<typeof cycles.run>[0],
+  fn: () => Promise<Record<string, unknown>>,
+): Promise<number> {
+  await cycles.run(type, fn);
+  return 0;
+}
 
-  if (runMode === "TECHLEAD") {
-    log.info("Running in TECHLEAD mode");
-    await cycles.run("techlead", techleadCycle);
-    closeDbAndExit(0);
+async function main() {
+  loadConfig(process.env);
+  const staleCycles = db.failStaleRunningCycles();
+  if (staleCycles > 0) {
+    log.warn(`Marked stale running cycles as failed: ${staleCycles}`);
   }
+  const runMode = config.runMode;
 
-  if (runMode === "DEV_TIPS") {
-    log.info("Running in DEV_TIPS mode");
-    await cycles.run("devtips", devTipsCycle);
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "WEEKLY") {
-    log.info("Running in WEEKLY mode");
-    await cycles.run("weekly", () => reportCycle("weekly"));
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "BIWEEKLY") {
-    log.info("Running in BIWEEKLY mode");
-    await cycles.run("biweekly", () => reportCycle("biweekly"));
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "MONTHLY") {
-    log.info("Running in MONTHLY mode");
-    await cycles.run("monthly", () => reportCycle("monthly"));
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "BIMONTHLY") {
-    log.info("Running in BIMONTHLY mode");
-    await cycles.run("bimonthly", () => reportCycle("bimonthly"));
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "SEMESTER") {
-    log.info("Running in SEMESTER mode");
-    await cycles.run("semester", () => reportCycle("semester"));
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "EBOOK") {
-    log.info("Running in EBOOK mode");
-    await cycles.run("ebook", ebookCycle);
-    closeDbAndExit(0);
-  }
-
-  if (runMode === "MODEL_ALERTS") {
-    log.info("Running in MODEL_ALERTS mode");
-    const result = await modelAlertCycle();
-    closeDbAndExit(result.failed > 0 ? 1 : 0);
+  const oneShot = ONE_SHOT_MODES[runMode];
+  if (oneShot) {
+    log.info(`Running in ${runMode} mode`);
+    closeDbAndExit(await oneShot());
   }
 
   if (runMode === "API") {
@@ -583,6 +544,11 @@ async function main() {
   };
   process.on("SIGINT", () => shutdown("SIGINT"));
   process.on("SIGTERM", () => shutdown("SIGTERM"));
+}
+
+if (process.argv.includes("--help") || process.argv.includes("-h")) {
+  console.log(runModeHelp());
+  process.exit(0);
 }
 
 main().catch((e) => {

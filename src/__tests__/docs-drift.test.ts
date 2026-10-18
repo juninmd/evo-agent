@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { RUN_MODE_SUMMARY, runModeHelp } from "../run-modes.js";
 
 const SRC = join(import.meta.dirname, "..");
 const ENV_READ =
@@ -29,5 +30,22 @@ describe("README env table", () => {
     }
     const missing = [...names].filter((n) => !readme.includes(`\`${n}\``));
     expect(missing.sort()).toEqual([]);
+  });
+});
+
+describe("run modes", () => {
+  it("lists every RUN_MODE as a row of the README table", () => {
+    const readme = readFileSync(join(SRC, "..", "README.md"), "utf8");
+    const missing = Object.keys(RUN_MODE_SUMMARY).filter(
+      (mode) => !readme.includes(`| \`${mode}\``),
+    );
+    expect(missing).toEqual([]);
+  });
+
+  it("prints every mode in --help", () => {
+    const help = runModeHelp();
+    for (const mode of Object.keys(RUN_MODE_SUMMARY)) {
+      expect(help).toContain(mode);
+    }
   });
 });
