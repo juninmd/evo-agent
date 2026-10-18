@@ -9,6 +9,7 @@ import {
 } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 import { buildAtomFeed } from "./feed.js";
+import { publicTags } from "./public-tags.js";
 import {
   type PublishedItem,
   SITE_DESCRIPTION,
