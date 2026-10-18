@@ -21,6 +21,24 @@
     <category term="vscode"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-18-radar-2026-10-18</id>
+    <title>Radar IA — 18/10/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-18-radar-2026-10-18"/>
+    <updated>2026-10-18T00:00:00Z</updated>
+    <summary type="text">Radar de 65 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/weekly-2026-10-18-deepseek-v4-1-flash-e-a-crise-de-consumo-de-tokens-no-codex</id>
     <title>DeepSeek V4.1 Flash e a crise de consumo de tokens no Codex</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/weekly-2026-10-18-deepseek-v4-1-flash-e-a-crise-de-consumo-de-tokens-no-codex"/>
@@ -664,22 +682,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-01-gemini-4-argon-entra-no-top-10-de-inteligencia-e-copilot-cli-lanca-sandbox-ca</id>
-    <title>Gemini 4 Argon entra no top 10 de inteligência e Copilot CLI lança sandbox CA</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-01-gemini-4-argon-entra-no-top-10-de-inteligencia-e-copilot-cli-lanca-sandbox-ca"/>
-    <updated>2026-10-01T00:00:00Z</updated>
-    <summary type="text">O índice Artificial Analysis registra a estreia do Gemini 4 Argon entre os dez modelos mais capazes. O Copilot CLI 1.0.91-1 adiciona gerenciamento de autoridade certificadora para sandboxes, enquanto usuários relatam instabilidade no GPT-6.1 Sol.</summary>
-    <category term="artificial-analysis"/>
-    <category term="copilot-cli"/>
-    <category term="claude-code"/>
-    <category term="hf-daily-papers"/>
-    <category term="reddit"/>
-    <category term="microsoft-agent-framework"/>
-    <category term="github"/>
-    <category term="openai"/>
-    <category term="vllm"/>
-    <category term="hacker-news"/>
   </entry>
 </feed>
