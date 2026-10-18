@@ -139,7 +139,9 @@ const MAX_VISIBLE_TAGS = 4;
 
 function searchText(item: PublishedItem): string {
   return escapeHtml(
-    `${item.title} ${(item.tags ?? []).join(" ")}`.toLowerCase(),
+    `${item.title} ${item.summary ?? ""} ${(item.tags ?? []).join(" ")}`
+      .replace(/\s+/g, " ")
+      .toLowerCase(),
   );
 }
 
@@ -165,11 +167,14 @@ function buildReportRow(item: PublishedItem, collapsed: boolean) {
   return `<li data-search="${searchText(item)}"${hidden}><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></li>`;
 }
 
-function buildLatest(articles: PublishedItem[]): string {
-  const latest = [...articles].sort((a, b) => b.date.localeCompare(a.date))[0];
+function newestFirst(items: PublishedItem[]): PublishedItem[] {
+  return [...items].sort((a, b) => b.date.localeCompare(a.date));
+}
+
+function buildLatest(latest: PublishedItem | undefined): string {
   if (!latest) return "";
   const summary = latest.summary ? `<p>${escapeHtml(latest.summary)}</p>` : "";
-  return `<section class="latest" aria-labelledby="ultima-edicao">
+  return `<section class="latest" aria-labelledby="ultima-edicao" data-search="${searchText(latest)}">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
   <a class="latest-card" href="${escapeHtml(latest.url)}">
     <time class="edition-date" datetime="${latest.date}"><span class="edition-day">${latest.date.slice(8, 10)}</span><span class="edition-month">${formatMonth(latest.date).toLowerCase()} ${latest.date.slice(0, 4)}</span></time>
@@ -183,6 +188,37 @@ function buildLatest(articles: PublishedItem[]): string {
 }
 
 const VISIBLE_REPORTS = 6;
+// Eighty cards made the home ~18k px tall; older months stay one click away.
+const VISIBLE_MONTHS = 2;
+
+function buildMonthGroup(
+  [key, items]: [string, PublishedItem[]],
+  collapsed: boolean,
+): string {
+  const year = key.slice(0, 4);
+  const month = formatMonth(`${key}-01`);
+  const count = `${items.length} ${items.length === 1 ? "edição" : "edições"}`;
+  const state = collapsed ? ' is-collapsed" hidden' : '"';
+  return `<section class="month-group${state} id="mes-${key}">
+  <div class="month-heading"><h2>${month} <span>${year}</span></h2><p>${count}</p></div>
+  ${items.map((a) => buildItemCard(a)).join("\n")}
+</section>`;
+}
+
+function buildArchiveGroups(groups: [string, PublishedItem[]][]): string {
+  const older = groups.slice(VISIBLE_MONTHS);
+  const olderCount = older.reduce((sum, [, items]) => sum + items.length, 0);
+  const olderBlock = older.length
+    ? `<div class="archive-older" data-collapsible>
+${older.map((g) => buildMonthGroup(g, true)).join("\n")}
+</div>
+<button type="button" class="show-more" data-show-more="arquivo">Ver edições anteriores (${olderCount})</button>`
+    : "";
+  const recent = groups
+    .slice(0, VISIBLE_MONTHS)
+    .map((g) => buildMonthGroup(g, false));
+  return [...recent, olderBlock].filter(Boolean).join("\n");
+}
 
 export function buildIndex(
   articles: PublishedItem[],
@@ -200,19 +236,11 @@ export function buildIndex(
       ? `<button type="button" class="show-more" data-show-more="relatorios">Ver todos (${weeklyReports.length})</button>`
       : "";
 
-  const yearMonthGroups = groupByYearMonth(articles);
+  // The newest edition is featured above; listing it again would repeat it.
+  const [latest, ...archived] = newestFirst(articles);
+  const yearMonthGroups = groupByYearMonth(archived);
   const archiveJumpNav = buildArchiveJumpNav(yearMonthGroups);
-  const articleGroups = yearMonthGroups
-    .map(([key, items]) => {
-      const year = key.slice(0, 4);
-      const month = formatMonth(`${key}-01`);
-      const count = `${items.length} ${items.length === 1 ? "edição" : "edições"}`;
-      return `<section class="month-group" id="mes-${key}">
-  <div class="month-heading"><h2>${month} <span>${year}</span></h2><p>${count}</p></div>
-  ${items.map((a) => buildItemCard(a)).join("\n")}
-</section>`;
-    })
-    .join("\n");
+  const articleGroups = buildArchiveGroups(yearMonthGroups);
 
   return `---
 layout: home
@@ -225,7 +253,7 @@ title: Evo Agent
   <p class="masthead-count"><strong>${articles.length}</strong> edições e <strong>${weeklyReports.length}</strong> radares no arquivo</p>
 </section>
 
-${buildLatest(articles)}
+${buildLatest(latest)}
 
 <div class="home-grid">
   <aside class="home-aside">
@@ -248,11 +276,11 @@ ${buildLatest(articles)}
   <section class="archive" id="arquivo">
     <h2>Arquivo</h2>
     <div class="search-box">
-      <input type="search" id="story-search" placeholder="Buscar por título ou tag" aria-label="Buscar edições e radares por título ou tag">
+      <input type="search" id="story-search" placeholder="Buscar por título, resumo ou tag" aria-label="Buscar edições e radares por título, resumo ou tag">
       <p class="search-empty" id="search-empty" hidden>Nada encontrado. Tente outro termo ou uma tag, como "claude" ou "agents".</p>
     </div>
     ${archiveJumpNav}
-    ${articleGroups || '<p class="empty-state">Nenhuma edição publicada ainda.</p>'}
+    ${articles.length === 0 ? '<p class="empty-state">Nenhuma edição publicada ainda.</p>' : articleGroups}
   </section>
 </div>
 `;
@@ -356,6 +384,14 @@ function buildIndexScript(): string {
         });
       });
 
+      // A month link may point into the collapsed block; open it first.
+      document.querySelectorAll(".archive-jump a").forEach(function(link) {
+        link.addEventListener("click", function() {
+          var more = document.querySelector('[data-show-more="arquivo"]');
+          if (more) more.click();
+        });
+      });
+
       var searchInput = document.getElementById("story-search");
       if (searchInput) {
         var emptyState = document.getElementById("search-empty");
@@ -375,6 +411,8 @@ function buildIndexScript(): string {
               function(card) { return card.style.display !== "none"; },
             );
             group.style.display = hasVisible ? "" : "none";
+            // A match inside a collapsed month must surface with its group.
+            if (query && hasVisible) group.hidden = false;
           });
           if (emptyState) emptyState.hidden = anyVisible;
         });

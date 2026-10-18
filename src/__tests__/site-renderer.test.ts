@@ -160,6 +160,65 @@ describe("buildIndex", () => {
     expect(html).toContain("&lt;img src=x onerror=1&gt;");
   });
 
+  it("does not list the featured edition again in the archive", () => {
+    const html = buildIndex([item("2026-09-26"), item("2026-09-25")], []);
+    const archive = html.slice(html.indexOf('id="arquivo"'));
+    expect(archive).not.toContain("https://example.test/2026-09-26");
+    expect(archive).toContain("https://example.test/2026-09-25");
+  });
+
+  it("keeps a lone edition out of the empty-state message", () => {
+    const html = buildIndex([item("2026-09-26")], []);
+    expect(html).not.toContain("Nenhuma edição publicada ainda.");
+    expect(buildIndex([], [])).toContain("Nenhuma edição publicada ainda.");
+  });
+
+  it("keeps the two newest months open and folds older ones behind a toggle", () => {
+    const html = buildIndex(
+      [
+        item("2026-09-26"),
+        item("2026-09-10"),
+        item("2026-08-10"),
+        item("2026-07-10"),
+        item("2026-06-10"),
+        item("2026-06-09"),
+      ],
+      [],
+    );
+    expect(html).toContain('class="month-group" id="mes-2026-09"');
+    expect(html).toContain('class="month-group" id="mes-2026-08"');
+    expect(html).toContain(
+      'class="month-group is-collapsed" hidden id="mes-2026-07"',
+    );
+    expect(html).toContain(
+      'class="month-group is-collapsed" hidden id="mes-2026-06"',
+    );
+    expect(html).toContain(
+      'data-show-more="arquivo">Ver edições anteriores (3)',
+    );
+    // Every month stays in the jump nav so a link can open its group.
+    expect(html).toContain('href="#mes-2026-06"');
+  });
+
+  it("omits the older-months toggle when everything fits", () => {
+    const html = buildIndex([item("2026-09-26"), item("2026-08-10")], []);
+    expect(html).not.toContain('data-show-more="arquivo"');
+  });
+
+  it("makes the summary searchable, including on the featured edition", () => {
+    const html = buildIndex(
+      [
+        { ...item("2026-09-26"), summary: "Quantização\nem GGUF" },
+        item("2026-09-25"),
+      ],
+      [],
+    );
+    expect(html).toContain(
+      'data-search="edicao 2026-09-26 quantização em gguf ia"',
+    );
+    expect(html).toContain("Buscar por título, resumo ou tag");
+  });
+
   it("collapses radar entries past the first six behind a toggle", () => {
     const reports = Array.from({ length: 8 }, (_, i) =>
       item(`2026-09-${String(10 + i).padStart(2, "0")}`),
