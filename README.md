@@ -101,7 +101,7 @@ Dockerfile receives it as a BuildKit secret file, never as a build arg.
 
 ## Run Modes
 
-Set `RUN_MODE` env var to control execution:
+Set `RUN_MODE` env var to control execution (`npm start -- --help` prints this list):
 
 | Mode | Behavior |
 |---|---|
@@ -109,6 +109,8 @@ Set `RUN_MODE` env var to control execution:
 | `CRAWL` | Single crawl + improve cycle, then exits |
 | `DAILY` | Generates and publishes one daily article (fills the day's edition budget one slot at a time), then exits |
 | `DAILY_SWEEP` | Publishes whatever is missing from today's edition budget, recovering a slot that failed earlier; no-op when the day is complete |
+| `RADAR` | Publishes the cross-source radar (deterministic tables plus a model-written reading, no editorial gate), then exits |
+| `TECHLEAD` | Publishes the tech-lead digest, then exits |
 | `DEV_TIPS` | Turns the week's Claude Code, VS Code and OpenCode release notes into practical tips (what changed, how to use, best practice), published as `devtips-<date>`, then exits; fails without candidates, falls back to a ranking when the model output cites anything outside the material |
 | `WEEKLY` | Generates and publishes one weekly article, then exits |
 | `BIWEEKLY` | Generates and publishes one biweekly report, then exits |
