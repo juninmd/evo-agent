@@ -215,6 +215,27 @@ export type MessageKey = keyof typeof catalog;
 const PLACEHOLDER = /\{(\w+)\}/g;
 
 export function t(
+   key: MessageKey,
+   params?: Record<string, string | number>,
+ ): string {
+   const singularKeys = new Set([
+     "overview.sourcesPrimary",
+     "overview.sourcesTotal",
+     "attention.failedCycles",
+   ]);
+   const template: string = catalog[key];
+   if (!params) return template;
+   let result = template;
+   if (params.count === 1 && singularKeys.has(key)) {
+     result = result
+       .replace(/ciclos/g, "ciclo")
+       .replace(/primárias/g, "primária")
+       .replace(/fontes/g, "fonte");
+   }
+   return result.replace(PLACEHOLDER, (match, name: string) =>
+     name in params ? String(params[name]) : match,
+   );
+ }
   key: MessageKey,
   params?: Record<string, string | number>,
 ): string {
