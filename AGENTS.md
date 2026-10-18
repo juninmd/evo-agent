@@ -29,6 +29,7 @@ src/
   index.ts
   api/                  # RUN_MODE=API: HTTP server for the desktop console
   crawler/index.ts
+  crawler/reddit.ts
   crawler/reddit-smoke.ts
   knowledge/store.ts
   agent/improver.ts

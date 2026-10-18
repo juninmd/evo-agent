@@ -1,22 +1,24 @@
 import { describe, expect, it } from "vitest";
 import {
   describeCrawlerError,
-  focusRetryDelayMs,
   hackerNewsEngagement,
   isCitableXUrl,
   isHackerNewsRelevant,
+  parseGitHubStarCount,
+  summarizeSourceContent,
+  todayIso,
+  trendingSignalUrl,
+} from "../crawler/index.js";
+import {
+  focusRetryDelayMs,
   isUsefulComment,
   orderedCommunitySubreddits,
-  parseGitHubStarCount,
   redditBudgetDelayMs,
   redditFeedDue,
   redditRateLimitDelayMs,
   redditSignalsDue,
   subredditPlan,
-  summarizeSourceContent,
-  todayIso,
-  trendingSignalUrl,
-} from "../crawler/index.js";
+} from "../crawler/reddit.js";
 
 describe("crawler transformations", () => {
   it("crawls the focus communities before the rest", () => {

@@ -68,8 +68,8 @@ Dockerfile receives it as a BuildKit secret file, never as a build arg.
 |---|---|---|---|
 | `LITELLM_API_BASE` | No | `http://localhost:4000/v1` | LiteLLM base URL |
 | `LITELLM_API_KEY` | No | `no-key` | LiteLLM API key |
-| `LITELLM_MODEL` | No | `cloud/llama-70b` | Primary model name |
-| `LITELLM_FALLBACK_MODELS` | No | `cloud/maverick,cloud/llama-8b` | Comma-separated fallback models tried if the primary fails/times out/returns empty |
+| `LITELLM_MODEL` | No | `cloud/auto` | Primary model name; `cloud/auto` is the LiteLLM chain that owns provider choice |
+| `LITELLM_FALLBACK_MODELS` | No | `cloud/auto` | Comma-separated fallback models tried if the primary fails/times out/returns empty |
 | `LITELLM_MAX_OUTPUT_TOKENS` | No | `12000` | Max output tokens per request |
 | `LITELLM_TIMEOUT_MS` | No | `300000` | LiteLLM request timeout in milliseconds |
 | `TELEGRAM_BOT_TOKEN` | Yes | — | Telegram Bot API token |
@@ -152,11 +152,12 @@ src/
   index.ts              # Entry point, cron scheduling, run modes
   config.ts             # Env loading, validation, frozen config
   crawler/
-    index.ts            # RSS, Google News, SearXNG, Reddit signal crawlers
+    index.ts            # RSS, Google News, SearXNG, HN/TabNews crawlers and crawlAll
     agent-sources.ts    # Coding-agent releases, agent SDKs, practitioner feeds
     feed-items.ts       # Recency window, newest-first selection, summary fallback
     hf-papers.ts        # Hugging Face Daily Papers ranked by upvotes
     model-launches.ts   # HF trending models + new-model launches (OpenRouter)
+    reddit.ts           # Reddit pacing, rate-limit handling, community signals
     reddit-smoke.ts     # Standalone Reddit community signal smoke test
   knowledge/
     store.ts            # SQLite persistence (articles, snippets, state, publish log)
