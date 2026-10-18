@@ -88,6 +88,12 @@ Dockerfile receives it as a BuildKit secret file, never as a build arg.
 | `API_TOKEN` | Only `API` | — | Bearer token for `/api/v1`; the API refuses to start without it |
 | `API_ALLOW_RUNS` | No | `false` | Enables `POST /api/v1/runs` |
 | `API_CORS_ORIGINS` | No | — | Comma-separated browser origins allowed to call the API |
+| `RADAR_CRON` | No | `0 21 * * *` | Radar edition cron |
+| `REDDIT_COMMENTS_ENABLED` | No | `false` | Fetches Reddit comment threads; off because the post `.json` endpoint answers 403 from datacenter IPs and burns the shared per-IP budget |
+| `HF_API_KEY` | No | — | Hugging Face token for GLiNER entity tagging; empty disables it |
+| `GLINER_MODEL` | No | `urchade/gliner_multi-v2.1` | GLiNER model used when `HF_API_KEY` is set |
+| `BACKFILL_START` / `BACKFILL_END` | No | — | Day range for `npm run backfill:articles` when not passed as arguments |
+| `OPENCODE_API_KEY` / `OPENCODE_MODEL` | No | — | Legacy aliases of `LITELLM_API_KEY` / `LITELLM_MODEL` |
 | `TZ` | No | `America/Sao_Paulo` | Timezone for every cron schedule and for the daily-edition day key |
 | `LOG_LEVEL` | No | `info` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
 | `LOG_FORMAT` | No | `json` | Structured `json` logs or local `text` output |
