@@ -63,8 +63,8 @@ const catalog = {
   "overview.sourcesHint":
     "{failing} com falha de {total} acompanhadas · {primary} primárias",
   "overview.sourcesFailing": "{count} com falha",
-  "overview.sourcesPrimary": "{count} primárias",
-  "overview.sourcesTotal": "{count} fontes",
+  "overview.sourcesPrimary": "{count} primária|{count} primárias",
+  "overview.sourcesTotal": "{count} fonte|{count} fontes",
   "overview.intelligence": "Ranking de modelos",
   "overview.intelligenceHint": "Medido em {day}",
   "overview.latestEditions": "Últimas edições",
@@ -81,7 +81,7 @@ const catalog = {
   "editions.filterKind": "Tipo",
   "editions.filterStatus": "Notificação",
   "editions.limit": "Limite",
-  "editions.count": "{total} publicações",
+  "editions.count": "{total} publicação|{total} publicações",
   "editions.empty": "Nenhuma edição publicada ainda.",
   "editions.kind.all": "Todas",
   "editions.kind.article": "Edição diária",
@@ -99,7 +99,8 @@ const catalog = {
   "editions.metrics.primarySources": "Primárias",
   "editions.attempts": "Tentativas",
   "editions.evidence": "Evidência preservada",
-  "editions.evidenceHint": "{count} fontes citadas nesta publicação",
+  "editions.evidenceHint":
+    "{count} fonte citada nesta publicação|{count} fontes citadas nesta publicação",
   "editions.notificationError": "Erro de notificação",
   "editions.close": "Fechar",
   "editions.selectHint":
@@ -107,7 +108,7 @@ const catalog = {
 
   "sources.title": "Fontes",
   "sources.window": "Janela",
-  "sources.days": "{days} dias",
+  "sources.days": "{days} dia|{days} dias",
   "sources.health": "Saúde das fontes",
   "sources.recent": "Artigos coletados",
   "sources.source": "Fonte",
@@ -126,7 +127,7 @@ const catalog = {
   "cycles.duration": "Duração",
   "cycles.error": "Erro",
   "cycles.metrics": "Métricas",
-  "cycles.count": "{total} execuções",
+  "cycles.count": "{total} execução|{total} execuções",
   "cycles.empty": "Nenhuma execução registrada.",
   "cycles.status.succeeded": "Sucesso",
   "cycles.status.failed": "Falha",
@@ -160,7 +161,7 @@ const catalog = {
   "metrics.maximum": "Máximo",
   "metrics.last": "Última leitura",
   "metrics.series": "Série de {name}",
-  "metrics.points": "{count} leituras",
+  "metrics.points": "{count} leitura|{count} leituras",
   "metrics.empty": "Nenhuma métrica registrada nesta janela.",
   "metrics.selectHint": "Selecione uma métrica para ver a série.",
   "metrics.max": "Máx",
@@ -194,7 +195,8 @@ const catalog = {
   "settings.radar": "Radar",
   "settings.modelAlerts": "Alertas de modelo",
   "settings.runsEnabled": "Disparo manual",
-  "settings.runsEnabledValue": "habilitado ({modes} modos)",
+  "settings.runsEnabledValue":
+    "habilitado ({modes} modo)|habilitado ({modes} modos)",
   "settings.runsDisabledValue": "desabilitado (API_ALLOW_RUNS)",
   "settings.theme": "Tema",
   "settings.themeDark": "Escuro",
@@ -204,15 +206,32 @@ const catalog = {
 
   // Badges de atencao nas abas: um numero que exige olhar, nao decoracao.
   "attention.pendingNotifications":
-    "{count} notificações pendentes ou em dead-letter",
-  "attention.failingSources": "{count} fontes com falha",
-  "attention.failedCycles": "{count} ciclos com falha em 24h",
+    "{count} notificação pendente ou em dead-letter|{count} notificações pendentes ou em dead-letter",
+  "attention.failingSources":
+    "{count} fonte com falha|{count} fontes com falha",
+  "attention.failedCycles":
+    "{count} ciclo com falha em 24h|{count} ciclos com falha em 24h",
   "attention.running": "Ciclo em execução",
 } as const;
 
 export type MessageKey = keyof typeof catalog;
 
 const PLACEHOLDER = /\{(\w+)\}/g;
+const COUNT_PARAMS = ["count", "total", "days", "modes"];
+
+/**
+ * An entry written "um|outros" has a singular and a plural form; it is the
+ * singular only when the count is exactly "1" (a formatted 1000 is "1.000").
+ */
+function pickForm(
+  template: string,
+  params: Record<string, string | number> | undefined,
+): string {
+  const [one, other] = template.split("|");
+  if (other === undefined) return template;
+  const name = params && COUNT_PARAMS.find((p) => p in params);
+  return params && name && String(params[name]) === "1" ? one : other;
+}
 
 export function t(
    key: MessageKey,
@@ -239,7 +258,7 @@ export function t(
   key: MessageKey,
   params?: Record<string, string | number>,
 ): string {
-  const template: string = catalog[key];
+  const template = pickForm(catalog[key], params);
   if (!params) return template;
   return template.replace(PLACEHOLDER, (match, name: string) =>
     name in params ? String(params[name]) : match,

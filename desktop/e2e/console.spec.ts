@@ -106,7 +106,7 @@ test("as abas sinalizam o que exige olhar", async ({ page }) => {
   // Os badges saem da visao geral: 2 pendentes, 4 fontes com falha, 1 ciclo falho.
   await expect(page.getByRole("tab", { name: /2 notificações/ })).toBeVisible();
   await expect(page.getByRole("tab", { name: /4 fontes com falha/ })).toBeVisible();
-  await expect(page.getByRole("tab", { name: /1 ciclos com falha/ })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /1 ciclo com falha/ })).toBeVisible();
 });
 
 test("sem nada pendente, nenhuma aba ganha badge", async ({ page }) => {
@@ -124,8 +124,8 @@ test("sem nada pendente, nenhuma aba ganha badge", async ({ page }) => {
   });
 
   await expect(page.getByRole("tab", { name: /notificações/ })).toHaveCount(0);
-  await expect(page.getByRole("tab", { name: /fontes com falha/ })).toHaveCount(0);
-  await expect(page.getByRole("tab", { name: /ciclos com falha/ })).toHaveCount(0);
+  await expect(page.getByRole("tab", { name: /fontes? com falha/ })).toHaveCount(0);
+  await expect(page.getByRole("tab", { name: /ciclos? com falha/ })).toHaveCount(0);
 });
 
 test("as abas respondem ao teclado", async ({ page }) => {

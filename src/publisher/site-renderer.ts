@@ -5,6 +5,10 @@ import { escapeHtml } from "../utils/escape.js";
 import { publicTags } from "./public-tags.js";
 import { buildSiteCss } from "./styles/index.js";
 
+export const SITE_TITLE = "Evo Agent";
+export const SITE_DESCRIPTION =
+  "Artigos e relatorios tecnicos gerados por um agente auto-aprimorante.";
+
 export type PublishedItem = {
   date: string;
   title: string;
@@ -578,14 +582,13 @@ export function buildSiteFiles(
   return [
     {
       path: "_config.yml",
-      content: `title: Evo Agent
-description: Artigos e relatorios tecnicos gerados por um agente auto-aprimorante.
+      content: `title: ${SITE_TITLE}
+description: ${SITE_DESCRIPTION}
 github_owner: ${owner}
 github_repo: ${repo}
 github_branch: ${branch}
 markdown: kramdown
 plugins:
-  - jekyll-feed
   - jekyll-sitemap
 `,
     },

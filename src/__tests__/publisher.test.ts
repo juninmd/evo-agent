@@ -135,6 +135,12 @@ describe("atomic GitHub publication", () => {
       { owner: "owner", repo: "repo", branch: "gh-pages" },
     );
 
+    const feed = batch.files.find((file) => file.path === "feed.xml");
+    expect(feed?.content.match(/<entry>/g)).toHaveLength(2);
+    expect(feed?.content).toContain(
+      "https://owner.github.io/repo/articles/2026-06-02-retroativo-2",
+    );
+
     expect(batch.files.map((file) => file.path)).toEqual(
       expect.arrayContaining([
         "articles/2026-06-01-retroativo-1.md",

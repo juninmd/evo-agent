@@ -63,3 +63,32 @@ describe("t", () => {
     expect(t("metrics.hours", { hours: 48 })).toBe("48 h");
   });
 });
+
+describe("t() plurals", () => {
+  // "1 ciclos com falha em 24h" is what the overview showed with a single failure.
+  it("uses the singular form only for exactly 1", () => {
+    expect(t("attention.failedCycles", { count: 1 })).toBe(
+      "1 ciclo com falha em 24h",
+    );
+    expect(t("attention.failedCycles", { count: 2 })).toBe(
+      "2 ciclos com falha em 24h",
+    );
+    expect(t("attention.failedCycles", { count: 0 })).toBe(
+      "0 ciclos com falha em 24h",
+    );
+  });
+
+  it("reads the count from whichever placeholder the entry uses", () => {
+    expect(t("editions.count", { total: 1 })).toBe("1 publicação");
+    expect(t("sources.days", { days: 1 })).toBe("1 dia");
+    expect(t("editions.evidenceHint", { count: 1 })).toBe(
+      "1 fonte citada nesta publicação",
+    );
+  });
+
+  // formatCount renders 1000 as "1.000" in pt-BR: that is not a singular.
+  it("does not mistake a formatted thousand for 1", () => {
+    expect(t("overview.sourcesTotal", { count: "1.000" })).toBe("1.000 fontes");
+    expect(t("overview.sourcesTotal", { count: "1" })).toBe("1 fonte");
+  });
+});
