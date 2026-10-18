@@ -8,6 +8,7 @@ import {
   db,
 } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
+import { publicTags } from "./public-tags.js";
 import {
   type PublishedItem,
   type SiteFile,
@@ -260,7 +261,7 @@ export function buildPublicationBatch(
       title: item.article.title,
       url: item.url,
       summary: item.article.summary,
-      tags: item.article.tags,
+      tags: publicTags(item.article.tags),
     };
     if (item.reportPeriod) reports.unshift(publishedItem);
     else articles.unshift(publishedItem);
@@ -325,6 +326,6 @@ function toPublishedItem(item: {
     title: item.title,
     url: item.url,
     summary: item.summary,
-    tags: item.tags,
+    tags: publicTags(item.tags),
   };
 }

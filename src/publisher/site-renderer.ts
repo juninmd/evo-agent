@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { EBOOK_SLUG, type EbookResult } from "../agent/ebook.js";
 import type { GeneratedArticle } from "../agent/writer.js";
 import { escapeHtml } from "../utils/escape.js";
+import { publicTags } from "./public-tags.js";
 import { buildSiteCss } from "./styles/index.js";
 
 export type PublishedItem = {
@@ -60,7 +61,9 @@ export function buildMarkdown(article: GeneratedArticle): string {
 layout: article
 title: "${escapeYaml(article.title)}"
 date: "${article.date}"
-tags: [${article.tags.map((t) => `"${escapeYaml(t)}"`).join(", ")}]
+tags: [${publicTags(article.tags)
+    .map((t) => `"${escapeYaml(t)}"`)
+    .join(", ")}]
 summary: "${escapeYaml(article.summary)}"
 reading_time: ${estimateReadingMinutes(article.content)}
 ---
@@ -552,7 +555,7 @@ export function buildArticleLayout() {
                 {% if page.reading_time %}<span>{{ page.reading_time }} min de leitura</span>{% endif %}
                 <a class="download-md" href="https://raw.githubusercontent.com/{{ site.github_owner }}/{{ site.github_repo }}/{{ site.github_branch | default: 'gh-pages' }}/{{ page.path }}" download rel="noopener">Baixar Markdown</a>
               </div>
-              {% if page.tags %}<p class="article-tags">Tags: {{ page.tags | join: ", " | escape }}</p>{% endif %}
+              {% capture visible_tags %}{% for tag in page.tags %}{% unless tag contains 'launched-' or tag == 'post-signals' %}{{ tag | escape }}|{% endunless %}{% endfor %}{% endcapture %}{% if visible_tags != '' %}<p class="article-tags">Tags: {{ visible_tags | split: '|' | join: ', ' }}</p>{% endif %}
             </div>
           </div>
         </header>
