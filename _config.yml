@@ -5,5 +5,4 @@ github_repo: evo-agent
 github_branch: gh-pages
 markdown: kramdown
 plugins:
-  - jekyll-feed
   - jekyll-sitemap

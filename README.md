@@ -11,11 +11,11 @@ title: Evo Agent
 
 <section class="latest" aria-labelledby="ultima-edicao">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-17-deepseek-v4-1-flash-leva-ia-multimodal-a-nova-linha-de-referencia">
-    <time class="edition-date" datetime="2026-10-17"><span class="edition-day">17</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-18-litellm-assina-imagens-docker-com-cosign-e-uso-do-codex-aumenta-apos-integracao-">
+    <time class="edition-date" datetime="2026-10-18"><span class="edition-day">18</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>DeepSeek V4.1 Flash leva IA multimodal a nova linha de referência</h3>
-      <p>Modelo DeepSeek desbloqueia vídeo, áudio e linguagem com 1M tokens, enquanto o Claude Code aprimora revisão automática e o GitHub Copilot ajusta modo interativo em tempo real.</p>
+      <h3>LiteLLM assina imagens Docker com cosign e uso do Codex aumenta após integração com dot</h3>
+      <p>LiteLLM v1.106.0 introduz verificação de assinatura Docker com cosign usando chave fixa. Usuários do Codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -70,10 +70,18 @@ title: Evo Agent
       <input type="search" id="story-search" placeholder="Buscar por título ou tag" aria-label="Buscar edições e radares por título ou tag">
       <p class="search-empty" id="search-empty" hidden>Nada encontrado. Tente outro termo ou uma tag, como "claude" ou "agents".</p>
     </div>
-    <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a><a href="#mes-2026-07">jul 2026</a></nav>
+    <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>16 edições</p></div>
-  <article class="story-card" data-search="deepseek v4.1 flash leva ia multimodal a nova linha de referência hf-trending-models reddit langgraph huggingface launched-1792204838 post-signals claudecode codex vscode agents">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>17 edições</p></div>
+  <article class="story-card" data-search="litellm assina imagens docker com cosign e uso do codex aumenta após integração com dot litellm reddit openai llm-framework codex post-signals vscode">
+  <time datetime="2026-10-18">18 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-18-litellm-assina-imagens-docker-com-cosign-e-uso-do-codex-aumenta-apos-integracao-">LiteLLM assina imagens Docker com cosign e uso do Codex aumenta após integração com dot</a></h3>
+    <p>LiteLLM v1.106.0 introduz verificação de assinatura Docker com cosign usando chave fixa. Usuários do Codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho.</p>
+    <p class="story-tags">litellm, reddit, openai, llm-framework</p>
+  </div>
+</article>
+<article class="story-card" data-search="deepseek v4.1 flash leva ia multimodal a nova linha de referência hf-trending-models reddit langgraph huggingface launched-1792204838 post-signals claudecode codex vscode agents">
   <time datetime="2026-10-17">17 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-17-deepseek-v4-1-flash-leva-ia-multimodal-a-nova-linha-de-referencia">DeepSeek V4.1 Flash leva IA multimodal a nova linha de referência</a></h3>
@@ -710,17 +718,6 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-01-chatgpt-dirige-codex-shieldfont-bloqueia-scraping-de-ia-e-copilot-exige-desenho-">ChatGPT dirige Codex, ShieldFont bloqueia scraping de IA e Copilot exige desenho de segurança</a></h3>
     <p>O fluxo de trabalho IA evolui: ChatGPT orquestra Codex e Terra Medium, enquanto ShieldFont demonstra diferenciação de texto entre humanos e bots. OpenAI divulga avanços que reforçam algoritmos de segurança.</p>
     <p class="story-tags">openai, tabnews, reddit, br</p>
-  </div>
-</article>
-</section>
-<section class="month-group" id="mes-2026-07">
-  <div class="month-heading"><h2>Julho <span>2026</span></h2><p>1 edição</p></div>
-  <article class="story-card" data-search="codex, anthropic opus e nf‑e: descobertas táticas de 31/07/2026 reddit tabnews openai google-news post-signals fallback br developer anthropic fable5 pricing">
-  <time datetime="2026-07-31">31 jul</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-07-31-codex-anthropic-opus-e-nf-e-descobertas-taticas-de-31-07-2026">Codex, Anthropic Opus e NF‑e: Descobertas Táticas de 31/07/2026</a></h3>
-    <p>Os usuários do Codex reportam automação de créditos até a depreciação rápida; o lançamento do Opus 5 reduz custos pela metade; e a nova regra de validação da NF‑e modifica os emissores. Alerta aos operadores: adequação técnica e governança de IA são obrigatórias.</p>
-    <p class="story-tags">reddit, tabnews, openai, google-news</p>
   </div>
 </article>
 </section>
