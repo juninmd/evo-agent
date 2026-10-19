@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 19/10/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>96 itens · 40 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>19/10/2026</strong></span><span>Coleta das últimas 24 horas</span><span>8 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1>DeepSeek V4.1 Flash 1017</h1><p class="dek">modelo image‑text‑to‑text com 1236 sinal, 1333 likes e 10 233 downloads.</p>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li><strong>DeepSeek V4.1 Flash 1017</strong>: modelo image‑text‑to‑text com 1236 sinal, 1333 likes e 10 233 downloads.</li><li><strong>MiniCPM‑V‑4.7‑35B‑A3B</strong>: modelo image‑text‑to‑text com 826 sinal, 1008 likes e 57 935 downloads.</li><li><strong>EmbeddingGemma‑2</strong>: feature‑extraction, 785 sinal, 2661 likes, 164 339 downloads.</li><li><strong>Claude Code v2.1.304</strong>: nova linha de transcript em plugins de hook, adicionou decider “person”, bug fixes.</li><li><strong>Copilot CLI 1.0.101‑0</strong>: suportou output estruturado nativo, adicionou assistedApprovalInstructions e correção de auth em MCP compartilhado.</li><li><strong>WebKit “M3.1 Flash” (MiniMax)</strong>: 428 B‑parameter MoE, $0.15/M input, 1 M‑token contexto.</li><li><strong>Google Foundry Browser Automation GA</strong>: ferramenta nativa com Live View e controle humano.</li><li><strong>Flux‑3‑Image‑Klein‑Comfy</strong>: modelo image‑to‑image com 809 likes, 338 036 downloads.</li><li><strong>Venture, OpenAI Gemini 4 Argon</strong>: janela de saída de um milhão de tokens e API pricing revisado.</li><li><strong>Kimi, Qwen, GLM, etc. no Ollama</strong>: Docker‑base “ollama” permite execuções locais de 9 LLMs.</li><li><strong>SDS (V1)</strong>: Agent‑tric: Image‑to‑Video com 8 377 likes e 2 012 496 downloads.</li><li><strong>Hugging Face TorchNeuron</strong>: facilita execução de HF models no AWS Trainium.</li></ol>
+<div class="watch"><h2>O que observar</h2><p><strong>Agentes de código</strong>: Claude Code v2.1.304 e Copilot CLI 1.0.101‑0 trazem mudanças de API e de fluxo de trabalho.</p><p><strong>Modelos de conversação interativa</strong>: Gemini 4 Argon e MiniCPM têm preços e contexto de token expandido.</p><p><strong>Infraestrutura e otimização</strong>: Cloudflare AI reduziu custos em 68% via prompt caching e roteamento inteligente.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-github">
+<h2 id="desk-github">GitHub Trending <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/morluto/rea" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/morluto/rea" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>GitHub Trending (weekly)</figcaption></figure><h3><a href="https://github.com/morluto/rea">morluto / rea</a></h3>
+<p>Reverse engineer anything with agents, from app behavior down to native binaries. | ⭐ 322,032 | Lang: TypeScript <span class="meta">GitHub Trending (weekly) · <b>322032</b></span></p></article>
+<ul class="brief"><li><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a> <span class="meta">GitHub Trending (daily-javascript) · <b>283277</b></span></li><li><a href="https://github.com/anomalyco/opencode">anomalyco / opencode</a> <span class="meta">GitHub Trending (daily-typescript) · <b>216563</b></span></li><li><a href="https://github.com/ollama/ollama">ollama / ollama</a> <span class="meta">GitHub Trending (daily-go) · <b>183748</b></span></li><li><a href="https://github.com/DietrichGebert/ponytail">DietrichGebert / ponytail</a> <span class="meta">GitHub Trending (daily-javascript) · <b>167043</b></span></li><li><a href="https://github.com/anthropics/claude-code">anthropics / claude-code</a> <span class="meta">GitHub Trending (daily-typescript) · <b>152334</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/deepseek-ai/DeepSeek-V4.1-Flash-1017.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017">deepseek-ai/DeepSeek-V4.1-Flash-1017</a></h3>
+<p>image-text-to-text · 1333 likes · 10233 downloads · trending 1236 <span class="meta">HF Trending Models · <b>1236</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/openbmb/MiniCPM-V-4.7-35B-A3B">openbmb/MiniCPM-V-4.7-35B-A3B</a> <span class="meta">HF Trending Models · <b>826</b></span></li><li><a href="https://huggingface.co/google/embeddinggemma-2">google/embeddinggemma-2</a> <span class="meta">HF Trending Models · <b>785</b></span></li><li><a href="https://huggingface.co/jialinyyzz/humanizer">jialinyyzz/humanizer</a> <span class="meta">HF Trending Models · <b>707</b></span></li><li><a href="https://huggingface.co/fishaudio/drama-3">fishaudio/drama-3</a> <span class="meta">HF Trending Models · <b>667</b></span></li><li><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy">black-forest-labs/flux-3-image-klein-comfy</a> <span class="meta">HF Trending Models · <b>637</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/LangChain/comments/1xa3t1b/cheap_models_copy_the_label_from_your_prompt_not/">Reddit: cheap models copy the label from your prompt, not the enum from your schema</a></h3>
+<p>small thing that cost me a day. my prompt described statuses in plain english, like &quot;At risk&quot;. the json field wanted the enum value risk. gemini flash returned &quot;at risk&quot; for every single item in that band. every time.… <span class="meta">Reddit Post Signals (LangChain)</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xa6ykz/has_anyone_else_here_found_a_place_for/">Has anyone else here found a place for DiffusionGemma in their local work?</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xa7hi8/lets_delve_into_the_tapestry_of_ai_slop_on/">Let&#39;s delve into the tapestry of AI slop on r/LocalLLaMA</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xa7ytv/i_built_an_app_to_efficiently_run_decision_models/">I built an app to efficiently run decision models on the Apple Neural Engine with Shortcuts actions for OS automations</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xa968x/gamesummoner_ease_of_local_use_update/">GameSummoner: ease of local use update</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xa9ffa/jev_based_adaptive_thinking_for_llms/">Jev Based Adaptive Thinking for LLMs</a> <span class="meta">Reddit: LocalLLaMA</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/IsuruMaduranga/harness-engineering-101" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/IsuruMaduranga/harness-engineering-101" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/IsuruMaduranga/harness-engineering-101">Harness Engineering 101: The LLM is the brain, the harness is the body</a></h3>
+<p>Harness Engineering 101: The LLM is the brain, the harness is the body | ⬆ 38 points | 💬 17 comments | by isuruwijesiri <span class="meta">Hacker News · <b>72</b></span></p></article>
+<ul class="brief"><li><a href="https://artificialanalysis.ai/models/deepseek-v4-1-flash-1017">DeepSeek V4.1 Flash 1017 (Max)</a> <span class="meta">Hacker News · <b>162</b></span></li><li><a href="https://news.ycombinator.com/item?id=50151036">Ask HN: How to deal with shipping AI-written code you don&#39;t understand?</a> <span class="meta">Hacker News · <b>121</b></span></li><li><a href="https://home.cern/cern-and-mistral-join-forces-to-accelerate-ai-for-science/">CERN and Mistral join forces to accelerate AI for science</a> <span class="meta">Hacker News · <b>107</b></span></li><li><a href="https://jrdsgl.com/if-you-dont-run-your-own-llm-proxy-how-the-fuck-do-you-even-know-whats-going-on/">If you don&#39;t run your own LLM proxy, how do you know whats going on?</a> <span class="meta">Hacker News · <b>98</b></span></li><li><a href="https://100toolkit.com/blog/deslop-model/">Show HN: Qwen3-4B with the AI writing tics trained out</a> <span class="meta">Hacker News · <b>94</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.304" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.304">v2.1.304</a></h3>
+<p>What&#39;s changed Added a transcript line when a plugin that runs first skips one of your mod&#39;s hooks, naming the event and the plugin Added decider: &quot;person&quot; to a mod&#39;s tool.check answer: only the permission dialog or a… <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.101-0">1.0.101-0</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-10-19-some-git-over-https-may-temporarily-require-authentication">Some Git over HTTPS may temporarily require authentication</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/langchain-ai/langgraph/releases/tag/cli%3D%3D0.4.37">langgraph-cli==0.4.37</a> <span class="meta">LangGraph Releases</span></li><li><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.303">v2.1.303</a> <span class="meta">Claude Code Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.100">1.0.100</a> <span class="meta">Copilot CLI Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://blog.cloudflare.com/obsessive-inference-optimization/">Cutting our inference bill by 68% by being obsessive about optimization</a></h3>
+<p>When our AI code reviewer&#39;s cost per run doubled, we dug into the token usage to find out why. Learn how we used prompt caching and intelligent model routing to slash our inference bill by 68% while speeding up reviews. <span class="meta">Cloudflare AI Blog</span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/blog/hf-torchneuron">TorchNeuron: running HF models on AWS Trainium is easier than ever</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://github.blog/ai-and-ml/github-copilot/how-to-continue-a-github-copilot-app-session-in-vs-code/">How to continue a GitHub Copilot app session in VS Code</a> <span class="meta">GitHub Blog</span></li><li><a href="https://www.together.ai/blog/together-post-training">Together Post-Training: frontier-grade model shaping, the way that fits you</a> <span class="meta">Together AI</span></li><li><a href="https://code.visualstudio.com/blogs/archive?tag=models">Models</a> <span class="meta">VSCode Blogs</span></li><li><a href="https://devblogs.microsoft.com/foundry/browser-automation-tool-ga/">Browser automation tool in Microsoft Foundry is now GA</a> <span class="meta">Microsoft Foundry Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><h3><a href="https://arxiv.org/abs/2610.23054">Efficient Program Reduction for Library Fuzzing Harnesses</a></h3>
+<p>arXiv:2610.23054v1 Announce Type: new Abstract: Library fuzzing harnesses translate generated inputs into API calls. When a complex harness triggers a crash, developers must determine whether the cause is a library… <span class="meta">arXiv cs.SE</span></p></article>
+<ul class="brief"><li><a href="https://arxiv.org/abs/2610.23035">VulnSAGE: Adjudicating SAST Reports by Connecting LLM Reasoning to Program Structure</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2610.22952">MergeShuffle: Reconstruct Shared Libraries for Improved Performance and Security</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2610.22881">No One-Size-Fits-All: Adaptive Code Editing with Feature-Based Strategy Selection</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2610.22664">Enjoying the Product but Not Joining the Builders: Investigating Why Students Don&#39;t Contribute to OSS</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2610.22544">SIEVE: A Parameterized GitHub Corpus Builder for Software Engineering Research</a> <span class="meta">arXiv cs.SE</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://dev.to/effessdev/i-argued-with-ai-until-it-apologized-for-calling-my-course-ai-slop-350d">I argued with AI until it apologized for calling my course &quot;AI Slop&quot;</a></h3>
+<p>Imagine spending weeks agonizing over every single paragraph, polishing every example, and pouring... <span class="meta">Dev.to (ai) · <b>263</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/pengeszikra/the-bell-of-greystone-381n">The Bell of Greystone</a> <span class="meta">Dev.to (llm) · <b>8</b></span></li><li><a href="https://dev.to/debs_obrien/grok-bot-uploads-my-youtube-videos-for-me-beginner-walkthrough-54ba">Grok Bot Uploads My YouTube Videos For Me (Beginner Walkthrough)</a> <span class="meta">Dev.to (agents) · <b>1</b></span></li><li><a href="https://aws.amazon.com/blogs/machine-learning/amazon-sagemaker-jumpstart-2026-year-to-date-in-review/">Amazon SageMaker JumpStart: 2026 year-to-date in review</a> <span class="meta">AWS Machine Learning Blog</span></li><li><a href="https://news.google.com/rss/articles/CBMieEFVX3lxTFA3NHdpcGlkNkF4RzRHQ3ZmQnYyODlFbFlkRDZSUEt1bm1wUHIxcVktblNubk5DUGQwT3pJbHNMTzBobjM5N050VGdOLXA1SFhIekozMGVKbGlUT2w2c2J3eXZCOFBVT29XM3lqaC1jNTZicTdVd3R2Rw?oc=5">Chip Earnings Week Puts AI Coding Costs at $14/Hour [2026] - https://tech-insider.org/</a> <span class="meta">Google News (AI coding agent)</span></li><li><a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxPS3lyVV92aUwtYm1mTFRDbHVkNG10eEZHakExQ3dXaUdOS1VCV2NrU01LbERLUmZIRlJJLWpKR2pOektRZ2YyV0JqLVpfS1psdUhlREV2X0NqOHR5Z0hRVTNwVnNlYm5xaXVIM1dEXzZmbW15S2JRS0huTjVqcVFrcWg0V1YzQ0ExS0xlN09INnpEeGs2Yzh5Rk4xTnlGamhITThv?oc=5">How to continue a GitHub Copilot app session in VS Code - The GitHub Blog</a> <span class="meta">Google News (GitHub Copilot agent)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-10-19</span></footer>
+</div></body></html>
