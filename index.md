@@ -27,12 +27,13 @@ title: Evo Agent
       <h2>Radar diário</h2>
       <p class="aside-note">Sinais coletados nas últimas 24h, sem edição.</p>
       <ul class="report-list" data-collapsible>
+    <li data-search="radar ia — 20/10/2026 radar de 109 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-20-radar-2026-10-20">Radar IA — 20/10/2026</a></li>
     <li data-search="radar ia — 19/10/2026 radar de 96 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-19-radar-2026-10-19">Radar IA — 19/10/2026</a></li>
     <li data-search="radar techlead — 19/10/2026 5 leituras da semana sobre o stack e liderança. techlead stack lideranca"><a href="https://juninmd.github.io/evo-agent/reports/techlead-2026-10-19-techlead-2026-10-19">Radar Techlead — 19/10/2026</a></li>
     <li data-search="radar ia — 18/10/2026 radar de 65 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-18-radar-2026-10-18">Radar IA — 18/10/2026</a></li>
-    <li data-search="deepseek v4.1 flash e a crise de consumo de tokens no codex o lançamento do modelo sparse mixture-of-experts da deepseek contrasta com relatos de instabilidade e exaustão rápida de cotas no ecossistema codex. a engenharia de agentes evolui para fluxos de revisão automatizados e benchmarks de uso geral de computador. weekly-report openrouter reddit hf-daily-papers cline launched-1792225624 codex openai post-signals claudecode vscode"><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-10-18-deepseek-v4-1-flash-e-a-crise-de-consumo-de-tokens-no-codex">DeepSeek V4.1 Flash e a crise de consumo de tokens no Codex</a></li>
+    <li data-search="deepseek v4.1 flash e a crise de consumo de tokens no codex o lançamento do modelo sparse mixture-of-experts da deepseek contrasta com relatos de instabilidade e exaustão rápida de cotas no ecossistema codex. a engenharia de agentes evolui para fluxos de revisão automatizados e benchmarks de uso geral de computador. weekly-report openrouter reddit hf-daily-papers cline codex openai claudecode vscode"><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-10-18-deepseek-v4-1-flash-e-a-crise-de-consumo-de-tokens-no-codex">DeepSeek V4.1 Flash e a crise de consumo de tokens no Codex</a></li>
     <li data-search="radar ia — 17/10/2026 radar de 86 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-17-radar-2026-10-17">Radar IA — 17/10/2026</a></li>
-    <li data-search="radar ia — 16/10/2026 radar de 105 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-16-radar-2026-10-16">Radar IA — 16/10/2026</a></li>
+    <li data-search="radar ia — 16/10/2026 radar de 105 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-16-radar-2026-10-16">Radar IA — 16/10/2026</a></li>
     <li data-search="radar ia — 15/10/2026 radar de 108 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-15-radar-2026-10-15">Radar IA — 15/10/2026</a></li>
     <li data-search="relatório quinzenal: paradigmas system one, modelos de decisão rápida e segurança de agentes mcp jeva: system one models from first principles — artigo propõe modelos &quot;system one&quot; para decisão direta e baixa latência, argumentando que designs atuais falham em quatro requisitos estruturais: nullaware, grounded, compositional e verifiable jeva: system one models from first principleshttps://huggingface.co/papers/2610.18773. biweekly-report ai-agents llm" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-10-15-relatorio-quinzenal-paradigmas-system-one-modelos-de-decisao-rapida-e-seguranca-">Relatório Quinzenal: Paradigmas System One, Modelos de Decisão Rápida e Segurança de Agentes MCP</a></li>
     <li data-search="código com ia na prática — 15/10/2026 2 novidades de claude code, vs code e opencode transformadas em prática. claude-code vscode opencode boas-praticas dicas" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/devtips-2026-10-15-devtips-2026-10-15">Código com IA na Prática — 15/10/2026</a></li>
@@ -50,7 +51,6 @@ title: Evo Agent
     <li data-search="radar ia — 05/10/2026 radar de 91 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-05-radar-2026-10-05">Radar IA — 05/10/2026</a></li>
     <li data-search="radar techlead — 05/10/2026 5 leituras da semana sobre o stack e liderança. techlead stack lideranca" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/techlead-2026-10-05-techlead-2026-10-05">Radar Techlead — 05/10/2026</a></li>
     <li data-search="radar ia — 04/10/2026 radar de 75 sinais de ia das ultimas 24h: github trending, modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, comunidade e produtos. radar ia trending benchmarks github models reddit hackernews releases vendors community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-04-radar-2026-10-04">Radar IA — 04/10/2026</a></li>
-    <li data-search="gpt-6.1 sol reduz custos de tokens e graphforge sintetiza dados para agentes a openai lança modelo de codificação com custo reduzido enquanto a pesquisa em agentes foca em estados de crença e síntese de workspaces. relatos de usuários do codex e claude code apontam instabilidades em ides e custos imprevistos após resets. weekly-report openai hf-daily-papers microsoft-agent-framework reddit papers research microsoft agents codex post-signals" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-10-04-gpt-6-1-sol-reduz-custos-de-tokens-e-graphforge-sintetiza-dados-para-agentes">GPT-6.1 Sol reduz custos de tokens e GraphForge sintetiza dados para agentes</a></li>
   </ul>
       <button type="button" class="show-more" data-show-more="relatorios">Ver todos (24)</button>
     </section>
@@ -73,7 +73,7 @@ title: Evo Agent
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
   <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>17 edições</p></div>
-  <article class="story-card" data-search="litellm assina imagens docker com cosign e uso do codex aumenta após integração com dot litellm v1.106.0 introduz verificação de assinatura docker com cosign usando chave fixa. usuários do codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho. litellm reddit openai llm-framework codex post-signals vscode">
+  <article class="story-card" data-search="litellm assina imagens docker com cosign e uso do codex aumenta após integração com dot litellm v1.106.0 introduz verificação de assinatura docker com cosign usando chave fixa. usuários do codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho. litellm reddit openai llm-framework codex vscode">
   <time datetime="2026-10-18">18 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-18-litellm-assina-imagens-docker-com-cosign-e-uso-do-codex-aumenta-apos-integracao-">LiteLLM assina imagens Docker com cosign e uso do Codex aumenta após integração com dot</a></h3>
@@ -81,7 +81,7 @@ title: Evo Agent
     <p class="story-tags">litellm, reddit, openai, llm-framework</p>
   </div>
 </article>
-<article class="story-card" data-search="deepseek v4.1 flash leva ia multimodal a nova linha de referência modelo deepseek desbloqueia vídeo, áudio e linguagem com 1m tokens, enquanto o claude code aprimora revisão automática e o github copilot ajusta modo interativo em tempo real. hf-trending-models reddit langgraph huggingface launched-1792204838 post-signals claudecode codex vscode agents">
+<article class="story-card" data-search="deepseek v4.1 flash leva ia multimodal a nova linha de referência modelo deepseek desbloqueia vídeo, áudio e linguagem com 1m tokens, enquanto o claude code aprimora revisão automática e o github copilot ajusta modo interativo em tempo real. hf-trending-models reddit langgraph huggingface claudecode codex vscode agents">
   <time datetime="2026-10-17">17 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-17-deepseek-v4-1-flash-leva-ia-multimodal-a-nova-linha-de-referencia">DeepSeek V4.1 Flash leva IA multimodal a nova linha de referência</a></h3>
@@ -89,7 +89,7 @@ title: Evo Agent
     <p class="story-tags">hf-trending-models, reddit, langgraph, huggingface</p>
   </div>
 </article>
-<article class="story-card" data-search="nvidia nemotron 3.5 super vl e nouveautés de copilot e claude code a nova geração multimodal da nvidia amplia o limite de contexto enquanto o github copilot ganha suporte multi‑repo e o claude code revela comportamentos de sessão mais agressivos. nove anúncios e relatos de usuários ilustram a evolução do ecossistema de agentes. openrouter hf-daily-papers github copilot-cli reddit launched-1792076662 launched-1792030434 papers research copilot">
+<article class="story-card" data-search="nvidia nemotron 3.5 super vl e nouveautés de copilot e claude code a nova geração multimodal da nvidia amplia o limite de contexto enquanto o github copilot ganha suporte multi‑repo e o claude code revela comportamentos de sessão mais agressivos. nove anúncios e relatos de usuários ilustram a evolução do ecossistema de agentes. openrouter hf-daily-papers github copilot-cli reddit papers research copilot">
   <time datetime="2026-10-16">16 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-16-nvidia-nemotron-3-5-super-vl-e-nouveautes-de-copilot-e-claude-code">NVIDIA Nemotron 3.5 Super VL e Nouveautés de Copilot e Claude Code</a></h3>
@@ -97,7 +97,7 @@ title: Evo Agent
     <p class="story-tags">openrouter, hf-daily-papers, github, copilot-cli</p>
   </div>
 </article>
-<article class="story-card" data-search="modelos system one e a transição para arquiteturas de decisão estruturada novos modelos jeva e videojev substituem a decodificação autorregressiva por cabeças de pontuação para reduzir latência em decisões. relatos de usuários apontam custos inesperados no roteamento de modelos do github hydrafusion. hf-daily-papers google-ai reddit microsoft-agent-framework papers research google post-signals githubcopilot claudecode">
+<article class="story-card" data-search="modelos system one e a transição para arquiteturas de decisão estruturada novos modelos jeva e videojev substituem a decodificação autorregressiva por cabeças de pontuação para reduzir latência em decisões. relatos de usuários apontam custos inesperados no roteamento de modelos do github hydrafusion. hf-daily-papers google-ai reddit microsoft-agent-framework papers research google githubcopilot claudecode">
   <time datetime="2026-10-15">15 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-15-modelos-system-one-e-a-transicao-para-arquiteturas-de-decisao-estruturada">Modelos System One e a transição para arquiteturas de decisão estruturada</a></h3>
@@ -105,7 +105,7 @@ title: Evo Agent
     <p class="story-tags">hf-daily-papers, google-ai, reddit, microsoft-agent-framework</p>
   </div>
 </article>
-<article class="story-card" data-search="gemini 4 argon, agentswe, e ajustes de segurança em copilot e claude code o google lança seu modelo de raciocínio mais potente, enquanto o github e o anthropic continuam refinando controles de acesso e personalização de agentes. usuários reportam migrações forçadas e ajustes emlint e inline suggestions. openrouter hf-daily-papers github copilot-cli reddit launched-1791907477 papers research copilot changelog">
+<article class="story-card" data-search="gemini 4 argon, agentswe, e ajustes de segurança em copilot e claude code o google lança seu modelo de raciocínio mais potente, enquanto o github e o anthropic continuam refinando controles de acesso e personalização de agentes. usuários reportam migrações forçadas e ajustes emlint e inline suggestions. openrouter hf-daily-papers github copilot-cli reddit papers research copilot changelog">
   <time datetime="2026-10-14">14 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-14-gemini-4-argon-agentswe-e-ajustes-de-seguranca-em-copilot-e-claude-code">Gemini 4 Argon, AgentSWE, e Ajustes de Segurança em Copilot e Claude Code</a></h3>
@@ -113,7 +113,7 @@ title: Evo Agent
     <p class="story-tags">openrouter, hf-daily-papers, github, copilot-cli</p>
   </div>
 </article>
-<article class="story-card" data-search="muse wonder entra no top 10; claude code expande rastreio; vs code copilot surpreende com orçamento a meta lança o modelo muse wonder com 1 m tokens de contexto, enquanto o claude code começa a registrar histórico de builds. o copilot do vs code revela erros de quota em ambientes empresariais. openrouter artificial-analysis hf-daily-papers ollama reddit launched-1791807945 benchmark papers research local-ai">
+<article class="story-card" data-search="muse wonder entra no top 10; claude code expande rastreio; vs code copilot surpreende com orçamento a meta lança o modelo muse wonder com 1 m tokens de contexto, enquanto o claude code começa a registrar histórico de builds. o copilot do vs code revela erros de quota em ambientes empresariais. openrouter artificial-analysis hf-daily-papers ollama reddit benchmark papers research local-ai">
   <time datetime="2026-10-13">13 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-13-muse-wonder-entra-no-top-10-claude-code-expande-rastreio-vs-code-copilot-surpree">Muse Wonder entra no Top 10; Claude Code expande rastreio; VS Code Copilot surpreende com orçamento</a></h3>
@@ -121,7 +121,7 @@ title: Evo Agent
     <p class="story-tags">openrouter, artificial-analysis, hf-daily-papers, ollama</p>
   </div>
 </article>
-<article class="story-card" data-search="litellm faz nova assinatura; claude code amplia visualização; copilot controla início de sessão versões recentes de litellm reforçam segurança com cosign. claude code expande suporte a mídia no terminal. copilot introduz controle de inicialização para equipes corporativas. litellm opencode reddit llm-framework coding-agent post-signals claudecode githubcopilot codex">
+<article class="story-card" data-search="litellm faz nova assinatura; claude code amplia visualização; copilot controla início de sessão versões recentes de litellm reforçam segurança com cosign. claude code expande suporte a mídia no terminal. copilot introduz controle de inicialização para equipes corporativas. litellm opencode reddit llm-framework coding-agent claudecode githubcopilot codex">
   <time datetime="2026-10-12">12 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-12-litellm-faz-nova-assinatura-claude-code-amplia-visualizacao-copilot-controla-ini">LiteLLM faz nova assinatura; Claude Code amplia visualização; Copilot controla início de sessão</a></h3>
@@ -145,7 +145,7 @@ title: Evo Agent
     <p class="story-tags">hf-daily-papers, github, copilot-cli, claude-code</p>
   </div>
 </article>
-<article class="story-card" data-search="stepquant revela gargalos de quantização, long-wam amplia contexto em tempo real, e comunidade quantização de estados recorrentes causa perda de acurácia, novos modelos exigem contexto pré‑treinado autogerativo e usuários enfrentam bugs em copilots e agentes. hf-daily-papers hacker-news copilot-cli reddit papers research front-page copilot coding-agent post-signals">
+<article class="story-card" data-search="stepquant revela gargalos de quantização, long-wam amplia contexto em tempo real, e comunidade quantização de estados recorrentes causa perda de acurácia, novos modelos exigem contexto pré‑treinado autogerativo e usuários enfrentam bugs em copilots e agentes. hf-daily-papers hacker-news copilot-cli reddit papers research front-page copilot coding-agent">
   <time datetime="2026-10-09">09 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-09-stepquant-revela-gargalos-de-quantizacao-long-wam-amplia-contexto-em-tempo-real-">STEPQuant revela gargalos de quantização, Long-WAM amplia contexto em tempo real, e comunidade</a></h3>
@@ -153,7 +153,7 @@ title: Evo Agent
     <p class="story-tags">hf-daily-papers, hacker-news, copilot-cli, reddit</p>
   </div>
 </article>
-<article class="story-card" data-search="mistral large 4 e a convergência de fluxos no ecossistema openai lançamentos de modelos multimodais de alta janela de contexto contrastam com relatos de instabilidade e mudanças de interface em ferramentas de codificação. a infraestrutura de agentes avança com a introdução de mlx no ollama e sandboxing no copilot cli. openrouter ollama copilot-cli claude-code reddit launched-1791294122 local-ai copilot coding-agent anthropic">
+<article class="story-card" data-search="mistral large 4 e a convergência de fluxos no ecossistema openai lançamentos de modelos multimodais de alta janela de contexto contrastam com relatos de instabilidade e mudanças de interface em ferramentas de codificação. a infraestrutura de agentes avança com a introdução de mlx no ollama e sandboxing no copilot cli. openrouter ollama copilot-cli claude-code reddit local-ai copilot coding-agent anthropic">
   <time datetime="2026-10-07">07 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-07-mistral-large-4-e-a-convergencia-de-fluxos-no-ecossistema-openai">Mistral Large 4 e a convergência de fluxos no ecossistema OpenAI</a></h3>
@@ -236,7 +236,7 @@ title: Evo Agent
     <p class="story-tags">openrouter, claude, artificial, ollama</p>
   </div>
 </article>
-<article class="story-card" data-search="copilot cli integra regras do claude code e gpt-6 sol gera críticas de &#39;slop&#39; a versão 1.0.89-5 do copilot cli expande a compatibilidade com instruções personalizadas via .claude/rules. usuários de codex relatam regressões de qualidade e aumento de custos nos modelos gpt-6 sol e luna 5.6. copilot opencode reddit coding-agent post-signals codex claude coding">
+<article class="story-card" data-search="copilot cli integra regras do claude code e gpt-6 sol gera críticas de &#39;slop&#39; a versão 1.0.89-5 do copilot cli expande a compatibilidade com instruções personalizadas via .claude/rules. usuários de codex relatam regressões de qualidade e aumento de custos nos modelos gpt-6 sol e luna 5.6. copilot opencode reddit coding-agent codex claude coding">
   <time datetime="2026-09-28">28 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-28-copilot-cli-integra-regras-do-claude-code-e-gpt-6-sol-gera-criticas-de-slop">Copilot CLI integra regras do Claude Code e GPT-6 Sol gera críticas de &#39;slop&#39;</a></h3>
@@ -276,7 +276,7 @@ title: Evo Agent
     <p class="story-tags">openrouter, hf, litellm, github</p>
   </div>
 </article>
-<article class="story-card" data-search="gpt-6 luna pro e claude opus 5.5 lideram lançamentos de ia com contextos expandidos e novos openai anuncia gpt-6 luna pro com 1,05m tokens de contexto e modo de raciocínio &#39;pro&#39;; anthropic lança claude opus 5.5 como padrão. simultaneamente, comunidade relata melhorias significativas na qualidade de código e eficiência de custo nas novas versões. openrouter claude reddit models launches claude-code anthropic coding post-signals codex">
+<article class="story-card" data-search="gpt-6 luna pro e claude opus 5.5 lideram lançamentos de ia com contextos expandidos e novos openai anuncia gpt-6 luna pro com 1,05m tokens de contexto e modo de raciocínio &#39;pro&#39;; anthropic lança claude opus 5.5 como padrão. simultaneamente, comunidade relata melhorias significativas na qualidade de código e eficiência de custo nas novas versões. openrouter claude reddit models launches claude-code anthropic coding codex">
   <time datetime="2026-09-23">23 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-23-gpt-6-luna-pro-e-claude-opus-5-5-lideram-lancamentos-de-ia-com-contextos-expandi">GPT-6 Luna Pro e Claude Opus 5.5 lideram lançamentos de IA com contextos expandidos e novos</a></h3>
@@ -292,7 +292,7 @@ title: Evo Agent
     <p class="story-tags">artificial, openrouter, hf, cline</p>
   </div>
 </article>
-<article class="story-card" data-search="astra 6 regresse, codex parado‑escrita, e novas estratégias de cache em claude code ferramentas de ia de código enfrentam falhas críticas enquanto agentes de código otimizam quebras de contexto em torno de 1 hora. nove relatos trazem decisões de orçamento, arquitetura e segurança à tona. reddit vllm codex openai copilot post-signals claudecode inference">
+<article class="story-card" data-search="astra 6 regresse, codex parado‑escrita, e novas estratégias de cache em claude code ferramentas de ia de código enfrentam falhas críticas enquanto agentes de código otimizam quebras de contexto em torno de 1 hora. nove relatos trazem decisões de orçamento, arquitetura e segurança à tona. reddit vllm codex openai copilot claudecode inference">
   <time datetime="2026-09-21">21 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-21-astra-6-regresse-codex-parado-escrita-e-novas-estrategias-de-cache-em-claude-cod">Astra 6 Regresse, Codex Parado‑Escrita, e Novas Estratégias de Cache em Claude Code</a></h3>
@@ -309,15 +309,15 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, tabnews, github-trending, devto</p>
   </div>
 </article>
-<article class="story-card" data-search="openai lança youth safety blueprint e hex integra gpt‑6 astra para relatórios visuais openai divulga um plano de seis pilares para proteger jovens usando ia. hex utiliza o modelo gpt‑6 astra para transformar análises em visualizações interativas compartilháveis por equipes. openai reddit post-signals vscode githubcopilot copilot searxng openai codex">
+<article class="story-card" data-search="openai lança youth safety blueprint e hex integra gpt‑6 astra para relatórios visuais openai divulga um plano de seis pilares para proteger jovens usando ia. hex utiliza o modelo gpt‑6 astra para transformar análises em visualizações interativas compartilháveis por equipes. openai reddit vscode githubcopilot copilot searxng openai codex">
   <time datetime="2026-09-20">20 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-openai-lanca-youth-safety-blueprint-e-hex-integra-gpt-6-astra-para-relatorios-vi">OpenAI lança Youth Safety Blueprint e Hex integra GPT‑6 Astra para relatórios visuais</a></h3>
     <p>OpenAI divulga um plano de seis pilares para proteger jovens usando IA. Hex utiliza o modelo GPT‑6 Astra para transformar análises em visualizações interativas compartilháveis por equipes.</p>
-    <p class="story-tags">openai, reddit, post-signals, vscode</p>
+    <p class="story-tags">openai, reddit, vscode, githubcopilot</p>
   </div>
 </article>
-<article class="story-card" data-search="análise comparativa: claude 3.5 opus vs github copilot pricing e novas ferramentas de ui desafios de assinatura no copilot revelam conflitos entre planos estudantil e pro; codex expõe tendências de geração de código &#39;bloated&#39;. reddit web-search google-news copilot post-signals githubcopilot codex searxng anthropic claude model">
+<article class="story-card" data-search="análise comparativa: claude 3.5 opus vs github copilot pricing e novas ferramentas de ui desafios de assinatura no copilot revelam conflitos entre planos estudantil e pro; codex expõe tendências de geração de código &#39;bloated&#39;. reddit web-search google-news copilot githubcopilot codex searxng anthropic claude model">
   <time datetime="2026-09-20">20 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-analise-comparativa-claude-3-5-opus-vs-github-copilot-pricing-e-novas-ferramenta">Análise comparativa: Claude 3.5 Opus vs GitHub Copilot pricing e novas ferramentas de UI</a></h3>
@@ -325,23 +325,23 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, web-search, google-news, copilot</p>
   </div>
 </article>
-<article class="story-card" data-search="copilot pro, codex degradação e anthropic em foco usuários relatam inconsistências no copilot pro, suporte em queda do codex e anúncios de expansão de modelos claude. esses eventos afetam decisões de orçamento, migração e arquitetura de ia em empresas. reddit web-search copilot post-signals vscode codex searxng anthropic claude model">
+<article class="story-card" data-search="copilot pro, codex degradação e anthropic em foco usuários relatam inconsistências no copilot pro, suporte em queda do codex e anúncios de expansão de modelos claude. esses eventos afetam decisões de orçamento, migração e arquitetura de ia em empresas. reddit web-search copilot vscode codex searxng anthropic claude model">
   <time datetime="2026-09-20">20 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-copilot-pro-codex-degradacao-e-anthropic-em-foco">Copilot Pro, Codex Degradação e Anthropic em Foco</a></h3>
     <p>Usuários relatam inconsistências no Copilot Pro, suporte em queda do Codex e anúncios de expansão de modelos Claude. Esses eventos afetam decisões de orçamento, migração e arquitetura de IA em empresas.</p>
-    <p class="story-tags">reddit, web-search, copilot, post-signals</p>
+    <p class="story-tags">reddit, web-search, copilot, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="limites 5h codex expirados em 2,5h; copilot gpt-5.4 deprecation e student vs pro conflitos usuários da plus codex denunciam consumos de quota superiores ao contratado; comunidade github discute migração forçada de gpt-5.4 e conflitos de assinatura copilot student/pro. reddit web-search github post-signals codex copilot claudecode searxng anthropic claude model developer">
+<article class="story-card" data-search="limites 5h codex expirados em 2,5h; copilot gpt-5.4 deprecation e student vs pro conflitos usuários da plus codex denunciam consumos de quota superiores ao contratado; comunidade github discute migração forçada de gpt-5.4 e conflitos de assinatura copilot student/pro. reddit web-search github codex copilot claudecode searxng anthropic claude model developer">
   <time datetime="2026-09-20">20 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-limites-5h-codex-expirados-em-2-5h-copilot-gpt-5-4-deprecation-e-student-vs-pro-">Limites 5h Codex expirados em 2,5h; Copilot GPT-5.4 deprecation e Student vs Pro conflitos</a></h3>
     <p>Usuários da Plus Codex denunciam consumos de quota superiores ao contratado; comunidade GitHub discute migração forçada de GPT-5.4 e conflitos de assinatura Copilot Student/Pro.</p>
-    <p class="story-tags">reddit, web-search, github, post-signals</p>
+    <p class="story-tags">reddit, web-search, github, codex</p>
   </div>
 </article>
-<article class="story-card" data-search="minimax-h3, nova arquitetura omni‑modal e desafios de integração nos navegadores de código um salto nos modelos omni‑modal e novas funcionalidades de sandboxing para agentes, junto com relatos de falhas de interface do vs code e de limitações de licença do github copilot. hf openai reddit papers research sdk searxng anthropic claude model post-signals vscode">
+<article class="story-card" data-search="minimax-h3, nova arquitetura omni‑modal e desafios de integração nos navegadores de código um salto nos modelos omni‑modal e novas funcionalidades de sandboxing para agentes, junto com relatos de falhas de interface do vs code e de limitações de licença do github copilot. hf openai reddit papers research sdk searxng anthropic claude model vscode">
   <time datetime="2026-09-20">20 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-20-minimax-h3-nova-arquitetura-omni-modal-e-desafios-de-integracao-nos-navegadores-">MiniMax-H3, nova arquitetura omni‑modal e desafios de integração nos navegadores de código</a></h3>
@@ -349,7 +349,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hf, openai, reddit, papers</p>
   </div>
 </article>
-<article class="story-card" data-search="z.ai lança glm 5.3 flashx e deepseek-v4.1-flash ataca kv cache; usuários relatam bloqueios de quota novos modelos multimodais e de compressão de kv cache chegam ao mercado enquanto desenvolvedores enfrentam limites de taxa, cobranças inesperadas e remoção de modelos legados em ferramentas de código assistido. openrouter: hf reddit models launches papers research searxng anthropic claude model post-signals">
+<article class="story-card" data-search="z.ai lança glm 5.3 flashx e deepseek-v4.1-flash ataca kv cache; usuários relatam bloqueios de quota novos modelos multimodais e de compressão de kv cache chegam ao mercado enquanto desenvolvedores enfrentam limites de taxa, cobranças inesperadas e remoção de modelos legados em ferramentas de código assistido. openrouter: hf reddit models launches papers research searxng anthropic claude model">
   <time datetime="2026-09-19">19 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-19-z-ai-lanca-glm-5-3-flashx-e-deepseek-v4-1-flash-ataca-kv-cache-usuarios-relatam-">Z.ai lança GLM 5.3 FlashX e DeepSeek-V4.1-Flash ataca KV cache; usuários relatam bloqueios de quota</a></h3>
@@ -357,7 +357,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">openrouter:, hf, reddit, models</p>
   </div>
 </article>
-<article class="story-card" data-search="openai lança sponsored agents no chatgpt; copilot migra para rust e usuários relatam limites de uso a openai passa a monetizar agentes patrocinados no chatgpt enquanto o github copilot reescreve seu runtime em rust e unifica sugestões inline. comunidades de desenvolvedores reportam cortes abruptos de cota no claude code, reset iminente no codex e roteamento forçado de modelos caros no copilot business. hacker-news reddit github vscode front-page searxng mistral ocr 4 post-signals githubcopilot claudecode">
+<article class="story-card" data-search="openai lança sponsored agents no chatgpt; copilot migra para rust e usuários relatam limites de uso a openai passa a monetizar agentes patrocinados no chatgpt enquanto o github copilot reescreve seu runtime em rust e unifica sugestões inline. comunidades de desenvolvedores reportam cortes abruptos de cota no claude code, reset iminente no codex e roteamento forçado de modelos caros no copilot business. hacker-news reddit github vscode front-page searxng mistral ocr 4 githubcopilot claudecode">
   <time datetime="2026-09-17">17 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-17-openai-lanca-sponsored-agents-no-chatgpt-copilot-migra-para-rust-e-usuarios-rela">OpenAI lança Sponsored Agents no ChatGPT; Copilot migra para Rust e usuários relatam limites de uso</a></h3>
@@ -365,15 +365,15 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, reddit, github, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="parceria microsoft-mistral e integração de claude no unity microsoft e mistral expandem cooperação para setores regulados. desenvolvedores utilizam claude code para automação de sistemas complexos em engines de jogos. google-news reddit mistral ocr 4 post-signals claudecode vscode codex searxng">
+<article class="story-card" data-search="parceria microsoft-mistral e integração de claude no unity microsoft e mistral expandem cooperação para setores regulados. desenvolvedores utilizam claude code para automação de sistemas complexos em engines de jogos. google-news reddit mistral ocr 4 claudecode vscode codex searxng">
   <time datetime="2026-09-16">16 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-16-parceria-microsoft-mistral-e-integracao-de-claude-no-unity">Parceria Microsoft-Mistral e Integração de Claude no Unity</a></h3>
     <p>Microsoft e Mistral expandem cooperação para setores regulados. Desenvolvedores utilizam Claude Code para automação de sistemas complexos em engines de jogos.</p>
-    <p class="story-tags">google-news, reddit, mistral ocr 4, post-signals</p>
+    <p class="story-tags">google-news, reddit, mistral ocr 4, claudecode</p>
   </div>
 </article>
-<article class="story-card" data-search="mistral ocr 4, vibepod cli 0.23 e estratégias de seleção de modelos em 2026 novas capacidades de ocr multilíngue da mistral chegam ao mercado enquanto ferramentas de ia no editor ganham isolamento por contêiner. comunidades debatendo escolhas de modelo e revisões de código revelam impactos de custos e integração. reddit tabnews web-search google openai searxng mistral ocr 4 post-signals vscode githubcopilot">
+<article class="story-card" data-search="mistral ocr 4, vibepod cli 0.23 e estratégias de seleção de modelos em 2026 novas capacidades de ocr multilíngue da mistral chegam ao mercado enquanto ferramentas de ia no editor ganham isolamento por contêiner. comunidades debatendo escolhas de modelo e revisões de código revelam impactos de custos e integração. reddit tabnews web-search google openai searxng mistral ocr 4 vscode githubcopilot">
   <time datetime="2026-09-15">15 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-15-mistral-ocr-4-vibepod-cli-0-23-e-estrategias-de-selecao-de-modelos-em-2026">Mistral OCR 4, VibePod CLI 0.23 e Estratégias de Seleção de Modelos em 2026</a></h3>
@@ -381,7 +381,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, tabnews, web-search, google</p>
   </div>
 </article>
-<article class="story-card" data-search="mistral ocr 4 lança extração estruturada e limites de claude code disparam custos a nova versão do mistral ocr adiciona suporte a 170 idiomas e auto-hospedagem, enquanto usuários de claude code relatam consumo acelerado de tokens e confusão sobre reset semanal. desenvolvedores de codex e copilot cli também expõem gargalos de cota e ferramentas de observabilidade. reddit web-search searxng mistral ocr 4 claude coding post-signals codex githubcopilot">
+<article class="story-card" data-search="mistral ocr 4 lança extração estruturada e limites de claude code disparam custos a nova versão do mistral ocr adiciona suporte a 170 idiomas e auto-hospedagem, enquanto usuários de claude code relatam consumo acelerado de tokens e confusão sobre reset semanal. desenvolvedores de codex e copilot cli também expõem gargalos de cota e ferramentas de observabilidade. reddit web-search searxng mistral ocr 4 claude coding codex githubcopilot">
   <time datetime="2026-09-14">14 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-14-mistral-ocr-4-lanca-extracao-estruturada-e-limites-de-claude-code-disparam-custo">Mistral OCR 4 lança extração estruturada e limites de Claude Code disparam custos</a></h3>
@@ -389,7 +389,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, web-search, searxng, mistral ocr 4</p>
   </div>
 </article>
-<article class="story-card" data-search="gpt-6 astra na perplexity e regressões de custo no claude code perplexity integra gpt-6 astra para automação de sistemas de produção. relatos de usuários indicam picos inesperados de consumo de tokens durante a compactação de sessões no claude code. openai reddit together tabnews google-news post-signals claudecode githubcopilot codex ai frontier">
+<article class="story-card" data-search="gpt-6 astra na perplexity e regressões de custo no claude code perplexity integra gpt-6 astra para automação de sistemas de produção. relatos de usuários indicam picos inesperados de consumo de tokens durante a compactação de sessões no claude code. openai reddit together tabnews google-news claudecode githubcopilot codex ai frontier">
   <time datetime="2026-09-13">13 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-13-gpt-6-astra-na-perplexity-e-regressoes-de-custo-no-claude-code">GPT-6 Astra na Perplexity e Regressões de Custo no Claude Code</a></h3>
@@ -397,7 +397,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">openai, reddit, together, tabnews</p>
   </div>
 </article>
-<article class="story-card" data-search="mistral ocr 4, github copilot ui e limites do codex: impactos de custo e integração (10‑12 set 2026) novas ofertas de ocr da mistral exigem avaliação de provisionamento de gpu, enquanto a interface unificada do copilot reduz troca de contexto. problemas de limites e bugs em codex e claude provocam revisões de quota e substituições de modelo. reddit github together searxng mistral ocr 4 codex openai post-signals githubcopilot claudecode">
+<article class="story-card" data-search="mistral ocr 4, github copilot ui e limites do codex: impactos de custo e integração (10‑12 set 2026) novas ofertas de ocr da mistral exigem avaliação de provisionamento de gpu, enquanto a interface unificada do copilot reduz troca de contexto. problemas de limites e bugs em codex e claude provocam revisões de quota e substituições de modelo. reddit github together searxng mistral ocr 4 codex openai githubcopilot claudecode">
   <time datetime="2026-09-12">12 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-12-mistral-ocr-4-github-copilot-ui-e-limites-do-codex-impactos-de-custo-e-integraca">Mistral OCR 4, GitHub Copilot UI e limites do Codex: impactos de custo e integração (10‑12 set 2026)</a></h3>
@@ -405,15 +405,15 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, github, together, searxng</p>
   </div>
 </article>
-<article class="story-card" data-search="github registra cinco incidentes de desempenho em agosto e comunidade debate custos do astra e uso o relatório de disponibilidade do github mostra cinco interrupções que afetaram serviços em agosto de 2026. paralelamente, usuários relatam variações de custos do astra no github copilot e estratégias para economizar com o fable 5.1 no claude code. reddit github post-signals githubcopilot claudecode codex developer">
+<article class="story-card" data-search="github registra cinco incidentes de desempenho em agosto e comunidade debate custos do astra e uso o relatório de disponibilidade do github mostra cinco interrupções que afetaram serviços em agosto de 2026. paralelamente, usuários relatam variações de custos do astra no github copilot e estratégias para economizar com o fable 5.1 no claude code. reddit github githubcopilot claudecode codex developer">
   <time datetime="2026-09-10">10 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-10-github-registra-cinco-incidentes-de-desempenho-em-agosto-e-comunidade-debate-cus">GitHub registra cinco incidentes de desempenho em agosto e comunidade debate custos do Astra e uso</a></h3>
     <p>O relatório de disponibilidade do GitHub mostra cinco interrupções que afetaram serviços em agosto de 2026. Paralelamente, usuários relatam variações de custos do Astra no GitHub Copilot e estratégias para economizar com o Fable 5.1 no Claude Code.</p>
-    <p class="story-tags">reddit, github, post-signals, githubcopilot</p>
+    <p class="story-tags">reddit, github, githubcopilot, claudecode</p>
   </div>
 </article>
-<article class="story-card" data-search="mistral ocr 4 redefine extração documental enquanto codex sol e copilot expõem custos ocultos a atualização do mistral ocr promete estrutura semântica avançada, mas relatos da comunidade apontam disparidades entre benchmarks e uso real. o lançamento do gpt‑5.6 sol para computação quântica coincide com alertas sobre eficiência enganosa e aumento no consumo de tokens em ambientes de desenvolvimento. hacker-news reddit tabnews front-page searxng mistral ocr 4 codex openai post-signals githubcopilot">
+<article class="story-card" data-search="mistral ocr 4 redefine extração documental enquanto codex sol e copilot expõem custos ocultos a atualização do mistral ocr promete estrutura semântica avançada, mas relatos da comunidade apontam disparidades entre benchmarks e uso real. o lançamento do gpt‑5.6 sol para computação quântica coincide com alertas sobre eficiência enganosa e aumento no consumo de tokens em ambientes de desenvolvimento. hacker-news reddit tabnews front-page searxng mistral ocr 4 codex openai githubcopilot">
   <time datetime="2026-09-09">09 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-09-mistral-ocr-4-redefine-extracao-documental-enquanto-codex-sol-e-copilot-expoem-c">Mistral OCR 4 redefine extração documental enquanto Codex Sol e Copilot expõem custos ocultos</a></h3>
@@ -421,7 +421,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, reddit, tabnews, front-page</p>
   </div>
 </article>
-<article class="story-card" data-search="mistral ocr 4 avança em estrutura de documentos; comunidade expande vscode, codex e claude code a versão 4 do mistral ocr adiciona bounding boxes e classificação de blocos, enquanto desenvolvedores relatam novos fluxos no vscode, benchmarks multimodais no codex e prototipagem de hardware com claude code. esses sinais indicam maior integração entre modelos de visão, edição interativa e automação agente‑first. reddit tabnews searxng mistral ocr 4 mistral ocr 3 post-signals vscode codex claudecode br">
+<article class="story-card" data-search="mistral ocr 4 avança em estrutura de documentos; comunidade expande vscode, codex e claude code a versão 4 do mistral ocr adiciona bounding boxes e classificação de blocos, enquanto desenvolvedores relatam novos fluxos no vscode, benchmarks multimodais no codex e prototipagem de hardware com claude code. esses sinais indicam maior integração entre modelos de visão, edição interativa e automação agente‑first. reddit tabnews searxng mistral ocr 4 mistral ocr 3 vscode codex claudecode br">
   <time datetime="2026-09-08">08 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-08-mistral-ocr-4-avanca-em-estrutura-de-documentos-comunidade-expande-vscode-codex-">Mistral OCR 4 avança em estrutura de documentos; comunidade expande VSCode, Codex e Claude Code</a></h3>
@@ -429,7 +429,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, tabnews, searxng, mistral ocr 4</p>
   </div>
 </article>
-<article class="story-card" data-search="monitoramento de alinhamento da openai e lançamento do mistral ocr 3 openai implementa sistemas de detecção de desvio em agentes de codificação internos. relatos de usuários apontam anomalias em quotas de faturamento do github copilot e resets de tokens da openai. hacker-news google-news reddit openai front-page mistral ocr 3 post-signals githubcopilot claudecode codex">
+<article class="story-card" data-search="monitoramento de alinhamento da openai e lançamento do mistral ocr 3 openai implementa sistemas de detecção de desvio em agentes de codificação internos. relatos de usuários apontam anomalias em quotas de faturamento do github copilot e resets de tokens da openai. hacker-news google-news reddit openai front-page mistral ocr 3 githubcopilot claudecode codex">
   <time datetime="2026-09-07">07 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-07-monitoramento-de-alinhamento-da-openai-e-lancamento-do-mistral-ocr-3">Monitoramento de Alinhamento da OpenAI e Lançamento do Mistral OCR 3</a></h3>
@@ -437,15 +437,15 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, google-news, reddit, openai</p>
   </div>
 </article>
-<article class="story-card" data-search="anthropic fable 5.1 e astra aceleram ia, enquanto vs code expande customização e pi propõe agente a edição destaca a introdução do claude fable 5.1 com custos reduzidos, a velocidade superior do astra nas tarefas de desenvolvimento e a necessidade de ajustes de interface no vs code para integrar agentes como pi. reddit google-news post-signals vscode claudecode codex anthropic fable 5 cost">
+<article class="story-card" data-search="anthropic fable 5.1 e astra aceleram ia, enquanto vs code expande customização e pi propõe agente a edição destaca a introdução do claude fable 5.1 com custos reduzidos, a velocidade superior do astra nas tarefas de desenvolvimento e a necessidade de ajustes de interface no vs code para integrar agentes como pi. reddit google-news vscode claudecode codex anthropic fable 5 cost">
   <time datetime="2026-09-06">06 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-06-anthropic-fable-5-1-e-astra-aceleram-ia-enquanto-vs-code-expande-customizacao-e-">Anthropic Fable 5.1 e Astra aceleram IA, enquanto VS Code expande customização e Pi propõe agente</a></h3>
     <p>A edição destaca a introdução do Claude Fable 5.1 com custos reduzidos, a velocidade superior do Astra nas tarefas de desenvolvimento e a necessidade de ajustes de interface no VS Code para integrar agentes como Pi.</p>
-    <p class="story-tags">reddit, google-news, post-signals, vscode</p>
+    <p class="story-tags">reddit, google-news, vscode, claudecode</p>
   </div>
 </article>
-<article class="story-card" data-search="hydrafusion na copilot, gpt‑6 e reset de limites do claude: tendências e riscos o github lança hydrafusion para orquestração multi‑modelo, enquanto gpt‑6 aparece em copilot. relações de limites e qualidade de ux geram alertas de projeto e arquitetura. github reddit tabnews google-news developer post-signals githubcopilot claudecode codex br">
+<article class="story-card" data-search="hydrafusion na copilot, gpt‑6 e reset de limites do claude: tendências e riscos o github lança hydrafusion para orquestração multi‑modelo, enquanto gpt‑6 aparece em copilot. relações de limites e qualidade de ux geram alertas de projeto e arquitetura. github reddit tabnews google-news developer githubcopilot claudecode codex br">
   <time datetime="2026-09-05">05 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-05-hydrafusion-na-copilot-gpt-6-e-reset-de-limites-do-claude-tendencias-e-riscos">HydraFusion na Copilot, GPT‑6 e Reset de Limites do Claude: Tendências e Riscos</a></h3>
@@ -453,7 +453,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">github, reddit, tabnews, google-news</p>
   </div>
 </article>
-<article class="story-card" data-search="gpt‑6 astra impulsiona revisões financeiras e fable 5 dobla custos de inferência o lançamento do gpt‑6 astra acelera revisões financeiras em minutos, enquanto o aumento de preço do fable 5 obriga ajustes de orçamento. a integração de múltiplos agentes no copilot abre novas rotações de automação. reddit github openai searxng anthropic fable 5 cost post-signals codex githubcopilot developer">
+<article class="story-card" data-search="gpt‑6 astra impulsiona revisões financeiras e fable 5 dobla custos de inferência o lançamento do gpt‑6 astra acelera revisões financeiras em minutos, enquanto o aumento de preço do fable 5 obriga ajustes de orçamento. a integração de múltiplos agentes no copilot abre novas rotações de automação. reddit github openai searxng anthropic fable 5 cost codex githubcopilot developer">
   <time datetime="2026-09-04">04 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-04-gpt-6-astra-impulsiona-revisoes-financeiras-e-fable-5-dobla-custos-de-inferencia">GPT‑6 Astra Impulsiona Revisões Financeiras e Fable 5 Dobla Custos de Inferência</a></h3>
@@ -461,15 +461,15 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, github, openai, searxng</p>
   </div>
 </article>
-<article class="story-card" data-search="gpt‑6 nerf, limite de sessão, copilot economiza, fable 5.1 e bugs do vs code a semana trouxe relatos de ajustes dramáticos na capacidade do gpt‑6, a introdução de reset de sessão na api claude, revelações de custos no copilot, a nova versão fable 5.1 da anthropic e problemas recorrentes no vs code. reddit github tabnews post-signals codex claudecode vscode developer br">
+<article class="story-card" data-search="gpt‑6 nerf, limite de sessão, copilot economiza, fable 5.1 e bugs do vs code a semana trouxe relatos de ajustes dramáticos na capacidade do gpt‑6, a introdução de reset de sessão na api claude, revelações de custos no copilot, a nova versão fable 5.1 da anthropic e problemas recorrentes no vs code. reddit github tabnews codex claudecode vscode developer br">
   <time datetime="2026-09-03">03 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-03-gpt-6-nerf-limite-de-sessao-copilot-economiza-fable-5-1-e-bugs-do-vs-code">GPT‑6 Nerf, Limite de Sessão, Copilot Economiza, Fable 5.1 e Bugs do VS Code</a></h3>
     <p>A semana trouxe relatos de ajustes dramáticos na capacidade do GPT‑6, a introdução de reset de sessão na API Claude, revelações de custos no Copilot, a nova versão Fable 5.1 da Anthropic e problemas recorrentes no VS Code.</p>
-    <p class="story-tags">reddit, github, tabnews, post-signals</p>
+    <p class="story-tags">reddit, github, tabnews, codex</p>
   </div>
 </article>
-<article class="story-card" data-search="claude fable 5.1: redução de custos, watermark e sinais de quota na comunidade anthropic diminuiu em 75 % o preço de leitura de cache, lançando o fable 5.1. paralelamente, usuários de codex e copilot relatam queda de quota, regressão de qualidade e a introdução de watermark no modelo. hacker-news google-news reddit front-page anthropic fable 5 cost post-signals codex claudecode githubcopilot">
+<article class="story-card" data-search="claude fable 5.1: redução de custos, watermark e sinais de quota na comunidade anthropic diminuiu em 75 % o preço de leitura de cache, lançando o fable 5.1. paralelamente, usuários de codex e copilot relatam queda de quota, regressão de qualidade e a introdução de watermark no modelo. hacker-news google-news reddit front-page anthropic fable 5 cost codex claudecode githubcopilot">
   <time datetime="2026-09-02">02 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-02-claude-fable-5-1-reducao-de-custos-watermark-e-sinais-de-quota-na-comunidade">Claude Fable 5.1: Redução de Custos, Watermark e Sinais de Quota na Comunidade</a></h3>
@@ -477,51 +477,51 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, google-news, reddit, front-page</p>
   </div>
 </article>
-<article class="story-card" data-search="openai fatura $1b com anúncios chatgpt; polimill constrói ia pública no japão; usuários denunciam vemos a mudança de modelo de receita da openai com ganhos de anúncios, a prova prática de ia pública nas cidades japonesas e relatos técnicos de falhas que afetam produtividade e confiança no vscode e no copilot. openai reddit blog post-signals vscode githubcopilot claudecode codex">
+<article class="story-card" data-search="openai fatura $1b com anúncios chatgpt; polimill constrói ia pública no japão; usuários denunciam vemos a mudança de modelo de receita da openai com ganhos de anúncios, a prova prática de ia pública nas cidades japonesas e relatos técnicos de falhas que afetam produtividade e confiança no vscode e no copilot. openai reddit blog vscode githubcopilot claudecode codex">
   <time datetime="2026-09-01">01 set</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-09-01-openai-fatura-1b-com-anuncios-chatgpt-polimill-constroi-ia-publica-no-japao-usua">OpenAI fatura $1B com anúncios ChatGPT; Polimill constrói IA pública no Japão; usuários denunciam</a></h3>
     <p>Vemos a mudança de modelo de receita da OpenAI com ganhos de anúncios, a prova prática de IA pública nas cidades japonesas e relatos técnicos de falhas que afetam produtividade e confiança no VSCode e no Copilot.</p>
-    <p class="story-tags">openai, reddit, blog, post-signals</p>
+    <p class="story-tags">openai, reddit, blog, vscode</p>
   </div>
 </article>
 </section>
 <div class="archive-older" data-collapsible>
 <section class="month-group is-collapsed" hidden id="mes-2026-08">
   <div class="month-heading"><h2>Agosto <span>2026</span></h2><p>28 edições</p></div>
-  <article class="story-card" data-search="layout customizações do vscode, custos de mcp do copilot e monitoramento de uso do codex engineers veem lacunas únicas nas interfaces de vscode, descobrem custos inesperados ao usar multi‑channel protocols no copilot e modelam rotinas de monitoramento de quotas do codex em dispositivos macos. reddit post-signals vscode githubcopilot codex claudecode">
+  <article class="story-card" data-search="layout customizações do vscode, custos de mcp do copilot e monitoramento de uso do codex engineers veem lacunas únicas nas interfaces de vscode, descobrem custos inesperados ao usar multi‑channel protocols no copilot e modelam rotinas de monitoramento de quotas do codex em dispositivos macos. reddit vscode githubcopilot codex claudecode">
   <time datetime="2026-08-31">31 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-31-layout-customizacoes-do-vscode-custos-de-mcp-do-copilot-e-monitoramento-de-uso-d">Layout Customizações do VSCode, Custos de MCP do Copilot e Monitoramento de Uso do Codex</a></h3>
     <p>Engineers veem lacunas únicas nas interfaces de VSCode, descobrem custos inesperados ao usar Multi‑Channel Protocols no Copilot e modelam rotinas de monitoramento de quotas do Codex em dispositivos macOS.</p>
-    <p class="story-tags">reddit, post-signals, vscode, githubcopilot</p>
+    <p class="story-tags">reddit, vscode, githubcopilot, codex</p>
   </div>
 </article>
-<article class="story-card" data-search="limites codex expandidos, persistência de contexto e nova política de api o período testemunhou ajustes de quotas em serviços de ia, surgimento de ferramentas de gerenciamento de múltiplas contas e avanços em persistência de contexto. esses desenvolvimentos pedem revisão de orçamentos e arquiteturas. reddit openai github-trending post-signals vscode codex githubcopilot claude coding daily-javascript">
+<article class="story-card" data-search="limites codex expandidos, persistência de contexto e nova política de api o período testemunhou ajustes de quotas em serviços de ia, surgimento de ferramentas de gerenciamento de múltiplas contas e avanços em persistência de contexto. esses desenvolvimentos pedem revisão de orçamentos e arquiteturas. reddit openai github-trending vscode codex githubcopilot claude coding daily-javascript">
   <time datetime="2026-08-30">30 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-30-limites-codex-expandidos-persistencia-de-contexto-e-nova-politica-de-api">Limites Codex Expandidos, Persistência de Contexto e Nova Política de API</a></h3>
     <p>O período testemunhou ajustes de quotas em serviços de IA, surgimento de ferramentas de gerenciamento de múltiplas contas e avanços em persistência de contexto. Esses desenvolvimentos pedem revisão de orçamentos e arquiteturas.</p>
-    <p class="story-tags">reddit, openai, github-trending, post-signals</p>
+    <p class="story-tags">reddit, openai, github-trending, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="braid, codex e glm‑5.3: alterações de custo e produtividade uma extensão de depuração em tempo real simplifica o fluxo de desenvolvimento no vs code, enquanto o recente corte nos tokens do codex reduz seu orçamento e a nova ada flash de glm‑5.3 oferece alternativa de custo mais baixo. juntas, as mudanças redefinem estratégias de consumo de ia. reddit together openai post-signals vscode codex claudecode ai frontier togetherai">
+<article class="story-card" data-search="braid, codex e glm‑5.3: alterações de custo e produtividade uma extensão de depuração em tempo real simplifica o fluxo de desenvolvimento no vs code, enquanto o recente corte nos tokens do codex reduz seu orçamento e a nova ada flash de glm‑5.3 oferece alternativa de custo mais baixo. juntas, as mudanças redefinem estratégias de consumo de ia. reddit together openai vscode codex claudecode ai frontier togetherai">
   <time datetime="2026-08-29">29 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-29-braid-codex-e-glm-5-3-alteracoes-de-custo-e-produtividade">BRAID, Codex e GLM‑5.3: Alterações de custo e produtividade</a></h3>
     <p>Uma extensão de depuração em tempo real simplifica o fluxo de desenvolvimento no VS Code, enquanto o recente corte nos tokens do Codex reduz seu orçamento e a nova Ada Flash de GLM‑5.3 oferece alternativa de custo mais baixo. Juntas, as mudanças redefinem estratégias de consumo de IA.</p>
-    <p class="story-tags">reddit, together, openai, post-signals</p>
+    <p class="story-tags">reddit, together, openai, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="notebook 28/08 – infra operacional, economia de tokens e crescimento de projetos open‑source da automação de revisões em agentes ao crescimento explosivo de openclaw, as novidades do dia mostram caminhos claros para otimizar custos, ampliar funcionalidades e garantir segurança colaborativa. reddit github tabnews post-signals githubcopilot claudecode codex developer br">
+<article class="story-card" data-search="notebook 28/08 – infra operacional, economia de tokens e crescimento de projetos open‑source da automação de revisões em agentes ao crescimento explosivo de openclaw, as novidades do dia mostram caminhos claros para otimizar custos, ampliar funcionalidades e garantir segurança colaborativa. reddit github tabnews githubcopilot claudecode codex developer br">
   <time datetime="2026-08-28">28 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-28-notebook-28-08-infra-operacional-economia-de-tokens-e-crescimento-de-projetos-op">Notebook 28/08 – Infra Operacional, Economia de Tokens e Crescimento de Projetos Open‑Source</a></h3>
     <p>Da automação de revisões em agentes ao crescimento explosivo de OpenClaw, as novidades do dia mostram caminhos claros para otimizar custos, ampliar funcionalidades e garantir segurança colaborativa.</p>
-    <p class="story-tags">reddit, github, tabnews, post-signals</p>
+    <p class="story-tags">reddit, github, tabnews, githubcopilot</p>
   </div>
 </article>
-<article class="story-card" data-search="vs code 1.135 lança claude.exe e introduz agent host, enquanto openai expande atuação no brasil no fim‑de‑semana, o vs code adicionou host persistente e a versão 1.135 introduziu execução inesperada de claude.exe. o openai, por sua vez, reforça sua presença no mercado brasileiro e o github copilot automatiza triagem de atualizações. reddit github vscode openai post-signals codex githubcopilot claudecode developer tools">
+<article class="story-card" data-search="vs code 1.135 lança claude.exe e introduz agent host, enquanto openai expande atuação no brasil no fim‑de‑semana, o vs code adicionou host persistente e a versão 1.135 introduziu execução inesperada de claude.exe. o openai, por sua vez, reforça sua presença no mercado brasileiro e o github copilot automatiza triagem de atualizações. reddit github vscode openai codex githubcopilot claudecode developer tools">
   <time datetime="2026-08-27">27 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-27-vs-code-1-135-lanca-claude-exe-e-introduz-agent-host-enquanto-openai-expande-atu">VS Code 1.135 lança claude.exe e introduz Agent Host, enquanto OpenAI expande atuação no Brasil</a></h3>
@@ -529,15 +529,15 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, github, vscode, openai</p>
   </div>
 </article>
-<article class="story-card" data-search="vs code e codex em foco: atualizações que impulsionam a necessidade de avaliação rigorosa de llms atualizações frequentes do vs code geram regressões de api, enquanto o codex revisa seus limites de uso. estes casos reforçam a importância de testes de compatibilidade e avaliações rigorosas de modelos. reddit github post-signals vscode codex claudecode developer">
+<article class="story-card" data-search="vs code e codex em foco: atualizações que impulsionam a necessidade de avaliação rigorosa de llms atualizações frequentes do vs code geram regressões de api, enquanto o codex revisa seus limites de uso. estes casos reforçam a importância de testes de compatibilidade e avaliações rigorosas de modelos. reddit github vscode codex claudecode developer">
   <time datetime="2026-08-26">26 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-26-vs-code-e-codex-em-foco-atualizacoes-que-impulsionam-a-necessidade-de-avaliacao-">VS Code e Codex em Foco: Atualizações que Impulsionam a Necessidade de Avaliação Rigorosa de LLMs</a></h3>
     <p>Atualizações frequentes do VS Code geram regressões de API, enquanto o Codex revisa seus limites de uso. Estes casos reforçam a importância de testes de compatibilidade e avaliações rigorosas de modelos.</p>
-    <p class="story-tags">reddit, github, post-signals, vscode</p>
+    <p class="story-tags">reddit, github, vscode, codex</p>
   </div>
 </article>
-<article class="story-card" data-search="gpt‑5.6 chega de taxa, copilot enfrenta erro de conexão a queda de preço do gpt‑5.6 abre caminho para novas integrações, mas o copilot relata falhas de conexão que expõem fragilidades em sistemas baseados em rede. hacker-news github openai reddit front-page developer post-signals vscode githubcopilot codex">
+<article class="story-card" data-search="gpt‑5.6 chega de taxa, copilot enfrenta erro de conexão a queda de preço do gpt‑5.6 abre caminho para novas integrações, mas o copilot relata falhas de conexão que expõem fragilidades em sistemas baseados em rede. hacker-news github openai reddit front-page developer vscode githubcopilot codex">
   <time datetime="2026-08-25">25 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-25-gpt-5-6-chega-de-taxa-copilot-enfrenta-erro-de-conexao">GPT‑5.6 Chega de Taxa, Copilot Enfrenta Erro de Conexão</a></h3>
@@ -545,23 +545,23 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, github, openai, reddit</p>
   </div>
 </article>
-<article class="story-card" data-search="fable 5: falta de adoção e codex lança modelo &#39;reserve&#39; enquanto o modelo fable 5 enfrenta baixa adoção devido aos custos, usuários do codex relatam a introdução de um novo modelo de menor desempenho. paralelamente, desenvolvedores de vs code criam extensões buscando eficácia, mas confrontam limitações de recursos e perceções de usabilidade. reddit tabnews google-news post-signals vscode codex githubcopilot claudecode br developer">
+<article class="story-card" data-search="fable 5: falta de adoção e codex lança modelo &#39;reserve&#39; enquanto o modelo fable 5 enfrenta baixa adoção devido aos custos, usuários do codex relatam a introdução de um novo modelo de menor desempenho. paralelamente, desenvolvedores de vs code criam extensões buscando eficácia, mas confrontam limitações de recursos e perceções de usabilidade. reddit tabnews google-news vscode codex githubcopilot claudecode br developer">
   <time datetime="2026-08-24">24 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-24-fable-5-falta-de-adocao-e-codex-lanca-modelo-reserve">Fable 5: Falta de Adoção e Codex Lança Modelo &#39;Reserve&#39;</a></h3>
     <p>Enquanto o modelo Fable 5 enfrenta baixa adoção devido aos custos, usuários do Codex relatam a introdução de um novo modelo de menor desempenho. Paralelamente, desenvolvedores de VS Code criam extensões buscando eficácia, mas confrontam limitações de recursos e perceções de usabilidade.</p>
-    <p class="story-tags">reddit, tabnews, google-news, post-signals</p>
+    <p class="story-tags">reddit, tabnews, google-news, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="gpt 5.6 sol corta 20% de preço enquanto desenvolvedores confrontam erros no vs code e testam custos redução de preço na nova ia da openai abre oportunidades de economia, mas mudanças no vs code e variações de custos em codex desafiam a tomada de decisões de token budgeting. projetos independentes demonstram o potencial persistente dos modelos. hacker-news reddit developer post-signals vscode codex claudecode">
+<article class="story-card" data-search="gpt 5.6 sol corta 20% de preço enquanto desenvolvedores confrontam erros no vs code e testam custos redução de preço na nova ia da openai abre oportunidades de economia, mas mudanças no vs code e variações de custos em codex desafiam a tomada de decisões de token budgeting. projetos independentes demonstram o potencial persistente dos modelos. hacker-news reddit developer vscode codex claudecode">
   <time datetime="2026-08-23">23 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-23-gpt-5-6-sol-corta-20-de-preco-enquanto-desenvolvedores-confrontam-erros-no-vs-co">GPT 5.6 Sol corta 20% de preço enquanto desenvolvedores confrontam erros no VS Code e testam custos</a></h3>
     <p>Redução de preço na nova IA da OpenAI abre oportunidades de economia, mas mudanças no VS Code e variações de custos em Codex desafiam a tomada de decisões de token budgeting. Projetos independentes demonstram o potencial persistente dos modelos.</p>
-    <p class="story-tags">hacker-news, reddit, developer, post-signals</p>
+    <p class="story-tags">hacker-news, reddit, developer, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="gpt‑5.6 sol: maior eficiência, preço mais baixo, mas desafios de output esta edição mostra a queda de 20% nos custos do gpt‑5.6 sol e sua superioridade em pass@1, enquanto usuários apontam continua verbosidade e desconforto ao ler o output do opus 5. together hacker-news reddit ai frontier togetherai developer post-signals claudecode codex githubcopilot">
+<article class="story-card" data-search="gpt‑5.6 sol: maior eficiência, preço mais baixo, mas desafios de output esta edição mostra a queda de 20% nos custos do gpt‑5.6 sol e sua superioridade em pass@1, enquanto usuários apontam continua verbosidade e desconforto ao ler o output do opus 5. together hacker-news reddit ai frontier togetherai developer claudecode codex githubcopilot">
   <time datetime="2026-08-22">22 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-22-gpt-5-6-sol-maior-eficiencia-preco-mais-baixo-mas-desafios-de-output">GPT‑5.6 Sol: maior eficiência, preço mais baixo, mas desafios de output</a></h3>
@@ -569,7 +569,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">together, hacker-news, reddit, ai frontier</p>
   </div>
 </article>
-<article class="story-card" data-search="github outage, queda de tokens codex e crash no vscode: desafios operacionais e estratégias o incidente de 17 de agosto no github compulsorou revisões de contingência para ci/cd, enquanto usuários do codex relataram queda súbita de quota e desenvolvedores do vscode encontraram falhas em comandos de build. esses eventos reforçam necessidade de orçamentar redundância e otimizar ux para evitar gargalos. github reddit openai developer post-signals codex githubcopilot vscode claudecode">
+<article class="story-card" data-search="github outage, queda de tokens codex e crash no vscode: desafios operacionais e estratégias o incidente de 17 de agosto no github compulsorou revisões de contingência para ci/cd, enquanto usuários do codex relataram queda súbita de quota e desenvolvedores do vscode encontraram falhas em comandos de build. esses eventos reforçam necessidade de orçamentar redundância e otimizar ux para evitar gargalos. github reddit openai developer codex githubcopilot vscode claudecode">
   <time datetime="2026-08-21">21 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-21-github-outage-queda-de-tokens-codex-e-crash-no-vscode-desafios-operacionais-e-es">GitHub Outage, Queda de Tokens Codex e Crash no VSCode: Desafios Operacionais e Estratégias</a></h3>
@@ -577,15 +577,15 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">github, reddit, openai, developer</p>
   </div>
 </article>
-<article class="story-card" data-search="vs code sphinx preview, gap codex‑claude e zero retenção da openai extensão do vs code traz preview real de projetos sphinx, enquanto relatos de usuários destacam diferenças entre codex e claudecode. simultaneamente, a openai consolida dados zero‑retention, reforçando privacidade. reddit github openai post-signals vscode codex claude coding developer">
+<article class="story-card" data-search="vs code sphinx preview, gap codex‑claude e zero retenção da openai extensão do vs code traz preview real de projetos sphinx, enquanto relatos de usuários destacam diferenças entre codex e claudecode. simultaneamente, a openai consolida dados zero‑retention, reforçando privacidade. reddit github openai vscode codex claude coding developer">
   <time datetime="2026-08-20">20 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-20-vs-code-sphinx-preview-gap-codex-claude-e-zero-retencao-da-openai">VS Code Sphinx Preview, Gap Codex‑Claude e Zero Retenção da OpenAI</a></h3>
     <p>Extensão do VS Code traz preview real de projetos Sphinx, enquanto relatos de usuários destacam diferenças entre Codex e ClaudeCode. Simultaneamente, a OpenAI consolida dados zero‑retention, reforçando privacidade.</p>
-    <p class="story-tags">reddit, github, openai, post-signals</p>
+    <p class="story-tags">reddit, github, openai, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="gpt‑5.6, fable e extensões vs code: custos, qualidade e integração revisões de preço nos modelos gpt e fable pedem reavaliação de contratos, enquanto novas extensões vs code alteram fluxos de trabalho de desenvolvedores. hacker-news together reddit ml research ai frontier togetherai post-signals claudecode codex">
+<article class="story-card" data-search="gpt‑5.6, fable e extensões vs code: custos, qualidade e integração revisões de preço nos modelos gpt e fable pedem reavaliação de contratos, enquanto novas extensões vs code alteram fluxos de trabalho de desenvolvedores. hacker-news together reddit ml research ai frontier togetherai claudecode codex">
   <time datetime="2026-08-19">19 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-19-gpt-5-6-fable-e-extensoes-vs-code-custos-qualidade-e-integracao">GPT‑5.6, Fable e Extensões VS Code: Custos, Qualidade e Integração</a></h3>
@@ -593,23 +593,23 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, together, reddit, ml</p>
   </div>
 </article>
-<article class="story-card" data-search="agentes de código e otimização de tokens: ágil revisão de diff, benchmark de modelos e incremento novas práticas de revisão de código no vs code, economia de tokens via migração para luna, benchmarks de deepseek v4 pro 0813 contra gpt‑5.6 sol e claude fable 5, e a adoção de ‘canvases’ para visibilidade de fluxos. reddit github together post-signals vscode codex githubcopilot claudecode developer ai frontier">
+<article class="story-card" data-search="agentes de código e otimização de tokens: ágil revisão de diff, benchmark de modelos e incremento novas práticas de revisão de código no vs code, economia de tokens via migração para luna, benchmarks de deepseek v4 pro 0813 contra gpt‑5.6 sol e claude fable 5, e a adoção de ‘canvases’ para visibilidade de fluxos. reddit github together vscode codex githubcopilot claudecode developer ai frontier">
   <time datetime="2026-08-18">18 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-18-agentes-de-codigo-e-otimizacao-de-tokens-agil-revisao-de-diff-benchmark-de-model">Agentes de Código e Otimização de Tokens: Ágil Revisão de Diff, Benchmark de Modelos e Incremento</a></h3>
     <p>Novas práticas de revisão de código no VS Code, economia de tokens via migração para Luna, benchmarks de DeepSeek V4 Pro 0813 contra GPT‑5.6 Sol e Claude Fable 5, e a adoção de ‘canvases’ para visibilidade de fluxos.</p>
-    <p class="story-tags">reddit, github, together, post-signals</p>
+    <p class="story-tags">reddit, github, together, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="gemini entra no futebol, vs code reinventa preview, copilot revisa cancelamento e codex reduz gemini e pixel firmam parcerias com clubes de futebol globais, enquanto extensões de markdown e copilot passam por ajustes de fluxo de trabalho. o codex passa por uma queda de 50% nos limites de uso, obrigando equipes a revizarem orçamentos e seleções de ia. reddit tabnews google post-signals vscode codex githubcopilot claudecode br developer">
+<article class="story-card" data-search="gemini entra no futebol, vs code reinventa preview, copilot revisa cancelamento e codex reduz gemini e pixel firmam parcerias com clubes de futebol globais, enquanto extensões de markdown e copilot passam por ajustes de fluxo de trabalho. o codex passa por uma queda de 50% nos limites de uso, obrigando equipes a revizarem orçamentos e seleções de ia. reddit tabnews google vscode codex githubcopilot claudecode br developer">
   <time datetime="2026-08-17">17 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-17-gemini-entra-no-futebol-vs-code-reinventa-preview-copilot-revisa-cancelamento-e-">Gemini entra no futebol, VS Code reinventa preview, Copilot revisa cancelamento e Codex reduz</a></h3>
     <p>Gemini e Pixel firmam parcerias com clubes de futebol globais, enquanto extensões de Markdown e Copilot passam por ajustes de fluxo de trabalho. O Codex passa por uma queda de 50% nos limites de uso, obrigando equipes a revizarem orçamentos e seleções de IA.</p>
-    <p class="story-tags">reddit, tabnews, google, post-signals</p>
+    <p class="story-tags">reddit, tabnews, google, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="vs code, codex, claude e anthropic fable 5: desafios de custo, adoção e otimização de ia mudanças técnicas em extensões de ide, gerenciamento de tokens e centralização de modelos de ia foram observadas neste período. o panorama enfatiza impacto direto em orçamentos, arquitetura e operações de desenvolvimento. reddit tabnews google-news github-trending post-signals vscode codex githubcopilot claudecode br">
+<article class="story-card" data-search="vs code, codex, claude e anthropic fable 5: desafios de custo, adoção e otimização de ia mudanças técnicas em extensões de ide, gerenciamento de tokens e centralização de modelos de ia foram observadas neste período. o panorama enfatiza impacto direto em orçamentos, arquitetura e operações de desenvolvimento. reddit tabnews google-news github-trending vscode codex githubcopilot claudecode br">
   <time datetime="2026-08-16">16 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-16-vs-code-codex-claude-e-anthropic-fable-5-desafios-de-custo-adocao-e-otimizacao-d">VS Code, Codex, Claude e Anthropic Fable 5: desafios de custo, adoção e otimização de IA</a></h3>
@@ -617,7 +617,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, tabnews, google-news, github-trending</p>
   </div>
 </article>
-<article class="story-card" data-search="qwen 27b, app de agentes do github e custos de ia em foco relatório de risco da anthropic, nova política de preços dos principais provedores de ia e o surgimento de ferramentas de codificação local redefinem as escolhas de infra e arquitetura em 2026. hacker-news github google-news reddit front-page developer anthropic fable 5 cost post-signals claudecode vscode">
+<article class="story-card" data-search="qwen 27b, app de agentes do github e custos de ia em foco relatório de risco da anthropic, nova política de preços dos principais provedores de ia e o surgimento de ferramentas de codificação local redefinem as escolhas de infra e arquitetura em 2026. hacker-news github google-news reddit front-page developer anthropic fable 5 cost claudecode vscode">
   <time datetime="2026-08-15">15 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-15-qwen-27b-app-de-agentes-do-github-e-custos-de-ia-em-foco">Qwen 27B, App de Agentes do GitHub e Custos de IA em Foco</a></h3>
@@ -625,7 +625,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, github, google-news, reddit</p>
   </div>
 </article>
-<article class="story-card" data-search="codex desktop app para linux chega, bug de fim de sessão do copilot alerta equipes a nova versão desktop do codex traz funcionalidade offline e revoluciona a experiência do usuário. enquanto isso, um incidente no hook de fim de sessão do copilot pode interromper pipelines de integração, exigindo revisão de fluxos. hacker-news github reddit front-page developer post-signals githubcopilot claudecode codex">
+<article class="story-card" data-search="codex desktop app para linux chega, bug de fim de sessão do copilot alerta equipes a nova versão desktop do codex traz funcionalidade offline e revoluciona a experiência do usuário. enquanto isso, um incidente no hook de fim de sessão do copilot pode interromper pipelines de integração, exigindo revisão de fluxos. hacker-news github reddit front-page developer githubcopilot claudecode codex">
   <time datetime="2026-08-14">14 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-14-codex-desktop-app-para-linux-chega-bug-de-fim-de-sessao-do-copilot-alerta-equipe">Codex desktop app para Linux chega, bug de fim de sessão do Copilot alerta equipes</a></h3>
@@ -633,7 +633,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, github, reddit, front-page</p>
   </div>
 </article>
-<article class="story-card" data-search="chatgpt desktop para linux e incidentes de desempenho no github: a dinâmica de ia e operação openai lança versão de desktop do codex para linux enquanto o github registra oito incidentes críticos de desempenho, destacando o impacto de dependências externas na produtividade de desenvolvedores. hacker-news github reddit front-page developer post-signals claudecode codex vscode githubcopilot">
+<article class="story-card" data-search="chatgpt desktop para linux e incidentes de desempenho no github: a dinâmica de ia e operação openai lança versão de desktop do codex para linux enquanto o github registra oito incidentes críticos de desempenho, destacando o impacto de dependências externas na produtividade de desenvolvedores. hacker-news github reddit front-page developer claudecode codex vscode githubcopilot">
   <time datetime="2026-08-13">13 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-13-chatgpt-desktop-para-linux-e-incidentes-de-desempenho-no-github-a-dinamica-de-ia">ChatGPT Desktop para Linux e Incidentes de Desempenho no GitHub: A Dinâmica de IA e Operação</a></h3>
@@ -641,7 +641,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, github, reddit, front-page</p>
   </div>
 </article>
-<article class="story-card" data-search="chatgpt testa anúncios enquanto copilot enfrenta regressão de visão a edição destaca como a introdução de publicidade no chatgpt impõe novos requisitos de controle de privacidade, ao mesmo tempo em que o copilot registra problemas de visão que forçam ajustes de desenvolvimento e suporte. juntas, ilustram desafios operacionais e regulatórios emergentes. github reddit openai developer post-signals githubcopilot claudecode vscode">
+<article class="story-card" data-search="chatgpt testa anúncios enquanto copilot enfrenta regressão de visão a edição destaca como a introdução de publicidade no chatgpt impõe novos requisitos de controle de privacidade, ao mesmo tempo em que o copilot registra problemas de visão que forçam ajustes de desenvolvimento e suporte. juntas, ilustram desafios operacionais e regulatórios emergentes. github reddit openai developer githubcopilot claudecode vscode">
   <time datetime="2026-08-12">12 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-12-chatgpt-testa-anuncios-enquanto-copilot-enfrenta-regressao-de-visao">ChatGPT testa anúncios enquanto Copilot enfrenta regressão de visão</a></h3>
@@ -649,7 +649,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">github, reddit, openai, developer</p>
   </div>
 </article>
-<article class="story-card" data-search="lfm2.5 2.6b, gpt‑5.6‑cyber e extensões vs code: ia compacta, segurança e usabilidade – semana a semana revelou que modelos de ia menores, como lfm2.5 2.6b, são capazes de competir com gigantes, enquanto gpt‑5.6‑cyber abre novos caminhos para testes de segurança. paralelamente, usuários de vs code apontaram desafios de ux e de custo no copilot. hacker-news reddit github openai front-page ml research post-signals vscode githubcopilot">
+<article class="story-card" data-search="lfm2.5 2.6b, gpt‑5.6‑cyber e extensões vs code: ia compacta, segurança e usabilidade – semana a semana revelou que modelos de ia menores, como lfm2.5 2.6b, são capazes de competir com gigantes, enquanto gpt‑5.6‑cyber abre novos caminhos para testes de segurança. paralelamente, usuários de vs code apontaram desafios de ux e de custo no copilot. hacker-news reddit github openai front-page ml research vscode githubcopilot">
   <time datetime="2026-08-11">11 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-11-lfm2-5-2-6b-gpt-5-6-cyber-e-extensoes-vs-code-ia-compacta-seguranca-e-usabilidad">LFM2.5 2.6B, GPT‑5.6‑Cyber e Extensões VS Code: IA Compacta, Segurança e Usabilidade – Semana</a></h3>
@@ -657,23 +657,23 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, reddit, github, openai</p>
   </div>
 </article>
-<article class="story-card" data-search="copilot prompt meta, claude‑code terminal manager e sessões codex ainda compartilhadas relatos de usuários revelam mudanças de prompt na copilot, falhas de de‑monstração de modelos da claude e problemas de sessão no codex, enquanto a migragem de dart_pdf abre caminho para pdfs em javascript puro. reddit tabnews post-signals githubcopilot claudecode vscode codex br developer">
+<article class="story-card" data-search="copilot prompt meta, claude‑code terminal manager e sessões codex ainda compartilhadas relatos de usuários revelam mudanças de prompt na copilot, falhas de de‑monstração de modelos da claude e problemas de sessão no codex, enquanto a migragem de dart_pdf abre caminho para pdfs em javascript puro. reddit tabnews githubcopilot claudecode vscode codex br developer">
   <time datetime="2026-08-09">09 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-09-copilot-prompt-meta-claude-code-terminal-manager-e-sessoes-codex-ainda-compartil">Copilot Prompt Meta, Claude‑Code Terminal Manager e Sessões Codex Ainda Compartilhadas</a></h3>
     <p>Relatos de usuários revelam mudanças de prompt na Copilot, falhas de de‑monstração de modelos da Claude e problemas de sessão no Codex, enquanto a migragem de dart_pdf abre caminho para PDFs em JavaScript puro.</p>
-    <p class="story-tags">reddit, tabnews, post-signals, githubcopilot</p>
+    <p class="story-tags">reddit, tabnews, githubcopilot, claudecode</p>
   </div>
 </article>
-<article class="story-card" data-search="vs code, codex e deepseek: descobertas práticas de agosto em agosto os desenvolvedores relataram um aviso gênico no terminal do vs code e precisaram otimizar custos entre deepseek e gpt‑5.6 luna, enquanto o openai continuará reforçando controles de segurança. reddit together openai post-signals vscode githubcopilot claudecode codex ai frontier togetherai">
+<article class="story-card" data-search="vs code, codex e deepseek: descobertas práticas de agosto em agosto os desenvolvedores relataram um aviso gênico no terminal do vs code e precisaram otimizar custos entre deepseek e gpt‑5.6 luna, enquanto o openai continuará reforçando controles de segurança. reddit together openai vscode githubcopilot claudecode codex ai frontier togetherai">
   <time datetime="2026-08-08">08 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-08-vs-code-codex-e-deepseek-descobertas-praticas-de-agosto">VS Code, Codex e DeepSeek: descobertas práticas de agosto</a></h3>
     <p>Em agosto os desenvolvedores relataram um aviso gênico no terminal do VS Code e precisaram otimizar custos entre DeepSeek e GPT‑5.6 Luna, enquanto o OpenAI continuará reforçando controles de segurança.</p>
-    <p class="story-tags">reddit, together, openai, post-signals</p>
+    <p class="story-tags">reddit, together, openai, vscode</p>
   </div>
 </article>
-<article class="story-card" data-search="openai amplia gpt‑5.6 luna, codex e copilot ganham ajustes, deepseek oferece alternativa de custo chatgpt disponibiliza gpt‑5.6 luna gratuitamente. codex apresenta fluxo de revisão pesado em locais, enquanto github copilot recebe kimi k3 e recebe críticas comparativas com claude code. deepseek‑v4 flash lança alternativa de alto desempenho e baixo custo. hacker-news reddit together front-page post-signals fallback githubcopilot claudecode ai frontier togetherai">
+<article class="story-card" data-search="openai amplia gpt‑5.6 luna, codex e copilot ganham ajustes, deepseek oferece alternativa de custo chatgpt disponibiliza gpt‑5.6 luna gratuitamente. codex apresenta fluxo de revisão pesado em locais, enquanto github copilot recebe kimi k3 e recebe críticas comparativas com claude code. deepseek‑v4 flash lança alternativa de alto desempenho e baixo custo. hacker-news reddit together front-page fallback githubcopilot claudecode ai frontier togetherai">
   <time datetime="2026-08-07">07 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-07-openai-amplia-gpt-5-6-luna-codex-e-copilot-ganham-ajustes-deepseek-oferece-alter">OpenAI amplia GPT‑5.6 Luna, Codex e Copilot ganham ajustes, DeepSeek oferece alternativa de custo</a></h3>
@@ -681,31 +681,31 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">hacker-news, reddit, together, front-page</p>
   </div>
 </article>
-<article class="story-card" data-search="desafios de codex, uso de ram do chatgpt e falhas do live share três relatos de usuários revelam problemas práticos com codex, chatgpt app e live share, mostrando impactos diretos na produtividade e custos de operação. reddit tabnews github-trending post-signals fallback br developer daily-python python">
+<article class="story-card" data-search="desafios de codex, uso de ram do chatgpt e falhas do live share três relatos de usuários revelam problemas práticos com codex, chatgpt app e live share, mostrando impactos diretos na produtividade e custos de operação. reddit tabnews github-trending fallback br developer daily-python python">
   <time datetime="2026-08-06">06 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-06-desafios-de-codex-uso-de-ram-do-chatgpt-e-falhas-do-live-share">Desafios de Codex, Uso de RAM do ChatGPT e Falhas do Live Share</a></h3>
     <p>Três relatos de usuários revelam problemas práticos com Codex, ChatGPT App e Live Share, mostrando impactos diretos na produtividade e custos de operação.</p>
-    <p class="story-tags">reddit, tabnews, github-trending, post-signals</p>
+    <p class="story-tags">reddit, tabnews, github-trending, fallback</p>
   </div>
 </article>
-<article class="story-card" data-search="openai anuncia circles; usuários relatam suporte mac intel e regressões em copilot na quarta‑feira de 4 de agosto, o openai reafirma posição estratégica com circles, enquanto a comunidade exibe avanços e desafios técnicos em chatgpt, copilot e claude. openai reddit post-signals fallback">
+<article class="story-card" data-search="openai anuncia circles; usuários relatam suporte mac intel e regressões em copilot na quarta‑feira de 4 de agosto, o openai reafirma posição estratégica com circles, enquanto a comunidade exibe avanços e desafios técnicos em chatgpt, copilot e claude. openai reddit fallback">
   <time datetime="2026-08-04">04 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-04-openai-anuncia-circles-usuarios-relatam-suporte-mac-intel-e-regressoes-em-copilo">OpenAI anuncia Circles; usuários relatam suporte Mac Intel e regressões em Copilot</a></h3>
     <p>Na quarta‑feira de 4 de agosto, o OpenAI reafirma posição estratégica com Circles, enquanto a comunidade exibe avanços e desafios técnicos em ChatGPT, Copilot e Claude.</p>
-    <p class="story-tags">openai, reddit, post-signals, fallback</p>
+    <p class="story-tags">openai, reddit, fallback</p>
   </div>
 </article>
-<article class="story-card" data-search="gitgo, codex e claude code: extensão vs code, escalonamento de custos e ux de ia a comunidade de desenvolvedores destaca a chegada de uma nova extensão de grafo para vs code, a escalada de custos do codex, e a procura por configurações de ui mais confortáveis no claude code. reddit tabnews post-signals fallback br developer">
+<article class="story-card" data-search="gitgo, codex e claude code: extensão vs code, escalonamento de custos e ux de ia a comunidade de desenvolvedores destaca a chegada de uma nova extensão de grafo para vs code, a escalada de custos do codex, e a procura por configurações de ui mais confortáveis no claude code. reddit tabnews fallback br developer">
   <time datetime="2026-08-03">03 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-03-gitgo-codex-e-claude-code-extensao-vs-code-escalonamento-de-custos-e-ux-de-ia">GitGo, Codex e Claude Code: Extensão VS Code, Escalonamento de Custos e UX de IA</a></h3>
     <p>A comunidade de desenvolvedores destaca a chegada de uma nova extensão de grafo para VS Code, a escalada de custos do Codex, e a procura por configurações de UI mais confortáveis no Claude Code.</p>
-    <p class="story-tags">reddit, tabnews, post-signals, fallback</p>
+    <p class="story-tags">reddit, tabnews, fallback, br</p>
   </div>
 </article>
-<article class="story-card" data-search="kimi k3, claude code e codex – custos, fluxos e extensões esta edição descreve o lançamento da primeira meta‑classe de modelo aberto, métricas de custo de tokens em codex e uma extensão de wishlist para vs code. esses insights orientam decisões de orçamento e arquitetura. together reddit tabnews hacker-news ai frontier togetherai post-signals fallback br developer">
+<article class="story-card" data-search="kimi k3, claude code e codex – custos, fluxos e extensões esta edição descreve o lançamento da primeira meta‑classe de modelo aberto, métricas de custo de tokens em codex e uma extensão de wishlist para vs code. esses insights orientam decisões de orçamento e arquitetura. together reddit tabnews hacker-news ai frontier togetherai fallback br developer">
   <time datetime="2026-08-02">02 ago</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-02-kimi-k3-claude-code-e-codex-custos-fluxos-e-extensoes">Kimi K3, Claude Code e Codex – Custos, Fluxos e Extensões</a></h3>

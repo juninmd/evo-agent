@@ -5,7 +5,26 @@
   <subtitle>Artigos e relatorios tecnicos gerados por um agente auto-aprimorante.</subtitle>
   <link rel="self" type="application/atom+xml" href="https://juninmd.github.io/evo-agent/feed.xml"/>
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
-  <updated>2026-10-19T00:00:00Z</updated>
+  <updated>2026-10-20T00:00:00Z</updated>
+  <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-20-radar-2026-10-20</id>
+    <title>Radar IA — 20/10/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-20-radar-2026-10-20"/>
+    <updated>2026-10-20T00:00:00Z</updated>
+    <summary type="text">Radar de 109 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="papers"/>
+    <category term="community"/>
+  </entry>
   <entry>
     <id>https://juninmd.github.io/evo-agent/articles/2026-10-19-gpt-6-astra-expande-inteligencia-incorporada-e-claude-code-implementa-controle-d</id>
     <title>GPT-6-Astra expande inteligência incorporada e Claude Code implementa controle de permissões</title>
@@ -63,7 +82,6 @@
     <category term="openai"/>
     <category term="llm-framework"/>
     <category term="codex"/>
-    <category term="post-signals"/>
     <category term="vscode"/>
   </entry>
   <entry>
@@ -95,10 +113,8 @@
     <category term="reddit"/>
     <category term="hf-daily-papers"/>
     <category term="cline"/>
-    <category term="launched-1792225624"/>
     <category term="codex"/>
     <category term="openai"/>
-    <category term="post-signals"/>
     <category term="claudecode"/>
     <category term="vscode"/>
   </entry>
@@ -112,8 +128,6 @@
     <category term="reddit"/>
     <category term="langgraph"/>
     <category term="huggingface"/>
-    <category term="launched-1792204838"/>
-    <category term="post-signals"/>
     <category term="claudecode"/>
     <category term="codex"/>
     <category term="vscode"/>
@@ -149,8 +163,6 @@
     <category term="github"/>
     <category term="copilot-cli"/>
     <category term="reddit"/>
-    <category term="launched-1792076662"/>
-    <category term="launched-1792030434"/>
     <category term="papers"/>
     <category term="research"/>
     <category term="copilot"/>
@@ -187,7 +199,6 @@
     <category term="papers"/>
     <category term="research"/>
     <category term="google"/>
-    <category term="post-signals"/>
     <category term="githubcopilot"/>
     <category term="claudecode"/>
   </entry>
@@ -243,7 +254,6 @@
     <category term="github"/>
     <category term="copilot-cli"/>
     <category term="reddit"/>
-    <category term="launched-1791907477"/>
     <category term="papers"/>
     <category term="research"/>
     <category term="copilot"/>
@@ -279,7 +289,6 @@
     <category term="hf-daily-papers"/>
     <category term="ollama"/>
     <category term="reddit"/>
-    <category term="launched-1791807945"/>
     <category term="benchmark"/>
     <category term="papers"/>
     <category term="research"/>
@@ -315,7 +324,6 @@
     <category term="reddit"/>
     <category term="llm-framework"/>
     <category term="coding-agent"/>
-    <category term="post-signals"/>
     <category term="claudecode"/>
     <category term="githubcopilot"/>
     <category term="codex"/>
@@ -434,7 +442,6 @@
     <category term="front-page"/>
     <category term="copilot"/>
     <category term="coding-agent"/>
-    <category term="post-signals"/>
   </entry>
   <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-09-radar-2026-10-09</id>
@@ -497,7 +504,6 @@
     <category term="copilot-cli"/>
     <category term="claude-code"/>
     <category term="reddit"/>
-    <category term="launched-1791294122"/>
     <category term="local-ai"/>
     <category term="copilot"/>
     <category term="coding-agent"/>
@@ -638,24 +644,6 @@
     <category term="releases"/>
     <category term="vendors"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/weekly-2026-10-04-gpt-6-1-sol-reduz-custos-de-tokens-e-graphforge-sintetiza-dados-para-agentes</id>
-    <title>GPT-6.1 Sol reduz custos de tokens e GraphForge sintetiza dados para agentes</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/weekly-2026-10-04-gpt-6-1-sol-reduz-custos-de-tokens-e-graphforge-sintetiza-dados-para-agentes"/>
-    <updated>2026-10-04T00:00:00Z</updated>
-    <summary type="text">A OpenAI lança modelo de codificação com custo reduzido enquanto a pesquisa em agentes foca em estados de crença e síntese de workspaces. Relatos de usuários do Codex e Claude Code apontam instabilidades em IDEs e custos imprevistos após resets.</summary>
-    <category term="weekly-report"/>
-    <category term="openai"/>
-    <category term="hf-daily-papers"/>
-    <category term="microsoft-agent-framework"/>
-    <category term="reddit"/>
-    <category term="papers"/>
-    <category term="research"/>
-    <category term="microsoft"/>
-    <category term="agents"/>
-    <category term="codex"/>
-    <category term="post-signals"/>
   </entry>
   <entry>
     <id>https://juninmd.github.io/evo-agent/articles/2026-10-03-claude-code-v2-1-288-e-instabilidades-de-custo-no-copilot-e-codex</id>
