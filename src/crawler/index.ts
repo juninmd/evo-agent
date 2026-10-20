@@ -1,5 +1,5 @@
 import { isSafeExternalUrl } from "@juninmd/digest-kit/core";
-import axios, { type AxiosError } from "axios";
+import axios from "axios";
 import type { BrowserContextOptions, Page } from "playwright";
 import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
@@ -25,13 +25,21 @@ import {
   crawlModelLaunches,
   crawlTrendingModels,
 } from "./model-launches.js";
+import {
+  REDDIT_FEED_MIN_INTERVAL_MINUTES,
+  REDDIT_USER_AGENT,
+  RedditRateLimitError,
+  crawlRedditCommunitySignals,
+  isRedditSource,
+  redditFeedAttemptKey,
+  redditFeedDue,
+  redditGet,
+} from "./reddit.js";
 import { TECHLEAD_SOURCES } from "./techlead-sources.js";
 
 export { summarizeSourceContent };
 
 chromium.use(stealth());
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const BROWSER_LAUNCH_ARGS = ["--no-sandbox", "--disable-setuid-sandbox"];
 
@@ -56,7 +64,7 @@ async function closeSharedBrowser() {
 }
 
 const STEALTH_USER_AGENT =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
+  "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
 
 /**
  * Owns the Playwright context lifecycle. Contexts are not reclaimed until the
@@ -107,7 +115,7 @@ const parser = new Parser({
   timeout: 10000,
   headers: {
     "User-Agent":
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
   },
 });
 
@@ -212,7 +220,7 @@ const REDDIT_FOCUS_SUBREDDITS = new Set([
 ]);
 
 const REDDIT_USER_AGENT =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
+  "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 const REDDIT_POSTS_PER_SUBREDDIT = 12;
 const REDDIT_FOCUS_POSTS_PER_SUBREDDIT = 20;
 /**
@@ -231,39 +239,271 @@ const REDDIT_FOCUS_RETRY_DELAYS_MS = [30_000, 60_000, 120_000];
 const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 3000;
 const REDDIT_RATE_LIMIT_MAX_RETRY_MS = 60000;
 /**
- * O 429 anonimo do Reddit nao traz `retry-after`; traz `x-ratelimit-remaining: 0`
- * e `x-ratelimit-reset` em segundos (medido: 7-15s). O retry cego de 3s batia
- * antes da janela reabrir e a fonte era perdida pelo resto do ciclo, inclusive
- * as comunidades que o gate editorial exige.
+ * `retry-after` tem precedencia; na ausencia dele vale o `x-ratelimit-reset`, que
+ * e o unico cabecalho que o Reddit manda no 429 anonimo.
  */
-const REDDIT_RATE_LIMIT_RETRIES = 2;
-/** Spacing every call keeps the crawl under the anonymous per-IP budget. */
-const REDDIT_MIN_REQUEST_INTERVAL_MS = 1100;
-/** A throttled community is skipped after this pause instead of killing the run. */
-const REDDIT_SUBREDDIT_COOLDOWN_MS = 20_000;
-const REDDIT_MAX_CONSECUTIVE_RATE_LIMITS = 3;
-/**
- * Reddit answers 403 to the post `.json` endpoint from datacenter IPs, so every
- * comment fetch burns the shared per-IP budget for nothing and pushes the RSS
- * feeds into 429. Comments stay behind a flag until the endpoint works again.
- */
-const REDDIT_COMMENTS_ENABLED = process.env.REDDIT_COMMENTS_ENABLED === "true";
-/** Hourly crawls never let the per-IP budget recover between sweeps. */
-const REDDIT_SIGNALS_MIN_INTERVAL_HOURS = 6;
-const REDDIT_SIGNALS_LAST_RUN_KEY = "reddit_signals_last_run";
-/**
- * A manual/ad-hoc crawl run minutes after the hourly cron re-hits Reddit with
- * a cold per-process rate limiter, burning the still-throttled per-IP budget
- * for articles that were just fetched and trips the circuit breaker for
- * hours. Gate each Reddit feed source independently of the RSS-parser flow
- * used by non-Reddit sources.
- */
-const REDDIT_FEED_MIN_INTERVAL_MINUTES = 20;
+export function redditRateLimitDelayMs(
+  value: unknown,
+  resetSeconds?: unknown,
+): number {
+  const retryAfterMs = (val: unknown): number | null => {
+    if (typeof val === "number" && Number.isFinite(val) && val >= 0) return val * 1000;
+    if (typeof val !== "string" || val.trim() === "") return null;
+    const seconds = Number(val);
+    if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
+    const date = Date.parse(val);
+    if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
+    return null;
+  };
 
-class RedditRateLimitError extends Error {
-  constructor(readonly retryAfterMs: number) {
-    super(`Reddit rate limit persisted after retry (${retryAfterMs}ms)`);
+  return Math.min(
+    retryAfterMs(value) ??
+      retryAfterMs(resetSeconds) ??
+      REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS,
+    REDDIT_RATE_LIMIT_MAX_RETRY_MS,
+  );
+}
+
+/**
+ * Com o orcamento anonimo esgotado, `x-ratelimit-reset` diz quantos segundos
+ * faltam para reabrir. Devolve null quando ainda ha orcamento, para o ritmo
+ * normal do crawler continuar valendo.
+ */
+export function redditBudgetDelayMs(
+  headers: Record<string, unknown> | undefined,
+): number | null {
+  const remaining = Number(headers?.["x-ratelimit-remaining"]);
+  if (!Number.isFinite(remaining) || remaining > 0) return null;
+  const reset = retryAfterMs(headers?.["x-ratelimit-reset"]);
+  return reset === null
+    ? null
+    : Math.min(reset, REDDIT_RATE_LIMIT_MAX_RETRY_MS);
+}
+
+const retryAfterMs = (value: unknown): number | null => {
+  if (typeof value === "number") {
+    return Number.isFinite(value) && value >= 0 ? value * 1000 : null;
   }
+  if (typeof value !== "string" || value.trim() === "") return null;
+  const seconds = Number(value);
+  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
+  const date = Date.parse(value);
+  if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
+  return null;
+};
+
+function isRedditRateLimit(err: unknown): err is AxiosError {
+  return (
+    axios.isAxiosError(err) &&
+    err.response?.status === 429 &&
+    err.response?.headers?.["retry-after"]
+  );
+}
+
+/**
+ * "Crawler failed for Google Research: " nao diz nada. Um erro sem mensagem
+ * ainda carrega status HTTP, codigo e tipo; e o que permite agir depois.
+ */
+export function describeCrawlerError(err: unknown): string {
+  if (axios.isAxiosError(err)) {
+    const parts = [
+      err.response?.status ? `HTTP ${err.response.status}` : null,
+      err.code ?? null,
+      err.message || null,
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(" · ") : "erro HTTP sem detalhe";
+  }
+  if (err instanceof Error) {
+    return err.message || err.name || "Error sem mensagem";
+  }
+  const text = String(err).trim();
+  return text === "" ? "falha sem detalhe" : text;
+}
+
+export function isUsefulComment(comment: RedditComment): boolean {
+  const body = comment.body.toLowerCase();
+  return (
+    comment.score >= REDDIT_MIN_COMMENT_SCORE &&
+    comment.body.length >= REDDIT_MIN_COMMENT_LENGTH &&
+    body !== "[deleted]" &&
+    body !== "[removed]" &&
+    !body.startsWith("i am a bot")
+  );
+}
+
+function isUsefulRedditPost(title: string): boolean {
+  const normalized = title.toLowerCase();
+  const lowSignalPatterns = [
+    "drop your projects",
+    "share what you're working on",
+    "share what you are working on",
+    "shout out",
+    "shoutout",
+    "instagram",
+  ];
+  return !lowSignalPatterns.some((pattern) => normalized.includes(pattern));
+}
+
+function flattenComments(
+  listing: RedditListing | undefined,
+  depth = 0,
+): RedditComment[] {
+  const children = listing?.data?.children ?? [];
+  const comments: RedditComment[] = [];
+
+  for (const child of children) {
+    if (child.kind !== "t1" || !child.data?.body) continue;
+
+    comments.push({
+      body: child.data.body,
+      score: child.data.score ?? 0,
+      depth,
+    });
+
+    if (typeof child.data.replies === "object") {
+      comments.push(...flattenComments(child.data.replies, depth + 1));
+    }
+  }
+
+  return comments;
+}
+
+function redditJsonUrl(postUrl: string): string {
+  const cleanUrl = postUrl.split("?")[0].replace(/\/$/, "");
+  return `${cleanUrl}.json?limit=50&depth=3&sort=top`;
+}
+
+function signalUrl(postUrl: string): string {
+  return `${postUrl.split("#")[0]}#community-signals`;
+}
+
+function buildCommunitySignalSummary(
+  post: RedditPostCandidate,
+  comments: RedditComment[],
+): string {
+  const topComments = comments
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8)
+    .map((comment) => {
+      const body = comment.body.length > 220
+        ? `${comment.body.slice(0, 217).trim()}...`
+        : comment.body;
+      return `score ${comment.score}: ${body}`;
+    });
+
+  const positiveCount = comments.filter((comment) => comment.score > 0).length;
+  return normalizeTitle(
+    [
+      `Sinais da comunidade em r/${post.subreddit} sobre "${post.title}".`,
+      `Comentários úteis analisados: ${comments.length}.`,
+      `Comentários com score positivo: ${positiveCount}.`,
+      `Top comments: ${topComments.join(" | ")}`,
+    ].join(" "),
+  ).slice(0, 2600);
+}
+
+function buildRedditPostSignalSummary(post: RedditPostCandidate): string {
+  return normalizeTitle(
+    [
+      `Post da comunidade em r/${post.subreddit} sobre "${post.title}".`,
+      "Relato do autor, sem os comentarios da discussao.",
+      post.summary,
+    ].join(" "),
+  ).slice(0, 1200);
+}
+
+function focusRetryDelayMs(attempt: number): number | null {
+  return REDDIT_FOCUS_RETRY_DELAYS_MS[attempt] ?? null;
+}
+
+async function getRedditPostCandidates(
+  subreddit: string,
+  sort: "new" | "top" = "new",
+): Promise<RedditPostCandidate[]> {
+  const limit = REDDIT_FOCUS_SUBREDDITS.has(subreddit)
+    ? REDDIT_FOCUS_POSTS_PER_SUBREDDIT
+    : REDDIT_POSTS_PER_SUBREDDIT;
+  const data = await redditGet<string>(
+    `https://www.reddit.com/r/${subreddit}/${sort}/.rss${sort === "top" ? "?t=week" : ""}`,
+    {
+      headers: {
+        Accept: "application/atom+xml, application/xml",
+        "User-Agent": REDDIT_USER_AGENT,
+      },
+      timeout: 8000,
+    },
+  );
+  const feed = await parser.parseString(data);
+
+  return feed.items.slice(0, limit).flatMap((item) => {
+    if (!item.title || !item.link) return [];
+    if (!isUsefulRedditPost(item.title)) return [];
+    const summary = summarizeSourceContent(
+      item.contentSnippet ?? item.content ?? "",
+      1000,
+    );
+    return [{ subreddit, title: item.title, url: item.link, summary }];
+  });
+}
+
+async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
+  const data = await redditGet<unknown[]>(redditJsonUrl(postUrl), {
+    headers: { "User-Agent": REDDIT_USER_AGENT },
+    timeout: 8000,
+  });
+  const listing = data?.[1] as RedditListing | undefined;
+  return flattenComments(listing)
+    .filter(isUsefulComment)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, REDDIT_COMMENTS_PER_POST);
+}
+
+async function getFocusPostCandidates(
+  subreddit: string,
+  sort: "new" | "top",
+): Promise<RedditPostCandidate[]> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await getRedditPostCandidates(subreddit, sort);
+    } catch (err) {
+      const delay =
+        err instanceof RedditRateLimitError ? focusRetryDelayMs(attempt) : null;
+      if (delay === null) throw err;
+      const jittered = jitterDelay(delay);
+      log.warn(
+        `Reddit rate limited on focus r/${subreddit}; waiting ${jittered}ms before retry ${attempt + 1}`,
+      );
+      await sleep(jittered);
+    }
+  }
+}
+
+function isV2exAiRelevant(title: string): boolean {
+  const lower = title.toLowerCase();
+  const keywords = [
+    "ai",
+    "agent",
+    "claude",
+    "codex",
+    "copilot",
+    "gpt",
+    "llm",
+    "mimo",
+    "模型",
+    "智能体",
+    "deepseek",
+    "gemini",
+    "opus",
+    "qwen",
+    "cursor",
+    "litellm",
+    "vibecoding",
+    "vibe coding",
+    "向量",
+    "脱敏",
+    "屎山",
+  ];
+  return keywords.some((kw) => lower.includes(kw));
 }
 
 const V2EX_AI_KEYWORDS = [
@@ -602,8 +842,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
 ];
 
-// Circuit breaker: track consecutive failures per source name.
-// After CIRCUIT_OPEN_THRESHOLD failures, skip the source for CIRCUIT_SKIP_CYCLES crawl cycles.
 const CIRCUIT_OPEN_THRESHOLD = 3;
 const CIRCUIT_SKIP_CYCLES = 5;
 function circuitAllow(name: string): boolean {
@@ -728,7 +966,6 @@ async function crawlGitHubTrending(): Promise<number> {
   let newCount = 0;
 
   await withStealthPage(async (page) => {
-    // Trending geral + trending por linguagem de IA
     const queries: Array<{ label: string; url: string }> = [
       {
         label: "daily",
@@ -740,7 +977,6 @@ async function crawlGitHubTrending(): Promise<number> {
       },
     ];
 
-    // Add language-specific trending
     for (const lang of GITHUB_TRENDING_LANGUAGES) {
       queries.push({
         label: `daily-${lang.toLowerCase()}`,
@@ -762,7 +998,9 @@ async function crawlGitHubTrending(): Promise<number> {
             .map((article) => {
               const link = article.querySelector("h2 a");
               const desc = article.querySelector("p");
-              const starsEl = article.querySelector('a[href$="/stargazers"]');
+              const starsEl = article.querySelector(
+                'a[href$="/stargazers"]',
+              );
               const langEl = article.querySelector(
                 '[itemprop="programmingLanguage"]',
               );
@@ -781,8 +1019,6 @@ async function crawlGitHubTrending(): Promise<number> {
         const day = todayIso();
         for (const repo of repos) {
           if (!repo.url || !repo.name) continue;
-          // A repo trending again is today's news, so the signal is keyed by
-          // day. Keying by repo URL alone hid every repo already seen once.
           const signalUrl = trendingSignalUrl(repo.url, label, day);
           if (db.urlExists(signalUrl)) continue;
 
@@ -908,523 +1144,15 @@ async function fetchWithPlaywright(url: string): Promise<string> {
   );
 }
 
-function normalizeText(value: string): string {
-  return value.replace(/\s+/g, " ").trim();
-}
-
-function isV2exAiRelevant(title: string): boolean {
+function isHackerNewsRelevant(title: string): boolean {
   const lower = title.toLowerCase();
-  return V2EX_AI_KEYWORDS.some((kw) => lower.includes(kw));
-}
-
-export function isUsefulComment(comment: RedditComment): boolean {
-  const body = comment.body.toLowerCase();
-  return (
-    comment.score >= REDDIT_MIN_COMMENT_SCORE &&
-    comment.body.length >= REDDIT_MIN_COMMENT_LENGTH &&
-    body !== "[deleted]" &&
-    body !== "[removed]" &&
-    !body.startsWith("i am a bot")
-  );
-}
-
-function isUsefulRedditPost(title: string): boolean {
-  const normalized = title.toLowerCase();
-  const lowSignalPatterns = [
-    "drop your projects",
-    "share what you're working on",
-    "share what you are working on",
-    "shout out",
-    "shoutout",
-    "instagram",
-  ];
-  return !lowSignalPatterns.some((pattern) => normalized.includes(pattern));
-}
-
-function flattenComments(
-  listing: RedditListing | undefined,
-  depth = 0,
-): RedditComment[] {
-  const children = listing?.data?.children ?? [];
-  const comments: RedditComment[] = [];
-
-  for (const child of children) {
-    if (child.kind !== "t1" || !child.data?.body) continue;
-
-    comments.push({
-      body: normalizeText(child.data.body),
-      score: child.data.score ?? 0,
-      depth,
-    });
-
-    if (typeof child.data.replies === "object") {
-      comments.push(...flattenComments(child.data.replies, depth + 1));
-    }
-  }
-
-  return comments;
-}
-
-function redditJsonUrl(postUrl: string): string {
-  const cleanUrl = postUrl.split("?")[0].replace(/\/$/, "");
-  return `${cleanUrl}.json?limit=50&depth=3&sort=top`;
-}
-
-function signalUrl(postUrl: string): string {
-  return `${postUrl.split("#")[0]}#community-signals`;
-}
-
-function buildCommunitySignalSummary(
-  post: RedditPostCandidate,
-  comments: RedditComment[],
-): string {
-  const topComments = comments
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 8)
-    .map((comment) => {
-      const body =
-        comment.body.length > 220
-          ? `${comment.body.slice(0, 217).trim()}...`
-          : comment.body;
-      return `score ${comment.score}: ${body}`;
-    });
-
-  const positiveCount = comments.filter((comment) => comment.score > 0).length;
-  return normalizeText(
-    [
-      `Sinais da comunidade em r/${post.subreddit} sobre "${post.title}".`,
-      `Comentarios uteis analisados: ${comments.length}.`,
-      `Comentarios com score positivo: ${positiveCount}.`,
-      `Top comments: ${topComments.join(" | ")}`,
-    ].join(" "),
-  ).slice(0, 2600);
-}
-
-function buildRedditPostSignalSummary(post: RedditPostCandidate): string {
-  return normalizeText(
-    [
-      `Post da comunidade em r/${post.subreddit} sobre "${post.title}".`,
-      "Relato do autor, sem os comentarios da discussao.",
-      post.summary,
-    ].join(" "),
-  ).slice(0, 1200);
-}
-
-function retryAfterMs(value: unknown): number | null {
-  // Cabecalho HTTP chega como string, mas alguns clientes ja entregam numero.
-  if (typeof value === "number") {
-    return Number.isFinite(value) && value >= 0 ? value * 1000 : null;
-  }
-  if (typeof value !== "string" || value.trim() === "") return null;
-  const seconds = Number(value);
-  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
-  const date = Date.parse(value);
-  if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
-  return null;
-}
-
-/**
- * `retry-after` tem precedencia; na ausencia dele vale o `x-ratelimit-reset`, que
- * e o unico cabecalho que o Reddit manda no 429 anonimo.
- */
-export function redditRateLimitDelayMs(
-  value: unknown,
-  resetSeconds?: unknown,
-): number {
-  return Math.min(
-    retryAfterMs(value) ??
-      retryAfterMs(resetSeconds) ??
-      REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS,
-    REDDIT_RATE_LIMIT_MAX_RETRY_MS,
-  );
-}
-
-/**
- * Com o orcamento anonimo esgotado, `x-ratelimit-reset` diz quantos segundos
- * faltam para reabrir. Devolve null quando ainda ha orcamento, para o ritmo
- * normal do crawler continuar valendo.
- */
-export function redditBudgetDelayMs(
-  headers: Record<string, unknown> | undefined,
-): number | null {
-  const remaining = Number(headers?.["x-ratelimit-remaining"]);
-  if (!Number.isFinite(remaining) || remaining > 0) return null;
-  const reset = retryAfterMs(headers?.["x-ratelimit-reset"]);
-  return reset === null
-    ? null
-    : Math.min(reset, REDDIT_RATE_LIMIT_MAX_RETRY_MS);
-}
-
-function isRedditRateLimit(err: unknown): err is AxiosError {
-  return axios.isAxiosError(err) && err.response?.status === 429;
-}
-
-/**
- * "Crawler failed for Google Research: " nao diz nada. Um erro sem mensagem
- * ainda carrega status HTTP, codigo e tipo; e o que permite agir depois.
- */
-export function describeCrawlerError(err: unknown): string {
-  if (axios.isAxiosError(err)) {
-    const parts = [
-      err.response?.status ? `HTTP ${err.response.status}` : null,
-      err.code ?? null,
-      err.message || null,
-    ].filter(Boolean);
-    return parts.length > 0 ? parts.join(" · ") : "erro HTTP sem detalhe";
-  }
-  if (err instanceof Error) {
-    return err.message || err.name || "Error sem mensagem";
-  }
-  const text = String(err).trim();
-  return text === "" ? "falha sem detalhe" : text;
-}
-
-function isRedditSource(source: FeedSource): boolean {
-  return source.url.includes("reddit.com") || source.tags.includes("reddit");
-}
-
-let redditNextRequestAt = 0;
-
-/**
- * Serializes Reddit calls to one every REDDIT_MIN_REQUEST_INTERVAL_MS. The slot
- * is reserved before awaiting, so callers queue up instead of all firing after
- * the same wait.
- */
-async function redditPace(now = Date.now()): Promise<void> {
-  const waitMs = redditNextRequestAt - now;
-  redditNextRequestAt =
-    Math.max(now, redditNextRequestAt) + REDDIT_MIN_REQUEST_INTERVAL_MS;
-  if (waitMs > 0) await sleep(waitMs);
-}
-
-async function redditGet<T = unknown>(
-  url: string,
-  config: Parameters<typeof axios.get>[1],
-): Promise<T> {
-  for (let attempt = 0; ; attempt++) {
-    await redditPace();
-    try {
-      const response = await axios.get<T>(url, config);
-      noteRedditBudget(response.headers);
-      return response.data;
-    } catch (err) {
-      if (!isRedditRateLimit(err)) throw err;
-      const headers = err.response?.headers as
-        | Record<string, unknown>
-        | undefined;
-      const retryAfter = headers?.["retry-after"];
-      const resetSeconds = headers?.["x-ratelimit-reset"];
-      if (attempt >= REDDIT_RATE_LIMIT_RETRIES) {
-        throw new RedditRateLimitError(
-          redditRateLimitDelayMs(retryAfter, resetSeconds),
-        );
-      }
-      const delayMs = jitterDelay(
-        redditRateLimitDelayMs(retryAfter, resetSeconds),
-      );
-      // Reserva a janela inteira: sem isto as fontes seguintes repetiriam a
-      // mesma colisao, uma atras da outra.
-      noteRedditBudget(headers);
-      log.warn(
-        `Reddit rate limited; retry ${attempt + 1}/${REDDIT_RATE_LIMIT_RETRIES} in ${delayMs}ms`,
-      );
-      await sleep(delayMs);
-    }
-  }
-}
-
-/**
- * Quando o Reddit diz que o orcamento anonimo acabou, empurra o proximo pedido
- * para depois da janela. Sem isto o ritmo de 1,1s segue batendo em 429: medido,
- * o reset fica entre 7 e 15s.
- */
-function noteRedditBudget(headers: Record<string, unknown> | undefined): void {
-  const delay = redditBudgetDelayMs(headers);
-  if (delay === null) return;
-  redditNextRequestAt = Math.max(redditNextRequestAt, Date.now() + delay);
-}
-
-/** ±20% jitter so parallel sources don't retry in lockstep. */
-function jitterDelay(ms: number): number {
-  return Math.round(ms * (0.8 + Math.random() * 0.4));
-}
-
-async function getRedditPostCandidates(
-  subreddit: string,
-  sort: "new" | "top" = "new",
-): Promise<RedditPostCandidate[]> {
-  const limit = REDDIT_FOCUS_SUBREDDITS.has(subreddit)
-    ? REDDIT_FOCUS_POSTS_PER_SUBREDDIT
-    : REDDIT_POSTS_PER_SUBREDDIT;
-  const data = await redditGet<string>(
-    `https://www.reddit.com/r/${subreddit}/${sort}/.rss${sort === "top" ? "?t=week" : ""}`,
-    {
-      headers: {
-        Accept: "application/atom+xml, application/xml",
-        "User-Agent": REDDIT_USER_AGENT,
-      },
-      timeout: 8000,
-    },
-  );
-  const feed = await parser.parseString(data);
-
-  return feed.items.slice(0, limit).flatMap((item) => {
-    if (!item.title || !item.link) return [];
-    if (!isUsefulRedditPost(item.title)) return [];
-    const summary = summarizeSourceContent(
-      item.contentSnippet ?? item.content ?? "",
-      1000,
-    );
-    return [{ subreddit, title: item.title, url: item.link, summary }];
+  const words = lower.split(/[^a-z0-9+.]+/);
+  return HACKER_NEWS_KEYWORDS.some((keyword) => {
+    if (keyword.includes(" ")) return lower.includes(keyword);
+    return keyword.length <= 3
+      ? words.includes(keyword)
+      : words.some((word) => word.startsWith(keyword));
   });
-}
-
-async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
-  const data = await redditGet<unknown[]>(redditJsonUrl(postUrl), {
-    headers: { "User-Agent": REDDIT_USER_AGENT },
-    timeout: 8000,
-  });
-  const listing = data?.[1] as RedditListing | undefined;
-  return flattenComments(listing)
-    .filter(isUsefulComment)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, REDDIT_COMMENTS_PER_POST);
-}
-
-export function focusRetryDelayMs(attempt: number): number | null {
-  return REDDIT_FOCUS_RETRY_DELAYS_MS[attempt] ?? null;
-}
-
-async function getFocusPostCandidates(
-  subreddit: string,
-  sort: "new" | "top",
-): Promise<RedditPostCandidate[]> {
-  for (let attempt = 0; ; attempt++) {
-    try {
-      return await getRedditPostCandidates(subreddit, sort);
-    } catch (err) {
-      const delay =
-        err instanceof RedditRateLimitError ? focusRetryDelayMs(attempt) : null;
-      if (delay === null) throw err;
-      const jittered = jitterDelay(delay);
-      log.warn(
-        `Reddit rate limited on focus r/${subreddit}; waiting ${jittered}ms before retry ${attempt + 1}`,
-      );
-      await sleep(jittered);
-    }
-  }
-}
-
-export function orderedCommunitySubreddits(): string[] {
-  return [
-    ...REDDIT_COMMUNITY_SUBREDDITS.filter((subreddit) =>
-      REDDIT_FOCUS_SUBREDDITS.has(subreddit),
-    ),
-    ...REDDIT_COMMUNITY_SUBREDDITS.filter(
-      (subreddit) => !REDDIT_FOCUS_SUBREDDITS.has(subreddit),
-    ),
-  ];
-}
-
-export interface SubredditPlan {
-  subreddit: string;
-  focus: boolean;
-  /** Posts kept per community, across every sort. */
-  postLimit: number;
-  /** How many of those posts get their comment thread fetched. */
-  commentLimit: number;
-}
-
-export function subredditPlan(subreddit: string): SubredditPlan {
-  const focus = REDDIT_FOCUS_SUBREDDITS.has(subreddit);
-  return {
-    subreddit,
-    focus,
-    postLimit: focus
-      ? REDDIT_FOCUS_POSTS_PER_SUBREDDIT
-      : REDDIT_POSTS_PER_SUBREDDIT,
-    commentLimit: focus
-      ? REDDIT_FOCUS_COMMENT_POSTS_PER_SUBREDDIT
-      : REDDIT_COMMENT_POSTS_PER_SUBREDDIT,
-  };
-}
-
-function saveCommunitySignal(
-  post: RedditPostCandidate,
-  url: string,
-  comments: RedditComment[],
-): void {
-  const topScore = comments[0]?.score ?? 0;
-  db.saveArticle({
-    title: `Discussao: ${post.title}`,
-    source: `Reddit Community Signals (${post.subreddit})`,
-    url,
-    summary: buildCommunitySignalSummary(post, comments),
-    tags: JSON.stringify([
-      "reddit",
-      "community-signals",
-      post.subreddit.toLowerCase(),
-    ]),
-    engagement_score:
-      topScore +
-      comments.reduce((sum, comment) => sum + Math.max(comment.score, 0), 0),
-  });
-}
-
-/** Saves a post without its discussion. Returns false when it carries no text. */
-function savePostSignal(post: RedditPostCandidate, url: string): boolean {
-  if (post.summary.length < REDDIT_MIN_COMMENT_LENGTH) return false;
-  db.saveArticle({
-    title: `Reddit: ${post.title}`,
-    source: `Reddit Post Signals (${post.subreddit})`,
-    url,
-    summary: buildRedditPostSignalSummary(post),
-    tags: JSON.stringify([
-      "reddit",
-      "post-signals",
-      post.subreddit.toLowerCase(),
-    ]),
-    engagement_score: 0,
-  });
-  return true;
-}
-
-async function collectPostCandidates(
-  plan: SubredditPlan,
-): Promise<{ posts: RedditPostCandidate[]; throttled: boolean }> {
-  const byUrl = new Map<string, RedditPostCandidate>();
-  let throttled = false;
-
-  // "top" first: with the comment budget capped, the enriched slots should go to
-  // the best posts of the week, not to whatever was posted in the last minutes.
-  for (const sort of REDDIT_SORTS) {
-    try {
-      const candidates = plan.focus
-        ? await getFocusPostCandidates(plan.subreddit, sort)
-        : await getRedditPostCandidates(plan.subreddit, sort);
-      for (const post of candidates) {
-        if (!byUrl.has(post.url)) byUrl.set(post.url, post);
-      }
-    } catch (err) {
-      if (err instanceof RedditRateLimitError) {
-        throttled = true;
-        break;
-      }
-      log.warn(
-        `Reddit ${sort} feed failed for r/${plan.subreddit}: ${(err as Error).message}`,
-      );
-    }
-  }
-
-  return { posts: [...byUrl.values()].slice(0, plan.postLimit), throttled };
-}
-
-export function redditSignalsDue(
-  lastRun: string | null,
-  now = new Date(),
-): boolean {
-  if (!lastRun) return true;
-  const elapsedMs = now.getTime() - Date.parse(lastRun);
-  if (!Number.isFinite(elapsedMs)) return true;
-  return elapsedMs >= REDDIT_SIGNALS_MIN_INTERVAL_HOURS * 3600_000;
-}
-
-function redditFeedAttemptKey(sourceName: string): string {
-  return `reddit.feed.last_attempt.${sourceName}`;
-}
-
-export function redditFeedDue(
-  lastAttempt: string | null,
-  now = new Date(),
-): boolean {
-  if (!lastAttempt) return true;
-  const elapsedMs = now.getTime() - Date.parse(lastAttempt);
-  if (!Number.isFinite(elapsedMs)) return true;
-  return elapsedMs >= REDDIT_FEED_MIN_INTERVAL_MINUTES * 60_000;
-}
-
-export async function crawlRedditCommunitySignals(): Promise<number> {
-  if (!redditSignalsDue(db.getState(REDDIT_SIGNALS_LAST_RUN_KEY))) {
-    log.info(
-      `Reddit community signals skipped: last run under ${REDDIT_SIGNALS_MIN_INTERVAL_HOURS}h ago`,
-    );
-    return 0;
-  }
-
-  let newCount = 0;
-  let consecutiveRateLimits = 0;
-
-  // Reddit throttles by IP, so the focus communities are collected before
-  // anything else instead of after 40 other subreddits.
-  for (const subreddit of orderedCommunitySubreddits()) {
-    const plan = subredditPlan(subreddit);
-    const collected = await collectPostCandidates(plan);
-    let throttled = collected.throttled;
-    if (throttled) {
-      log.warn(`Reddit feed rate limit persisted for r/${subreddit}`);
-    }
-    let enriched = 0;
-
-    for (const post of collected.posts) {
-      const url = signalUrl(post.url);
-      if (db.urlExists(url)) continue;
-
-      // Past the comment budget the post is still worth publishing; it just goes
-      // in without the discussion instead of costing another request.
-      if (
-        throttled ||
-        !REDDIT_COMMENTS_ENABLED ||
-        enriched >= plan.commentLimit
-      ) {
-        if (savePostSignal(post, url)) newCount++;
-        continue;
-      }
-
-      try {
-        const comments = await getRedditComments(post.url);
-        enriched++;
-        if (comments.length === 0) {
-          if (savePostSignal(post, url)) newCount++;
-          continue;
-        }
-        saveCommunitySignal(post, url, comments);
-        newCount++;
-      } catch (err) {
-        if (err instanceof RedditRateLimitError) {
-          log.warn(`Reddit comments rate limit persisted for r/${subreddit}`);
-          throttled = true;
-        } else {
-          log.info(
-            `Reddit comments skipped for r/${subreddit}: ${(err as Error).message}`,
-          );
-        }
-        if (savePostSignal(post, url)) newCount++;
-      }
-    }
-
-    // One throttled community used to end the whole crawl, leaving the remaining
-    // 40 subreddits uncollected. Now it costs a cooldown, and only a run of
-    // throttled communities means the IP is actually blocked.
-    if (!throttled) {
-      consecutiveRateLimits = 0;
-      continue;
-    }
-    consecutiveRateLimits++;
-    if (consecutiveRateLimits >= REDDIT_MAX_CONSECUTIVE_RATE_LIMITS) {
-      log.warn(
-        `Reddit throttled ${consecutiveRateLimits} communities in a row; stopping Reddit crawl`,
-      );
-      break;
-    }
-    await sleep(REDDIT_SUBREDDIT_COOLDOWN_MS);
-  }
-
-  // Only mark the sweep as done after it actually ran; a crash mid-crawl must
-  // not lock the signals out for another REDDIT_SIGNALS_MIN_INTERVAL_HOURS.
-  db.setState(REDDIT_SIGNALS_LAST_RUN_KEY, new Date().toISOString());
-
-  log.info(`Crawled Reddit community signals, ${newCount} new digests`);
-  return newCount;
 }
 
 const HACKER_NEWS_MIN_POINTS = 20;
@@ -1452,24 +1180,8 @@ const HACKER_NEWS_KEYWORDS = [
   "neural",
 ];
 
-export function isHackerNewsRelevant(title: string): boolean {
-  const lower = title.toLowerCase();
-  const words = lower.split(/[^a-z0-9+.]+/);
-  return HACKER_NEWS_KEYWORDS.some((keyword) => {
-    if (keyword.includes(" ")) return lower.includes(keyword);
-    // Short keywords match whole words only, or "Spain" reads as AI news.
-    // Longer ones match as a prefix, so "agentic" and "qwen3.8" still count.
-    return keyword.length <= 3
-      ? words.includes(keyword)
-      : words.some((word) => word.startsWith(keyword));
-  });
-}
-
 async function crawlHackerNewsAlgolia(): Promise<number> {
   let newCount = 0;
-  // The full-text index lags — on 06/08/2026 a broad "AI OR LLM" query returned
-  // nothing newer than 23/07. The front page is always current, so relevance is
-  // filtered here instead of being delegated to the query.
   const queries = [
     {
       tag: "front-page",
@@ -1478,7 +1190,9 @@ async function crawlHackerNewsAlgolia(): Promise<number> {
     },
     {
       tag: "ai",
-      url: `https://hn.algolia.com/api/v1/search_by_date?query=${encodeURIComponent("AI OR LLM OR GPT OR Claude OR agent")}&tags=story&hitsPerPage=30&numericFilters=points>${HACKER_NEWS_MIN_POINTS}`,
+      url: `https://hn.algolia.com/api/v1/search_by_date?query=${encodeURIComponent(
+        "AI OR LLM OR GPT OR Claude OR agent",
+      )}&tags=story&hitsPerPage=30&numericFilters=points>${HACKER_NEWS_MIN_POINTS}`,
       filter: false,
     },
   ];
@@ -1556,7 +1270,6 @@ async function crawlTabNews(): Promise<number> {
       )
       .slice(0, 20);
 
-    // Bodies are fetched in bounded parallel; the list call stays cheap.
     const missingBodies = contents.filter((item) => !item.body);
     const fetchedBodies = await mapLimit(missingBodies, 5, async (item) => {
       try {
@@ -1608,7 +1321,6 @@ async function crawlAiCommunityPosts(): Promise<number> {
   let newCount = 0;
   const aiTags = ["ai", "llm", "machine-learning", "agents"];
 
-  // Dev.to (AI-focused)
   for (const tag of aiTags) {
     try {
       const url = `https://dev.to/api/articles?tag=${tag}&top=7&per_page=25`;
@@ -1638,7 +1350,6 @@ async function crawlAiCommunityPosts(): Promise<number> {
     }
   }
 
-  // Hashnode (AI-focused)
   const hashnoteTags = ["artificial-intelligence", "llm", "machine-learning"];
   for (const tag of hashnoteTags) {
     try {
@@ -1695,13 +1406,14 @@ async function crawlHtmlSource(source: FeedSource): Promise<number> {
               const title = titleEl
                 ? titleEl.textContent?.trim()
                 : a.textContent?.trim();
-              // Description often lives in the card wrapper, not inside the <a>.
               const card = a.closest('[class*="card"]') ?? a.parentElement ?? a;
               const descEl = a.querySelector("p") ?? card.querySelector("p");
               const summary = descEl ? descEl.textContent?.trim() : "";
               return {
                 title: title ?? "",
-                url: href.startsWith("http") ? href : `${baseUrl}${href}`,
+                url: href.startsWith("http")
+                  ? href
+                  : `${baseUrl}${href}`,
                 summary: summary ?? "",
               };
             })
@@ -1771,9 +1483,6 @@ async function crawlAllInner(): Promise<CrawlReport> {
     metrics[source.name] = { saved: 0, failed: false };
   }
 
-  // Non-Reddit feeds are independent, so bounded concurrency cuts the crawl
-  // tail instead of waiting on 60+ sources in a row; Reddit stays serialized
-  // by its own pace limiter and the shared rate-limit flag.
   const crawlSource = async (source: FeedSource): Promise<void> => {
     if (redditRateLimited && isRedditSource(source)) {
       log.debug(`Reddit rate limit active: skipping "${source.name}"`);
@@ -1876,12 +1585,12 @@ async function crawlAllInner(): Promise<CrawlReport> {
   const keywords = getSearchKeywords();
   let googleNewsSaved = 0;
   let googleNewsFailed = 0;
-  // Google News links are redirect URLs unique per query, so the same story
-  // would be saved once per keyword; normalized titles dedupe the pass.
   const googleNewsTitles = new Set<string>();
   for (const keyword of keywords) {
     try {
-      const queryUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(keyword)}&hl=en-US&gl=US&ceid=US:en`;
+      const queryUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(
+        keyword,
+      )}&hl=en-US&gl=US&ceid=US:en`;
       const feed = await parser.parseURL(queryUrl);
       for (const item of feed.items.slice(0, 5)) {
         if (!item.link || !item.title) continue;
@@ -1903,7 +1612,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
     } catch (err) {
       googleNewsFailed++;
       log.warn(
-        `Google News search crawler failed for '${keyword}': ${err instanceof Error ? err.message : String(err)}`,
+        `Google News search crawler failed for '${keyword}': ${(err as Error).message}`,
       );
     }
   }
@@ -1918,7 +1627,9 @@ async function crawlAllInner(): Promise<CrawlReport> {
     try {
       const cleanKeyword = keyword.slice(0, 60).trim();
       const query = `(site:reddit.com OR site:x.com) "${cleanKeyword}"`;
-      const searxngUrl = `${config.searxngUrl}/search?q=${encodeURIComponent(query)}&format=json`;
+      const searxngUrl = `${config.searxngUrl}/search?q=${encodeURIComponent(
+        query,
+      )}&format=json`;
       const response = await axios.get(searxngUrl, { timeout: 5000 });
       const results = response.data?.results ?? [];
       for (const result of results.slice(0, 5)) {
@@ -1930,8 +1641,8 @@ async function crawlAllInner(): Promise<CrawlReport> {
         const sourceName = result.url.includes("reddit.com")
           ? `Reddit (${cleanKeyword})`
           : result.url.includes("x.com")
-            ? `X/Twitter (${cleanKeyword})`
-            : `Web Search (${cleanKeyword})`;
+          ? `X/Twitter (${cleanKeyword})`
+          : `Web Search (${cleanKeyword})`;
         db.saveArticle({
           title: result.title,
           source: sourceName,
@@ -1946,7 +1657,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
     } catch (err) {
       searxngFailed++;
       log.warn(
-        `SearXNG failed for '${keyword.slice(0, 40)}': ${err instanceof Error ? err.message : String(err)}`,
+        `SearXNG failed for '${keyword.slice(0, 40)}': ${(err as Error).message}`,
       );
     }
   }
@@ -1986,7 +1697,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
       metrics[extra.name] = { saved: 0, failed: true };
       circuitFailure(extra.name);
       log.warn(
-        `${extra.name} crawler failed: ${err instanceof Error ? err.message : String(err)}`,
+        `${extra.name} crawler failed: ${(err as Error).message}`,
       );
     }
   }
@@ -1999,7 +1710,9 @@ async function crawlAllInner(): Promise<CrawlReport> {
     .map(([k, v]) => `${k}:${v.saved}`)
     .join(", ");
   log.info(
-    `Crawl complete — ${newCount} new articles. Saved by source: [${summary || "none"}]${failed.length ? `. Failed: [${failed.join(", ")}]` : ""}`,
+    `Crawl complete — ${newCount} new articles. Saved by source: [${summary || "none"}]${
+      failed.length ? `. Failed: [${failed.join(", ")}]` : ""
+    }`,
   );
   return { totalSaved: newCount, sources: metrics, failedSources: failed };
 }

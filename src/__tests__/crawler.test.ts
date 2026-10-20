@@ -5,8 +5,6 @@ import {
   hackerNewsEngagement,
   isCitableXUrl,
   isHackerNewsRelevant,
-  isUsefulComment,
-  orderedCommunitySubreddits,
   parseGitHubStarCount,
   redditBudgetDelayMs,
   redditFeedDue,
@@ -17,6 +15,16 @@ import {
   todayIso,
   trendingSignalUrl,
 } from "../crawler/index.js";
+import {
+  focusRetryDelayMs,
+  isUsefulComment,
+  orderedCommunitySubreddits,
+  redditBudgetDelayMs,
+  redditFeedDue,
+  redditRateLimitDelayMs,
+  redditSignalsDue,
+  subredditPlan,
+} from "../crawler/reddit.js";
 
 describe("crawler transformations", () => {
   it("crawls the focus communities before the rest", () => {

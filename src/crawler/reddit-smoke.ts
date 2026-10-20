@@ -1,6 +1,6 @@
 process.env.DB_PATH = "data/reddit-comments-test.db";
 
-const { crawlRedditCommunitySignals } = await import("./index.js");
+const { crawlRedditCommunitySignals } = await import("./reddit.js");
 const { db } = await import("../knowledge/store.js");
 
 const count = await crawlRedditCommunitySignals();
