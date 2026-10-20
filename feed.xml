@@ -7,6 +7,23 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-10-19T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-10-19-gpt-6-astra-expande-inteligencia-incorporada-e-claude-code-implementa-controle-d</id>
+    <title>GPT-6-Astra expande inteligência incorporada e Claude Code implementa controle de permissões</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-19-gpt-6-astra-expande-inteligencia-incorporada-e-claude-code-implementa-controle-d"/>
+    <updated>2026-10-19T00:00:00Z</updated>
+    <summary type="text">Novos benchmarks de robótica testam a generalização do GPT-6-Astra enquanto ferramentas de terminal refinam o controle humano sobre agentes. Relatos de usuários apontam instabilidades em predições de composer e drenos anômalos de tokens.</summary>
+    <category term="hf-daily-papers"/>
+    <category term="claude-code"/>
+    <category term="copilot-cli"/>
+    <category term="github"/>
+    <category term="reddit"/>
+    <category term="papers"/>
+    <category term="research"/>
+    <category term="anthropic"/>
+    <category term="copilot"/>
+    <category term="coding-agent"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-19-radar-2026-10-19</id>
     <title>Radar IA — 19/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-19-radar-2026-10-19"/>
@@ -656,22 +673,5 @@
     <category term="sdk"/>
     <category term="microsoft"/>
     <category term="agents"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-02-o-jeito-de-estabelecer-distilacao-de-politicas-em-multimodal-novos-mods-do-claud</id>
-    <title>O jeito de estabelecer distilação de políticas em multimodal, novos mods do Claude Code e relatos</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-02-o-jeito-de-estabelecer-distilacao-de-politicas-em-multimodal-novos-mods-do-claud"/>
-    <updated>2026-10-02T00:00:00Z</updated>
-    <summary type="text">A partir de técnicas de distilação on‑policy, a nova versão do Claude Code expande a personalização de mods e usuários relatam falhas de paralelização em Copilot no VS Code.</summary>
-    <category term="hf-daily-papers"/>
-    <category term="github"/>
-    <category term="copilot-cli"/>
-    <category term="cline"/>
-    <category term="reddit"/>
-    <category term="papers"/>
-    <category term="research"/>
-    <category term="copilot"/>
-    <category term="changelog"/>
-    <category term="coding-agent"/>
   </entry>
 </feed>

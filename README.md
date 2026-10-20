@@ -9,13 +9,13 @@ title: Evo Agent
   <p class="masthead-count"><strong>80</strong> edições e <strong>24</strong> radares no arquivo</p>
 </section>
 
-<section class="latest" aria-labelledby="ultima-edicao" data-search="litellm assina imagens docker com cosign e uso do codex aumenta após integração com dot litellm v1.106.0 introduz verificação de assinatura docker com cosign usando chave fixa. usuários do codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho. litellm reddit openai llm-framework codex post-signals vscode">
+<section class="latest" aria-labelledby="ultima-edicao" data-search="gpt-6-astra expande inteligência incorporada e claude code implementa controle de permissões novos benchmarks de robótica testam a generalização do gpt-6-astra enquanto ferramentas de terminal refinam o controle humano sobre agentes. relatos de usuários apontam instabilidades em predições de composer e drenos anômalos de tokens. hf-daily-papers claude-code copilot-cli github reddit papers research anthropic copilot coding-agent">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-18-litellm-assina-imagens-docker-com-cosign-e-uso-do-codex-aumenta-apos-integracao-">
-    <time class="edition-date" datetime="2026-10-18"><span class="edition-day">18</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-19-gpt-6-astra-expande-inteligencia-incorporada-e-claude-code-implementa-controle-d">
+    <time class="edition-date" datetime="2026-10-19"><span class="edition-day">19</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>LiteLLM assina imagens Docker com cosign e uso do Codex aumenta após integração com dot</h3>
-      <p>LiteLLM v1.106.0 introduz verificação de assinatura Docker com cosign usando chave fixa. Usuários do Codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho.</p>
+      <h3>GPT-6-Astra expande inteligência incorporada e Claude Code implementa controle de permissões</h3>
+      <p>Novos benchmarks de robótica testam a generalização do GPT-6-Astra enquanto ferramentas de terminal refinam o controle humano sobre agentes. Relatos de usuários apontam instabilidades em predições de composer e drenos anômalos de tokens.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>16 edições</p></div>
-  <article class="story-card" data-search="deepseek v4.1 flash leva ia multimodal a nova linha de referência modelo deepseek desbloqueia vídeo, áudio e linguagem com 1m tokens, enquanto o claude code aprimora revisão automática e o github copilot ajusta modo interativo em tempo real. hf-trending-models reddit langgraph huggingface launched-1792204838 post-signals claudecode codex vscode agents">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>17 edições</p></div>
+  <article class="story-card" data-search="litellm assina imagens docker com cosign e uso do codex aumenta após integração com dot litellm v1.106.0 introduz verificação de assinatura docker com cosign usando chave fixa. usuários do codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho. litellm reddit openai llm-framework codex post-signals vscode">
+  <time datetime="2026-10-18">18 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-18-litellm-assina-imagens-docker-com-cosign-e-uso-do-codex-aumenta-apos-integracao-">LiteLLM assina imagens Docker com cosign e uso do Codex aumenta após integração com dot</a></h3>
+    <p>LiteLLM v1.106.0 introduz verificação de assinatura Docker com cosign usando chave fixa. Usuários do Codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho.</p>
+    <p class="story-tags">litellm, reddit, openai, llm-framework</p>
+  </div>
+</article>
+<article class="story-card" data-search="deepseek v4.1 flash leva ia multimodal a nova linha de referência modelo deepseek desbloqueia vídeo, áudio e linguagem com 1m tokens, enquanto o claude code aprimora revisão automática e o github copilot ajusta modo interativo em tempo real. hf-trending-models reddit langgraph huggingface launched-1792204838 post-signals claudecode codex vscode agents">
   <time datetime="2026-10-17">17 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-17-deepseek-v4-1-flash-leva-ia-multimodal-a-nova-linha-de-referencia">DeepSeek V4.1 Flash leva IA multimodal a nova linha de referência</a></h3>
@@ -480,7 +488,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </section>
 <div class="archive-older" data-collapsible>
 <section class="month-group is-collapsed" hidden id="mes-2026-08">
-  <div class="month-heading"><h2>Agosto <span>2026</span></h2><p>29 edições</p></div>
+  <div class="month-heading"><h2>Agosto <span>2026</span></h2><p>28 edições</p></div>
   <article class="story-card" data-search="layout customizações do vscode, custos de mcp do copilot e monitoramento de uso do codex engineers veem lacunas únicas nas interfaces de vscode, descobrem custos inesperados ao usar multi‑channel protocols no copilot e modelam rotinas de monitoramento de quotas do codex em dispositivos macos. reddit post-signals vscode githubcopilot codex claudecode">
   <time datetime="2026-08-31">31 ago</time>
   <div>
@@ -705,16 +713,8 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">together, reddit, tabnews, hacker-news</p>
   </div>
 </article>
-<article class="story-card" data-search="chatgpt dirige codex, shieldfont bloqueia scraping de ia e copilot exige desenho de segurança o fluxo de trabalho ia evolui: chatgpt orquestra codex e terra medium, enquanto shieldfont demonstra diferenciação de texto entre humanos e bots. openai divulga avanços que reforçam algoritmos de segurança. openai tabnews reddit br developer post-signals fallback">
-  <time datetime="2026-08-01">01 ago</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-01-chatgpt-dirige-codex-shieldfont-bloqueia-scraping-de-ia-e-copilot-exige-desenho-">ChatGPT dirige Codex, ShieldFont bloqueia scraping de IA e Copilot exige desenho de segurança</a></h3>
-    <p>O fluxo de trabalho IA evolui: ChatGPT orquestra Codex e Terra Medium, enquanto ShieldFont demonstra diferenciação de texto entre humanos e bots. OpenAI divulga avanços que reforçam algoritmos de segurança.</p>
-    <p class="story-tags">openai, tabnews, reddit, br</p>
-  </div>
-</article>
 </section>
 </div>
-<button type="button" class="show-more" data-show-more="arquivo">Ver edições anteriores (29)</button>
+<button type="button" class="show-more" data-show-more="arquivo">Ver edições anteriores (28)</button>
   </section>
 </div>
