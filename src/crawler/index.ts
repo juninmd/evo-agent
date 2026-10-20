@@ -11,6 +11,7 @@ import { db } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 import { AGENT_SOURCES } from "./agent-sources.js";
 import {
+  type FeedItem,
   feedItemSummary,
   isEmptyRelease,
   isPrereleaseTitle,
@@ -696,9 +697,7 @@ async function crawlGitHubTrending(): Promise<number> {
             .map((article) => {
               const link = article.querySelector("h2 a");
               const desc = article.querySelector("p");
-              const starsEl = article.querySelector(
-                'a[href$="/stargazers"]',
-              );
+              const starsEl = article.querySelector('a[href$="/stargazers"]');
               const langEl = article.querySelector(
                 '[itemprop="programmingLanguage"]',
               );
@@ -1109,9 +1108,7 @@ async function crawlHtmlSource(source: FeedSource): Promise<number> {
               const summary = descEl ? descEl.textContent?.trim() : "";
               return {
                 title: title ?? "",
-                url: href.startsWith("http")
-                  ? href
-                  : `${baseUrl}${href}`,
+                url: href.startsWith("http") ? href : `${baseUrl}${href}`,
                 summary: summary ?? "",
               };
             })
@@ -1246,7 +1243,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
       if (!feedData?.items) return;
 
       const newsworthy = feedData.items
-        .map((item: any) => ({ ...item, summary: feedItemSummary(item) }))
+        .map((item: FeedItem) => ({ ...item, summary: feedItemSummary(item) }))
         .filter(
           (item) =>
             !isEmptyRelease(item.summary) &&
@@ -1339,8 +1336,8 @@ async function crawlAllInner(): Promise<CrawlReport> {
         const sourceName = result.url.includes("reddit.com")
           ? `Reddit (${cleanKeyword})`
           : result.url.includes("x.com")
-          ? `X/Twitter (${cleanKeyword})`
-          : `Web Search (${cleanKeyword})`;
+            ? `X/Twitter (${cleanKeyword})`
+            : `Web Search (${cleanKeyword})`;
         db.saveArticle({
           title: result.title,
           source: sourceName,
@@ -1394,9 +1391,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
     } catch (err) {
       metrics[extra.name] = { saved: 0, failed: true };
       circuitFailure(extra.name);
-      log.warn(
-        `${extra.name} crawler failed: ${(err as Error).message}`,
-      );
+      log.warn(`${extra.name} crawler failed: ${(err as Error).message}`);
     }
   }
 

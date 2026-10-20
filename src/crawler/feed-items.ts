@@ -5,7 +5,7 @@ export const FEED_MAX_AGE_DAYS = 14;
 export const FEED_ITEMS_PER_SOURCE = 10;
 const FEED_SUMMARY_MAX = 500;
 
-type FeedItem = Pick<
+export type FeedItem = Pick<
   Parser.Item,
   "title" | "link" | "isoDate" | "pubDate" | "contentSnippet" | "content"
 > & { summary?: string };
