@@ -84,7 +84,7 @@ export async function withStealthPage<T>(
   try {
     return await run(await context.newPage());
   } finally {
-    await context.close().catch((err) => {
+    await context.close().catch((err: unknown) => {
       log.warn(`Failed to close browser context: ${(err as Error).message}`);
     });
   }
@@ -156,150 +156,6 @@ interface RedditPostCandidate {
   summary: string;
 }
 
-const REDDIT_COMMUNITY_SUBREDDITS = [
-  // IA/LLM Core
-  "LocalLLaMA",
-  "MachineLearning",
-  "OpenAI",
-  "ClaudeAI",
-  "ClaudeCode",
-  "ChatGPTCoding",
-  "LLMDevs",
-  "AI_Agents",
-  "AgenticAI",
-  "LangChain",
-  "ollama",
-  "artificial",
-  "singularity",
-  "ChatGPT",
-  "ArtificialIntelligence",
-  "deeplearning",
-  "MLQuestions",
-  "StableDiffusion",
-  "comfyui",
-  "SoraAi",
-  // Development tools com IA
-  "Cursor",
-  "CursorIDE",
-  "WindsurfAI",
-  "GithubCopilot",
-  "codex",
-  "vscode",
-  "vibecoding",
-  "kilocode",
-  "opencode",
-  "MCP",
-  // Linguagens de programação (foco em IA/agents)
-  "Python",
-  "TypeScript",
-  "node",
-  "golang",
-  "rust",
-  // IA/ML específicos
-  "neuralnetworks",
-  "LanguageModels",
-  "Tensorflow",
-  "learnmachinelearning",
-  "reinforcementlearning",
-  "datascience",
-  // Development & Tools
-  "learnprogramming",
-  "coding",
-];
-
-/**
- * Communities the editions must cover every day. They are crawled by "top of the
- * week" on top of the usual "new" feed so the best recent posts are collected,
- * not only whatever happened to be posted last.
- */
-const REDDIT_FOCUS_SUBREDDITS = new Set([
-  "ClaudeCode",
-  "codex",
-  "vscode",
-  "GithubCopilot",
-]);
-
-const REDDIT_USER_AGENT =
-  "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
-const REDDIT_POSTS_PER_SUBREDDIT = 12;
-const REDDIT_FOCUS_POSTS_PER_SUBREDDIT = 20;
-/**
- * Comments cost one request per post, which is what exhausts the rate limit.
- * Only the top slice of each feed is enriched; the remaining posts still reach
- * the edition as post signals, for free.
- */
-const REDDIT_COMMENT_POSTS_PER_SUBREDDIT = 4;
-const REDDIT_FOCUS_COMMENT_POSTS_PER_SUBREDDIT = 8;
-const REDDIT_SORTS: ("top" | "new")[] = ["top", "new"];
-const REDDIT_COMMENTS_PER_POST = 30;
-const REDDIT_MIN_COMMENT_SCORE = 3;
-const REDDIT_MIN_COMMENT_LENGTH = 80;
-/** Reddit throttles by IP, so the focus feeds wait it out instead of giving up. */
-const REDDIT_FOCUS_RETRY_DELAYS_MS = [30_000, 60_000, 120_000];
-const REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS = 3000;
-const REDDIT_RATE_LIMIT_MAX_RETRY_MS = 60000;
-/**
- * `retry-after` tem precedencia; na ausencia dele vale o `x-ratelimit-reset`, que
- * e o unico cabecalho que o Reddit manda no 429 anonimo.
- */
-export function redditRateLimitDelayMs(
-  value: unknown,
-  resetSeconds?: unknown,
-): number {
-  const retryAfterMs = (val: unknown): number | null => {
-    if (typeof val === "number" && Number.isFinite(val) && val >= 0) return val * 1000;
-    if (typeof val !== "string" || val.trim() === "") return null;
-    const seconds = Number(val);
-    if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
-    const date = Date.parse(val);
-    if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
-    return null;
-  };
-
-  return Math.min(
-    retryAfterMs(value) ??
-      retryAfterMs(resetSeconds) ??
-      REDDIT_RATE_LIMIT_DEFAULT_RETRY_MS,
-    REDDIT_RATE_LIMIT_MAX_RETRY_MS,
-  );
-}
-
-/**
- * Com o orcamento anonimo esgotado, `x-ratelimit-reset` diz quantos segundos
- * faltam para reabrir. Devolve null quando ainda ha orcamento, para o ritmo
- * normal do crawler continuar valendo.
- */
-export function redditBudgetDelayMs(
-  headers: Record<string, unknown> | undefined,
-): number | null {
-  const remaining = Number(headers?.["x-ratelimit-remaining"]);
-  if (!Number.isFinite(remaining) || remaining > 0) return null;
-  const reset = retryAfterMs(headers?.["x-ratelimit-reset"]);
-  return reset === null
-    ? null
-    : Math.min(reset, REDDIT_RATE_LIMIT_MAX_RETRY_MS);
-}
-
-const retryAfterMs = (value: unknown): number | null => {
-  if (typeof value === "number") {
-    return Number.isFinite(value) && value >= 0 ? value * 1000 : null;
-  }
-  if (typeof value !== "string" || value.trim() === "") return null;
-  const seconds = Number(value);
-  if (Number.isFinite(seconds) && seconds >= 0) return seconds * 1000;
-  const date = Date.parse(value);
-  if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
-  return null;
-};
-
-function isRedditRateLimit(err: unknown): err is AxiosError {
-  return (
-    axios.isAxiosError(err) &&
-    err.response?.status === 429 &&
-    err.response?.headers?.["retry-after"]
-  );
-}
-
 /**
  * "Crawler failed for Google Research: " nao diz nada. Um erro sem mensagem
  * ainda carrega status HTTP, codigo e tipo; e o que permite agir depois.
@@ -318,164 +174,6 @@ export function describeCrawlerError(err: unknown): string {
   }
   const text = String(err).trim();
   return text === "" ? "falha sem detalhe" : text;
-}
-
-export function isUsefulComment(comment: RedditComment): boolean {
-  const body = comment.body.toLowerCase();
-  return (
-    comment.score >= REDDIT_MIN_COMMENT_SCORE &&
-    comment.body.length >= REDDIT_MIN_COMMENT_LENGTH &&
-    body !== "[deleted]" &&
-    body !== "[removed]" &&
-    !body.startsWith("i am a bot")
-  );
-}
-
-function isUsefulRedditPost(title: string): boolean {
-  const normalized = title.toLowerCase();
-  const lowSignalPatterns = [
-    "drop your projects",
-    "share what you're working on",
-    "share what you are working on",
-    "shout out",
-    "shoutout",
-    "instagram",
-  ];
-  return !lowSignalPatterns.some((pattern) => normalized.includes(pattern));
-}
-
-function flattenComments(
-  listing: RedditListing | undefined,
-  depth = 0,
-): RedditComment[] {
-  const children = listing?.data?.children ?? [];
-  const comments: RedditComment[] = [];
-
-  for (const child of children) {
-    if (child.kind !== "t1" || !child.data?.body) continue;
-
-    comments.push({
-      body: child.data.body,
-      score: child.data.score ?? 0,
-      depth,
-    });
-
-    if (typeof child.data.replies === "object") {
-      comments.push(...flattenComments(child.data.replies, depth + 1));
-    }
-  }
-
-  return comments;
-}
-
-function redditJsonUrl(postUrl: string): string {
-  const cleanUrl = postUrl.split("?")[0].replace(/\/$/, "");
-  return `${cleanUrl}.json?limit=50&depth=3&sort=top`;
-}
-
-function signalUrl(postUrl: string): string {
-  return `${postUrl.split("#")[0]}#community-signals`;
-}
-
-function buildCommunitySignalSummary(
-  post: RedditPostCandidate,
-  comments: RedditComment[],
-): string {
-  const topComments = comments
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 8)
-    .map((comment) => {
-      const body = comment.body.length > 220
-        ? `${comment.body.slice(0, 217).trim()}...`
-        : comment.body;
-      return `score ${comment.score}: ${body}`;
-    });
-
-  const positiveCount = comments.filter((comment) => comment.score > 0).length;
-  return normalizeTitle(
-    [
-      `Sinais da comunidade em r/${post.subreddit} sobre "${post.title}".`,
-      `Comentários úteis analisados: ${comments.length}.`,
-      `Comentários com score positivo: ${positiveCount}.`,
-      `Top comments: ${topComments.join(" | ")}`,
-    ].join(" "),
-  ).slice(0, 2600);
-}
-
-function buildRedditPostSignalSummary(post: RedditPostCandidate): string {
-  return normalizeTitle(
-    [
-      `Post da comunidade em r/${post.subreddit} sobre "${post.title}".`,
-      "Relato do autor, sem os comentarios da discussao.",
-      post.summary,
-    ].join(" "),
-  ).slice(0, 1200);
-}
-
-function focusRetryDelayMs(attempt: number): number | null {
-  return REDDIT_FOCUS_RETRY_DELAYS_MS[attempt] ?? null;
-}
-
-async function getRedditPostCandidates(
-  subreddit: string,
-  sort: "new" | "top" = "new",
-): Promise<RedditPostCandidate[]> {
-  const limit = REDDIT_FOCUS_SUBREDDITS.has(subreddit)
-    ? REDDIT_FOCUS_POSTS_PER_SUBREDDIT
-    : REDDIT_POSTS_PER_SUBREDDIT;
-  const data = await redditGet<string>(
-    `https://www.reddit.com/r/${subreddit}/${sort}/.rss${sort === "top" ? "?t=week" : ""}`,
-    {
-      headers: {
-        Accept: "application/atom+xml, application/xml",
-        "User-Agent": REDDIT_USER_AGENT,
-      },
-      timeout: 8000,
-    },
-  );
-  const feed = await parser.parseString(data);
-
-  return feed.items.slice(0, limit).flatMap((item) => {
-    if (!item.title || !item.link) return [];
-    if (!isUsefulRedditPost(item.title)) return [];
-    const summary = summarizeSourceContent(
-      item.contentSnippet ?? item.content ?? "",
-      1000,
-    );
-    return [{ subreddit, title: item.title, url: item.link, summary }];
-  });
-}
-
-async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
-  const data = await redditGet<unknown[]>(redditJsonUrl(postUrl), {
-    headers: { "User-Agent": REDDIT_USER_AGENT },
-    timeout: 8000,
-  });
-  const listing = data?.[1] as RedditListing | undefined;
-  return flattenComments(listing)
-    .filter(isUsefulComment)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, REDDIT_COMMENTS_PER_POST);
-}
-
-async function getFocusPostCandidates(
-  subreddit: string,
-  sort: "new" | "top",
-): Promise<RedditPostCandidate[]> {
-  for (let attempt = 0; ; attempt++) {
-    try {
-      return await getRedditPostCandidates(subreddit, sort);
-    } catch (err) {
-      const delay =
-        err instanceof RedditRateLimitError ? focusRetryDelayMs(attempt) : null;
-      if (delay === null) throw err;
-      const jittered = jitterDelay(delay);
-      log.warn(
-        `Reddit rate limited on focus r/${subreddit}; waiting ${jittered}ms before retry ${attempt + 1}`,
-      );
-      await sleep(jittered);
-    }
-  }
 }
 
 function isV2exAiRelevant(title: string): boolean {
@@ -1144,7 +842,7 @@ async function fetchWithPlaywright(url: string): Promise<string> {
   );
 }
 
-function isHackerNewsRelevant(title: string): boolean {
+export function isHackerNewsRelevant(title: string): boolean {
   const lower = title.toLowerCase();
   const words = lower.split(/[^a-z0-9+.]+/);
   return HACKER_NEWS_KEYWORDS.some((keyword) => {
@@ -1548,7 +1246,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
       if (!feedData?.items) return;
 
       const newsworthy = feedData.items
-        .map((item) => ({ ...item, summary: feedItemSummary(item) }))
+        .map((item: any) => ({ ...item, summary: feedItemSummary(item) }))
         .filter(
           (item) =>
             !isEmptyRelease(item.summary) &&
@@ -1563,7 +1261,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
           title: item.title,
           source: source.name,
           url: item.link,
-          summary: item.summary,
+          summary: item.summary ?? "",
           tags: JSON.stringify(source.tags),
           engagement_score: 0,
         });

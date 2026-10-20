@@ -1,16 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   describeCrawlerError,
-  focusRetryDelayMs,
   hackerNewsEngagement,
   isCitableXUrl,
   isHackerNewsRelevant,
   parseGitHubStarCount,
-  redditBudgetDelayMs,
-  redditFeedDue,
-  redditRateLimitDelayMs,
-  redditSignalsDue,
-  subredditPlan,
   summarizeSourceContent,
   todayIso,
   trendingSignalUrl,
