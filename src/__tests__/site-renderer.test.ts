@@ -6,6 +6,7 @@ import {
   buildIndex,
   buildMarkdown,
   buildSiteFiles,
+  buildYearArchives,
   estimateReadingMinutes,
 } from "../publisher/site-renderer.js";
 
@@ -247,5 +248,77 @@ describe("buildSiteFiles", () => {
     expect(image?.encoding).toBe("base64");
     const bytes = Buffer.from(image?.content ?? "", "base64");
     expect(bytes.subarray(1, 4).toString("ascii")).toBe("PNG");
+  });
+});
+
+describe("rolling home window and yearly archives", () => {
+  const monthly = (year: number, month: number, n = 2) =>
+    Array.from({ length: n }, (_, i) => ({
+      date: `${year}-${String(month).padStart(2, "0")}-${String(10 + i).padStart(2, "0")}`,
+      title: `Edição ${year}-${month}-${i}`,
+      url: `https://o.github.io/r/articles/${year}-${month}-${i}`,
+      summary: "resumo",
+      tags: ["ai"],
+    }));
+  // 2026-12 back to 2025-01 (24 months), two editions each.
+  const twoYears = [
+    ...Array.from({ length: 12 }, (_, m) => monthly(2026, 12 - m)).flat(),
+    ...Array.from({ length: 12 }, (_, m) => monthly(2025, 12 - m)).flat(),
+  ];
+
+  it("keeps the home to the newest 12 months and links older years", () => {
+    const index = buildIndex(twoYears, []);
+    expect(index).toContain('id="mes-2026-12"');
+    expect(index).toContain('id="mes-2026-01"');
+    expect(index).not.toContain('id="mes-2025-12"');
+    expect(index).not.toContain("Edição 2025-3-0");
+    expect(index).toContain("{{ '/arquivo/2025' | relative_url }}");
+    expect(index).toContain("24 edições");
+    expect(index).toContain("<strong>48</strong> edições");
+  });
+
+  it("writes one page per year that left the window, with the whole year", () => {
+    const pages = buildYearArchives(twoYears);
+    expect(pages.map((p) => p.path)).toEqual(["arquivo/2025.md"]);
+    const [page] = pages;
+    expect(page.content).toContain("layout: home");
+    expect(page.content).toContain('title: "Arquivo 2025"');
+    expect(page.content).toContain("24 edições publicadas em 2025");
+    expect(page.content).toContain('id="mes-2025-12"');
+    expect(page.content).toContain('id="mes-2025-01"');
+    expect(page.content).toContain('id="story-search"');
+    expect(page.content).not.toContain("Edição 2026-");
+  });
+
+  it("adds no year pages and no year links while everything fits the window", () => {
+    const recent = twoYears.slice(0, 20);
+    expect(buildYearArchives(recent)).toEqual([]);
+    expect(buildIndex(recent, [])).not.toContain("archive-years");
+  });
+
+  it("pages a year as soon as its first month leaves the window", () => {
+    const old = [
+      ...monthly(2027, 1, 1),
+      ...Array.from({ length: 12 }, (_, m) => monthly(2026, 12 - m, 1)).flat(),
+      ...monthly(2025, 12, 1),
+    ];
+    const pages = buildYearArchives(old);
+    expect(pages.map((p) => p.path)).toEqual(["arquivo/2025.md"]);
+    expect(pages[0].content).toContain("1 edição publicada em 2025.");
+  });
+
+  it("escapes crawled titles on the year page", () => {
+    const hostile = [
+      {
+        ...monthly(2024, 5, 1)[0],
+        title: '<img src=x onerror="alert(1)">',
+      },
+      ...twoYears,
+    ];
+    const [page] = buildYearArchives(hostile).filter((p) =>
+      p.path.endsWith("2024.md"),
+    );
+    expect(page.content).not.toContain("<img src=x");
+    expect(page.content).toContain("&lt;img");
   });
 });

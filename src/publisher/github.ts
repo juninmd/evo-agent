@@ -22,6 +22,7 @@ import {
   buildIndex,
   buildMarkdown,
   buildSiteFiles,
+  buildYearArchives,
   uniqueByUrl,
 } from "./site-renderer.js";
 
@@ -184,6 +185,8 @@ export async function publishEbook(ebook: EbookResult): Promise<string> {
   const reports = existing
     .filter((item) => item.kind === "report")
     .map(toPublishedItem);
+  const indexArticles = uniqueByUrl(articles);
+  const indexContent = buildIndex(indexArticles, uniqueByUrl(reports));
   await commitFiles(
     target.owner,
     target.repo,
@@ -194,14 +197,9 @@ export async function publishEbook(ebook: EbookResult): Promise<string> {
         path: `handbooks/${EBOOK_SLUG}.md`,
         content: buildEbookMarkdown(ebook),
       },
-      {
-        path: "index.md",
-        content: buildIndex(uniqueByUrl(articles), uniqueByUrl(reports)),
-      },
-      {
-        path: "README.md",
-        content: buildIndex(uniqueByUrl(articles), uniqueByUrl(reports)),
-      },
+      ...buildYearArchives(indexArticles),
+      { path: "index.md", content: indexContent },
+      { path: "README.md", content: indexContent },
     ],
     `ebook: ${ebook.title}`,
   );
@@ -291,6 +289,7 @@ export function buildPublicationBatch(
     files: [
       ...buildSiteFiles(target.owner, target.repo, target.branch),
       ...items.flatMap((item) => [item.file, ...item.attachments]),
+      ...buildYearArchives(indexArticles),
       { path: "index.md", content: indexContent },
       { path: "README.md", content: indexContent },
       { path: "feed.xml", content: feed },

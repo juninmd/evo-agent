@@ -210,7 +210,7 @@ function buildMonthGroup(
 ): string {
   const year = key.slice(0, 4);
   const month = formatMonth(`${key}-01`);
-  const count = `${items.length} ${items.length === 1 ? "edição" : "edições"}`;
+  const count = pluralEditions(items.length);
   const state = collapsed ? ' is-collapsed" hidden' : '"';
   return `<section class="month-group${state} id="mes-${key}">
   <div class="month-heading"><h2>${month} <span>${year}</span></h2><p>${count}</p></div>
@@ -233,6 +233,75 @@ ${older.map((g) => buildMonthGroup(g, true)).join("\n")}
   return [...recent, olderBlock].filter(Boolean).join("\n");
 }
 
+// The home lists a rolling window; whatever falls out of it is one link per
+// year, so the page stops growing with every edition.
+const HOME_MONTHS = 12;
+
+function splitArchive(articles: PublishedItem[]) {
+  // The newest edition is featured above; listing it again would repeat it.
+  const [latest, ...archived] = newestFirst(articles);
+  const groups = groupByYearMonth(archived);
+  const older = groups.slice(HOME_MONTHS);
+  const years = [...new Set(older.map(([key]) => key.slice(0, 4)))];
+  return { latest, home: groups.slice(0, HOME_MONTHS), years };
+}
+
+function pluralEditions(count: number): string {
+  return `${count} ${count === 1 ? "edição" : "edições"}`;
+}
+
+function buildYearLinks(articles: PublishedItem[], years: string[]): string {
+  if (years.length === 0) return "";
+  const rows = years
+    .map((year) => {
+      const count = articles.filter((a) => a.date.startsWith(year)).length;
+      return `<li><a href="{{ '/arquivo/${year}' | relative_url }}">${year}</a> <span>${pluralEditions(count)}</span></li>`;
+    })
+    .join("\n      ");
+  return `<nav class="archive-years" aria-label="Anos anteriores">
+    <h3>Anos anteriores</h3>
+    <ul>
+      ${rows}
+    </ul>
+  </nav>`;
+}
+
+function buildSearchBox(): string {
+  return `<div class="search-box">
+      <input type="search" id="story-search" placeholder="Buscar por título, resumo ou tag" aria-label="Buscar edições e radares por título, resumo ou tag">
+      <p class="search-empty" id="search-empty" hidden>Nada encontrado. Tente outro termo ou uma tag, como "claude" ou "agents".</p>
+    </div>`;
+}
+
+/** One page per year that has left the home window, written with every publication. */
+export function buildYearArchives(articles: PublishedItem[]): SiteFile[] {
+  return splitArchive(articles).years.map((year) => {
+    const items = articles.filter((a) => a.date.startsWith(year));
+    const groups = groupByYearMonth(items);
+    const published = `${pluralEditions(items.length)} ${items.length === 1 ? "publicada" : "publicadas"} em ${year}.`;
+    return {
+      path: `arquivo/${year}.md`,
+      content: `---
+layout: home
+title: "Arquivo ${year}"
+summary: "${published}"
+---
+
+<section class="masthead">
+  <h1>Arquivo ${year}</h1>
+  <p class="lede">${published} <a href="{{ '/' | relative_url }}#arquivo">Voltar às edições recentes</a>.</p>
+</section>
+
+<section class="archive" id="arquivo">
+    ${buildSearchBox()}
+    ${buildArchiveJumpNav(groups)}
+    ${buildArchiveGroups(groups)}
+</section>
+`,
+    };
+  });
+}
+
 export function buildIndex(
   articles: PublishedItem[],
   weeklyReports: PublishedItem[],
@@ -249,11 +318,10 @@ export function buildIndex(
       ? `<button type="button" class="show-more" data-show-more="relatorios">Ver todos (${weeklyReports.length})</button>`
       : "";
 
-  // The newest edition is featured above; listing it again would repeat it.
-  const [latest, ...archived] = newestFirst(articles);
-  const yearMonthGroups = groupByYearMonth(archived);
-  const archiveJumpNav = buildArchiveJumpNav(yearMonthGroups);
-  const articleGroups = buildArchiveGroups(yearMonthGroups);
+  const { latest, home, years } = splitArchive(articles);
+  const archiveJumpNav = buildArchiveJumpNav(home);
+  const articleGroups = buildArchiveGroups(home);
+  const yearLinks = buildYearLinks(articles, years);
 
   return `---
 layout: home
@@ -288,12 +356,10 @@ ${buildLatest(latest)}
 
   <section class="archive" id="arquivo">
     <h2>Arquivo</h2>
-    <div class="search-box">
-      <input type="search" id="story-search" placeholder="Buscar por título, resumo ou tag" aria-label="Buscar edições e radares por título, resumo ou tag">
-      <p class="search-empty" id="search-empty" hidden>Nada encontrado. Tente outro termo ou uma tag, como "claude" ou "agents".</p>
-    </div>
+    ${buildSearchBox()}
     ${archiveJumpNav}
     ${articles.length === 0 ? '<p class="empty-state">Nenhuma edição publicada ainda.</p>' : articleGroups}
+    ${yearLinks}
   </section>
 </div>
 `;
@@ -340,7 +406,7 @@ function buildHead(): string {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Literata:opsz,wght@7..72,400;7..72,600&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ '/assets/site.css?v=10' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/site.css?v=11' | relative_url }}">
     <script>
       // Runs before first paint: applies the theme and stamps the toggle's own
       // label, so the button never claims the opposite of what is rendered.
