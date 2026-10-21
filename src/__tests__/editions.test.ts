@@ -1,16 +1,23 @@
 import Database from "better-sqlite3";
 import { afterAll, describe, expect, it } from "vitest";
-import { qualityFeedback, scoreEdition } from "../agent/quality.js";
+import {
+  QUALITY_WEIGHTS,
+  qualityFeedback,
+  scoreEdition,
+} from "../agent/quality.js";
 import {
   editionCalendar,
   getRevisionContent,
   getRevisions,
   markRetracted,
   queryEditions,
+  recentEvidenceUrls,
   requeueNotification,
 } from "../knowledge/editions.js";
 import { db, getDb, migrate, qualifiedSlug } from "../knowledge/store.js";
 import { pagePathFromUrl, retractionNotice } from "../publisher/lifecycle.js";
+import { buildMarkdown } from "../publisher/site-renderer.js";
+import { addDays } from "../utils/date.js";
 
 afterAll(() => getDb().close());
 
@@ -359,5 +366,78 @@ describe("qualityFeedback", () => {
   it("is empty when nothing scoreable exists", () => {
     expect(qualityFeedback([])).toBe("");
     expect(qualityFeedback([{ metrics: {}, evidenceCount: 0 }])).toBe("");
+  });
+});
+
+describe("recentEvidenceUrls", () => {
+  const evidence = (url: string) => [
+    { sourceUrl: url, sourceTitle: "t", excerpt: "trecho" },
+  ];
+
+  it("returns sources of visible article editions from the given day on", () => {
+    publish("ev-old", {
+      date: "2030-03-01",
+      evidence: evidence("https://src.test/old"),
+    });
+    publish("ev-yesterday", {
+      date: "2030-03-09",
+      evidence: evidence("https://src.test/yesterday"),
+    });
+    publish("ev-today", {
+      date: "2030-03-10",
+      evidence: evidence("https://src.test/today"),
+    });
+    publish("ev-report", {
+      date: "2030-03-10",
+      kind: "report",
+      evidence: evidence("https://src.test/report"),
+    });
+    publish("ev-gone", {
+      date: "2030-03-10",
+      evidence: evidence("https://src.test/gone"),
+    });
+    markRetracted("https://pages.test/articles/ev-gone", "x", "aviso");
+
+    expect(recentEvidenceUrls("2030-03-09").sort()).toEqual([
+      "https://src.test/today",
+      "https://src.test/yesterday",
+    ]);
+  });
+});
+
+describe("quality weights and day arithmetic", () => {
+  it("keeps the weights summing to 1 so a perfect edition scores 100", () => {
+    const sum = Object.values(QUALITY_WEIGHTS).reduce((a, b) => a + b, 0);
+    expect(sum).toBeCloseTo(1, 10);
+  });
+
+  it("moves a day key across month and year boundaries", () => {
+    expect(addDays("2026-03-01", -1)).toBe("2026-02-28");
+    expect(addDays("2026-12-31", 1)).toBe("2027-01-01");
+    expect(addDays("2028-03-01", -1)).toBe("2028-02-29");
+  });
+
+  it("opts a page out of the sitemap only when asked", () => {
+    const base = {
+      title: "T",
+      slug: "t",
+      content: "c",
+      summary: "s",
+      tags: [],
+      date: "2026-10-20",
+      sources: [],
+      evidence: [],
+      editorialMetrics: {
+        considered: 0,
+        selected: 0,
+        rejected: 0,
+        buckets: {},
+        primarySources: 0,
+      },
+    };
+    expect(buildMarkdown(base)).not.toContain("sitemap");
+    expect(buildMarkdown(base, { hidden: true })).toContain(
+      "sitemap: false\n---",
+    );
   });
 });

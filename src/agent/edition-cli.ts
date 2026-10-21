@@ -1,3 +1,4 @@
+import { Octokit } from "@octokit/rest";
 import { config } from "../config.js";
 import {
   countEvidence,
@@ -8,6 +9,7 @@ import {
 } from "../knowledge/editions.js";
 import { db, getDb } from "../knowledge/store.js";
 import { retractEdition } from "../publisher/lifecycle.js";
+import { reconcilePublished } from "../publisher/reconcile.js";
 import { localDayIso } from "../utils/date.js";
 import { scoreEdition } from "./quality.js";
 
@@ -16,6 +18,8 @@ const USAGE = `Usage: npm run edition -- <command>
   show <slug>               status, score and revisions
   requeue <slug>            put the Telegram notification back in the outbox
   retract <slug> <reason>   replace the page with a notice and rebuild home/feed
+  reconcile                 register pages on the branch that the database does not know
+  scores [n]                quality score and facets of the last n editions (calibration)
   rescore                   fill quality_score for editions published before it existed`;
 
 function print(value: unknown) {
@@ -70,6 +74,29 @@ async function main(argv: string[]): Promise<number> {
         localDayIso(new Date(), config.timezone),
       );
       print({ retracted: url });
+      return 0;
+    }
+    case "reconcile": {
+      const restored = await reconcilePublished(
+        new Octokit({ auth: config.github.token }),
+        config.github,
+      );
+      print({ restored });
+      return 0;
+    }
+    case "scores": {
+      const limit = Math.min(100, Math.max(1, Number(args[0]) || 20));
+      const { items } = queryEditions({ kind: "article", limit, offset: 0 });
+      print(
+        items.map((edition) => ({
+          slug: edition.slug,
+          stored: edition.quality_score,
+          ...scoreEdition(
+            edition.editorial_metrics,
+            countEvidence(edition.url),
+          ),
+        })),
+      );
       return 0;
     }
     case "rescore": {

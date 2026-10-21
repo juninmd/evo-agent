@@ -45,14 +45,20 @@ export async function retractEdition(
   slug: string,
   reason: string,
   day: string,
+  deps: {
+    target?: { owner: string; repo: string; branch: string };
+    client?: Parameters<typeof commitFiles>[5];
+  } = {},
 ): Promise<string> {
   const edition = db.getPublishedBySlug(slug);
   if (!edition) throw new Error(`Unknown edition: ${slug}`);
   if (edition.status === "retracted") {
     throw new Error(`Edition already retracted: ${slug}`);
   }
-  const target = config.github;
-  const notice = buildMarkdown(retractionNotice(edition, reason, day));
+  const target = deps.target ?? config.github;
+  const notice = buildMarkdown(retractionNotice(edition, reason, day), {
+    hidden: true,
+  });
   const remaining = db
     .getPublished()
     .map((item) =>
@@ -67,6 +73,7 @@ export async function retractEdition(
     target.branch,
     [...files, { path: pagePathFromUrl(edition.url), content: notice }],
     `retract: ${edition.title}`,
+    deps.client,
   );
   markRetracted(edition.url, reason, notice);
   log.info(`Retracted edition: ${edition.url}`);

@@ -60,7 +60,13 @@ export function estimateReadingMinutes(content: string): number {
   return Math.max(1, Math.round(words / 200));
 }
 
-export function buildMarkdown(article: GeneratedArticle): string {
+export function buildMarkdown(
+  article: GeneratedArticle,
+  options: { hidden?: boolean } = {},
+): string {
+  // jekyll-sitemap skips pages that opt out; a retracted page is a notice, not
+  // something to keep offering to crawlers.
+  const sitemap = options.hidden ? "sitemap: false\n" : "";
   return `---
 layout: article
 title: "${escapeYaml(article.title)}"
@@ -70,7 +76,7 @@ tags: [${publicTags(article.tags)
     .join(", ")}]
 summary: "${escapeYaml(article.summary)}"
 reading_time: ${estimateReadingMinutes(article.content)}
----
+${sitemap}---
 
 {% raw %}
 ${neutralizeEndRaw(article.content)}

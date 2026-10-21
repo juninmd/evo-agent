@@ -1,5 +1,6 @@
 import axios from "axios";
 import { db } from "../knowledge/store.js";
+import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { log } from "../utils/logger.js";
 import { summarizeSourceContent } from "./feed-items.js";
 
@@ -53,7 +54,7 @@ export async function crawlHuggingFacePapers(
   const day = new Date(now.getTime() - 86_400_000).toISOString().slice(0, 10);
   const response = await axios.get<DailyPaperEntry[]>(
     `https://huggingface.co/api/daily_papers?date=${day}&limit=100`,
-    { timeout: 15000 },
+    { ...HTTP_LIMITS, timeout: 15000 },
   );
   const entries = Array.isArray(response.data) ? response.data : [];
   let saved = 0;
