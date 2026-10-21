@@ -23,7 +23,24 @@ export interface EditionDto {
   notificationAttempts: number;
   notificationError: string | null;
   editorialMetrics: Record<string, unknown>;
+  status: PublishedArticle["status"];
+  /** 0-100, null for pages that carry no curated selection. */
+  qualityScore: number | null;
+  revision: number;
   publishedAt: string;
+}
+
+export interface RevisionDto {
+  revision: number;
+  reason: string;
+  contentHash: string;
+  createdAt: string;
+}
+
+export interface CalendarDayDto {
+  date: string;
+  published: number;
+  failedNotifications: number;
 }
 
 export interface CrawledArticleDto {
@@ -132,6 +149,9 @@ export function toEdition(row: PublishedArticle): EditionDto {
     notificationAttempts: row.notification_attempts,
     notificationError: row.notification_error,
     editorialMetrics: row.editorial_metrics,
+    status: row.status,
+    qualityScore: row.quality_score,
+    revision: row.revision,
     publishedAt: row.published_at,
   };
 }

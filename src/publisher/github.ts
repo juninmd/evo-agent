@@ -1,11 +1,13 @@
 import { Octokit } from "@octokit/rest";
 import { EBOOK_SLUG, type EbookResult } from "../agent/ebook.js";
+import { scoreEdition } from "../agent/quality.js";
 import type { GeneratedArticle, ReportPeriod } from "../agent/writer.js";
 import { config } from "../config.js";
 import {
   type PublishedArticle,
   type SavePublishedInput,
   db,
+  qualifiedSlug,
 } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 import { buildAtomFeed } from "./feed.js";
@@ -174,7 +176,7 @@ export async function publishEbook(ebook: EbookResult): Promise<string> {
   const target = config.github;
   await ensureBranchExists(target.owner, target.repo, target.branch);
   const url = `https://${target.owner}.github.io/${target.repo}/handbooks/${EBOOK_SLUG}`;
-  const existing = db.getPublished();
+  const existing = visibleEditions(db.getPublished());
   const articles = existing
     .filter((item) => item.kind === "article")
     .map(toPublishedItem);
@@ -193,17 +195,11 @@ export async function publishEbook(ebook: EbookResult): Promise<string> {
       },
       {
         path: "index.md",
-        content: buildIndex(
-          uniqueByUrl(articles).slice(0, 80),
-          uniqueByUrl(reports).slice(0, 24),
-        ),
+        content: buildIndex(uniqueByUrl(articles), uniqueByUrl(reports)),
       },
       {
         path: "README.md",
-        content: buildIndex(
-          uniqueByUrl(articles).slice(0, 80),
-          uniqueByUrl(reports).slice(0, 24),
-        ),
+        content: buildIndex(uniqueByUrl(articles), uniqueByUrl(reports)),
       },
     ],
     `ebook: ${ebook.title}`,
@@ -223,14 +219,19 @@ function preparePublication(
   const prefix = isReport ? `${reportPeriod}-` : "";
   const filePath = `${folder}/${prefix}${article.date}-${article.slug}.md`;
   const articleUrl = `https://${owner}.github.io/${repo}/${folder}/${prefix}${article.date}-${article.slug}`;
+  const file = { path: filePath, content: buildMarkdown(article) };
+  const quality = scoreEdition(
+    article.editorialMetrics as unknown as Record<string, unknown>,
+    article.evidence.length,
+  );
   return {
     article,
     reportPeriod,
     url: articleUrl,
-    file: { path: filePath, content: buildMarkdown(article) },
+    file,
     attachments: checkedAttachments(article),
     saved: {
-      slug: article.slug,
+      slug: qualifiedSlug(article.slug, article.date),
       title: article.title,
       url: articleUrl,
       date: article.date,
@@ -240,6 +241,8 @@ function preparePublication(
       period: reportPeriod || undefined,
       editorialMetrics: article.editorialMetrics,
       evidence: article.evidence,
+      qualityScore: quality?.score ?? null,
+      content: file.content,
     },
   };
 }
@@ -251,7 +254,9 @@ export function buildPublicationBatch(
 ): { files: SiteFile[]; items: PreparedPublication[] } {
   const items = entries.map((entry) => preparePublication(entry, target));
   const newUrls = new Set(items.map((item) => item.url));
-  const existing = published.filter((item) => !newUrls.has(item.url));
+  const existing = visibleEditions(published).filter(
+    (item) => !newUrls.has(item.url),
+  );
   const articles = existing
     .filter((item) => item.kind === "article")
     .map(toPublishedItem);
@@ -270,8 +275,10 @@ export function buildPublicationBatch(
     else articles.unshift(publishedItem);
   }
 
-  const indexArticles = uniqueByUrl(articles).slice(0, 80);
-  const indexReports = uniqueByUrl(reports).slice(0, 24);
+  // No cap: the archive is the record. Older months render collapsed and the
+  // feed applies its own limit.
+  const indexArticles = uniqueByUrl(articles);
+  const indexReports = uniqueByUrl(reports);
   const indexContent = buildIndex(indexArticles, indexReports);
   const feed = buildAtomFeed([...indexArticles, ...indexReports], {
     baseUrl: `https://${target.owner}.github.io/${target.repo}/`,
@@ -320,6 +327,11 @@ export async function publishArticleBatch(
     log.info(`Published ${item.saved.kind}: ${item.url}`);
   }
   return batch.items.map((item) => item.url);
+}
+
+/** A retracted edition leaves the home, the feed and the archive counts. */
+export function visibleEditions(items: PublishedArticle[]): PublishedArticle[] {
+  return items.filter((item) => item.status !== "retracted");
 }
 
 function toPublishedItem(item: {

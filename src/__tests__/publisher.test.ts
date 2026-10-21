@@ -1,6 +1,7 @@
 import type { Octokit } from "@octokit/rest";
 import { describe, expect, it, vi } from "vitest";
 import type { GeneratedArticle } from "../agent/types.js";
+import type { PublishedArticle } from "../knowledge/store.js";
 import { buildPublicationBatch, commitFiles } from "../publisher/github.js";
 import { buildEbookMarkdown } from "../publisher/site-renderer.js";
 
@@ -166,5 +167,84 @@ describe("atomic GitHub publication", () => {
     expect(markdown).toContain('tags: ["ebook"');
     expect(markdown).toContain("{% raw %}");
     expect(markdown).toContain("## Ferramentas");
+  });
+});
+
+describe("archive and lifecycle in the publication batch", () => {
+  const target = { owner: "owner", repo: "repo", branch: "gh-pages" };
+
+  const article = (date: string, slug: string): GeneratedArticle => ({
+    title: `Edição ${slug}`,
+    slug,
+    content: "# Conteúdo",
+    summary: "Resumo suficientemente completo para publicação.",
+    tags: ["ai"],
+    date,
+    sources: ["https://example.com/s"],
+    evidence: [
+      {
+        sourceUrl: "https://example.com/s",
+        sourceTitle: "Fonte",
+        excerpt: "Trecho factual suficientemente detalhado para auditoria.",
+      },
+    ],
+    editorialMetrics: {
+      considered: 10,
+      selected: 1,
+      rejected: 9,
+      buckets: { official: 1 },
+      primarySources: 1,
+    },
+  });
+
+  const row = (n: number, status: PublishedArticle["status"] = "published") =>
+    ({
+      slug: `old-${n}`,
+      title: `Antiga ${n}`,
+      url: `https://owner.github.io/repo/articles/2026-01-01-old-${n}`,
+      date: "2026-01-01",
+      summary: "resumo",
+      tags: ["ai"],
+      kind: "article",
+      status,
+    }) as PublishedArticle;
+
+  it("keeps every published edition in the index instead of the newest 80", () => {
+    const published = Array.from({ length: 130 }, (_, n) => row(n));
+    const { files } = buildPublicationBatch(
+      [{ article: article("2026-06-01", "nova"), reportPeriod: false }],
+      published,
+      target,
+    );
+    const index = files.find((file) => file.path === "index.md")?.content;
+    expect(index?.match(/class="story-card"|<li data-search/g)).toHaveLength(
+      131 - 1,
+    );
+    expect(index).toContain("Antiga 129");
+    expect(index).toContain("<strong>131</strong> edições");
+  });
+
+  it("drops a retracted edition from the index and the feed", () => {
+    const { files } = buildPublicationBatch(
+      [{ article: article("2026-06-01", "nova"), reportPeriod: false }],
+      [row(1), row(2, "retracted")],
+      target,
+    );
+    const index = files.find((file) => file.path === "index.md")?.content;
+    const feed = files.find((file) => file.path === "feed.xml")?.content;
+    expect(index).toContain("Antiga 1");
+    expect(index).not.toContain("Antiga 2");
+    expect(feed).not.toContain("old-2");
+  });
+
+  it("saves a date-qualified slug, the committed body and a quality score", () => {
+    const { items } = buildPublicationBatch(
+      [{ article: article("2026-06-01", "mesmo-titulo"), reportPeriod: false }],
+      [],
+      target,
+    );
+    expect(items[0].saved.slug).toBe("2026-06-01-mesmo-titulo");
+    expect(items[0].saved.content).toBe(items[0].file.content);
+    expect(items[0].saved.qualityScore).toEqual(expect.any(Number));
   });
 });

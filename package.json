@@ -10,6 +10,7 @@
     "health": "tsx src/observability/health-cli.ts",
     "benchmark:editorial": "tsx src/agent/benchmark-cli.ts",
     "prompt:rollback": "tsx src/agent/prompt-rollback-cli.ts",
+    "edition": "tsx src/agent/edition-cli.ts",
     "backfill:articles": "node dist/agent/backfill-cli.js",
     "smoke:reddit-comments": "tsx src/crawler/reddit-smoke.ts",
     "build": "tsc && node -e \"require('node:fs').cpSync('src/publisher/assets','dist/publisher/assets',{recursive:true})\"",
@@ -21,7 +22,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.67",
-    "@juninmd/digest-kit": "^0.2.1",
+    "@juninmd/digest-kit": "^0.2.3",
     "@octokit/rest": "^21.0.0",
     "ai": "^6.0.193",
     "axios": "^1.7.0",

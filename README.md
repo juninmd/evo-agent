@@ -52,15 +52,12 @@ git clone git@github.com:juninmd/evo-agent.git
 cd evo-agent
 cp .env.example .env
 # Edit .env with your credentials
-# @juninmd/digest-kit comes from GitHub Packages, which requires auth even for
-# public packages: a classic PAT with read:packages, kept in your user ~/.npmrc.
-npm config set //npm.pkg.github.com/:_authToken <PAT>
 npm install
 npm run build
 ```
 
-CI and the Docker build authenticate with the workflow `GITHUB_TOKEN`; the
-Dockerfile receives it as a BuildKit secret file, never as a build arg.
+`@juninmd/digest-kit` is a public package on npm: no registry token is needed to install or to
+build the image.
 
 ## Environment Variables
 
@@ -132,6 +129,7 @@ npm run benchmark:editorial    # Run deterministic editorial regression corpus
 npm run test:coverage          # Enforce repository coverage floors
 npm run health                 # Emit operational health JSON
 npm run prompt:rollback        # Restore the previous promoted system prompt
+npm run edition -- list        # Search, requeue, retract and rescore published editions
 npm run backfill:articles -- 2026-06-01 2026-06-11 # Publish historical editions without Telegram spam
 npm run dev                    # Watch mode with tsx
 npm start                      # Run compiled output
