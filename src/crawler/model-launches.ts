@@ -1,5 +1,6 @@
 import axios from "axios";
 import { db } from "../knowledge/store.js";
+import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { launchTag } from "../utils/launch.js";
 import { log } from "../utils/logger.js";
 import { FEED_MAX_AGE_DAYS, summarizeSourceContent } from "./feed-items.js";
@@ -152,7 +153,7 @@ function save(source: string, tags: string[], signals: ModelSignal[]): number {
 export async function crawlTrendingModels(now = new Date()): Promise<number> {
   const response = await axios.get<HubModel[]>(
     "https://huggingface.co/api/models?sort=trendingScore&limit=50",
-    { timeout: 15000 },
+    { ...HTTP_LIMITS, timeout: 15000 },
   );
   const models = Array.isArray(response.data) ? response.data : [];
   const saved = save(
@@ -167,7 +168,7 @@ export async function crawlTrendingModels(now = new Date()): Promise<number> {
 export async function fetchModelCatalog(): Promise<CatalogModel[]> {
   const response = await axios.get<{ data?: CatalogModel[] }>(
     "https://openrouter.ai/api/v1/models",
-    { timeout: 15000 },
+    { ...HTTP_LIMITS, timeout: 15000 },
   );
   return Array.isArray(response.data?.data) ? response.data.data : [];
 }

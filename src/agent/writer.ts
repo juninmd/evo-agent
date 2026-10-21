@@ -121,6 +121,9 @@ function uniqueByUrl(articles: Article[]): Article[] {
   });
 }
 
+/** How far back a daily edition looks; also how far back it must not repeat. */
+export const DAILY_WINDOW_DAYS = 2;
+
 export async function generateArticle(
   type: "daily" | "weekly" = "daily",
   options: GenerateArticleOptions = {},
@@ -136,7 +139,7 @@ export async function generateArticle(
       ? articles
       : articles.filter((article) => !excluded.has(article.url));
   let window = options.targetDate ? historicalWindow(options.targetDate) : null;
-  const windowDays = type === "weekly" ? 7 : 2;
+  const windowDays = type === "weekly" ? 7 : DAILY_WINDOW_DAYS;
   // The main pool is capped, and Reddit crawls last, so a tight limit would
   // return community posts only and starve the primary feeds. The primary
   // fetch is capped on its own budget and merged back in.

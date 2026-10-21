@@ -8,6 +8,7 @@ import { normalizeTitle } from "../agent/curation.js";
 import { getSearchKeywords } from "../agent/improver.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
+import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { log } from "../utils/logger.js";
 import { AGENT_SOURCES } from "./agent-sources.js";
 import {
@@ -896,7 +897,7 @@ async function crawlHackerNewsAlgolia(): Promise<number> {
 
   for (const { tag, url, filter } of queries) {
     try {
-      const response = await axios.get(url, { timeout: 10000 });
+      const response = await axios.get(url, { ...HTTP_LIMITS, timeout: 10000 });
       const hits = response.data?.hits ?? [];
 
       for (const hit of hits) {
@@ -954,7 +955,7 @@ async function crawlTabNews(): Promise<number> {
   try {
     const url =
       "https://www.tabnews.com.br/api/v1/contents?strategy=relevant&per_page=30";
-    const response = await axios.get(url, { timeout: 15000 });
+    const response = await axios.get(url, { ...HTTP_LIMITS, timeout: 15000 });
     const contents = ((response.data ?? []) as TabNewsItem[])
       .filter((item): item is TabNewsItem & { title: string; slug: string } =>
         Boolean(item.title && item.slug && item.status === "published"),
@@ -972,7 +973,7 @@ async function crawlTabNews(): Promise<number> {
       try {
         const detail = await axios.get(
           `https://www.tabnews.com.br/api/v1/contents/${item.owner_username}/${item.slug}`,
-          { timeout: 8000 },
+          { ...HTTP_LIMITS, timeout: 8000 },
         );
         return { slug: item.slug, body: detail.data?.body ?? "" };
       } catch (err) {
@@ -1021,7 +1022,7 @@ async function crawlAiCommunityPosts(): Promise<number> {
   for (const tag of aiTags) {
     try {
       const url = `https://dev.to/api/articles?tag=${tag}&top=7&per_page=25`;
-      const response = await axios.get(url, { timeout: 10000 });
+      const response = await axios.get(url, { ...HTTP_LIMITS, timeout: 10000 });
       const articles = response.data ?? [];
 
       for (const item of articles) {
@@ -1051,7 +1052,7 @@ async function crawlAiCommunityPosts(): Promise<number> {
   for (const tag of hashnoteTags) {
     try {
       const url = `https://hashnode.com/api/v1/posts?tagSlug=${tag}&limit=15`;
-      const response = await axios.get(url, { timeout: 10000 });
+      const response = await axios.get(url, { ...HTTP_LIMITS, timeout: 10000 });
       const posts = response.data?.posts ?? [];
 
       for (const item of posts) {
@@ -1325,7 +1326,10 @@ async function crawlAllInner(): Promise<CrawlReport> {
       const searxngUrl = `${config.searxngUrl}/search?q=${encodeURIComponent(
         query,
       )}&format=json`;
-      const response = await axios.get(searxngUrl, { timeout: 5000 });
+      const response = await axios.get(searxngUrl, {
+        ...HTTP_LIMITS,
+        timeout: 5000,
+      });
       const results = response.data?.results ?? [];
       for (const result of results.slice(0, 5)) {
         if (!result.url || !result.title) continue;

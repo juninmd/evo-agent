@@ -12,6 +12,7 @@ import {
 import { log } from "../utils/logger.js";
 import { buildAtomFeed } from "./feed.js";
 import { publicTags } from "./public-tags.js";
+import { reconcilePublished } from "./reconcile.js";
 import {
   type PublishedItem,
   SITE_DESCRIPTION,
@@ -307,6 +308,10 @@ export async function publishArticleBatch(
   if (entries.length === 0) return [];
   const target = config.github;
   await ensureBranchExists(target.owner, target.repo, target.branch);
+  // Best effort: a failed listing must not block today's publication.
+  await reconcilePublished(octokit, target).catch((err) =>
+    log.warn(`Reconciliation skipped: ${(err as Error).message}`),
+  );
   const batch = buildPublicationBatch(entries, db.getPublished(), target);
   await commitFiles(
     target.owner,

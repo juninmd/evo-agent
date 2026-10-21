@@ -69,7 +69,20 @@ npm run edition -- show <slug>                 # status, score, revisions
 npm run edition -- requeue <slug>              # send the notification again (dead_letter, suppressed)
 npm run edition -- retract <slug> "<motivo>"   # replace the page with a notice, rebuild home and feed
 npm run edition -- rescore                     # fill quality_score for editions published before it existed
+npm run edition -- scores 20                   # score and facets of the last 20 editions, for tuning the weights
+npm run edition -- reconcile                   # register pages on the branch that the database does not know
 ```
+
+The commit to GitHub lands before the database write. If the process dies in between, the
+next publication reconciles the branch first (`src/publisher/reconcile.ts`): every
+`articles/` or `reports/` page without a row is registered as `suppressed` (no Telegram
+ping), so it returns to the home, the feed and the daily budget. At most 50 pages per run.
+A retracted page is a notice and is never re-registered.
+
+Daily editions do not repeat a story from the last two days: the sources cited by those
+editions are excluded from the candidate pool (`DAILY_WINDOW_DAYS` in `writer.ts`).
+Retracted pages carry `sitemap: false`. Crawler HTTP calls are capped at 5 MB and 3
+redirects (`src/utils/http-limits.ts`).
 
 `retract` commits before it touches the database, like a publication, and keeps the previous
 body in `edition_revisions`. The home, the Atom feed and the calendar stop listing it.

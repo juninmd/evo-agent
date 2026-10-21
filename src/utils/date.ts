@@ -18,3 +18,10 @@ export function localDayIso(
     day: "2-digit",
   }).format(now);
 }
+
+/** Calendar arithmetic on YYYY-MM-DD keys; UTC avoids a DST hour shifting the day. */
+export function addDays(day: string, delta: number): string {
+  const date = new Date(`${day}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + delta);
+  return date.toISOString().slice(0, 10);
+}

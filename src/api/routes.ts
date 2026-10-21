@@ -8,7 +8,7 @@ import {
 } from "../knowledge/editions.js";
 import { db } from "../knowledge/store.js";
 import { evaluateHealth } from "../observability/health.js";
-import { localDayIso } from "../utils/date.js";
+import { addDays, localDayIso } from "../utils/date.js";
 import { ApiError, intParam, stringParam } from "./http.js";
 import {
   isExposableStateKey,
@@ -371,11 +371,4 @@ function editionQuery(url: URL): EditionQuery {
     limit: intParam(url, "limit", 50, 1, 200),
     offset: intParam(url, "offset", 0, 0, 1_000_000),
   };
-}
-
-/** Calendar arithmetic on YYYY-MM-DD keys; UTC avoids a DST hour shifting the day. */
-function addDays(day: string, delta: number): string {
-  const date = new Date(`${day}T00:00:00Z`);
-  date.setUTCDate(date.getUTCDate() + delta);
-  return date.toISOString().slice(0, 10);
 }

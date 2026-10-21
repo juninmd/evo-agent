@@ -2,6 +2,7 @@ import axios, { type AxiosError } from "axios";
 import Parser from "rss-parser";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
+import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { log } from "../utils/logger.js";
 import { summarizeSourceContent } from "./feed-items.js";
 
@@ -329,7 +330,10 @@ export async function redditGet<T = unknown>(
   for (let attempt = 0; ; attempt++) {
     await redditPace();
     try {
-      const response = await axios.get<T>(url, config);
+      const response = await axios.get<T>(url, {
+        ...HTTP_LIMITS,
+        ...config,
+      });
       noteRedditBudget(response.headers);
       return response.data;
     } catch (err) {

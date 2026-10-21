@@ -274,3 +274,20 @@ export function countEvidence(url: string): number {
       .get(url) as { total: number }
   ).total;
 }
+
+/**
+ * Source URLs cited by the visible article editions dated `fromDay` or later.
+ * The daily draft looks two days back, so without this a story covered
+ * yesterday is eligible again today.
+ */
+export function recentEvidenceUrls(fromDay: string): string[] {
+  const rows = getDb()
+    .prepare(
+      `SELECT DISTINCT e.source_url AS sourceUrl
+       FROM published_evidence e
+       JOIN published_articles p ON p.url = e.article_url
+       WHERE p.kind = 'article' AND p.status <> 'retracted' AND p.date >= ?`,
+    )
+    .all(fromDay) as Array<{ sourceUrl: string }>;
+  return rows.map((row) => row.sourceUrl);
+}
