@@ -3,6 +3,7 @@ import { db } from "../knowledge/store.js";
 import type { Article } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { localDayIso } from "../utils/date.js";
+import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { log } from "../utils/logger.js";
 import { UNTRUSTED_MATERIAL_RULE } from "./prompt-guards.js";
 import { citedUrls, renderReading } from "./techlead.js";
@@ -115,6 +116,7 @@ export async function withReleaseNotes(article: Article): Promise<Article> {
   if (article.source !== "VSCode Updates" || !version) return article;
   try {
     const { data } = await axios.get<string>(`${VSCODE_NOTES}/${version}.md`, {
+      ...HTTP_LIMITS,
       timeout: 15_000,
       responseType: "text",
     });

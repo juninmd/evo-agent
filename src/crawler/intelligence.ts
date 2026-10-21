@@ -5,6 +5,7 @@ import {
   db,
 } from "../knowledge/store.js";
 import { localDayIso } from "../utils/date.js";
+import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { log } from "../utils/logger.js";
 
 export const ARTIFICIAL_ANALYSIS_MODELS_URL =
@@ -373,6 +374,7 @@ export async function fetchArtificialAnalysisModels(): Promise<
         Accept:
           "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
       },
+      ...HTTP_LIMITS,
       timeout: 15000,
     });
     const models = extractIntelligenceModels(response.data);

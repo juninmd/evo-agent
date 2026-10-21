@@ -10,6 +10,18 @@ export interface QualityScore {
   breakdown: QualityBreakdown;
 }
 
+/**
+ * Starting weights, not measured ones: `npm run edition -- scores` prints the
+ * facets of recent editions so they can be tuned against editions a human
+ * rated good or weak. They must sum to 1.
+ */
+export const QUALITY_WEIGHTS: Record<keyof QualityBreakdown, number> = {
+  primary: 0.35,
+  evidence: 0.25,
+  depth: 0.25,
+  community: 0.15,
+};
+
 function num(metrics: Record<string, unknown>, key: string): number {
   const value = metrics[key];
   return typeof value === "number" && Number.isFinite(value) ? value : 0;
@@ -40,10 +52,10 @@ export function scoreEdition(
     evidence: Math.round(100 * ratio(evidenceCount, selected)),
   };
   const score = Math.round(
-    breakdown.primary * 0.35 +
-      breakdown.evidence * 0.25 +
-      breakdown.depth * 0.25 +
-      breakdown.community * 0.15,
+    breakdown.primary * QUALITY_WEIGHTS.primary +
+      breakdown.evidence * QUALITY_WEIGHTS.evidence +
+      breakdown.depth * QUALITY_WEIGHTS.depth +
+      breakdown.community * QUALITY_WEIGHTS.community,
   );
   return { score, breakdown };
 }

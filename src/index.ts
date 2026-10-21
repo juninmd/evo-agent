@@ -11,6 +11,7 @@ import { rollbackPrompt } from "./agent/prompt-policy.js";
 import { generateRadar } from "./agent/radar.js";
 import { generateTechleadDigest } from "./agent/techlead.js";
 import {
+  DAILY_WINDOW_DAYS,
   type GenerateArticleOptions,
   generateArticle,
   generatePeriodReport,
@@ -19,6 +20,7 @@ import { startApiServer } from "./api/server.js";
 import { type RunMode, config, loadConfig } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
 import { fetchModelCatalog } from "./crawler/model-launches.js";
+import { recentEvidenceUrls } from "./knowledge/editions.js";
 import { db, getDb } from "./knowledge/store.js";
 import { runModelAlerts } from "./notifier/model-alerts.js";
 import {
@@ -39,7 +41,7 @@ import {
 import { runModeHelp } from "./run-modes.js";
 import { setAiMetricRecorder } from "./utils/ai.js";
 import { CycleCoordinator } from "./utils/cycle.js";
-import { localDayIso } from "./utils/date.js";
+import { addDays, localDayIso } from "./utils/date.js";
 import { log } from "./utils/logger.js";
 
 function errMsg(e: unknown): string {
@@ -294,16 +296,10 @@ function editionsPublishedToday(): number {
   return db.countPublishedOn("article", localDayIso());
 }
 
-function articlesPublishedToday() {
-  return db.getPublishedOn("article", localDayIso());
-}
-
-// Sources already spent by today's earlier editions. Without this the second and
-// third edition of the day would re-curate the same top-ranked stories.
-function sourcesUsedToday(): string[] {
-  return articlesPublishedToday().flatMap((item) =>
-    db.getPublishedEvidence(item.url).map((evidence) => evidence.source_url),
-  );
+// Sources already spent by the last editions. The draft window is two days, so
+// excluding only today's would let yesterday's stories be covered again at 8h.
+function sourcesUsedRecently(): string[] {
+  return recentEvidenceUrls(addDays(localDayIso(), -(DAILY_WINDOW_DAYS - 1)));
 }
 
 // Idempotent daily editions: the day has a fixed budget (config.dailyEditions)
@@ -317,7 +313,7 @@ async function ensureDailyEditions(reason: string, fill = false) {
     log.info(`Generating daily edition ${edition}/${target} (${reason})`);
     try {
       const result = await cycles.run("daily", () =>
-        articleCycle("daily", { excludeUrls: sourcesUsedToday() }),
+        articleCycle("daily", { excludeUrls: sourcesUsedRecently() }),
       );
       // A skipped run publishes nothing, so retrying inside this loop would spin
       // against whichever cycle is holding the coordinator.
