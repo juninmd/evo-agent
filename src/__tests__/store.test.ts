@@ -286,9 +286,9 @@ describe("migrate - legacy database without engagement_score", () => {
     );
     const legacyPublished = legacyDb
       .prepare(
-        "SELECT notification_status, notification_error FROM published_articles WHERE slug = ?",
+        "SELECT notification_status, notification_error FROM published_articles WHERE url = ?",
       )
-      .get("legacy-article") as {
+      .get("https://legacy.test/article") as {
       notification_status: string;
       notification_error: string;
     };

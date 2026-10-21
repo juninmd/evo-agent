@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 import Database from "better-sqlite3";
@@ -53,8 +54,14 @@ export interface PublishedArticle {
   next_notification_at: string;
   notification_error: string | null;
   editorial_metrics: Record<string, unknown>;
+  status: EditionStatus;
+  quality_score: number | null;
+  revision: number;
   published_at: string;
 }
+
+/** Lifecycle of the published page, independent of the Telegram outbox. */
+export type EditionStatus = "published" | "corrected" | "retracted";
 
 export interface PromptVersion {
   id: number;
@@ -205,7 +212,21 @@ function applyMigrations(db: Database.Database) {
       next_notification_at TEXT NOT NULL DEFAULT (datetime('now')),
       notification_error TEXT,
       editorial_metrics TEXT NOT NULL DEFAULT '{}',
+      status TEXT NOT NULL DEFAULT 'published',
+      quality_score INTEGER,
+      revision INTEGER NOT NULL DEFAULT 1,
       published_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS edition_revisions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      edition_url TEXT NOT NULL,
+      revision INTEGER NOT NULL,
+      content TEXT NOT NULL,
+      content_hash TEXT NOT NULL,
+      reason TEXT NOT NULL DEFAULT 'initial',
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      UNIQUE(edition_url, revision)
     );
 
     CREATE TABLE IF NOT EXISTS cycle_runs (
@@ -298,6 +319,9 @@ function applyMigrations(db: Database.Database) {
     ["next_notification_at", "TEXT"],
     ["notification_error", "TEXT"],
     ["editorial_metrics", "TEXT NOT NULL DEFAULT '{}'"],
+    ["status", "TEXT NOT NULL DEFAULT 'published'"],
+    ["quality_score", "INTEGER"],
+    ["revision", "INTEGER NOT NULL DEFAULT 1"],
   ];
   for (const [name, definition] of additions) {
     if (!publishedColumns.some((column) => column.name === name)) {
@@ -323,12 +347,41 @@ function applyMigrations(db: Database.Database) {
       AND editorial_metrics = '{}';
   `);
 
+  qualifyLegacySlugs(db);
+
   db.exec(`
     CREATE INDEX IF NOT EXISTS idx_articles_engagement
       ON articles(engagement_score DESC);
     CREATE INDEX IF NOT EXISTS idx_published_articles_date
       ON published_articles(kind, date);
   `);
+}
+
+/**
+ * A slug taken from the title alone repeats across days, and the UNIQUE(slug)
+ * upsert then replaced the older edition's row. Rows written before the date
+ * joined the slug get it now; a slug that already carries its date (reports,
+ * retroactive editions) is left alone, and a clash keeps the old slug.
+ */
+function qualifyLegacySlugs(db: Database.Database) {
+  const rows = db
+    .prepare("SELECT id, slug, date FROM published_articles WHERE date <> ''")
+    .all() as Array<{ id: number; slug: string; date: string }>;
+  const taken = new Set(rows.map((row) => row.slug));
+  const rename = db.prepare(
+    "UPDATE published_articles SET slug = ? WHERE id = ?",
+  );
+  for (const row of rows) {
+    const next = qualifiedSlug(row.slug, row.date);
+    if (next === row.slug || taken.has(next)) continue;
+    rename.run(next, row.id);
+    taken.add(next);
+  }
+}
+
+/** Date-qualified identity: the same title on two days is two editions. */
+export function qualifiedSlug(slug: string, date: string): string {
+  return slug.includes(date) ? slug : `${date}-${slug}`;
 }
 
 export interface SaveArticleInput {
@@ -356,6 +409,10 @@ export interface SavePublishedInput {
     excerpt: string;
   }>;
   notificationStatus?: PublishedArticle["notification_status"];
+  qualityScore?: number | null;
+  /** Full Markdown as committed; enables revisions, diffs and preview. */
+  content?: string;
+  revisionReason?: string;
 }
 
 export interface IntelligenceModelRecord {
@@ -413,6 +470,44 @@ type PublishedRow = Omit<PublishedArticle, "tags" | "editorial_metrics"> & {
   editorial_metrics: string;
 };
 
+/**
+ * Appends a revision when the committed Markdown changed. The first revision
+ * of a row that predates revisions is a baseline, not a correction.
+ */
+function recordRevision(
+  url: string,
+  content: string,
+  reason: string,
+  rowExisted: boolean,
+) {
+  const hash = createHash("sha256").update(content).digest("hex");
+  const last = stmt(
+    `SELECT revision, content_hash FROM edition_revisions
+     WHERE edition_url = ? ORDER BY revision DESC LIMIT 1`,
+  ).get(url) as { revision: number; content_hash: string } | undefined;
+  if (last?.content_hash === hash) return;
+  const revision = (last?.revision ?? 0) + 1;
+  stmt(
+    `INSERT INTO edition_revisions
+       (edition_url, revision, content, content_hash, reason)
+     VALUES (?, ?, ?, ?, ?)`,
+  ).run(
+    url,
+    revision,
+    content,
+    hash,
+    last || !rowExisted ? reason : "baseline",
+  );
+  const corrected = last !== undefined;
+  stmt(
+    `UPDATE published_articles
+     SET revision = ?,
+         status = CASE WHEN status = 'retracted' OR ? = 0 THEN status
+                       ELSE 'corrected' END
+     WHERE url = ?`,
+  ).run(revision, corrected ? 1 : 0, url);
+}
+
 function hydratePublished(row: PublishedRow): PublishedArticle {
   return {
     ...row,
@@ -449,14 +544,25 @@ export const db = {
     ) as Article[];
   },
 
-  getArticlesSince(days: number, limit = 2000): Article[] {
+  getArticlesSince(
+    days: number,
+    limit = 2000,
+    filters: { source?: string } = {},
+  ): Article[] {
+    // Filters live in the WHERE clause: applying them after the LIMIT returned
+    // fewer rows than matched whenever the window held more than `limit`.
+    const where = [`crawled_at >= datetime('now', ?)`, NOT_TECHLEAD_SQL];
+    const params: Array<string | number> = [`-${days} days`];
+    if (filters.source) {
+      where.push("source = ?");
+      params.push(filters.source);
+    }
     return stmt(
       `SELECT * FROM articles
-       WHERE crawled_at >= datetime('now', ?)
-         AND ${NOT_TECHLEAD_SQL}
+       WHERE ${where.join(" AND ")}
        ORDER BY crawled_at DESC
        LIMIT ?`,
-    ).all(`-${days} days`, limit) as Article[];
+    ).all(...params, limit) as Article[];
   },
 
   getTechleadArticlesSince(days: number, limit = 300): Article[] {
@@ -683,13 +789,19 @@ export const db = {
   savePublished(item: SavePublishedInput) {
     const database = getDb();
     const save = database.transaction(() => {
+      const existing = stmt(
+        "SELECT id FROM published_articles WHERE slug = ?",
+      ).get(item.slug) as { id: number } | undefined;
+      // Republishing is a correction, not news: the notification state of an
+      // existing row survives unless the caller states one explicitly.
       const result = stmt(
         `INSERT INTO published_articles
          (slug, title, url, date, summary, tags, kind, period,
           notification_status, notification_attempts, next_notification_at,
-          notification_error, editorial_metrics)
+          notification_error, editorial_metrics, quality_score)
          VALUES (@slug, @title, @url, @date, @summary, @tags, @kind, @period,
-                 @notificationStatus, 0, datetime('now'), NULL, @editorialMetrics)
+                 COALESCE(@notificationStatus, 'pending'), 0, datetime('now'),
+                 NULL, @editorialMetrics, @qualityScore)
          ON CONFLICT(slug) DO UPDATE SET
            title = excluded.title,
            url = excluded.url,
@@ -698,18 +810,30 @@ export const db = {
            tags = excluded.tags,
            kind = excluded.kind,
            period = excluded.period,
-           notification_status = excluded.notification_status,
-           notification_attempts = 0,
-           next_notification_at = datetime('now'),
-           notification_error = NULL,
+           notification_status = CASE WHEN @notificationStatus IS NULL
+             THEN published_articles.notification_status
+             ELSE excluded.notification_status END,
+           notification_attempts = CASE WHEN @notificationStatus IS NULL
+             THEN published_articles.notification_attempts ELSE 0 END,
+           next_notification_at = CASE WHEN @notificationStatus IS NULL
+             THEN published_articles.next_notification_at
+             ELSE datetime('now') END,
+           notification_error = CASE WHEN @notificationStatus IS NULL
+             THEN published_articles.notification_error ELSE NULL END,
            editorial_metrics = excluded.editorial_metrics,
-           published_at = datetime('now')`,
+           quality_score = excluded.quality_score`,
       ).run({
-        ...item,
+        slug: item.slug,
+        title: item.title,
+        url: item.url,
+        date: item.date,
+        summary: item.summary,
+        kind: item.kind,
         tags: JSON.stringify(item.tags),
         period: item.period ?? null,
-        notificationStatus: item.notificationStatus ?? "pending",
+        notificationStatus: item.notificationStatus ?? null,
         editorialMetrics: JSON.stringify(item.editorialMetrics ?? {}),
+        qualityScore: item.qualityScore ?? null,
       });
       stmt("DELETE FROM published_evidence WHERE article_url = ?").run(
         item.url,
@@ -727,6 +851,14 @@ export const db = {
           evidence.excerpt,
         );
       }
+      if (item.content !== undefined) {
+        recordRevision(
+          item.url,
+          item.content,
+          item.revisionReason ?? (existing ? "update" : "initial"),
+          Boolean(existing),
+        );
+      }
       return result;
     });
     return save();
@@ -739,6 +871,7 @@ export const db = {
   deletePublishedByUrl(url: string) {
     stmt("DELETE FROM published_articles WHERE url = ?").run(url);
     stmt("DELETE FROM published_evidence WHERE article_url = ?").run(url);
+    stmt("DELETE FROM edition_revisions WHERE edition_url = ?").run(url);
   },
 
   markNotification(

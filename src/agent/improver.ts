@@ -1,4 +1,5 @@
 import { isSafeExternalUrl } from "@juninmd/digest-kit/core";
+import { countEvidence } from "../knowledge/editions.js";
 import { db } from "../knowledge/store.js";
 import type { Article } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
@@ -6,6 +7,7 @@ import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 import { sourceBucket } from "./curation.js";
 import { promotePromptCandidate } from "./prompt-policy.js";
+import { qualityFeedback } from "./quality.js";
 import { getSearchKeywords, saveSearchKeywords } from "./search-keywords.js";
 
 export { getSearchKeywords };
@@ -178,6 +180,12 @@ export async function runImprovementCycle() {
 
   const currentPrompt = getSystemPrompt();
   const currentKeywords = getSearchKeywords().join(", ");
+  const feedback = qualityFeedback(
+    db.getPublishedRecent(10, "article").map((edition) => ({
+      metrics: edition.editorial_metrics,
+      evidenceCount: countEvidence(edition.url),
+    })),
+  );
 
   const systemPrompt = `You are a meta-AI that optimizes AI agent behavior based on observed data.
 You analyze recent news/papers and improve the agent's configuration.
@@ -194,7 +202,7 @@ Current system prompt:
 ${currentPrompt}
 
 Current search keywords: ${currentKeywords}
-
+${feedback ? `\nPublished edition quality (internal metric): ${feedback}. Address the weakest facet without dropping any control below.\n` : ""}
 Analyze what's trending and important. Return JSON with:
 {
   "improved_system_prompt": "...",

@@ -56,6 +56,27 @@ exponential backoff from five minutes to six hours. Five failed attempts move
 the item to `dead_letter`. Telegram API errors are stored in
 `notification_error` without logging bot tokens.
 
+## Edition lifecycle
+
+An edition is identified by `AAAA-MM-DD-titulo`, the same name as its file, so a repeated
+title on another day is a separate edition. Every committed Markdown is stored in
+`edition_revisions`; republishing identical content adds nothing, changed content adds a
+revision and marks the edition `corrected`, and neither re-sends the Telegram notification.
+
+```bash
+npm run edition -- list "mcp"                  # search title, summary, tags and evidence
+npm run edition -- show <slug>                 # status, score, revisions
+npm run edition -- requeue <slug>              # send the notification again (dead_letter, suppressed)
+npm run edition -- retract <slug> "<motivo>"   # replace the page with a notice, rebuild home and feed
+npm run edition -- rescore                     # fill quality_score for editions published before it existed
+```
+
+`retract` commits before it touches the database, like a publication, and keeps the previous
+body in `edition_revisions`. The home, the Atom feed and the calendar stop listing it.
+`qualityScore` (`src/agent/quality.ts`) weighs primary-source share, evidence per highlight,
+breadth and community signals; the last ten editions' average and weakest facet are fed to the
+improvement cycle.
+
 ## Cycle recovery
 
 On startup, cycles left as `running` for more than six hours are marked failed

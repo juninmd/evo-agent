@@ -1,8 +1,15 @@
 import { config } from "../config.js";
+import {
+  type EditionQuery,
+  editionCalendar,
+  getRevisionContent,
+  getRevisions,
+  queryEditions,
+} from "../knowledge/editions.js";
 import { db } from "../knowledge/store.js";
 import { evaluateHealth } from "../observability/health.js";
 import { localDayIso } from "../utils/date.js";
-import { ApiError, intParam } from "./http.js";
+import { ApiError, intParam, stringParam } from "./http.js";
 import {
   isExposableStateKey,
   mergeSources,
@@ -36,6 +43,7 @@ export interface RouteDeps {
 }
 
 const OVERVIEW_WINDOW_DAYS = 2;
+const PRIMARY_SCAN_LIMIT = 5000;
 
 function meta(deps: RouteDeps) {
   return {
@@ -124,14 +132,13 @@ export function createRoutes(deps: RouteDeps): Route[] {
       method: "GET",
       path: "/api/v1/editions",
       handler: ({ url }) => {
-        const items = db
-          .getPublishedRecent(
-            intParam(url, "limit", 50, 1, 200),
-            optionalKind(url),
-            optionalStatus(url),
-          )
-          .map(toEdition);
-        return { total: items.length, items };
+        const query = editionQuery(url);
+        const { total, items } = queryEditions(query);
+        return {
+          total,
+          offset: query.offset,
+          items: items.map(toEdition),
+        };
       },
     },
 
@@ -144,6 +151,49 @@ export function createRoutes(deps: RouteDeps): Route[] {
         return {
           edition: toEdition(edition),
           evidence: db.getPublishedEvidence(edition.url).map(toEvidence),
+          revisions: getRevisions(edition.url),
+        };
+      },
+    },
+
+    {
+      method: "GET",
+      path: "/api/v1/editions/:slug/content",
+      handler: ({ params, url }) => {
+        const edition = db.getPublishedBySlug(params.slug);
+        if (!edition) throw new ApiError(404, "edition not found");
+        const requested = url.searchParams.has("revision")
+          ? intParam(url, "revision", 1, 1, 100_000)
+          : undefined;
+        const found = getRevisionContent(edition.url, requested);
+        if (!found) throw new ApiError(404, "revision not found");
+        return { revision: found.revision, markdown: found.content };
+      },
+    },
+
+    {
+      method: "GET",
+      path: "/api/v1/calendar",
+      handler: ({ url }) => {
+        const days = intParam(url, "days", 35, 1, 120);
+        const today = localDayIso();
+        const first = addDays(today, -(days - 1));
+        const byDate = new Map(
+          editionCalendar(first).map((row) => [row.date, row]),
+        );
+        return {
+          target: config.dailyEditions,
+          today,
+          days: Array.from({ length: days }, (_, index) => {
+            const date = addDays(first, index);
+            return (
+              byDate.get(date) ?? {
+                date,
+                published: 0,
+                failedNotifications: 0,
+              }
+            );
+          }),
         };
       },
     },
@@ -156,11 +206,15 @@ export function createRoutes(deps: RouteDeps): Route[] {
         const limit = intParam(url, "limit", 100, 1, 500);
         const source = url.searchParams.get("source")?.trim();
         const primaryOnly = url.searchParams.get("primary") === "true";
+        // `primary` is decided in code (isPrimarySourceName), so that filter
+        // scans the whole window and trims afterwards; `source` is plain SQL.
         const items = db
-          .getArticlesSince(days, limit)
+          .getArticlesSince(days, primaryOnly ? PRIMARY_SCAN_LIMIT : limit, {
+            source: source || undefined,
+          })
           .map(toCrawledArticle)
-          .filter((article) => !source || article.source === source)
-          .filter((article) => !primaryOnly || article.primary);
+          .filter((article) => !primaryOnly || article.primary)
+          .slice(0, limit);
         return { days, total: items.length, items };
       },
     },
@@ -276,4 +330,52 @@ function optionalStatus(url: URL) {
     throw new ApiError(400, `status must be one of: ${allowed.join(", ")}`);
   }
   return status as "pending" | "delivered" | "dead_letter" | "suppressed";
+}
+
+function optionalLifecycle(url: URL) {
+  const lifecycle = url.searchParams.get("lifecycle")?.trim();
+  if (!lifecycle) return undefined;
+  const allowed = ["published", "corrected", "retracted"];
+  if (!allowed.includes(lifecycle)) {
+    throw new ApiError(400, `lifecycle must be one of: ${allowed.join(", ")}`);
+  }
+  return lifecycle as "published" | "corrected" | "retracted";
+}
+
+function dayParam(url: URL, key: string): string | undefined {
+  const value = stringParam(url, key, { maxLength: 10 });
+  if (!value) return undefined;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new ApiError(400, `${key} must be YYYY-MM-DD`);
+  }
+  return value;
+}
+
+function editionQuery(url: URL): EditionQuery {
+  const sort = url.searchParams.get("sort")?.trim();
+  if (sort && sort !== "date" && sort !== "score") {
+    throw new ApiError(400, "sort must be date or score");
+  }
+  return {
+    kind: optionalKind(url),
+    notificationStatus: optionalStatus(url),
+    status: optionalLifecycle(url),
+    q: stringParam(url, "q", { maxLength: 100 }),
+    tag: stringParam(url, "tag", { maxLength: 60 }),
+    from: dayParam(url, "from"),
+    to: dayParam(url, "to"),
+    maxScore: url.searchParams.has("maxScore")
+      ? intParam(url, "maxScore", 100, 0, 100)
+      : undefined,
+    sort: sort === "score" ? "score" : "date",
+    limit: intParam(url, "limit", 50, 1, 200),
+    offset: intParam(url, "offset", 0, 0, 1_000_000),
+  };
+}
+
+/** Calendar arithmetic on YYYY-MM-DD keys; UTC avoids a DST hour shifting the day. */
+function addDays(day: string, delta: number): string {
+  const date = new Date(`${day}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + delta);
+  return date.toISOString().slice(0, 10);
 }
