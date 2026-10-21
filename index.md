@@ -9,13 +9,13 @@ title: Evo Agent
   <p class="masthead-count"><strong>80</strong> edições e <strong>24</strong> radares no arquivo</p>
 </section>
 
-<section class="latest" aria-labelledby="ultima-edicao" data-search="gpt-6-astra expande inteligência incorporada e claude code implementa controle de permissões novos benchmarks de robótica testam a generalização do gpt-6-astra enquanto ferramentas de terminal refinam o controle humano sobre agentes. relatos de usuários apontam instabilidades em predições de composer e drenos anômalos de tokens. hf-daily-papers claude-code copilot-cli github reddit papers research anthropic copilot coding-agent">
+<section class="latest" aria-labelledby="ultima-edicao" data-search="litellm implementa assinatura de imagens docker e claude code expande sandbox linux litellm adota verificação via cosign para garantir a integridade de runtimes. relatos de usuários apontam instabilidades de uso no codex e testes a/b do fable 5.5. litellm claude-code copilot-cli reddit llm-framework anthropic copilot coding-agent claudecode">
   <h2 class="section-label" id="ultima-edicao">Última edição</h2>
-  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-19-gpt-6-astra-expande-inteligencia-incorporada-e-claude-code-implementa-controle-d">
-    <time class="edition-date" datetime="2026-10-19"><span class="edition-day">19</span><span class="edition-month">outubro 2026</span></time>
+  <a class="latest-card" href="https://juninmd.github.io/evo-agent/articles/2026-10-20-litellm-implementa-assinatura-de-imagens-docker-e-claude-code-expande-sandbox-li">
+    <time class="edition-date" datetime="2026-10-20"><span class="edition-day">20</span><span class="edition-month">outubro 2026</span></time>
     <div>
-      <h3>GPT-6-Astra expande inteligência incorporada e Claude Code implementa controle de permissões</h3>
-      <p>Novos benchmarks de robótica testam a generalização do GPT-6-Astra enquanto ferramentas de terminal refinam o controle humano sobre agentes. Relatos de usuários apontam instabilidades em predições de composer e drenos anômalos de tokens.</p>
+      <h3>LiteLLM implementa assinatura de imagens Docker e Claude Code expande sandbox Linux</h3>
+      <p>LiteLLM adota verificação via cosign para garantir a integridade de runtimes. Relatos de usuários apontam instabilidades de uso no Codex e testes A/B do Fable 5.5.</p>
       <span class="read-cta">Ler edição</span>
     </div>
   </a>
@@ -72,8 +72,16 @@ title: Evo Agent
     </div>
     <nav class="archive-jump" aria-label="Ir para o mês"><a href="#mes-2026-10">out 2026</a><a href="#mes-2026-09">set 2026</a><a href="#mes-2026-08">ago 2026</a></nav>
     <section class="month-group" id="mes-2026-10">
-  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>17 edições</p></div>
-  <article class="story-card" data-search="litellm assina imagens docker com cosign e uso do codex aumenta após integração com dot litellm v1.106.0 introduz verificação de assinatura docker com cosign usando chave fixa. usuários do codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho. litellm reddit openai llm-framework codex vscode">
+  <div class="month-heading"><h2>Outubro <span>2026</span></h2><p>18 edições</p></div>
+  <article class="story-card" data-search="gpt-6-astra expande inteligência incorporada e claude code implementa controle de permissões novos benchmarks de robótica testam a generalização do gpt-6-astra enquanto ferramentas de terminal refinam o controle humano sobre agentes. relatos de usuários apontam instabilidades em predições de composer e drenos anômalos de tokens. hf-daily-papers claude-code copilot-cli github reddit papers research anthropic copilot coding-agent">
+  <time datetime="2026-10-19">19 out</time>
+  <div>
+    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-19-gpt-6-astra-expande-inteligencia-incorporada-e-claude-code-implementa-controle-d">GPT-6-Astra expande inteligência incorporada e Claude Code implementa controle de permissões</a></h3>
+    <p>Novos benchmarks de robótica testam a generalização do GPT-6-Astra enquanto ferramentas de terminal refinam o controle humano sobre agentes. Relatos de usuários apontam instabilidades em predições de composer e drenos anômalos de tokens.</p>
+    <p class="story-tags">hf-daily-papers, claude-code, copilot-cli, github</p>
+  </div>
+</article>
+<article class="story-card" data-search="litellm assina imagens docker com cosign e uso do codex aumenta após integração com dot litellm v1.106.0 introduz verificação de assinatura docker com cosign usando chave fixa. usuários do codex relatam aumento significativo no consumo de usage após adoção do dot para coordenar cargas de trabalho. litellm reddit openai llm-framework codex vscode">
   <time datetime="2026-10-18">18 out</time>
   <div>
     <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-10-18-litellm-assina-imagens-docker-com-cosign-e-uso-do-codex-aumenta-apos-integracao-">LiteLLM assina imagens Docker com cosign e uso do Codex aumenta após integração com dot</a></h3>
@@ -488,7 +496,7 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
 </section>
 <div class="archive-older" data-collapsible>
 <section class="month-group is-collapsed" hidden id="mes-2026-08">
-  <div class="month-heading"><h2>Agosto <span>2026</span></h2><p>28 edições</p></div>
+  <div class="month-heading"><h2>Agosto <span>2026</span></h2><p>27 edições</p></div>
   <article class="story-card" data-search="layout customizações do vscode, custos de mcp do copilot e monitoramento de uso do codex engineers veem lacunas únicas nas interfaces de vscode, descobrem custos inesperados ao usar multi‑channel protocols no copilot e modelam rotinas de monitoramento de quotas do codex em dispositivos macos. reddit vscode githubcopilot codex claudecode">
   <time datetime="2026-08-31">31 ago</time>
   <div>
@@ -705,16 +713,8 @@ Nove relatos trazem decisões de orçamento, arquitetura e segurança à tona.</
     <p class="story-tags">reddit, tabnews, fallback, br</p>
   </div>
 </article>
-<article class="story-card" data-search="kimi k3, claude code e codex – custos, fluxos e extensões esta edição descreve o lançamento da primeira meta‑classe de modelo aberto, métricas de custo de tokens em codex e uma extensão de wishlist para vs code. esses insights orientam decisões de orçamento e arquitetura. together reddit tabnews hacker-news ai frontier togetherai fallback br developer">
-  <time datetime="2026-08-02">02 ago</time>
-  <div>
-    <h3><a href="https://juninmd.github.io/evo-agent/articles/2026-08-02-kimi-k3-claude-code-e-codex-custos-fluxos-e-extensoes">Kimi K3, Claude Code e Codex – Custos, Fluxos e Extensões</a></h3>
-    <p>Esta edição descreve o lançamento da primeira meta‑classe de modelo aberto, métricas de custo de tokens em Codex e uma extensão de wishlist para VS Code. Esses insights orientam decisões de orçamento e arquitetura.</p>
-    <p class="story-tags">together, reddit, tabnews, hacker-news</p>
-  </div>
-</article>
 </section>
 </div>
-<button type="button" class="show-more" data-show-more="arquivo">Ver edições anteriores (28)</button>
+<button type="button" class="show-more" data-show-more="arquivo">Ver edições anteriores (27)</button>
   </section>
 </div>

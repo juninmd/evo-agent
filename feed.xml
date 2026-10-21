@@ -7,6 +7,22 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-10-20T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-10-20-litellm-implementa-assinatura-de-imagens-docker-e-claude-code-expande-sandbox-li</id>
+    <title>LiteLLM implementa assinatura de imagens Docker e Claude Code expande sandbox Linux</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-20-litellm-implementa-assinatura-de-imagens-docker-e-claude-code-expande-sandbox-li"/>
+    <updated>2026-10-20T00:00:00Z</updated>
+    <summary type="text">LiteLLM adota verificação via cosign para garantir a integridade de runtimes. Relatos de usuários apontam instabilidades de uso no Codex e testes A/B do Fable 5.5.</summary>
+    <category term="litellm"/>
+    <category term="claude-code"/>
+    <category term="copilot-cli"/>
+    <category term="reddit"/>
+    <category term="llm-framework"/>
+    <category term="anthropic"/>
+    <category term="copilot"/>
+    <category term="coding-agent"/>
+    <category term="claudecode"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-20-radar-2026-10-20</id>
     <title>Radar IA — 20/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-20-radar-2026-10-20"/>
@@ -644,22 +660,5 @@
     <category term="releases"/>
     <category term="vendors"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-03-claude-code-v2-1-288-e-instabilidades-de-custo-no-copilot-e-codex</id>
-    <title>Claude Code v2.1.288 e instabilidades de custo no Copilot e Codex</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-03-claude-code-v2-1-288-e-instabilidades-de-custo-no-copilot-e-codex"/>
-    <updated>2026-10-03T00:00:00Z</updated>
-    <summary type="text">Atualizações no ecossistema MCP e Claude Code expandem a automação de terminal. Relatos de usuários apontam anomalias de consumo de tokens e custos elevados em modelos de raciocínio máximo.</summary>
-    <category term="claude-code"/>
-    <category term="mcp-typescript-sdk"/>
-    <category term="microsoft-agent-framework"/>
-    <category term="openai-agents-sdk"/>
-    <category term="reddit"/>
-    <category term="anthropic"/>
-    <category term="mcp"/>
-    <category term="sdk"/>
-    <category term="microsoft"/>
-    <category term="agents"/>
   </entry>
 </feed>
