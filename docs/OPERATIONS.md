@@ -90,6 +90,14 @@ body in `edition_revisions`. The home, the Atom feed and the calendar stop listi
 breadth and community signals; the last ten editions' average and weakest facet are fed to the
 improvement cycle.
 
+## Archive pages
+
+The home lists the newest 12 months of editions. Older months are replaced by one link per
+year to `arquivo/AAAA` (`buildYearArchives` in `site-renderer.ts`), written on every
+publication, retraction and ebook run from the same database rows as the index, so a late
+backfill or retraction updates its year page. The home search only covers what the home
+lists; each year page has its own search. Bump `site.css?v=` when the archive styles change.
+
 ## Cycle recovery
 
 On startup, cycles left as `running` for more than six hours are marked failed
