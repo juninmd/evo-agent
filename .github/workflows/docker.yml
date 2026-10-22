@@ -3,14 +3,13 @@ name: Build and Push Docker Image
 on:
   push:
     branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   docker:
     uses: juninmd/base-actions/.github/workflows/reusable-docker-build.yml@main
     with:
       image-name: ${{ github.repository }}
-      push: ${{ github.event_name != 'pull_request' }}
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       BUILD_SECRETS: ${{ format('npmrc=//npm.pkg.github.com/:_authToken={0}', secrets.GITHUB_TOKEN) }}
