@@ -7,6 +7,25 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-10-22T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-22-radar-2026-10-22</id>
+    <title>Radar IA — 22/10/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-22-radar-2026-10-22"/>
+    <updated>2026-10-22T00:00:00Z</updated>
+    <summary type="text">Radar de 106 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="papers"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/devtips-2026-10-22-devtips-2026-10-22</id>
     <title>Código com IA na Prática — 22/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/devtips-2026-10-22-devtips-2026-10-22"/>
@@ -643,24 +662,5 @@
     <category term="github-trending"/>
     <category term="local-ai"/>
     <category term="copilot"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-05-radar-2026-10-05</id>
-    <title>Radar IA — 05/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-05-radar-2026-10-05"/>
-    <updated>2026-10-05T00:00:00Z</updated>
-    <summary type="text">Radar de 91 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
-    <category term="radar"/>
-    <category term="ia"/>
-    <category term="trending"/>
-    <category term="benchmarks"/>
-    <category term="github"/>
-    <category term="models"/>
-    <category term="reddit"/>
-    <category term="hackernews"/>
-    <category term="releases"/>
-    <category term="vendors"/>
-    <category term="papers"/>
-    <category term="community"/>
   </entry>
 </feed>
