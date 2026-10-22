@@ -7,6 +7,22 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-10-21T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-10-21-gui-agents-matrix-game-4-0-e-escala-de-repositorios-o-que-mudou-em-dezois</id>
+    <title>Gui Agents, Matrix-Game 4.0, e Escala de Repositórios: o que mudou em dezóis</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-21-gui-agents-matrix-game-4-0-e-escala-de-repositorios-o-que-mudou-em-dezois"/>
+    <updated>2026-10-21T00:00:00Z</updated>
+    <summary type="text">Novidades entre agentes visuais, mundos de jogos em tempo real e infraestrutura Github‑Azure redefinem como codificamos e escalamos projetos de IA.</summary>
+    <category term="hf-daily-papers"/>
+    <category term="reddit"/>
+    <category term="github"/>
+    <category term="papers"/>
+    <category term="research"/>
+    <category term="claudecode"/>
+    <category term="codex"/>
+    <category term="openai"/>
+    <category term="githubcopilot"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-21-radar-2026-10-21</id>
     <title>Radar IA — 21/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-21-radar-2026-10-21"/>
@@ -644,22 +660,5 @@
     <category term="techlead"/>
     <category term="stack"/>
     <category term="lideranca"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-04-graphforge-lora-e-o-peso-dos-tokens-em-ia</id>
-    <title>GraphForge, LoRA e o Peso dos Tokens em IA</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-04-graphforge-lora-e-o-peso-dos-tokens-em-ia"/>
-    <updated>2026-10-04T00:00:00Z</updated>
-    <summary type="text">A nova técnica de síntese de dados dos agentes encontra respaldo em um método baseado em grafos, ao mesmo tempo em que Pequenum LoRA restitui a lembrança de contextos profundos em modelos de última geração. Paralelamente, relatos reais de consumo de tokens mostram que modelos em produção de mercado sofrem de volatilidade.</summary>
-    <category term="hf-daily-papers"/>
-    <category term="litellm"/>
-    <category term="openai-agents-sdk"/>
-    <category term="github"/>
-    <category term="openai"/>
-    <category term="reddit"/>
-    <category term="papers"/>
-    <category term="research"/>
-    <category term="llm-framework"/>
-    <category term="sdk"/>
   </entry>
 </feed>
