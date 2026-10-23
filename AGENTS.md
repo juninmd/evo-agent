@@ -78,14 +78,29 @@ desktop/                # Tauri 2 + React 19 + Tailwind v4 console (own package)
 ## Commands
 
 ```bash
-npm run build
+npm ci                       # no --legacy-peer-deps: it drops the zod peer and dist/ then fails with ERR_MODULE_NOT_FOUND
 npm run lint
+npm run build
+npm test
+npm run test:coverage
+npm run benchmark:editorial
 npm run smoke:reddit-comments
 
 # desktop/ has its own package and its own gate
 cd desktop && npm run lint && npm test && npm run build && npm run e2e
-cd desktop/src-tauri && cargo clippy --all-targets -- -D warnings && cargo test
+cd desktop/src-tauri && cargo fmt --check && cargo clippy --all-targets --locked -- -D warnings && cargo test --locked
 ```
+
+## CI gates
+
+`.github/workflows/ci.yml` runs on PRs and pushes to `main`:
+
+- `test`: lint, build, `npm test`, `benchmark:editorial`, `test:coverage`, `npm audit --omit=dev --audit-level=moderate`.
+- `desktop`: lint, test, build, `npm run e2e`; `npm audit` is non-blocking.
+- `desktop-rust`: `cargo fmt --check`, clippy with `-D warnings`, `cargo test --locked`.
+- `gitleaks`: full-history secret scan.
+- `docker.yml` (image build) and `security.yml` (weekly scan) call `juninmd/base-actions` reusable workflows.
+- `src/__tests__/docs-drift.test.ts` fails if README.md lacks an env var read by `src/` or a `RUN_MODE` row.
 
 ## Console rules
 
