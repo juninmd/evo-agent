@@ -1,0 +1,27 @@
+# Saída real, gerada a partir de um clone limpo (npm ci && npm run build).
+# Nenhuma credencial usada; o health roda contra um SQLite vazio e isolado (DB_PATH temporário),
+# por isso o status "critical" é esperado: ainda não existe ciclo nem artigo.
+
+$ node dist/index.js --help
+evo-agent: set RUN_MODE (default DAEMON) and run `npm start`.
+
+  DAEMON        Learn cycle now, then cron: crawl, daily editions, reports, radar
+  CRAWL         One crawl + improve cycle, drain the Telegram outbox, exit
+  DAILY         Publish one daily edition within the day's budget, exit
+  DAILY_SWEEP   Fill whatever is missing from today's edition budget, exit
+  RADAR         Publish the cross-source radar (tables + reading), exit
+  TECHLEAD      Publish the tech-lead digest, exit
+  DEV_TIPS      Weekly tips from Claude Code, VS Code and OpenCode release notes
+  WEEKLY        Publish the weekly report, exit
+  BIWEEKLY      Publish the biweekly report, exit
+  MONTHLY       Publish the monthly report, exit
+  BIMONTHLY     Publish the bimonthly report, exit
+  SEMESTER      Publish the semester report, exit
+  EBOOK         Refine and publish the living AI-assisted development handbook
+  MODEL_ALERTS  Alert on new LLMs from major vendors (needs only Telegram)
+  API           Serve the read-only REST API for the desktop console
+
+Variables: see the README environment table.
+
+$ DB_PATH=<arquivo temporário> npm run health --silent
+{"status":"critical","reasons":["no successful cycle in 24h","no articles collected in 48h","no recent primary sources"],"stats":{"pendingNotifications":0,"stalePendingNotifications":0,"deadLetterNotifications":0,"failedCycles24h":0,"staleRunningCycles":0,"successfulCycles24h":0,"recentArticles":0,"recentPrimarySources":0}}

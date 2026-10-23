@@ -1,14 +1,14 @@
 # evo-agent
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue)](https://www.typescriptlang.org/)
-[![Node](https://img.shields.io/badge/Node-24-green)](https://nodejs.org/)
+[![Node](https://img.shields.io/badge/Node-22%2B-green)](https://nodejs.org/)
 [![Biome](https://img.shields.io/badge/Lint-Biome-60a5fa)](https://biomejs.dev/)
 
-Self-improving AI publishing agent. Crawls AI/developer sources, learns from trends, and generates pt-BR technical articles published to GitHub Pages.
+Agente de publicação com IA que se auto-aprimora. Coleta fontes de IA e desenvolvimento, aprende com as tendências e gera artigos técnicos em pt-BR publicados no GitHub Pages, avisando via Telegram. Um console desktop (Tauri) acompanha saúde, edições e ciclos pela API REST do agente.
 
 ---
 
-## Architecture
+## Arquitetura
 
 ```mermaid
 flowchart TD
@@ -28,200 +28,233 @@ flowchart TD
     Publisher -->|published URL| Notifier[Telegram Notifier]
 ```
 
-## Features
+## Funcionalidades
 
-- **Multi-source crawling**: RSS/HTML sources, Google News keyword search, SearXNG for Reddit/X.com, Hacker News, TabNews, GitHub Trending, Hugging Face Daily Papers (ranked by upvotes), Hugging Face trending models, new models from major labs (OpenRouter catalog, last 14 days), coding-agent release notes (Claude Code, Codex, Gemini CLI, Copilot CLI, Cursor, MCP), and Reddit community signal analysis. Feed items older than 14 days are skipped and Atom bodies back-fill empty snippets
-- **Self-improvement loop**: System prompt and search keywords evolve from ingested content
-- **Reliable orchestration**: Overlapping cycles are skipped and every run is recorded in SQLite
-- **Editorial scoring**: Recency, engagement, source authority, diversity, and cross-source evidence shape selection
-- **Evidence provenance**: Every selected highlight preserves source URL, title, and supporting excerpt
-- **Guarded self-improvement**: Prompt candidates are scored, versioned, promoted only without regression, and rollback-capable
-- **Article generation**: three long-form daily editions (≥5 subjects each, no repeated sources within the day) and weekly/periodic reports in pt-BR via LLM, with expanded Reddit/community evidence when available
-- **Living ebook**: weekly/refinable AI-assisted development handbook published to GitHub Pages
-- **Atomic GitHub Pages publishing**: Article, layouts, and indexes land in one Git commit
-- **Discoverable pages**: Canonical URL, Open Graph/Twitter metadata, Atom feed and sitemap on every published page
-- **Escaped by construction**: Crawled titles and summaries are HTML-escaped in the Jekyll layouts and flattened in the YAML front matter
-- **Telegram outbox**: Failed delivery retries with exponential backoff and dead-letter isolation; the hourly `CRAWL` job drains it in production, and pings not delivered within 24h are suppressed instead of sent late
-- **Operational health**: Structured logs, persistent metrics, primary-source alerts, and a machine-readable health command
-- **Playwright stealth fallback**: Automatic browser-based fetch when RSS sources return 403/429
+- **Coleta multi-fonte**: RSS/HTML, busca por palavra-chave no Google News, SearXNG para Reddit/X.com, Hacker News, TabNews, GitHub Trending, Hugging Face Daily Papers (ranqueado por votos), modelos em alta no Hugging Face, lançamentos de modelos dos grandes laboratórios (catálogo OpenRouter, últimos 14 dias), release notes de coding agents (Claude Code, Codex, Gemini CLI, Copilot CLI, Cursor, MCP) e análise de sinais da comunidade no Reddit. Itens de feed com mais de 14 dias são ignorados e corpos Atom preenchem snippets vazios
+- **Ciclo de auto-aprimoramento**: o system prompt e as palavras-chave de busca evoluem a partir do conteúdo ingerido
+- **Orquestração confiável**: ciclos sobrepostos são pulados e cada execução fica registrada no SQLite
+- **Pontuação editorial**: recência, engajamento, autoridade da fonte, diversidade e evidência entre fontes definem a seleção
+- **Proveniência da evidência**: cada destaque selecionado preserva URL da fonte, título e trecho de apoio
+- **Auto-aprimoramento com guarda**: candidatos de prompt são pontuados, versionados, promovidos só sem regressão e podem sofrer rollback
+- **Geração de artigos**: três edições diárias longas (≥5 assuntos cada, sem repetir fontes no dia) e relatórios semanais/periódicos em pt-BR via LLM, com evidência ampliada de Reddit/comunidade quando disponível
+- **Ebook vivo**: manual semanal e refinável de desenvolvimento assistido por IA, publicado no GitHub Pages
+- **Publicação atômica no GitHub Pages**: artigo, layouts e índices entram em um único commit
+- **Páginas descobríveis**: URL canônica, metadados Open Graph/Twitter, feed Atom e sitemap em toda página publicada
+- **Escape por construção**: títulos e resumos coletados são escapados em HTML nos layouts Jekyll e achatados no front matter YAML
+- **Outbox do Telegram**: entregas falhas são retentadas com backoff exponencial e isoladas em dead-letter; o job horário `CRAWL` drena a fila em produção, e avisos não entregues em 24h são suprimidos em vez de enviados atrasados
+- **Saúde operacional**: logs estruturados, métricas persistentes, alertas de fonte primária e um comando de health legível por máquina
+- **Fallback Playwright stealth**: busca automática via navegador quando fontes RSS respondem 403/429
 
-## Quick Start
+## Requisitos
+
+- Node.js 22 ou superior (a CI usa 22; o Dockerfile usa a imagem `mcr.microsoft.com/playwright:v1.60.0-noble`)
+- npm (o repositório usa `package-lock.json`)
+- Toolchain nativa para compilar `better-sqlite3` (compilador C/C++ e Python 3), caso não haja binário pré-compilado para a plataforma
+- Opcional, só para o console desktop: Rust estável e as dependências do Tauri 2 (ver [`desktop/README.md`](desktop/README.md))
+
+## Instalação
 
 ```bash
 git clone git@github.com:juninmd/evo-agent.git
 cd evo-agent
 cp .env.example .env
-# Edit .env with your credentials
-npm install
+# Edite o .env com suas credenciais
+npm ci
 npm run build
 ```
 
-`@juninmd/digest-kit` is a public package on npm: no registry token is needed to install or to
-build the image.
+Use `npm ci` sem `--legacy-peer-deps`: com a flag, o peer `zod` exigido por `@ai-sdk/provider-utils` não é instalado e o processo compilado falha ao iniciar com `ERR_MODULE_NOT_FOUND`.
 
-## Environment Variables
+`@juninmd/digest-kit` é um pacote público no npm: não é preciso token de registry para instalar nem para construir a imagem.
 
-| Variable | Required | Default | Description |
+## Configuração
+
+As variáveis vêm do ambiente ou de um `.env` na raiz (use `.env.example` como modelo). Nunca commite valores reais.
+
+| Variável | Obrigatória | Padrão | Descrição |
 |---|---|---|---|
-| `LITELLM_API_BASE` | No | `http://localhost:4000/v1` | LiteLLM base URL |
-| `LITELLM_API_KEY` | No | `no-key` | LiteLLM API key |
-| `LITELLM_MODEL` | No | `cloud/auto` | Primary model name; `cloud/auto` is the LiteLLM chain that owns provider choice |
-| `LITELLM_FALLBACK_MODELS` | No | `cloud/auto` | Comma-separated fallback models tried if the primary fails/times out/returns empty |
-| `LITELLM_MAX_OUTPUT_TOKENS` | No | `12000` | Max output tokens per request |
-| `LITELLM_TIMEOUT_MS` | No | `300000` | LiteLLM request timeout in milliseconds |
-| `TELEGRAM_BOT_TOKEN` | Yes | — | Telegram Bot API token |
-| `TELEGRAM_CHAT_ID` | Yes | — | Target Telegram chat/group ID |
-| `GITHUB_TOKEN` | Yes | — | GitHub PAT with repo write access |
-| `GITHUB_OWNER` | Yes | — | GitHub username or org |
-| `GITHUB_REPO` | Yes | — | Repository name for Pages |
-| `GITHUB_BRANCH` | No | `gh-pages` | Target branch for published content |
-| `CRAWL_INTERVAL_MINUTES` | No | `40` | Learn cycle frequency in daemon mode |
-| `ARTICLE_CRON` | No | `0 8,13,18 * * *` | Daily edition cron (one edition per slot) |
-| `MODEL_ALERT_CRON` | No | `*/30 * * * *` | New LLM launch alert cron (OpenRouter catalog, major vendors, Telegram) |
-| `DAILY_EDITIONS` | No | `3` | Editions published per day; a 22h sweep fills missed slots |
-| `SEARXNG_URL` | No | `http://searxng.searxng.svc.cluster.local` | SearXNG instance URL |
-| `API_HOST` | No | `127.0.0.1` | Bind address of `RUN_MODE=API` |
-| `API_PORT` | No | `8787` | Port of `RUN_MODE=API` |
-| `API_TOKEN` | Only `API` | — | Bearer token for `/api/v1`; the API refuses to start without it |
-| `API_ALLOW_RUNS` | No | `false` | Enables `POST /api/v1/runs` |
-| `API_CORS_ORIGINS` | No | — | Comma-separated browser origins allowed to call the API |
-| `RADAR_CRON` | No | `0 21 * * *` | Radar edition cron |
-| `REDDIT_COMMENTS_ENABLED` | No | `false` | Fetches Reddit comment threads; off because the post `.json` endpoint answers 403 from datacenter IPs and burns the shared per-IP budget |
-| `HF_API_KEY` | No | — | Hugging Face token for GLiNER entity tagging; empty disables it |
-| `GLINER_MODEL` | No | `urchade/gliner_multi-v2.1` | GLiNER model used when `HF_API_KEY` is set |
-| `BACKFILL_START` / `BACKFILL_END` | No | — | Day range for `npm run backfill:articles` when not passed as arguments |
-| `OPENCODE_API_KEY` / `OPENCODE_MODEL` | No | — | Legacy aliases of `LITELLM_API_KEY` / `LITELLM_MODEL` |
-| `TZ` | No | `America/Sao_Paulo` | Timezone for every cron schedule and for the daily-edition day key |
-| `LOG_LEVEL` | No | `info` | Logging verbosity (`debug`, `info`, `warn`, `error`) |
-| `LOG_FORMAT` | No | `json` | Structured `json` logs or local `text` output |
-| `DB_PATH` | No | `data/knowledge.db` | SQLite database path |
+| `LITELLM_API_BASE` | Não | `http://localhost:4000/v1` | URL base do LiteLLM |
+| `LITELLM_API_KEY` | Não | `no-key` | Chave de API do LiteLLM |
+| `LITELLM_MODEL` | Não | `cloud/auto` | Modelo primário; `cloud/auto` é a cadeia do LiteLLM que decide o provider |
+| `LITELLM_FALLBACK_MODELS` | Não | `cloud/auto` | Modelos de fallback separados por vírgula, usados se o primário falhar, estourar o tempo ou vier vazio |
+| `LITELLM_MAX_OUTPUT_TOKENS` | Não | `12000` | Máximo de tokens de saída por requisição |
+| `LITELLM_TIMEOUT_MS` | Não | `300000` | Timeout da requisição ao LiteLLM, em milissegundos |
+| `TELEGRAM_BOT_TOKEN` | Sim | — | Token da Bot API do Telegram |
+| `TELEGRAM_CHAT_ID` | Sim | — | ID do chat/grupo de destino no Telegram |
+| `GITHUB_TOKEN` | Sim | — | PAT do GitHub com escrita no repositório |
+| `GITHUB_OWNER` | Sim | — | Usuário ou organização no GitHub |
+| `GITHUB_REPO` | Sim | — | Nome do repositório do Pages |
+| `GITHUB_BRANCH` | Não | `gh-pages` | Branch de destino do conteúdo publicado |
+| `CRAWL_INTERVAL_MINUTES` | Não | `40` | Frequência do ciclo de aprendizado no modo daemon |
+| `ARTICLE_CRON` | Não | `0 8,13,18 * * *` | Cron das edições diárias (uma edição por horário) |
+| `MODEL_ALERT_CRON` | Não | `*/30 * * * *` | Cron do alerta de novos LLMs (catálogo OpenRouter, grandes fornecedores, Telegram) |
+| `DAILY_EDITIONS` | Não | `3` | Edições publicadas por dia; uma varredura às 22h preenche horários perdidos |
+| `SEARXNG_URL` | Não | `http://searxng.searxng.svc.cluster.local` | URL da instância SearXNG |
+| `API_HOST` | Não | `127.0.0.1` | Endereço de bind do `RUN_MODE=API` |
+| `API_PORT` | Não | `8787` | Porta do `RUN_MODE=API` |
+| `API_TOKEN` | Só `API` | — | Bearer token de `/api/v1`; a API se recusa a iniciar sem ele |
+| `API_ALLOW_RUNS` | Não | `false` | Habilita `POST /api/v1/runs` |
+| `API_CORS_ORIGINS` | Não | — | Origens de navegador permitidas, separadas por vírgula |
+| `RADAR_CRON` | Não | `0 21 * * *` | Cron da edição Radar |
+| `REDDIT_COMMENTS_ENABLED` | Não | `false` | Busca threads de comentários do Reddit; desligado porque o `.json` do post responde 403 em IPs de datacenter e gasta o orçamento compartilhado por IP |
+| `HF_API_KEY` | Não | — | Token do Hugging Face para a marcação de entidades com GLiNER; vazio desabilita |
+| `GLINER_MODEL` | Não | `urchade/gliner_multi-v2.1` | Modelo GLiNER usado quando `HF_API_KEY` está definida |
+| `BACKFILL_START` / `BACKFILL_END` | Não | — | Intervalo de dias do `npm run backfill:articles` quando não passado como argumento |
+| `OPENCODE_API_KEY` / `OPENCODE_MODEL` | Não | — | Aliases legados de `LITELLM_API_KEY` / `LITELLM_MODEL` |
+| `TZ` | Não | `America/Sao_Paulo` | Fuso de todos os crons e da chave do dia da edição diária |
+| `LOG_LEVEL` | Não | `info` | Verbosidade dos logs (`debug`, `info`, `warn`, `error`) |
+| `LOG_FORMAT` | Não | `json` | Logs estruturados `json` ou saída local `text` |
+| `DB_PATH` | Não | `data/knowledge.db` | Caminho do banco SQLite |
 
-## Run Modes
+## Modos de execução
 
-Set `RUN_MODE` env var to control execution (`npm start -- --help` prints this list):
+Defina `RUN_MODE` para controlar a execução (`npm start -- --help` imprime esta lista):
 
-| Mode | Behavior |
+| Modo | Comportamento |
 |---|---|
-| `DAEMON` (default) | Runs learn cycle immediately, then schedules crawling + daily editions + weekly report via cron |
-| `CRAWL` | Single crawl + improve cycle, then exits |
-| `DAILY` | Generates and publishes one daily article (fills the day's edition budget one slot at a time), then exits |
-| `DAILY_SWEEP` | Publishes whatever is missing from today's edition budget, recovering a slot that failed earlier; no-op when the day is complete |
-| `RADAR` | Publishes the cross-source radar (deterministic tables plus a model-written reading, no editorial gate), then exits |
-| `TECHLEAD` | Publishes the tech-lead digest, then exits |
-| `DEV_TIPS` | Turns the week's Claude Code, VS Code and OpenCode release notes into practical tips (what changed, how to use, best practice), published as `devtips-<date>`, then exits; fails without candidates, falls back to a ranking when the model output cites anything outside the material |
-| `WEEKLY` | Generates and publishes one weekly article, then exits |
-| `BIWEEKLY` | Generates and publishes one biweekly report, then exits |
-| `MONTHLY` | Generates and publishes one monthly report, then exits |
-| `BIMONTHLY` | Generates and publishes one bimonthly report, then exits |
-| `SEMESTER` | Generates and publishes one semester report, then exits |
-| `EBOOK` | Refines and publishes the living AI-assisted development handbook, then exits |
-| `MODEL_ALERTS` | Checks the OpenRouter catalog once and sends a Telegram alert per new LLM from a major vendor, then exits (needs only Telegram credentials; first run records a baseline silently) |
-| `API` | Serves the read-only REST API the desktop console consumes (`docs/API.md`); needs only `API_TOKEN` |
+| `DAEMON` (padrão) | Roda o ciclo de aprendizado na hora e agenda via cron coleta, edições diárias e relatório semanal |
+| `CRAWL` | Um ciclo de coleta + aprimoramento e sai |
+| `DAILY` | Gera e publica um artigo diário (preenche o orçamento de edições do dia um horário por vez) e sai |
+| `DAILY_SWEEP` | Publica o que falta do orçamento de edições de hoje, recuperando um horário que falhou antes; não faz nada se o dia está completo |
+| `RADAR` | Publica o radar entre fontes (tabelas determinísticas mais uma leitura escrita pelo modelo, sem portão editorial) e sai |
+| `TECHLEAD` | Publica o digest para tech leads e sai |
+| `DEV_TIPS` | Transforma as release notes da semana de Claude Code, VS Code e OpenCode em dicas práticas (o que mudou, como usar, boa prática), publicadas como `devtips-<data>`, e sai; falha sem candidatos e cai para um ranking quando a saída do modelo cita algo fora do material |
+| `WEEKLY` | Gera e publica um artigo semanal e sai |
+| `BIWEEKLY` | Gera e publica um relatório quinzenal e sai |
+| `MONTHLY` | Gera e publica um relatório mensal e sai |
+| `BIMONTHLY` | Gera e publica um relatório bimestral e sai |
+| `SEMESTER` | Gera e publica um relatório semestral e sai |
+| `EBOOK` | Refina e publica o manual vivo de desenvolvimento assistido por IA e sai |
+| `MODEL_ALERTS` | Consulta o catálogo OpenRouter uma vez e envia um alerta no Telegram por novo LLM de grande fornecedor, e sai (precisa só das credenciais do Telegram; a primeira execução grava a linha de base em silêncio) |
+| `API` | Serve a API REST somente leitura consumida pelo console desktop (`docs/API.md`); precisa só de `API_TOKEN` |
 
-## Commands
+## Uso
 
 ```bash
-npm run build                  # TypeScript compilation
-npm run lint                   # Biome static analysis
-npm run lint:fix               # Auto-fix lint issues
-npm run smoke:reddit-comments  # Test Reddit signal crawler with isolated DB
-npm run benchmark:editorial    # Run deterministic editorial regression corpus
-npm run test:coverage          # Enforce repository coverage floors
-npm run health                 # Emit operational health JSON
-npm run prompt:rollback        # Restore the previous promoted system prompt
-npm run edition -- list        # Search, requeue, retract and rescore published editions
-npm run backfill:articles -- 2026-06-01 2026-06-11 # Publish historical editions without Telegram spam
-npm run dev                    # Watch mode with tsx
-npm start                      # Run compiled output
+npm run dev                    # modo watch com tsx
+npm start                      # roda a saída compilada (RUN_MODE=DAEMON por padrão)
+RUN_MODE=CRAWL npm start       # um ciclo de coleta e sai
+npm run health                 # emite o JSON de saúde operacional
+npm run prompt:rollback        # restaura o system prompt promovido anterior
+npm run edition -- list        # busca, reenfileira, retrata e repontua edições publicadas
+npm run backfill:articles -- 2026-06-01 2026-06-11 # publica edições históricas sem spam no Telegram
+npm run smoke:reddit-comments  # testa o coletor de sinais do Reddit com banco isolado
 ```
 
-## Desktop console
+Saídas reais de `--help` e `npm run health` (banco vazio) estão em [`docs/terminal.txt`](docs/terminal.txt). Em banco vazio o health responde `critical`, o que é esperado: ainda não há ciclo nem artigo.
 
-`desktop/` is a Tauri 2 + React 19 + Tailwind v4 app that reads the agent's REST API:
-health, published editions with their preserved evidence, source health, cycle history,
-prompt versions and metrics, plus optional on-demand cycle runs. The token lives in the
-Rust process and never reaches the webview.
+## Testes, lint e build
 
 ```bash
-RUN_MODE=API API_TOKEN=<secret> npm start   # at the repository root
+npm test                  # vitest run (suíte do agente)
+npm run test:coverage     # testes com os pisos de cobertura do repositório
+npm run benchmark:editorial # corpus determinístico de regressão editorial
+npm run lint              # Biome (biome check src/)
+npm run lint:fix          # corrige o que o Biome corrige sozinho
+npm run build             # tsc + cópia de src/publisher/assets para dist/
+```
+
+O console desktop tem pacote e gate próprios (ver abaixo).
+
+## Console desktop
+
+`desktop/` é um app Tauri 2 + React 19 + Tailwind v4 que lê a API REST do agente: saúde, edições publicadas com a evidência preservada, saúde das fontes, histórico de ciclos, versões de prompt e métricas, além de execuções de ciclo sob demanda (opcional). O token fica no processo Rust e nunca chega ao webview.
+
+```bash
+RUN_MODE=API API_TOKEN=<segredo> npm start   # na raiz do repositório
 cd desktop && npm install && npm run tauri dev
 ```
 
-See [`desktop/README.md`](desktop/README.md) for the app and [`docs/API.md`](docs/API.md)
-for the REST contract.
+### Screenshot
 
-## Project Structure
+![Console desktop, visão geral](docs/prints/console-visao-geral.png)
+
+Os prints em [`docs/prints/`](docs/prints/) são regenerados pelo `npm run e2e` do `desktop/`; esta captura não foi refeita nesta atualização de documentação.
+
+Veja [`desktop/README.md`](desktop/README.md) para o app e [`docs/API.md`](docs/API.md) para o contrato REST.
+
+## Estrutura do projeto
 
 ```
 src/
-  api/                  # RUN_MODE=API: node:http server, auth, routes and run spawning
-  index.ts              # Entry point, cron scheduling, run modes
-  config.ts             # Env loading, validation, frozen config
+  api/                  # RUN_MODE=API: servidor node:http, auth, rotas e disparo de execuções
+  index.ts              # Ponto de entrada, agendamento cron, modos de execução
+  config.ts             # Leitura do ambiente, validação, config congelada
   crawler/
-    index.ts            # RSS, Google News, SearXNG, HN/TabNews crawlers and crawlAll
-    agent-sources.ts    # Coding-agent releases, agent SDKs, practitioner feeds
-    feed-items.ts       # Recency window, newest-first selection, summary fallback
-    hf-papers.ts        # Hugging Face Daily Papers ranked by upvotes
-    model-launches.ts   # HF trending models + new-model launches (OpenRouter)
-    reddit.ts           # Reddit pacing, rate-limit handling, community signals
-    reddit-smoke.ts     # Standalone Reddit community signal smoke test
+    index.ts            # RSS, Google News, SearXNG, HN/TabNews e crawlAll
+    agent-sources.ts    # Releases de coding agents, SDKs de agentes, feeds de praticantes
+    feed-items.ts       # Janela de recência, seleção mais novo primeiro, fallback de resumo
+    hf-papers.ts        # Hugging Face Daily Papers ranqueado por votos
+    model-launches.ts   # Modelos em alta no HF + lançamentos de modelos (OpenRouter)
+    reddit.ts           # Ritmo, rate limit e sinais da comunidade do Reddit
+    reddit-smoke.ts     # Smoke test isolado dos sinais do Reddit
   knowledge/
-    store.ts            # SQLite persistence (articles, snippets, state, publish log)
+    store.ts            # Persistência SQLite (artigos, snippets, estado, log de publicação)
   agent/
-    improver.ts         # Self-improvement: updates prompt and keywords from recent sources
-    writer.ts           # LLM-powered article and weekly report generation
-    ebook.ts            # Living handbook refinement
-    editorial-renderer.ts # Deterministic article rendering and citations
-    prompt-policy.ts    # Prompt promotion and rollback policy
+    improver.ts         # Auto-aprimoramento: atualiza prompt e palavras-chave a partir das fontes recentes
+    writer.ts           # Geração de artigos e relatórios semanais via LLM
+    ebook.ts            # Refino do manual vivo
+    editorial-renderer.ts # Renderização determinística de artigos e citações
+    prompt-policy.ts    # Política de promoção e rollback de prompts
   newspaper/
-    edition.ts          # Radar buckets + reading -> headline, desks, stories
-    images.ts           # Card image URLs from validated GitHub/Hub ids (host allowlist)
-    inline.ts           # Reading parser and escaped inline markdown
-    render.ts           # Standalone HTML page (site document or embeddable fragment)
-    styles.ts           # Newspaper CSS with light/dark tokens
+    edition.ts          # Baldes do radar + leitura -> manchete, editorias, matérias
+    images.ts           # URLs de imagem de cartão a partir de ids GitHub/Hub validados (allowlist de hosts)
+    inline.ts           # Parser da leitura e markdown inline escapado
+    render.ts           # Página HTML standalone (documento do site ou fragmento embutível)
+    styles.ts           # CSS do jornal com tokens claro/escuro
   publisher/
-    github.ts           # Atomic GitHub API transaction and publication
-    site-renderer.ts    # Jekyll scaffold, layouts, CSS, and index rendering
+    github.ts           # Transação atômica na API do GitHub e publicação
+    site-renderer.ts    # Scaffold Jekyll, layouts, CSS e renderização dos índices
   notifier/
-    telegram.ts         # Telegram Bot API notifications
-    outbox.ts           # Retry and dead-letter policy
+    telegram.ts         # Notificações pela Bot API do Telegram
+    outbox.ts           # Política de retry e dead-letter
   observability/
-    health.ts           # Operational health evaluation
+    health.ts           # Avaliação de saúde operacional
   utils/
-    ai.ts               # LiteLLM client wrapper for AI text generation
-    logger.ts           # Timestamped log levels via console
+    ai.ts               # Wrapper do cliente LiteLLM para geração de texto
+    logger.ts           # Níveis de log com timestamp via console
 ```
 
-## Published Site
+## Site publicado
 
-Articles are available at `https://<GITHUB_OWNER>.github.io/<GITHUB_REPO>/` with:
+Os artigos ficam em `https://<GITHUB_OWNER>.github.io/<GITHUB_REPO>/` com:
 
-- Light and dark theme toggle (persisted in `localStorage`)
-- Article archive grouped by year and month
-- Weekly reports section
-- Daily newspaper edition at `jornal/<YYYY-MM-DD>.html` ("Gazeta dos Agentes"), published in the same commit as the radar and linked from it: headline, TL;DR, one desk per radar bucket, and card images derived from GitHub and Hugging Face URLs (no page scraping)
-- Markdown download button per article
-- Responsive typography (Source Serif 4 body, IBM Plex Mono code, IBM Plex Sans UI)
+- Alternância de tema claro/escuro (persistida em `localStorage`)
+- Arquivo de artigos agrupado por ano e mês
+- Seção de relatórios semanais
+- Edição diária do jornal em `jornal/<YYYY-MM-DD>.html` ("Gazeta dos Agentes"), publicada no mesmo commit do radar e linkada a partir dele: manchete, TL;DR, uma editoria por balde do radar e imagens de cartão derivadas de URLs do GitHub e do Hugging Face (sem raspar páginas)
+- Botão de download do Markdown por artigo
+- Tipografia responsiva (Source Serif 4 no corpo, IBM Plex Mono no código, IBM Plex Sans na UI)
 
-## Deployment
+## Gates de CI
 
-Docker image published at `ghcr.io/juninmd/evo-agent:latest`. Kubernetes manifests live in a separate `app-charts/evo-agent/` repository. Secrets are injected via environment — never commit `.env` or credentials to this repository.
+| Workflow | Job | O que checa |
+|---|---|---|
+| `ci.yml` | `test` | Node 22: `npm ci --legacy-peer-deps`, lint (Biome), build, `npm test`, `benchmark:editorial`, `test:coverage` e `npm audit --omit=dev --audit-level=moderate` |
+| `ci.yml` | `desktop` | Em `desktop/`: lint (`tsc --noEmit` + Biome), `npm test`, build, `npm run e2e` (Playwright) e `npm audit` (não bloqueante) |
+| `ci.yml` | `desktop-rust` | Em `desktop/src-tauri`: `cargo fmt --check`, `cargo clippy -D warnings` e `cargo test --locked` |
+| `ci.yml` | `gitleaks` | Varredura de segredos no histórico completo |
+| `docker.yml` | build | Constrói e publica `ghcr.io/juninmd/evo-agent` pelo workflow reutilizável `juninmd/base-actions` (push na `main`) |
+| `security.yml` | scan | Scan de segurança pelo workflow reutilizável `juninmd/base-actions` (push na `main` e cron semanal) |
 
-## Code Quality (SonarQube Cloud)
+## Deploy
 
-`sonar-project.properties` configures a CI-based SonarQube Cloud analysis with coverage (`coverage/lcov.info` from `npm run test:coverage`). The CI scan step is not enabled yet; before adding it:
+Imagem Docker publicada em `ghcr.io/juninmd/evo-agent:latest`. Os manifestos Kubernetes ficam em um repositório separado, `app-charts/evo-agent/`. Segredos são injetados pelo ambiente — nunca commite `.env` nem credenciais neste repositório.
 
-1. On SonarQube Cloud, create the project `juninmd_evo-agent` in the `juninmd` organization (public).
-2. In the project, **Administration → Analysis Method**: turn **Automatic Analysis off** (it conflicts with CI analysis).
-3. Generate a token and save it as the repository secret `SONAR_TOKEN`.
+## Qualidade de código (SonarQube Cloud)
 
-## Security
+O `sonar-project.properties` configura análise do SonarQube Cloud via CI, com cobertura (`coverage/lcov.info` gerado por `npm run test:coverage`). O passo de scan na CI ainda não está habilitado; antes de adicioná-lo:
 
-- `.env` excluded from version control
-- Tokens never logged or exposed
-- Browser sandbox enabled (no `--disable-web-security`)
-- Signal handlers close SQLite database gracefully on shutdown
-- Article content wrapped with `{% raw %}` to prevent Jekyll Liquid injection
+1. No SonarQube Cloud, crie o projeto `juninmd_evo-agent` na organização `juninmd` (público).
+2. No projeto, **Administration → Analysis Method**: desligue **Automatic Analysis** (conflita com a análise via CI).
+3. Gere um token e salve como secret do repositório `SONAR_TOKEN`.
 
-Operational details and SLO-style checks are documented in
-[`docs/OPERATIONS.md`](docs/OPERATIONS.md).
+## Segurança
+
+- `.env` fora do controle de versão
+- Tokens nunca são logados nem expostos
+- Sandbox do navegador habilitado (sem `--disable-web-security`)
+- Handlers de sinal fecham o SQLite com segurança no shutdown
+- Conteúdo dos artigos envolvido em `{% raw %}` para evitar injeção de Liquid no Jekyll
+
+Detalhes operacionais e checagens no estilo SLO estão em [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
