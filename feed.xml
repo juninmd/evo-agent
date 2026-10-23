@@ -24,6 +24,25 @@
     <category term="pytorch"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-23-radar-2026-10-23</id>
+    <title>Radar IA — 23/10/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-23-radar-2026-10-23"/>
+    <updated>2026-10-23T00:00:00Z</updated>
+    <summary type="text">Radar de 100 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="papers"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/articles/2026-10-22-minimax-m3-1-flash-expande-contexto-para-1m-tokens-claude-code-corrige-sandbox-e</id>
     <title>MiniMax M3.1 Flash expande contexto para 1M tokens; Claude Code corrige sandbox e MCP</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-22-minimax-m3-1-flash-expande-contexto-para-1m-tokens-claude-code-corrige-sandbox-e"/>
@@ -643,22 +662,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-06-qwen-3-8-roda-por-padrao-em-mlx-no-apple-silicon</id>
-    <title>Qwen 3.8 roda por padrão em MLX no Apple Silicon</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-06-qwen-3-8-roda-por-padrao-em-mlx-no-apple-silicon"/>
-    <updated>2026-10-06T00:00:00Z</updated>
-    <summary type="text">O Rho desejado agora se dá em dispositivos Apple Silicon com MLX, simplificando a execução de modelos de maior escala. Junto com novidades em Claude Code, Copiloto e benchmarks de long‑conversation, o cenário se expande.</summary>
-    <category term="ollama"/>
-    <category term="hf-daily-papers"/>
-    <category term="github"/>
-    <category term="langgraph"/>
-    <category term="reddit"/>
-    <category term="local-ai"/>
-    <category term="papers"/>
-    <category term="research"/>
-    <category term="copilot"/>
-    <category term="changelog"/>
   </entry>
 </feed>
