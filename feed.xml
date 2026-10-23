@@ -7,6 +7,23 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-10-22T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-10-22-minimax-m3-1-flash-expande-contexto-para-1m-tokens-claude-code-corrige-sandbox-e</id>
+    <title>MiniMax M3.1 Flash expande contexto para 1M tokens; Claude Code corrige sandbox e MCP</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-22-minimax-m3-1-flash-expande-contexto-para-1m-tokens-claude-code-corrige-sandbox-e"/>
+    <updated>2026-10-22T00:00:00Z</updated>
+    <summary type="text">Lançamentos oficiais trazem modelos multimodais de longo contexto e correções de segurança em ferramentas de IA, enquanto relatos de usuários expõem limites de uso, falhas de cobrança e lacunas de privacidade em ambientes corporativos.</summary>
+    <category term="hf-daily-papers"/>
+    <category term="claude-code"/>
+    <category term="github"/>
+    <category term="vercel-ai-sdk"/>
+    <category term="microsoft-agent-framework"/>
+    <category term="copilot-cli"/>
+    <category term="openrouter"/>
+    <category term="reddit"/>
+    <category term="ollama"/>
+    <category term="opencode"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-22-radar-2026-10-22</id>
     <title>Radar IA — 22/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-22-radar-2026-10-22"/>
@@ -645,22 +662,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-05-ollama-0-40-0-adota-mlx-padrao-no-apple-silicon-copilot-cli-1-0-92-4-melhora-mcp</id>
-    <title>Ollama 0.40.0 adota MLX padrão no Apple Silicon; Copilot CLI 1.0.92-4 melhora MCP e config</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-05-ollama-0-40-0-adota-mlx-padrao-no-apple-silicon-copilot-cli-1-0-92-4-melhora-mcp"/>
-    <updated>2026-10-05T00:00:00Z</updated>
-    <summary type="text">Ollama muda runtime padrão para MLX em Macs com Apple Silicon e expande suporte a Qwen 3.8. Copilot CLI ganha subcomandos de configuração e corrige travamento em conexões HTTP+SSE legadas.</summary>
-    <category term="ollama"/>
-    <category term="copilot-cli"/>
-    <category term="openai"/>
-    <category term="reddit"/>
-    <category term="marktechpost"/>
-    <category term="arxiv-csse"/>
-    <category term="tabnews"/>
-    <category term="github-trending"/>
-    <category term="local-ai"/>
-    <category term="copilot"/>
   </entry>
 </feed>
