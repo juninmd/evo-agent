@@ -24,6 +24,24 @@
     <category term="coding"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/weekly-2026-10-25-litellm-troca-chave-de-assinatura-e-openai-detalha-seguranca-de-treinamento</id>
+    <title>LiteLLM troca chave de assinatura e OpenAI detalha segurança de treinamento</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/weekly-2026-10-25-litellm-troca-chave-de-assinatura-e-openai-detalha-seguranca-de-treinamento"/>
+    <updated>2026-10-25T00:00:00Z</updated>
+    <summary type="text">LiteLLM rotaciona chave cosign a partir da v1.106.3 exigindo atualização imediata em pipelines de verificação. OpenAI publica arquitetura de isolamento para treinamento de modelos de fronteira com execução de código não confiável em sandbox.</summary>
+    <category term="weekly-report"/>
+    <category term="litellm"/>
+    <category term="hacker-news"/>
+    <category term="hf-daily-papers"/>
+    <category term="github"/>
+    <category term="langgraph"/>
+    <category term="claude-code"/>
+    <category term="reddit"/>
+    <category term="llm-framework"/>
+    <category term="front-page"/>
+    <category term="papers"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/articles/2026-10-24-modelos-de-acao-mundial-e-chaves-de-assinatura-litellm</id>
     <title>Modelos de ação mundial e chaves de assinatura LiteLLM</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-24-modelos-de-acao-mundial-e-chaves-de-assinatura-litellm"/>
@@ -636,25 +654,6 @@
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-09-radar-2026-10-09"/>
     <updated>2026-10-09T00:00:00Z</updated>
     <summary type="text">Radar de 99 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
-    <category term="radar"/>
-    <category term="ia"/>
-    <category term="trending"/>
-    <category term="benchmarks"/>
-    <category term="github"/>
-    <category term="models"/>
-    <category term="reddit"/>
-    <category term="hackernews"/>
-    <category term="releases"/>
-    <category term="vendors"/>
-    <category term="papers"/>
-    <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-08-radar-2026-10-08</id>
-    <title>Radar IA — 08/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-08-radar-2026-10-08"/>
-    <updated>2026-10-08T00:00:00Z</updated>
-    <summary type="text">Radar de 108 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
     <category term="radar"/>
     <category term="ia"/>
     <category term="trending"/>
