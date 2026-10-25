@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   describeCrawlerError,
   hackerNewsEngagement,
+  hostnameOf,
   isCitableXUrl,
   isHackerNewsRelevant,
+  isHost,
   parseGitHubStarCount,
   summarizeSourceContent,
   todayIso,
@@ -228,5 +230,37 @@ describe("crawler transformations", () => {
         "https://x.com/CNASdc/article/2029218852056314162?lang=ar-x-fm",
       ),
     ).toBe(false);
+  });
+
+  it("extracts valid hostnames and rejects unsafe/invalid URLs", () => {
+    expect(hostnameOf("https://www.dropbox.com/s/abc")).toBe("www.dropbox.com");
+    expect(hostnameOf("https://x.com/user/status/1")).toBe("x.com");
+    expect(hostnameOf("https://old.reddit.com/r/ai")).toBe("old.reddit.com");
+    expect(hostnameOf("javascript:alert(1)")).toBeNull();
+    expect(hostnameOf("ftp://x")).toBeNull();
+    expect(hostnameOf("http://127.0.0.1/test")).toBeNull();
+    expect(hostnameOf("http://localhost/test")).toBeNull();
+    expect(hostnameOf("not a url")).toBeNull();
+  });
+
+  it("classifies domains accurately without false substring matches", () => {
+    expect(isHost("https://www.dropbox.com/s/abc", "x.com")).toBe(false);
+    expect(isHost("https://wix.com", "x.com")).toBe(false);
+    expect(isHost("https://max.com", "x.com")).toBe(false);
+    expect(isHost("https://box.com", "x.com")).toBe(false);
+    expect(isHost("https://notreddit.com", "reddit.com")).toBe(false);
+    expect(isHost("https://evil.example/?u=reddit.com", "reddit.com")).toBe(
+      false,
+    );
+
+    expect(isHost("https://old.reddit.com/r/ai", "reddit.com")).toBe(true);
+    expect(isHost("https://x.com/user/status/1", "x.com")).toBe(true);
+    expect(isHost("https://mobile.twitter.com/user/status/1", "x.com")).toBe(
+      true,
+    );
+    expect(isHost("https://twitter.com/user/status/1", "x.com")).toBe(true);
+
+    expect(isHost("javascript:alert(1)", "x.com")).toBe(false);
+    expect(isHost("ftp://x", "x.com")).toBe(false);
   });
 });
