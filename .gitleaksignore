@@ -1,5 +1,6 @@
-# Falsos positivos confirmados manualmente - Hostname de exemplo em artigo de documentacao (caveman.api.internal).
-# Formato: commit:arquivo:regra:linha (fingerprint exato; segredo novo no mesmo
-# arquivo continua sendo detectado). Nao usar path allowlist para isso.
+# Falsos positivos confirmados manualmente: hostname de exemplo em artigo de
+# documentacao. Formato: commit:arquivo:regra:linha (fingerprint exato; segredo
+# novo no mesmo arquivo continua sendo detectado). Nao usar path allowlist.
 
-c1ca7802fe157028508e9d1f5786aa46614cf543:articles/2026-06-04-verificador-seguro-de-patches-de-cli-com-reducao-de-tokens-e-guardrails-de-custo.md:juninmd-internal-hostname:257
+52e653a494a49eca1100da3ce44cc42956b2295b:articles/2026-06-04-verificador-seguro-de-patches-de-cli-com-reducao-de-tokens-e-guardrails-de-custo.md:juninmd-internal-hostname:257
+efc8d4863164e0511c33ade8055e04b8ca26c298:.gitleaksignore:juninmd-internal-hostname:1
