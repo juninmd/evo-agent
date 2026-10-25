@@ -162,6 +162,32 @@ interface RedditPostCandidate {
  * "Crawler failed for Google Research: " nao diz nada. Um erro sem mensagem
  * ainda carrega status HTTP, codigo e tipo; e o que permite agir depois.
  */
+export function hostnameOf(url: string): string | null {
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return null;
+    }
+    if (!isSafeExternalUrl(url)) {
+      return null;
+    }
+    return parsed.hostname.toLowerCase() || null;
+  } catch {
+    return null;
+  }
+}
+
+export function isHost(url: string, domain: string): boolean {
+  const host = hostnameOf(url);
+  if (!host) return false;
+  const d = domain.toLowerCase();
+  const domains =
+    d === "x.com" || d === "twitter.com" ? ["x.com", "twitter.com"] : [d];
+  return domains.some(
+    (target) => host === target || host.endsWith(`.${target}`),
+  );
+}
+
 export function describeCrawlerError(err: unknown): string {
   if (axios.isAxiosError(err)) {
     const parts = [
@@ -1333,13 +1359,14 @@ async function crawlAllInner(): Promise<CrawlReport> {
       const results = response.data?.results ?? [];
       for (const result of results.slice(0, 5)) {
         if (!result.url || !result.title) continue;
+        if (hostnameOf(result.url) === null) continue;
         if (db.urlExists(result.url)) continue;
-        if (result.url.includes("x.com") && !isCitableXUrl(result.url)) {
+        if (isHost(result.url, "x.com") && !isCitableXUrl(result.url)) {
           continue;
         }
-        const sourceName = result.url.includes("reddit.com")
+        const sourceName = isHost(result.url, "reddit.com")
           ? `Reddit (${cleanKeyword})`
-          : result.url.includes("x.com")
+          : isHost(result.url, "x.com")
             ? `X/Twitter (${cleanKeyword})`
             : `Web Search (${cleanKeyword})`;
         db.saveArticle({
