@@ -121,3 +121,15 @@ cd desktop/src-tauri && cargo fmt --check && cargo clippy --all-targets --locked
 - Tab labels are pt-BR and so are the labels derived from API enums (`runModeLabel`,
   `healthReasonLabel`). Raw contract values (English health reasons, SQL slugs) are translated
   at the edge, in `src/lib/i18n.ts`, never printed as they arrive.
+
+<!-- base-actions-main-policy -->
+## GitHub Actions — padrão obrigatório (@main)
+
+- Referencie as actions internas sempre pelo branch, nunca por SHA:
+  - `uses: juninmd/base-actions/<action>@main`
+  - `uses: juninmd/base-actions/.github/workflows/<arquivo>.yml@main`
+- Não fixe `@<sha>` em `juninmd/base-actions`: a atualização é centralizada no
+  `main` e passa a valer no próximo run.
+- PRs cujos checks não iniciam por billing/spending limit são mesclados pelo bot central
+  `juninmd/base-actions/.github/workflows/auto-merge-billing-blocked.yml`.
+  Para impedir o merge automático de um PR, aplique a label `do-not-merge`.
