@@ -7,6 +7,23 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-10-24T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-10-24-modelos-de-acao-mundial-e-chaves-de-assinatura-litellm</id>
+    <title>Modelos de ação mundial e chaves de assinatura LiteLLM</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-24-modelos-de-acao-mundial-e-chaves-de-assinatura-litellm"/>
+    <updated>2026-10-24T00:00:00Z</updated>
+    <summary type="text">World Action Models usam auto-destilação para prever ações sem geração iterativa de vídeo. LiteLLM troca chave de assinatura Docker em três releases, exigindo atualização imediata de políticas de admissão.</summary>
+    <category term="hf-daily-papers"/>
+    <category term="litellm"/>
+    <category term="vercel-ai-sdk"/>
+    <category term="reddit"/>
+    <category term="openai"/>
+    <category term="github-trending"/>
+    <category term="hacker-news"/>
+    <category term="devto-llm"/>
+    <category term="v2ex-tech"/>
+    <category term="marktechpost"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-24-radar-2026-10-24</id>
     <title>Radar IA — 24/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-24-radar-2026-10-24"/>
@@ -645,21 +662,5 @@
     <category term="opencode"/>
     <category term="boas-praticas"/>
     <category term="dicas"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-07-mistral-large-4-e-a-convergencia-de-fluxos-no-ecossistema-openai</id>
-    <title>Mistral Large 4 e a convergência de fluxos no ecossistema OpenAI</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-07-mistral-large-4-e-a-convergencia-de-fluxos-no-ecossistema-openai"/>
-    <updated>2026-10-07T00:00:00Z</updated>
-    <summary type="text">Lançamentos de modelos multimodais de alta janela de contexto contrastam com relatos de instabilidade e mudanças de interface em ferramentas de codificação. A infraestrutura de agentes avança com a introdução de MLX no Ollama e sandboxing no Copilot CLI.</summary>
-    <category term="openrouter"/>
-    <category term="ollama"/>
-    <category term="copilot-cli"/>
-    <category term="claude-code"/>
-    <category term="reddit"/>
-    <category term="local-ai"/>
-    <category term="copilot"/>
-    <category term="coding-agent"/>
-    <category term="anthropic"/>
   </entry>
 </feed>
