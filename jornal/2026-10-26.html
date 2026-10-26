@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 26/10/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>94 itens · 38 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>26/10/2026</strong></span><span>Coleta das últimas 24 horas</span><span>8 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Lançamento do dia</p><h1><a href="https://openrouter.ai/openai/gpt-6.1-terra">OpenAI: GPT-6.1 Terra</a></h1><p class="dek">1050000 tokens de contexto. GPT-6.1 Terra is the mid-tier model in OpenAI&#39;s GPT-6.1 series, priced below GPT-6.1 Sol. It is suited for everyday agentic, coding, and writing work, is particularly strong at understanding…</p>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>OpenAI GPT-6.1 Terra lançado com 1,05M tokens de contexto, posicionado como modelo mid-tier abaixo do GPT-6.1 Sol para uso agentico e coding cotidiano.</li><li>OpenAI GPT-6.1 Terra disponibilizado geralmente no GitHub Copilot para coding agentico e trabalho no terminal a custo menor que o Sol.</li><li>GitHub Copilot Inline Suggestions ganha configuracao &quot;Eagerness&quot; para controlar proatividade das sugestoes.</li><li>Cursor lança Agent SDK permitindo definir agentes como pastas de codigo, testar com evals e deployar no Cursor ou infra propria.</li><li>Cline v4.1.26 adiciona Cloud tasks com toggle Local Cloud e selecao de modelo dedicada para sessoes na nuvem.</li><li>Cline Desktop v0.0.49 introduz botao Changes no header da sessao com contagem de linhas, lista de arquivos alterados e diffs por turno.</li><li>Cline SDK v0.2.0 corrige reanexacao a sessoes ja em andamento evitando substituiçao de runtime e transcripts em snapshots stale.</li><li>LangGraph v1.2.18 melhora error_handler para recuperar em todos os caminhos e transmite resultados de tasks falhas; default delta snapshots para 100.</li><li>LangGraph Checkpoint v4.3.1 rejeita bytes NUL em labels de namespace.</li><li>LangGraph SDK Python v0.4.10 adiciona retry em <code>runs.wait</code> com GET sem body e propaga erros de run no wait sincrono.</li><li>DeepSeek-V4.1-Flash-1017 lidera trending HF com sinal 1220 para image-text-to-text.</li><li>Qwen3.8-27B aparece no trending HF com sinal 310 e 18k likes para image-text-to-text.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>OpenAI consolida estrategia de dois tiers (Terra/Sol) no Copilot: Terra para volume diário, Sol para tarefas complexas de seguranca (ex.: CodeRabbit).</p><p>Ferramentas de agente (Cursor, Cline, LangGraph) convergem para SDKs deployaveis, evals nativos e gerenciamento de estado/sessao cloud-local.</p><p>Papers recentes (arXiv cs.SE) focam em gaps evidencia-acao, clarificaçao de requisitos greenfield, censo de AGENTS.md/CLAUDE.md e compactaçao de contexto em horizonte longo.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-github">
+<h2 id="desk-github">GitHub Trending <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/affaan-m/ECC" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/affaan-m/ECC" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>GitHub Trending (daily)</figcaption></figure><h3><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a></h3>
+<p>The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond. | ⭐ 289,200 | Lang: JavaScript <span class="meta">GitHub Trending (daily) · <b>289200</b></span></p></article>
+<ul class="brief"><li><a href="https://github.com/multica-ai/andrej-karpathy-skills">multica-ai / andrej-karpathy-skills</a> <span class="meta">GitHub Trending (daily) · <b>224120</b></span></li><li><a href="https://github.com/anomalyco/opencode">anomalyco / opencode</a> <span class="meta">GitHub Trending (weekly) · <b>221513</b></span></li><li><a href="https://github.com/firecrawl/firecrawl">firecrawl / firecrawl</a> <span class="meta">GitHub Trending (daily-typescript) · <b>195329</b></span></li><li><a href="https://github.com/Significant-Gravitas/AutoGPT">Significant-Gravitas / AutoGPT</a> <span class="meta">GitHub Trending (daily-python) · <b>187756</b></span></li><li><a href="https://github.com/ollama/ollama">ollama / ollama</a> <span class="meta">GitHub Trending (daily-go) · <b>184757</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/deepseek-ai/DeepSeek-V4.1-Flash-1017.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017">deepseek-ai/DeepSeek-V4.1-Flash-1017</a></h3>
+<p>image-text-to-text · 2980 likes · 85275 downloads · trending 1220 <span class="meta">HF Trending Models · <b>1220</b></span></p></article>
+<ul class="brief"><li><a href="https://openrouter.ai/openai/gpt-6.1-terra">OpenAI: GPT-6.1 Terra</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/RecursiveSI/flint">RecursiveSI/flint</a> <span class="meta">HF Trending Models · <b>825</b></span></li><li><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy">black-forest-labs/flux-3-image-klein-comfy</a> <span class="meta">HF Trending Models · <b>507</b></span></li><li><a href="https://huggingface.co/XHToken/Spark-X2.6-4B">XHToken/Spark-X2.6-4B</a> <span class="meta">HF Trending Models · <b>451</b></span></li><li><a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> <span class="meta">HF Trending Models · <b>411</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/artificial/comments/1xgb9at/google_ai_constant_errors/">Reddit: Google AI Constant Errors</a></h3>
+<p>I used the regular Google search for answers about my new Toyota Sienna. I find that if you use a full question, it gives an AI interactive response. I assume that this is accessing Gemini...? I had a bunch of questions… <span class="meta">Reddit Post Signals (artificial)</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/codex/comments/1sryenn/openais_new_image_model_feels_surprisingly/">r/codex on Reddit: OpenAI’s new image model feels surprisingly ...</a> <span class="meta">Reddit (OpenAI Codex)</span></li><li><a href="https://www.reddit.com/r/singularity/comments/1snegq5/openai_codex_for_almost_everything/">r/singularity on Reddit: OpenAI: Codex for Almost Everything</a> <span class="meta">Reddit (OpenAI Codex)</span></li><li><a href="https://www.reddit.com/r/AgentContext_dev/comments/1w7w276/mastering_openai_codex_skills_the_essential/">r/AgentContext_dev on Reddit: Mastering OpenAI Codex Skills: The ...</a> <span class="meta">Reddit (OpenAI Codex)</span></li><li><a href="https://www.reddit.com/r/opencode/comments/1xg8gqj/use_your_local_opencode_from_your_phone_through_a/">Use your local OpenCode from your phone through a Cloudflare Tunnel</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/opencode/comments/1xg8h7p/looking_for_the_best_budget_friendly_model/">Looking for the best budget friendly model</a> <span class="meta">Reddit: OpenCode</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/FrigadeHQ/hob" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/FrigadeHQ/hob" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/FrigadeHQ/hob">Show HN: Hob - Open-source, on device alternative to Claude Cowork and ChatGPT</a></h3>
+<p>Show HN: Hob - Open-source, on device alternative to Claude Cowork and ChatGPT | ⬆ 27 points | 💬 11 comments | by pancomplex <span class="meta">Hacker News · <b>49</b></span></p></article>
+<ul class="brief"><li><a href="https://openai.com/index/introducing-gpt-6-1-terra/">GPT-6.1 Terra</a> <span class="meta">Hacker News · <b>285</b></span></li><li><a href="https://www.brown.edu/news/2026-10-26/ai-data-workers">Brown student maps the hidden global labor powering AI</a> <span class="meta">Hacker News · <b>184</b></span></li><li><a href="https://minimaxir.com/2026/10/cheap-llms/">OpenAI and Anthropic cut their LLM prices by up to 80% within a few months. Why?</a> <span class="meta">Hacker News · <b>175</b></span></li><li><a href="https://www.economist.com/business/2026/10/22/if-ai-displaces-human-workers-they-will-lose-more-than-just-pay">If AI displaces human workers, they will lose more than just pay</a> <span class="meta">Hacker News · <b>95</b></span></li><li><a href="https://www.sec.gov/Archives/edgar/data/2130357/000162828026067168/anthropicpbc-sx1.htm">Anthropic S-1</a> <span class="meta">Hacker News · <b>93</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.311" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.311">v2.1.311</a></h3>
+<p>What&#39;s changed Added --hold-idle-file and --max-hold-min to self-hosted-runner, to keep an idle session while your host reports processes it left running Added a tip for the Explanatory output style, shown when you ask… <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://code.visualstudio.com/blogs/2026/10/27/configurable-eagerness">Tune GitHub Copilot Inline Suggestions with Configurable Eagerness</a> <span class="meta">VSCode Updates</span></li><li><a href="https://cursor.com/changelog/agent-sdk">Agent SDK</a> <span class="meta">Cursor Changelog</span></li><li><a href="https://github.blog/changelog/2026-10-26-gpt-6-1-terra-in-github-copilot">GPT-6.1 Terra in GitHub Copilot</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/langchain-ai/langgraph/releases/tag/1.2.18">langgraph==1.2.18</a> <span class="meta">LangGraph Releases</span></li><li><a href="https://github.com/cline/cline/releases/tag/v4.1.26">v4.1.26</a> <span class="meta">Cline Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>5</span></h2>
+<article class="note"><h3><a href="https://openai.com/index/building-scientific-understanding-with-academic-communities">Working with academic communities to build scientific understanding</a></h3>
+<p>OpenAI shares model results on the Kakeya conjecture, Exponential Time Hypothesis, and quantum chromodynamics—and how researchers can verify and build on them. <span class="meta">OpenAI Blog</span></p></article>
+<ul class="brief"><li><a href="https://devblogs.microsoft.com/foundry/announcing-azure-ai-speech-llm-09-2026/">Announcing Azure AI Speech LLM 09-2026: Broader locale support</a> <span class="meta">Microsoft Foundry Blog</span></li><li><a href="https://blog.google/products-and-platforms/products/education/ai-quests-polar-peaks/">Our newest AI Quest: Mapping the human brain</a> <span class="meta">Google AI Blog</span></li><li><a href="https://openai.com/index/gpt-6-1-sol-coderabbit-code-security">GPT-6.1 Sol helps CodeRabbit strengthen security across complex codebases</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://openai.com/index/introducing-gpt-6-1-terra">Introducing GPT-6.1 Terra</a> <span class="meta">OpenAI Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><h3><a href="https://arxiv.org/abs/2610.31895">Knowing When to Stop: The Evidence-Action Gap in Coding Agents</a></h3>
+<p>arXiv:2610.31895v1 Announce Type: new Abstract: Coding agents are trained to complete tasks, and they keep trying even when the environment makes completion impossible. The evidence that only outside help can restore… <span class="meta">arXiv cs.SE</span></p></article>
+<ul class="brief"><li><a href="https://arxiv.org/abs/2610.31854">SWE-Clar: Can Coding Agents Clarify Incomplete Client Requirements and Deliver Greenfield Software?</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2610.31715">What Open-Source Projects Tell Their Coding Agents: A Census of AGENTS.md and CLAUDE.md</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2610.31712">Reuse, Rewrite, or Reject: Evidence-Constrained Trace Reuse for Repeated Mobile GUI Control</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2610.31711">MBABench-2.0: Evaluating AI Agents on Constructing Financial Spreadsheets Beyond Simple Verifiability</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2610.31710">Compact-Bench: Measuring What Context Compaction Costs Long-Horizon Coding Agents</a> <span class="meta">arXiv cs.SE</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://artificialanalysis.ai/models">Artificial Analysis: GPT-6.1 Terra entra no top 10 do Índice de Inteligência</a></h3>
+<p>Índice de Inteligência Artificial Analysis (2026-10-26): liderança de Claude Opus 5.5 (Max, Default Fallback) (57.6). Líder em pesos abertos: MiMo-V2.6-Pro (46.3). Mudanças no ranking: Novos no top 10: GPT-6.1 Terra… <span class="meta">Artificial Analysis · <b>95</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/gde/postmortem-the-tuesday-our-ai-bill-had-no-owner-34pd">Postmortem: The Tuesday Our AI Bill Had No Owner</a> <span class="meta">Dev.to (ai) · <b>26</b></span></li><li><a href="https://dev.to/yahhi/when-coding-agent-guides-help-hurt-or-do-nothing-28op">When Coding Agent Guides Help, Hurt, or Do Nothing</a> <span class="meta">Dev.to (agents) · <b>26</b></span></li><li><a href="https://dev.to/herinpatel15/i-built-a-pip-tool-to-test-how-well-any-local-llm-calls-tools-here-is-what-my-demo-run-showed-177c">I built a pip tool to test how well any local LLM calls tools (here is what my demo run showed)</a> <span class="meta">Dev.to (llm) · <b>13</b></span></li><li><a href="https://news.google.com/rss/articles/CBMiZkFVX3lxTFBnaVhvbnFoYnpJMkVUNDNNLWhaLXlORjJtRFRfMEptbXVoVVRFY2RjQUpsMXFDanlwMF9kTDhTNjQ3SFp2SS1WWHh3WFhyeDdVNy1sRUJxRlNvWkl1MnNwaWhHMmNnQQ?oc=5">AGNTCon + MCPCon 2026: Agentic AI Foundation Adds Four Projects as MCP Turns to Security - infoq.com</a> <span class="meta">Google News (Model Context Protocol)</span></li><li><a href="https://news.google.com/rss/articles/CBMiakFVX3lxTE9pOTNhSUYxckRBNnBHTDJEV2ZPZ1M2ZmFNclFvUEk0OWZOakx3UEJzU1ZETnM3VVFMMi1xYVRlWnNoZ3ZyZGlQOFhiaGRuX0c2dXNSVlhBQ0FHWjRMTFY2U0FmNnh0akNQOXc?oc=5">Greptile takes bug detection beyond code review with GPT-6 Astra - OpenAI</a> <span class="meta">Google News (OpenAI Codex)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-10-26</span></footer>
+</div></body></html>

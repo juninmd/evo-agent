@@ -24,6 +24,25 @@
     <category term="openai"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-26-radar-2026-10-26</id>
+    <title>Radar IA — 26/10/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-26-radar-2026-10-26"/>
+    <updated>2026-10-26T00:00:00Z</updated>
+    <summary type="text">Radar de 94 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="papers"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/techlead-2026-10-26-techlead-2026-10-26</id>
     <title>Radar Techlead — 26/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/techlead-2026-10-26-techlead-2026-10-26"/>
@@ -639,22 +658,5 @@
     <category term="hackernews"/>
     <category term="releases"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-10-agentgarten-cria-mundos-virtuais-para-agentes-e-tokenrouter-resolve-gargalo-de-c</id>
-    <title>AgentGarten cria mundos virtuais para agentes e TokenRouter resolve gargalo de cache em roteamento</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-10-agentgarten-cria-mundos-virtuais-para-agentes-e-tokenrouter-resolve-gargalo-de-c"/>
-    <updated>2026-10-10T00:00:00Z</updated>
-    <summary type="text">Novos frameworks atacam limitações fundamentais de ambientes de treino e inferência roteada. Relatos de usuários expõem custos ocultos, instabilidade de CLI e exaustão de disco em workflows autônomos.</summary>
-    <category term="hf-daily-papers"/>
-    <category term="github"/>
-    <category term="copilot-cli"/>
-    <category term="claude-code"/>
-    <category term="reddit"/>
-    <category term="tabnews"/>
-    <category term="openai"/>
-    <category term="github-trending"/>
-    <category term="hacker-news"/>
-    <category term="devto-ai"/>
   </entry>
 </feed>
