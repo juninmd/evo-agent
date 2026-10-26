@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loadConfig } from "../config.js";
+import { loadConfig, parseEnvFile } from "../config.js";
 
 const baseEnv = {
   LITELLM_API_BASE: "http://litellm.test/v1",
@@ -142,5 +142,31 @@ describe("loadConfig", () => {
         ARTICLE_CRON: "invalid",
       }),
     ).toThrow(/ARTICLE_CRON/);
+  });
+});
+
+describe("parseEnvFile", () => {
+  it("strips matching single and double quotes", () => {
+    expect(
+      parseEnvFile(`TELEGRAM_CHAT_ID="-1001"\nNAME='evo'\nMIXED="it's"`),
+    ).toEqual({ TELEGRAM_CHAT_ID: "-1001", NAME: "evo", MIXED: "it's" });
+  });
+
+  it("accepts the export prefix", () => {
+    expect(parseEnvFile("export GITHUB_OWNER=juninmd")).toEqual({
+      GITHUB_OWNER: "juninmd",
+    });
+  });
+
+  it("drops inline comments outside quotes but keeps # inside quotes", () => {
+    expect(parseEnvFile('LOG_LEVEL=info # padrao\nTOKEN="a#b" # nota')).toEqual(
+      { LOG_LEVEL: "info", TOKEN: "a#b" },
+    );
+  });
+
+  it("skips blank and comment lines, handles CRLF and values containing =", () => {
+    expect(
+      parseEnvFile("# comentario\r\n\r\nLITELLM_API_KEY=abc=def\r\n"),
+    ).toEqual({ LITELLM_API_KEY: "abc=def" });
   });
 });
