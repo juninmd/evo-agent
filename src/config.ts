@@ -39,15 +39,33 @@ const RUN_MODES = new Set<RunMode>([
   "API",
 ]);
 
+// Accepts `KEY=value`, `export KEY=value`, quoted values and ` # comment`
+// tails, the same shapes dotenv and `docker --env-file` accept.
+export function parseEnvFile(content: string): Record<string, string> {
+  const parsed: Record<string, string> = {};
+  for (const raw of content.split(/\r?\n/)) {
+    const match = raw.match(/^\s*(?:export\s+)?([^#=\s]+)\s*=(.*)$/);
+    if (!match) continue;
+    parsed[match[1]] = unquoteEnvValue(match[2].trim());
+  }
+  return parsed;
+}
+
+function unquoteEnvValue(value: string): string {
+  const quote = value[0];
+  if ((quote === '"' || quote === "'") && value.indexOf(quote, 1) > 0) {
+    return value.slice(1, value.indexOf(quote, 1));
+  }
+  return value.replace(/\s+#.*$/, "");
+}
+
 function loadEnvFile(env: NodeJS.ProcessEnv) {
   const envPath = join(process.cwd(), ".env");
   if (!existsSync(envPath)) return;
 
-  for (const line of readFileSync(envPath, "utf-8").split(/\r?\n/)) {
-    const match = line.match(/^([^#=]+)=(.*)$/);
-    if (!match) continue;
-    const key = match[1].trim();
-    if (env[key] === undefined) env[key] = match[2].trim();
+  const parsed = parseEnvFile(readFileSync(envPath, "utf-8"));
+  for (const [key, value] of Object.entries(parsed)) {
+    if (env[key] === undefined) env[key] = value;
   }
 }
 

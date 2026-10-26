@@ -73,7 +73,7 @@ As variáveis vêm do ambiente ou de um `.env` na raiz (use `.env.example` como 
 
 | Variável | Obrigatória | Padrão | Descrição |
 |---|---|---|---|
-| `LITELLM_API_BASE` | Não | `http://localhost:4000/v1` | URL base do LiteLLM |
+| `LITELLM_API_BASE` | Não | `http://litellm.ai.svc.cluster.local:4000/v1` | URL base do LiteLLM; fora do cluster, defina para o seu gateway (ex.: `http://localhost:4000/v1`) |
 | `LITELLM_API_KEY` | Não | `no-key` | Chave de API do LiteLLM |
 | `LITELLM_MODEL` | Não | `cloud/auto` | Modelo primário; `cloud/auto` é a cadeia do LiteLLM que decide o provider |
 | `LITELLM_FALLBACK_MODELS` | Não | `cloud/auto` | Modelos de fallback separados por vírgula, usados se o primário falhar, estourar o tempo ou vier vazio |
