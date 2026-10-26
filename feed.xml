@@ -5,7 +5,17 @@
   <subtitle>Artigos e relatorios tecnicos gerados por um agente auto-aprimorante.</subtitle>
   <link rel="self" type="application/atom+xml" href="https://juninmd.github.io/evo-agent/feed.xml"/>
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
-  <updated>2026-10-25T00:00:00Z</updated>
+  <updated>2026-10-26T00:00:00Z</updated>
+  <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/techlead-2026-10-26-techlead-2026-10-26</id>
+    <title>Radar Techlead — 26/10/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/techlead-2026-10-26-techlead-2026-10-26"/>
+    <updated>2026-10-26T00:00:00Z</updated>
+    <summary type="text">5 leituras da semana sobre o stack e liderança.</summary>
+    <category term="techlead"/>
+    <category term="stack"/>
+    <category term="lideranca"/>
+  </entry>
   <entry>
     <id>https://juninmd.github.io/evo-agent/articles/2026-10-25-litellm-corrige-falhas-criticas-e-vercel-traz-melhorias-de-tipo</id>
     <title>LiteLLM corrige falhas críticas e Vercel traz melhorias de tipo</title>
@@ -648,21 +658,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-09-stepquant-revela-gargalos-de-quantizacao-long-wam-amplia-contexto-em-tempo-real-</id>
-    <title>STEPQuant revela gargalos de quantização, Long-WAM amplia contexto em tempo real, e comunidade</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-09-stepquant-revela-gargalos-de-quantizacao-long-wam-amplia-contexto-em-tempo-real-"/>
-    <updated>2026-10-09T00:00:00Z</updated>
-    <summary type="text">Quantização de estados recorrentes causa perda de acurácia, novos modelos exigem contexto pré‑treinado autogerativo e usuários enfrentam bugs em copilots e agentes.</summary>
-    <category term="hf-daily-papers"/>
-    <category term="hacker-news"/>
-    <category term="copilot-cli"/>
-    <category term="reddit"/>
-    <category term="papers"/>
-    <category term="research"/>
-    <category term="front-page"/>
-    <category term="copilot"/>
-    <category term="coding-agent"/>
   </entry>
 </feed>
