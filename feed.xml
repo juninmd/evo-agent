@@ -23,6 +23,25 @@
     <category term="codex"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-27-radar-2026-10-27</id>
+    <title>Radar IA — 27/10/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-27-radar-2026-10-27"/>
+    <updated>2026-10-27T00:00:00Z</updated>
+    <summary type="text">Radar de 111 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="papers"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/articles/2026-10-26-cline-v4-1-26-e-nanbeige4-3-33b-lideram-atualizacoes-de-agentes-e-modelos-de-cod</id>
     <title>Cline v4.1.26 e Nanbeige4.3-33B lideram atualizações de agentes e modelos de código</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-26-cline-v4-1-26-e-nanbeige4-3-33b-lideram-atualizacoes-de-agentes-e-modelos-de-cod"/>
@@ -640,22 +659,5 @@
     <category term="techlead"/>
     <category term="stack"/>
     <category term="lideranca"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-11-gpt-6-1-sol-reduz-custos-da-asana-e-litellm-implementa-assinaturas-cosign</id>
-    <title>GPT-6.1 Sol reduz custos da Asana e LiteLLM implementa assinaturas Cosign</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-11-gpt-6-1-sol-reduz-custos-da-asana-e-litellm-implementa-assinaturas-cosign"/>
-    <updated>2026-10-11T00:00:00Z</updated>
-    <summary type="text">A Asana otimizou custos de agentes de navegador em 76 vezes utilizando o modelo Sol. Novas atualizações de segurança em Docker e extensões de monitoramento de créditos para Copilot alteram a operação de IDEs.</summary>
-    <category term="openai"/>
-    <category term="litellm"/>
-    <category term="github"/>
-    <category term="opencode"/>
-    <category term="copilot-cli"/>
-    <category term="reddit"/>
-    <category term="llm-framework"/>
-    <category term="copilot"/>
-    <category term="changelog"/>
-    <category term="coding-agent"/>
   </entry>
 </feed>
