@@ -24,6 +24,25 @@
     <category term="codex"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-28-radar-2026-10-28</id>
+    <title>Radar IA — 28/10/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-28-radar-2026-10-28"/>
+    <updated>2026-10-28T00:00:00Z</updated>
+    <summary type="text">Radar de 103 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="papers"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/articles/2026-10-27-gpt-6-1-terra-pro-treina-copilot-claude-code-evoluem-sob-nova-regulacao</id>
     <title>GPT‑6.1 Terra Pro Treina + Copilot &amp; Claude‑Code Evoluem sob Nova Regulação</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-27-gpt-6-1-terra-pro-treina-copilot-claude-code-evoluem-sob-nova-regulacao"/>
@@ -647,24 +666,5 @@
     <category term="claudecode"/>
     <category term="githubcopilot"/>
     <category term="codex"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-12-radar-2026-10-12</id>
-    <title>Radar IA — 12/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-12-radar-2026-10-12"/>
-    <updated>2026-10-12T00:00:00Z</updated>
-    <summary type="text">Radar de 89 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
-    <category term="radar"/>
-    <category term="ia"/>
-    <category term="trending"/>
-    <category term="benchmarks"/>
-    <category term="github"/>
-    <category term="models"/>
-    <category term="reddit"/>
-    <category term="hackernews"/>
-    <category term="releases"/>
-    <category term="vendors"/>
-    <category term="papers"/>
-    <category term="community"/>
   </entry>
 </feed>

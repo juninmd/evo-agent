@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 28/10/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>103 itens · 46 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>28/10/2026</strong></span><span>Coleta das últimas 24 horas</span><span>8 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1>OpenAI e ServiceNow expandem parceria enterprise</h1><p class="dek">modelos e agentes da OpenAI agora integrados ao ServiceNow e fluxos de trabalho do ServiceNow disponíveis no ChatGPT e Codex.</p>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>OpenAI e ServiceNow expandem parceria enterprise: modelos e agentes da OpenAI agora integrados ao ServiceNow e fluxos de trabalho do ServiceNow disponíveis no ChatGPT e Codex.</li><li>Gemini 4 Carbon lidera Índice Artificial Analysis: modelo top em ciberdefesa e coding, com acesso a partir de $2/$10 por mil tokens, segundo comunicado oficial.</li><li>OpenCode v1.19.5 corrige bug de TUI: requests com falha agora retornam erro em vez de deixar o chamador esperando, mudança crítica para produtividade em sessões longas.</li><li>GitHub Agentic Workflows GA: projeto de GitHub Next agora disponível estável, automatizando tarefas de reasonings como triagem de issues, análise de falhas CI e atualizações de documentação.</li><li>Claude Code v2.1.311 remove bloqueio rm em modo skip: atualização permite operação mais fluida em ambientes de coding agente, segundo shattered.io.</li><li>Vercel AI SDK @ai-sdk/xai v3.0.146 expõe costInUsdTicks em metadata de resposta: novo campo de custo em provedor XAI para melhor visibilidade de gastos.</li><li>DeepSeek-V4.1-Flash-1017 permanece top trending HF: 1017 sinal, 3375 likes e mais de 105M downloads, consolidado como referência image-text-to-text.</li><li>Qwen3.8-27B acumula 18536 likes e 7.5M downloads: forte presença na categoria image-text-to-text, mantendo-se entre os mais populares do dia.</li><li>MiniMax-M3.1-Flash lançado: novo modelo image-text-to-text com 413 likes e 11075 downloads, ingressando na frente de multimodal flash.</li><li>Flux-3-image-klein-comfy ganha destaque: 1853 likes e 750M downloads, liderando categoria image-to-image no momento.</li><li>LTX-2.5 da Lightricks: 9574 likes e 2.1M downloads, destaque em image-to-video com alta aceitação da comunidade.</li><li>RecursiveSI/flint: 971 likes e 10574 downloads, novo entrada text-generation trending com sinal 930.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Expansão da parceria OpenAI/ServiceNow traz modelos enterprise diretamente ao ChatGPT e Codex, sinalizando convergência entre assistants e ferramentas de automação de fluxo de trabalho.</p><p>Gemini 4 Carbon estreia com posicionamento de topo em ciberdefense e coding, cobrando estrutura de precificação por tokens que pode redefinir expectativas de custo em agentes de alto desempenho.</p><p>O bug corrigido no OpenCode v1.19.5 afeta diretamente desenvolvedores que utilizam a interface de linha de comando em sessões prolongadas, evitando hangs inesperados durante compacts ou navegação de contexto.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-github">
+<h2 id="desk-github">GitHub Trending <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/obra/superpowers" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/obra/superpowers" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>GitHub Trending (daily)</figcaption></figure><h3><a href="https://github.com/obra/superpowers">obra / superpowers</a></h3>
+<p>An agentic skills framework &amp; software development methodology that works. | ⭐ 306,422 | Lang: Shell <span class="meta">GitHub Trending (daily) · <b>306422</b></span></p></article>
+<ul class="brief"><li><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a> <span class="meta">GitHub Trending (daily-javascript) · <b>290861</b></span></li><li><a href="https://github.com/multica-ai/andrej-karpathy-skills">multica-ai / andrej-karpathy-skills</a> <span class="meta">GitHub Trending (weekly) · <b>225485</b></span></li><li><a href="https://github.com/anomalyco/opencode">anomalyco / opencode</a> <span class="meta">GitHub Trending (weekly) · <b>222374</b></span></li><li><a href="https://github.com/n8n-io/n8n">n8n-io / n8n</a> <span class="meta">GitHub Trending (daily-typescript) · <b>208850</b></span></li><li><a href="https://github.com/ollama/ollama">ollama / ollama</a> <span class="meta">GitHub Trending (daily-go) · <b>185082</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/deepseek-ai/DeepSeek-V4.1-Flash-1017.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017">deepseek-ai/DeepSeek-V4.1-Flash-1017</a></h3>
+<p>image-text-to-text · 3375 likes · 105667 downloads · trending 962 <span class="meta">HF Trending Models · <b>962</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/RecursiveSI/flint">RecursiveSI/flint</a> <span class="meta">HF Trending Models · <b>930</b></span></li><li><a href="https://huggingface.co/Nanbeige/Nanbeige4.3-33B">Nanbeige/Nanbeige4.3-33B</a> <span class="meta">HF Trending Models · <b>660</b></span></li><li><a href="https://huggingface.co/XHToken/Spark-X2.6-4B">XHToken/Spark-X2.6-4B</a> <span class="meta">HF Trending Models · <b>592</b></span></li><li><a href="https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy">black-forest-labs/flux-3-image-klein-comfy</a> <span class="meta">HF Trending Models · <b>411</b></span></li><li><a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> <span class="meta">HF Trending Models · <b>398</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xhmo1q/someone_built_a_32bit_riscv_cpu_directly_inside/">Reddit: Someone built a 32-bit RISC-V CPU directly inside Qwen&#39;s model weights so it can execute instructions internaly!</a></h3>
+<p>This might have implications for tool calling and computer use. Write-up: https://divagr.com/blog/qwenputer HF: https://huggingface.co/divagr1925/Qwen3.5-4B-Qwenputer Live demo:… <span class="meta">Reddit Post Signals (LocalLLaMA)</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/opencode/comments/1xi16kr/23_of_31_ai_models_have_a_cheaper_model_that/">23 of 31 AI models have a cheaper model that scores just as high. Here&#39;s the cheaper pick for each one.</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/opencode/comments/1xi1hok/opencode_2_consumes_more_than_opencode_1/">Opencode 2 consumes more $ than opencode 1</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/opencode/comments/1xi1osz/simple_deepseek_web_search_cli_written_in/">Simple DeepSeek web search cli written in TypeScript. Cheap + fast search tool for agents (built on DS web search API)</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/opencode/comments/1xi1tin/anyone_tried_ecc_in_opencode/">Anyone Tried ECC in opencode?</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/codex/comments/1xi0zcn/do_we_think_that_the_next_line_of_models_will_be/">Do we think that the next line of models will be better at video production / editing?</a> <span class="meta">Reddit: Codex</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/thomasunise/casecite" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/thomasunise/casecite" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/thomasunise/casecite">Harvey raised 500M for legal AI, I built the same and open sourced it</a></h3>
+<p>Harvey raised 500M for legal AI, I built the same and open sourced it | ⬆ 29 points | 💬 2 comments | by zztopisgreat <span class="meta">Hacker News · <b>33</b></span></p></article>
+<ul class="brief"><li><a href="https://www.wired.com/story/massive-leak-exposes-41000-homeland-security-workers-including-undercover-ice-agents/">Leak Exposes 41,000 Homeland Security Workers–Including Undercover ICE Agents</a> <span class="meta">Hacker News · <b>200</b></span></li><li><a href="https://surgehq.ai/blog/dayjob-tax">Dayjob: Tax – evaluating AI agents on 50 professional tax assignments</a> <span class="meta">Hacker News · <b>108</b></span></li><li><a href="https://cursor.com/blog/agent-sdk">The Agent SDK</a> <span class="meta">Hacker News · <b>96</b></span></li><li><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-carbon/">Gemini 4 Carbon</a> <span class="meta">Hacker News · <b>93</b></span></li><li><a href="https://religionnews.com/2026/10/26/in-a-first-a-humanist-granted-a-religious-exemption-from-using-ai/">Kentucky man becomes the first humanist granted religious exemption from AI</a> <span class="meta">Hacker News · <b>83</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anomalyco/opencode/releases/tag/process-daemon-v0.3.2" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anomalyco/opencode" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>OpenCode Releases</figcaption></figure><h3><a href="https://github.com/anomalyco/opencode/releases/tag/process-daemon-v0.3.2">process-daemon v0.3.2</a></h3>
+<p>opencode-pty 0.3.2 (protocol 7) from packages/process-daemon, published to npm as @opencode/pty@0.3.2. <span class="meta">OpenCode Releases</span></p></article>
+<ul class="brief"><li><a href="https://code.visualstudio.com/blogs/2026/10/28/vscode-wrapped">VS Code Wrapped: GitHub Universe 2026</a> <span class="meta">VSCode Updates</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.105">1.0.105</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-10-28-github-copilot-in-vs-code-universe-releases">GitHub Copilot in VS Code, Universe releases</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/vercel/ai/releases/tag/%40ai-sdk%2Fsandbox-vercel%401.0.167">@ai-sdk/sandbox-vercel@1.0.167</a> <span class="meta">Vercel AI SDK Releases</span></li><li><a href="https://github.com/ollama/ollama/releases/tag/v0.40.13-rc0">v0.40.13-rc0</a> <span class="meta">Ollama Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://openai.com/index/openai-servicenow-partnership-expansion">OpenAI and ServiceNow expand partnership across enterprise workflows</a></h3>
+<p>OpenAI and ServiceNow expand their partnership to bring OpenAI models and agents into ServiceNow and ServiceNow workflows into ChatGPT and Codex. <span class="meta">OpenAI Blog</span></p></article>
+<ul class="brief"><li><a href="https://devblogs.microsoft.com/foundry/microsoft-copilot-harness-in-foundry/">Introducing the Microsoft Copilot harness in Foundry Agent Service</a> <span class="meta">Microsoft Foundry Blog</span></li><li><a href="https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/">Gemini 4 Carbon: Our next frontier model</a> <span class="meta">Google DeepMind</span></li><li><a href="https://code.visualstudio.com/blogs/archive?tag=remote+development">Remote Development</a> <span class="meta">VSCode Blogs</span></li><li><a href="https://github.blog/news-insights/company-news/github-universe-2026-evolving-every-layer-of-the-stack/">GitHub Universe 2026: Evolving every layer of the stack</a> <span class="meta">GitHub Blog</span></li><li><a href="https://huggingface.co/blog/nvidia/nemotron-transcribe-granary">NVIDIA Nemotron 3.5 Transcribe and Granary v2: Intelligent Multilingual Transcription You Can Prompt and Adapt</a> <span class="meta">Hugging Face Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2610.33568" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2610.33568.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2610.33568">Trajectory2Gym: Decision-Grounded Compositional Interaction Synthesis for Tool-Use Agents</a></h3>
+<p>Successful tool-use trajectories are not necessarily useful supervision. Even successful interactions may underrepresent multi-step dependencies or contain actions that are unjustified by the information visible to the… <span class="meta">HF Daily Papers · <b>335</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2610.34662">StreamVibe: Proactive Video Agents for Evolving User Intent</a> <span class="meta">HF Daily Papers · <b>242</b></span></li><li><a href="https://huggingface.co/papers/2610.32285">Trial by Trace: Benchmarking AI Agent Harnesses for Reliability and Failure Attribution</a> <span class="meta">HF Daily Papers · <b>241</b></span></li><li><a href="https://huggingface.co/papers/2610.34467">DynaFlow: Learning Free-Form Multi-Agent Orchestration</a> <span class="meta">HF Daily Papers · <b>186</b></span></li><li><a href="https://huggingface.co/papers/2610.33966">InteractiveWorld: A Verifiable Human-Centric Environment for Building Better Interactive MLLM Assistants</a> <span class="meta">HF Daily Papers · <b>111</b></span></li><li><a href="https://huggingface.co/papers/2610.35845">Work Agents: Systems, Capabilities, and Optimization</a> <span class="meta">HF Daily Papers · <b>100</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://artificialanalysis.ai/models">Artificial Analysis: Gemini 4 Carbon assume a liderança do Índice de Inteligência</a></h3>
+<p>Índice de Inteligência Artificial Analysis (2026-10-28): liderança de Gemini 4 Carbon (High) (59.4). Líder em pesos abertos: DeepSeek V4.1 Flash 1017 (Max) (32.5). Mudanças no ranking: Novos no top 10: Gemini 4 Carbon… <span class="meta">Artificial Analysis · <b>95</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/kenwalger/four-ways-a-test-can-lie-to-you-2ibf">Four Ways a Test Can Lie to You</a> <span class="meta">Dev.to (ai) · <b>19</b></span></li><li><a href="https://dev.to/jamilxt/stop-coding-agents-from-trusting-downloads-build-a-workspace-preflight-1nff">Stop Coding Agents From Trusting Downloads: Build a Workspace Preflight</a> <span class="meta">Dev.to (agents) · <b>10</b></span></li><li><a href="https://dev.to/sascha-ms/how-to-write-tool-descriptions-for-ai-agents-5fd1">How to write tool descriptions for AI agents</a> <span class="meta">Dev.to (llm) · <b>9</b></span></li><li><a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxNUnllWG01c2NfbkdMV3c4SHZ0VWlXdm5yTF9nNjhIS0FhY0xkWG5EeUZ0Tlp1RHRXTUlWVHRNdWhKLVNILXpIYlR4aHpWYS1fWTdzVmd1SHA3U0hCQjlaYUxFSDFEZUowV2NpMWxGUjlTOGd1S2M4d0VuLVhXQndpU2pXcERJcXIzckpFV3hsRkJ4eFdqUjRGbW9yWlY0WDBTRkltTTVNS1JHSjE1SzJMVFJZcmFkTkxFandyTmtIOVZXMVRQWS1YUGIxRnItX3FrbzlYWk1jbkt5Zw?oc=5">The GitHub Copilot harness in Copilot Studio is now the Microsoft Copilot harness - Microsoft</a> <span class="meta">Google News (GitHub Copilot agent)</span></li><li><a href="https://latent.space/p/elorian/">Can Frontier Models See Past a Decoy? Elorian Tests Visual Reasoning</a> <span class="meta">Latent Space</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-10-28</span></footer>
+</div></body></html>
