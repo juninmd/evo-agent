@@ -1308,7 +1308,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
   let googleNewsSaved = 0;
   let googleNewsFailed = 0;
   const googleNewsTitles = new Set<string>();
-  for (const keyword of keywords) {
+  await mapLimit(keywords, 4, async (keyword) => {
     try {
       const queryUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(
         keyword,
@@ -1337,7 +1337,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
         `Google News search crawler failed for '${keyword}': ${(err as Error).message}`,
       );
     }
-  }
+  });
   metrics["Google News (keywords)"] = {
     saved: googleNewsSaved,
     failed: googleNewsFailed === keywords.length && keywords.length > 0,
@@ -1345,7 +1345,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
 
   let searxngSaved = 0;
   let searxngFailed = 0;
-  for (const keyword of keywords) {
+  await mapLimit(keywords, 3, async (keyword) => {
     try {
       const cleanKeyword = keyword.slice(0, 60).trim();
       const query = `(site:reddit.com OR site:x.com) "${cleanKeyword}"`;
@@ -1386,7 +1386,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
         `SearXNG failed for '${keyword.slice(0, 40)}': ${(err as Error).message}`,
       );
     }
-  }
+  });
   metrics["SearXNG (keywords)"] = {
     saved: searxngSaved,
     failed: searxngFailed === keywords.length && keywords.length > 0,

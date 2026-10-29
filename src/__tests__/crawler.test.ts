@@ -55,6 +55,13 @@ describe("crawler transformations", () => {
     expect(focusRetryDelayMs(3)).toBeNull();
   });
 
+  it("stops waiting once the run's shared wait budget is spent", () => {
+    // 4 focus communities x 2 sorts x 210s of retries used to overrun the 1h job deadline.
+    expect(focusRetryDelayMs(0, 210_000)).toBe(30_000);
+    expect(focusRetryDelayMs(1, 200_000)).toBeNull();
+    expect(focusRetryDelayMs(0, 240_000)).toBeNull();
+  });
+
   it("computes Hacker News engagement", () => {
     expect(hackerNewsEngagement(150, 45)).toBe(240);
     expect(hackerNewsEngagement(undefined, undefined)).toBe(0);

@@ -4,6 +4,7 @@ import { dirname } from "node:path";
 import Database from "better-sqlite3";
 import { config } from "../config.js";
 import type { OperationalStats } from "../observability/health.js";
+import { canonicalUrl, stripTracking } from "../utils/url.js";
 
 export interface Article {
   id: number;
@@ -273,6 +274,15 @@ function applyMigrations(db: Database.Database) {
       UNIQUE(article_url, source_url)
     );
 
+    -- Keyed by model too: vectors from different models are not comparable.
+    CREATE TABLE IF NOT EXISTS article_embeddings (
+      url TEXT NOT NULL,
+      model TEXT NOT NULL,
+      vector BLOB NOT NULL,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      PRIMARY KEY (url, model)
+    );
+
     CREATE INDEX IF NOT EXISTS idx_articles_crawled_at
       ON articles(crawled_at);
     CREATE INDEX IF NOT EXISTS idx_metric_events_recorded_at
@@ -304,6 +314,20 @@ function applyMigrations(db: Database.Database) {
       "ALTER TABLE articles ADD COLUMN engagement_score INTEGER DEFAULT 0",
     );
   }
+
+  // Dedup key, separate from url: url is the link readers click and must not
+  // be rewritten (dropping "www." breaks hosts that only resolve with it).
+  if (!articleColumns.some((c) => c.name === "url_key")) {
+    db.exec("ALTER TABLE articles ADD COLUMN url_key TEXT");
+  }
+  db.exec(
+    "CREATE INDEX IF NOT EXISTS idx_articles_url_key ON articles(url_key)",
+  );
+  const unkeyed = db
+    .prepare("SELECT id, url FROM articles WHERE url_key IS NULL")
+    .all() as Array<{ id: number; url: string }>;
+  const setKey = db.prepare("UPDATE articles SET url_key = ? WHERE id = ?");
+  for (const row of unkeyed) setKey.run(canonicalUrl(row.url), row.id);
 
   const publishedColumns = db
     .prepare("PRAGMA table_info(published_articles)")
@@ -460,7 +484,9 @@ let _urlExistsStmt: ReturnType<Database.Database["prepare"]> | null = null;
 
 function urlExistsStmt() {
   if (!_urlExistsStmt) {
-    _urlExistsStmt = stmt("SELECT 1 FROM articles WHERE url = ?");
+    _urlExistsStmt = stmt(
+      "SELECT 1 FROM articles WHERE url = ? OR url_key = ?",
+    );
   }
   return _urlExistsStmt;
 }
@@ -522,8 +548,8 @@ export const db = {
     // engagement instead of being silently ignored; crawl time stays the first
     // sighting so recency semantics are preserved.
     return stmt(
-      `INSERT INTO articles (title, source, url, summary, tags, engagement_score)
-       VALUES (@title, @source, @url, @summary, @tags, @engagement_score)
+      `INSERT INTO articles (title, source, url, url_key, summary, tags, engagement_score)
+       VALUES (@title, @source, @url, @url_key, @summary, @tags, @engagement_score)
        ON CONFLICT(url) DO UPDATE SET
          summary = excluded.summary,
          tags = excluded.tags,
@@ -531,7 +557,8 @@ export const db = {
     ).run({
       title: a.title,
       source: a.source,
-      url: a.url,
+      url: stripTracking(a.url),
+      url_key: canonicalUrl(a.url),
       summary: a.summary,
       tags: a.tags,
       engagement_score: a.engagement_score ?? 0,
@@ -609,7 +636,8 @@ export const db = {
   },
 
   urlExists(url: string): boolean {
-    return !!urlExistsStmt().get(url);
+    // Raw too: rows stored before url_key existed match by their URL.
+    return !!urlExistsStmt().get([url, canonicalUrl(url)]);
   },
 
   saveSnippet(s: Omit<Snippet, "id" | "created_at">) {
