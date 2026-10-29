@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 29/10/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>96 itens · 42 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>29/10/2026</strong></span><span>Coleta das últimas 24 horas</span><span>8 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1>OpenAI lançou Agents SDK v0.3, unificando o OpenAI Swarm e simplificando a orquestração de agentes para devs.</h1>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>OpenAI lançou Agents SDK v0.3, unificando o OpenAI Swarm e simplificando a orquestração de agentes para devs.</li><li>Vercel AI SDK @ai-sdk/workflow v2.0.89 graduatei LanguageModelStreamPart e filterActiveTools da experimental, promovendo estabilidade ao fluxo de trabalho.</li><li>Ollama v0.40.13 incluiu workaround para crash Metal unary em versões antigas do macOS, corrigindo estabilidade de execução local.</li><li>Process-daemon @opencode/pty v0.4.0 lançou suporte nativo a geração de imagem por padrão quando o provider conectado suporta modelos de imagem.</li><li>LiteLLM v1.105.7 assinou todas as imagens Docker com cosign, exigindo verificação via hash pinado para validade de artefato.</li><li>GitHub disponibilizou ranges de IP para webhooks da Meta API, permitindo atualizações de allowlist estática para entregas confiáveis.</li><li>Baseten lançou joey-1, modeloDecision de 2B open-weight que retorna probabilidades calibradas a $0,01 por 1M de tokens com latência P50 de 20ms.</li><li>Hacker News destacou que Claude Code gasta ~15–20% de tokens em uma status line de 3 palavras, apontando desperdício de eficiência.</li><li>Hugging Face trending liderou deepseek-ai/DeepSeek-V4.1-Flash-1017 com 116.770 downloads e sinal 919, consolidando cima em text-to-text.</li><li>GitHub Trending weeklyobra/superpowers acumula 307.870 ⭐ como framework agente Skills para metodologia desenvolvimento de software.</li><li>Reddit reportou que limites de uso do Codex Pro foram dobrados para Türkiye, com mudança de 5x para 25x usage no plano $200/mês.</li><li>OpenAI Blog publicou Model Spec atualizado com cinco valores centrais para guiar AI mais capaz toward sound judgment e human agency.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Mudança de preço/limite: Reddit confirma que plano Pro OpenAI agora oferece 25x usage (vs 10x anterior) no tier $200/mês, indicando reajuste de cota para regiões específicas.</p><p>Release de agente: OpenCode v2.2.2 habilita image generation por default quando provider suporta modelos imagem, removendo configuração experimental extra necessária.</p><p>Paper votado: HF Daily Papers &quot;Multiscale Policy Optimization for Long-Horizon LLM Agents&quot; (sinal 378) propõe otimização ancorada em turns para agentes de longa duração, endereçando variabilidade de critic values.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-github">
+<h2 id="desk-github">GitHub Trending <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/obra/superpowers" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/obra/superpowers" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>GitHub Trending (weekly)</figcaption></figure><h3><a href="https://github.com/obra/superpowers">obra / superpowers</a></h3>
+<p>An agentic skills framework &amp; software development methodology that works. | ⭐ 307,870 | Lang: Shell <span class="meta">GitHub Trending (weekly) · <b>307870</b></span></p></article>
+<ul class="brief"><li><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a> <span class="meta">GitHub Trending (daily-javascript) · <b>291750</b></span></li><li><a href="https://github.com/multica-ai/andrej-karpathy-skills">multica-ai / andrej-karpathy-skills</a> <span class="meta">GitHub Trending (weekly) · <b>225981</b></span></li><li><a href="https://github.com/anomalyco/opencode">anomalyco / opencode</a> <span class="meta">GitHub Trending (weekly) · <b>222753</b></span></li><li><a href="https://github.com/n8n-io/n8n">n8n-io / n8n</a> <span class="meta">GitHub Trending (daily-typescript) · <b>208915</b></span></li><li><a href="https://github.com/ollama/ollama">ollama / ollama</a> <span class="meta">GitHub Trending (daily-go) · <b>185141</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/deepseek-ai/DeepSeek-V4.1-Flash-1017.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017">deepseek-ai/DeepSeek-V4.1-Flash-1017</a></h3>
+<p>image-text-to-text · 3544 likes · 116770 downloads · trending 919 <span class="meta">HF Trending Models · <b>919</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/RecursiveSI/flint">RecursiveSI/flint</a> <span class="meta">HF Trending Models · <b>762</b></span></li><li><a href="https://huggingface.co/Nanbeige/Nanbeige4.3-33B">Nanbeige/Nanbeige4.3-33B</a> <span class="meta">HF Trending Models · <b>711</b></span></li><li><a href="https://huggingface.co/XHToken/Spark-X2.6-4B">XHToken/Spark-X2.6-4B</a> <span class="meta">HF Trending Models · <b>554</b></span></li><li><a href="https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash">MiniMaxAI/MiniMax-M3.1-Flash</a> <span class="meta">HF Trending Models · <b>422</b></span></li><li><a href="https://huggingface.co/ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF">ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF</a> <span class="meta">HF Trending Models · <b>410</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/AI_Agents/comments/1xisfiu/guide_for_building_research_ai_agents/">Reddit: guide for building research ai agents</a></h3>
+<p>i want to build an research searching ai agent which will handle the failures and to a program where you type a research-style question (e.g. “Compare the top 3 open-source vector databases for a startup”) and it plans,… <span class="meta">Reddit Post Signals (AI_Agents)</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/ChatGPTCoding/comments/1xg3k5z/claude_code_has_agent_teams_but_how_do_teams/">Reddit: Claude Code has agent teams, but how do teams collaborate when everyone uses a different AI?</a> <span class="meta">Reddit Post Signals (ChatGPTCoding)</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xit9g8/research_matching_claude_code_sonnet_55_design/">Research: Matching Claude Code + Sonnet 5.5 design quality with DeepSeek/GLM Flash models and a custom harness</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xiv58m/git_for_global_law_global_law_querable_in_git/">Git for Global Law: Global Law querable in Git</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xix35p/release_swift_15_flash_next_heretic_v2/">Release: Swift 1.5 Flash Next - Heretic v2 - ReverseEngineer</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xix61q/arguably_unethical_behavior_from_cohere/">Arguably unethical behavior from Cohere</a> <span class="meta">Reddit: LocalLLaMA</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/ZigEmbeddedGroup/microzig/blob/main/CODE_OF_CONDUCT.md" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/ZigEmbeddedGroup/microzig" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/ZigEmbeddedGroup/microzig/blob/main/CODE_OF_CONDUCT.md">MicroZig to Adopt Strict No LLM / No AI Policy</a></h3>
+<p>MicroZig to Adopt Strict No LLM / No AI Policy | ⬆ 35 points | 💬 35 comments | by paaloeye <span class="meta">Hacker News · <b>105</b></span></p></article>
+<ul class="brief"><li><a href="https://artificialanalysis.ai/articles/gemini-4-carbon-new-number-1">Gemini 4 Carbon is the new #1 on the Artificial Analysis Intelligence Index v5</a> <span class="meta">Hacker News · <b>306</b></span></li><li><a href="https://gist.github.com/flamerix-ai/c3905705cc4205e5de3011fa2e74efce">Claude Code burns ~15–20% of your tokens on a 3-word status line</a> <span class="meta">Hacker News · <b>184</b></span></li><li><a href="https://divagr.com/blog/qwenputer">Qwenputer: A functioning, deterministic RISC-V CPU inside Qwen3.5</a> <span class="meta">Hacker News · <b>112</b></span></li><li><a href="https://fig.blue/posts/duet-is-the-future/">Claude Duet is the future of chatbot interaction</a> <span class="meta">Hacker News · <b>102</b></span></li><li><a href="https://github.com/SheepSeb/tinyworldformer">A tiny world model running games on a Raspberry Pi Pico 2 W</a> <span class="meta">Hacker News · <b>60</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anomalyco/opencode/releases/tag/process-daemon-v0.4.0" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anomalyco/opencode" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>OpenCode Releases</figcaption></figure><h3><a href="https://github.com/anomalyco/opencode/releases/tag/process-daemon-v0.4.0">process-daemon v0.4.0</a></h3>
+<p>opencode-pty 0.4.0 (protocol 7) from packages/process-daemon, published to npm as @opencode/pty@0.4.0. <span class="meta">OpenCode Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.166.0">rust-v0.166.0</a> <span class="meta">Codex CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-10-28-repository-plugin-defaults-and-enterprise-plugin-controls-generally-available">Repository plugin defaults and enterprise plugin controls generally available</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/vercel/ai/releases/tag/%40ai-sdk%2Fworkflow%402.0.89">@ai-sdk/workflow@2.0.89</a> <span class="meta">Vercel AI SDK Releases</span></li><li><a href="https://github.com/ollama/ollama/releases/tag/v0.40.13">v0.40.13: llama.cpp: workaround Metal unary crash (#19372)</a> <span class="meta">Ollama Releases</span></li><li><a href="https://github.com/BerriAI/litellm/releases/tag/v1.105.7">v1.105.7</a> <span class="meta">LiteLLM Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://openai.com/index/ropes-gray-ai-diligence">How Ropes &amp; Gray is developing AI for transactional diligence</a></h3>
+<p>Ropes &amp; Gray is developing AI for transactional diligence with OpenAI. Lawyers review grouped documents, summaries, and reports before advising clients. <span class="meta">OpenAI Blog</span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/blog/mistral-large4">Welcome Le Chonk: Mistral Large 4 on Hugging Face</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://openai.com/index/updated-model-spec">An updated Model Spec for more capable and beneficial AI</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/announcing-project-protostar">Announcing Project ProtoStar: Making Publicly Funded Science AI-Ready</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://openai.com/index/how-we-detect-frontier-model-misalignment">How we detect frontier model misalignment</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/ibm-granite/granite-switch-4-1-1">Granite Switch 4.1.1 — Update models like you update software</a> <span class="meta">Hugging Face Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2610.35013" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2610.35013.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2610.35013">Multiscale Policy Optimization for Long-Horizon LLM Agents</a></h3>
+<p>Long-horizon LLM agents interact with their environments through complete assistant turns while generating each action token by token. We observe that critic values vary primarily across turns, motivating optimization… <span class="meta">HF Daily Papers · <b>378</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2610.34283">ChronoReplay: One Answer Interface Is Not Enough for Streaming Spatial Intelligence</a> <span class="meta">HF Daily Papers · <b>346</b></span></li><li><a href="https://huggingface.co/papers/2610.36077">The Trinity:Capability-Driven Recursive Self-Improvement for Multimodal Agents</a> <span class="meta">HF Daily Papers · <b>315</b></span></li><li><a href="https://huggingface.co/papers/2610.35864">VibeVideoBench: Evaluating Multimodal Agents on Code-Driven Video Generation</a> <span class="meta">HF Daily Papers · <b>173</b></span></li><li><a href="https://huggingface.co/papers/2610.37381">PDRVLA: A Vision-Language-Action Model with Physical Dynamics Representations</a> <span class="meta">HF Daily Papers · <b>137</b></span></li><li><a href="https://huggingface.co/papers/2610.34073">Memory Tax: Dissecting the Net Value of Agent Memory</a> <span class="meta">HF Daily Papers · <b>121</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.7.3" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/langchain-ai/langchain" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>LangChain Docs &amp; Updates</figcaption></figure><h3><a href="https://github.com/langchain-ai/langchain/releases/tag/langchain-core%3D%3D1.7.3">langchain-core==1.7.3</a></h3>
+<p>Changes since langchain-core==1.7.2 release(core): 1.7.3 ( 41564) <span class="meta">LangChain Docs &amp; Updates</span></p></article>
+<ul class="brief"><li><a href="https://dev.to/gramli/ghost-in-the-shell-can-a-log-file-hijack-an-ai-3gk">Ghost in the Shell: Can a Log File Hijack an AI?</a> <span class="meta">Dev.to (ai) · <b>73</b></span></li><li><a href="https://dev.to/wpwebinfotech/generative-ai-development-is-20-prompting-and-80-everything-else-59jb">Generative AI Development Is 20% Prompting and 80% Everything Else</a> <span class="meta">Dev.to (llm) · <b>37</b></span></li><li><a href="https://dev.to/katul1512/ai-agents-can-get-approval-and-still-do-the-wrong-thing-4oon">AI Agents Can Get Approval and Still Do the Wrong Thing</a> <span class="meta">Dev.to (agents) · <b>21</b></span></li><li><a href="https://news.google.com/rss/articles/CBMiygFBVV95cUxOU0JXRjV1cEtLRWZRQjJUanEySE0wRVc1WGZoYmlKalZlLThGaFlFdlZ2VEVSdmRfWjNYUDR1N21tdHJ1NG5oUDcwZGNsaW9TLUlpOC1zU0RHUTgzWkZ3eVlITnJSYThyWTNyQnpNaDRIMDBCNGdITFF3eFBWVTdhQ3oxU3lzTUFXZFpvc01MUndKS1NfOFFnSHhrQ2w3TlBhRE9ZVTVOa3Bob09UQTVzR0ZKTmktQWVEZFVJcFMtcDZVX3Z3Z0p2eWhR?oc=5">Claude Now Writes 90% Of Anthropic’s Code - Forbes</a> <span class="meta">Google News (Claude Code)</span></li><li><a href="https://www.marktechpost.com/2026/10/29/baseten-joey-1-2b-decision-model/">Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens</a> <span class="meta">MarkTechPost</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-10-29</span></footer>
+</div></body></html>
