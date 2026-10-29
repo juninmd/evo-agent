@@ -420,8 +420,17 @@ async function getRedditComments(postUrl: string): Promise<RedditComment[]> {
     .slice(0, REDDIT_COMMENTS_PER_POST);
 }
 
-export function focusRetryDelayMs(attempt: number): number | null {
-  return REDDIT_FOCUS_RETRY_DELAYS_MS[attempt] ?? null;
+/** Shared by every focus feed of a run: a blocked IP must not sleep through the job deadline. */
+const REDDIT_FOCUS_WAIT_BUDGET_MS = 240_000;
+let focusWaitedMs = 0;
+
+export function focusRetryDelayMs(
+  attempt: number,
+  waitedMs = 0,
+): number | null {
+  const delay = REDDIT_FOCUS_RETRY_DELAYS_MS[attempt];
+  if (delay === undefined) return null;
+  return waitedMs + delay <= REDDIT_FOCUS_WAIT_BUDGET_MS ? delay : null;
 }
 
 async function getFocusPostCandidates(
@@ -433,9 +442,12 @@ async function getFocusPostCandidates(
       return await getRedditPostCandidates(subreddit, sort);
     } catch (err) {
       const delay =
-        err instanceof RedditRateLimitError ? focusRetryDelayMs(attempt) : null;
+        err instanceof RedditRateLimitError
+          ? focusRetryDelayMs(attempt, focusWaitedMs)
+          : null;
       if (delay === null) throw err;
       const jittered = jitterDelay(delay);
+      focusWaitedMs += jittered;
       log.warn(
         `Reddit rate limited on focus r/${subreddit}; waiting ${jittered}ms before retry ${attempt + 1}`,
       );
@@ -582,6 +594,7 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
 
   let newCount = 0;
   let consecutiveRateLimits = 0;
+  focusWaitedMs = 0;
 
   // Reddit throttles by IP, so the focus communities are collected before
   // anything else instead of after 40 other subreddits.

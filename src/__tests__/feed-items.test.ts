@@ -5,6 +5,7 @@ import {
   isEmptyRelease,
   isPrereleaseTitle,
   selectFeedItems,
+  summarizeSourceContent,
 } from "../crawler/feed-items.js";
 import { rankDailyPapers } from "../crawler/hf-papers.js";
 
@@ -127,5 +128,27 @@ describe("Hugging Face daily papers", () => {
         { title: "path traversal", paper: { id: "../x", upvotes: 9 } },
       ]),
     ).toEqual([]);
+  });
+});
+
+describe("summarizeSourceContent", () => {
+  it("decodes named and numeric HTML entities instead of leaking them", () => {
+    expect(
+      summarizeSourceContent(
+        "<p>Tom &amp; Jerry&#8217;s &quot;AI&quot;&nbsp;launch &#x41;</p>",
+      ),
+    ).toBe('Tom & Jerry’s "AI" launch A');
+  });
+
+  it("drops script and style bodies, not just their tags", () => {
+    expect(
+      summarizeSourceContent(
+        "<style>.a{color:red}</style>Real text<script>var x=1</script> here",
+      ),
+    ).toBe("Real text here");
+  });
+
+  it("drops an out-of-range numeric entity instead of throwing", () => {
+    expect(summarizeSourceContent("bad &#99999999; ref")).toBe("bad ref");
   });
 });

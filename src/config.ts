@@ -77,6 +77,12 @@ function positiveNumber(env: Env, key: string, fallback: string): number {
   return value;
 }
 
+function cosineThreshold(env: Env, key: string, fallback: string): number {
+  const value = positiveNumber(env, key, fallback);
+  if (value > 1) throw new Error(`${key} must be in (0, 1]`);
+  return value;
+}
+
 function validUrl(env: Env, key: string, fallback: string): string {
   const value = env[key] ?? fallback;
   try {
@@ -198,6 +204,17 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
         env,
         "LITELLM_MAX_OUTPUT_TOKENS",
         "12000",
+      ),
+    },
+    // Semantic dedup is best-effort: an empty model, or a backend that fails,
+    // falls back to the lexical title match.
+    embedding: {
+      model: env.EMBEDDING_MODEL ?? "nomic-embed-text",
+      timeoutMs: positiveNumber(env, "EMBEDDING_TIMEOUT_MS", "20000"),
+      duplicateThreshold: cosineThreshold(
+        env,
+        "EMBEDDING_DUP_THRESHOLD",
+        "0.88",
       ),
     },
     crawlIntervalMinutes: positiveNumber(env, "CRAWL_INTERVAL_MINUTES", "40"),
