@@ -141,6 +141,14 @@ const REDDIT_COMMENTS_ENABLED = process.env.REDDIT_COMMENTS_ENABLED === "true";
 /** Hourly crawls never let the per-IP budget recover between sweeps. */
 const REDDIT_SIGNALS_MIN_INTERVAL_HOURS = 6;
 const REDDIT_SIGNALS_LAST_RUN_KEY = "reddit_signals_last_run";
+/** Where the previous capped sweep stopped in the non-focus tail. */
+const REDDIT_SIGNALS_CURSOR_KEY = "reddit_signals_cursor";
+/** The sweep must end well inside the 1h crawl job; a pass at 1.1s per request does not. */
+const REDDIT_SWEEP_BUDGET_MS = 20 * 60_000;
+
+export function redditSweepOutOfTime(startedAt: number, now = Date.now()) {
+  return now - startedAt >= REDDIT_SWEEP_BUDGET_MS;
+}
 /**
  * A manual/ad-hoc crawl run minutes after the hourly cron re-hits Reddit with
  * a cold per-process rate limiter, burning the still-throttled per-IP budget
@@ -456,14 +464,18 @@ async function getFocusPostCandidates(
   }
 }
 
-export function orderedCommunitySubreddits(): string[] {
+/** Focus first, always; `offset` rotates the rest so a capped sweep moves along. */
+export function orderedCommunitySubreddits(offset = 0): string[] {
+  const rest = REDDIT_COMMUNITY_SUBREDDITS.filter(
+    (subreddit) => !REDDIT_FOCUS_SUBREDDITS.has(subreddit),
+  );
+  const start = rest.length === 0 ? 0 : offset % rest.length;
   return [
     ...REDDIT_COMMUNITY_SUBREDDITS.filter((subreddit) =>
       REDDIT_FOCUS_SUBREDDITS.has(subreddit),
     ),
-    ...REDDIT_COMMUNITY_SUBREDDITS.filter(
-      (subreddit) => !REDDIT_FOCUS_SUBREDDITS.has(subreddit),
-    ),
+    ...rest.slice(start),
+    ...rest.slice(0, start),
   ];
 }
 
@@ -595,11 +607,21 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   let newCount = 0;
   let consecutiveRateLimits = 0;
   focusWaitedMs = 0;
+  const sweepStartedAt = Date.now();
+  const cursor = Number(db.getState(REDDIT_SIGNALS_CURSOR_KEY)) || 0;
+  let tailVisited = 0;
 
   // Reddit throttles by IP, so the focus communities are collected before
   // anything else instead of after 40 other subreddits.
-  for (const subreddit of orderedCommunitySubreddits()) {
+  for (const subreddit of orderedCommunitySubreddits(cursor)) {
+    if (redditSweepOutOfTime(sweepStartedAt)) {
+      log.warn(
+        "Reddit sweep hit its time budget; the rest resumes on the next sweep",
+      );
+      break;
+    }
     const plan = subredditPlan(subreddit);
+    if (!plan.focus) tailVisited++;
     const collected = await collectPostCandidates(plan);
     let throttled = collected.throttled;
     if (throttled) {
@@ -664,6 +686,7 @@ export async function crawlRedditCommunitySignals(): Promise<number> {
   // Only mark the sweep as done after it actually ran; a crash mid-crawl must
   // not lock the signals out for another REDDIT_SIGNALS_MIN_INTERVAL_HOURS.
   db.setState(REDDIT_SIGNALS_LAST_RUN_KEY, new Date().toISOString());
+  db.setState(REDDIT_SIGNALS_CURSOR_KEY, String(cursor + tailVisited));
 
   log.info(`Crawled Reddit community signals, ${newCount} new digests`);
   return newCount;

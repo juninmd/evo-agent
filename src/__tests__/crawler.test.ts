@@ -19,6 +19,7 @@ import {
   redditFeedDue,
   redditRateLimitDelayMs,
   redditSignalsDue,
+  redditSweepOutOfTime,
   subredditPlan,
 } from "../crawler/reddit.js";
 
@@ -32,6 +33,23 @@ describe("crawler transformations", () => {
       "vscode",
     ]);
     expect(new Set(ordered).size).toBe(ordered.length);
+  });
+
+  it("rotates only the non-focus tail so a capped sweep eventually covers it", () => {
+    const base = orderedCommunitySubreddits();
+    const rotated = orderedCommunitySubreddits(5);
+    expect(rotated.slice(0, 4)).toEqual(base.slice(0, 4));
+    expect(rotated[4]).toBe(base[4 + 5]);
+    expect([...rotated].sort()).toEqual([...base].sort());
+    expect(orderedCommunitySubreddits((base.length - 4) * 3)).toEqual(base);
+  });
+
+  it("caps the Reddit sweep by elapsed time", () => {
+    // The unbounded sweep never finished inside the 1h job deadline, so the
+    // last-run key was never written and every hourly crawl restarted it.
+    const start = 1_000_000;
+    expect(redditSweepOutOfTime(start, start + 19 * 60_000)).toBe(false);
+    expect(redditSweepOutOfTime(start, start + 20 * 60_000)).toBe(true);
   });
 
   it("collects more posts than it enriches with comments", () => {
