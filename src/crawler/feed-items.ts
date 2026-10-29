@@ -10,13 +10,44 @@ export type FeedItem = Pick<
   "title" | "link" | "isoDate" | "pubDate" | "contentSnippet" | "content"
 > & { summary?: string };
 
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  nbsp: " ",
+  ndash: "–",
+  mdash: "—",
+  hellip: "…",
+  lsquo: "‘",
+  rsquo: "’",
+  ldquo: "“",
+  rdquo: "”",
+};
+
+/** Feeds ship `&amp;`/`&#8217;` in content; unknown names stay as written. */
+function decodeEntities(text: string): string {
+  return text.replace(
+    /&(?:#(\d{1,10})|#[xX]([0-9a-fA-F]{1,8})|([a-zA-Z]+));/g,
+    (match, dec?: string, hex?: string, name?: string) => {
+      if (name) return NAMED_ENTITIES[name.toLowerCase()] ?? match;
+      const code = dec ? Number(dec) : Number.parseInt(hex ?? "", 16);
+      return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : " ";
+    },
+  );
+}
+
 export function summarizeSourceContent(value: string, maxLength = 800): string {
   return (
-    value
-      .replace(/```[\s\S]*?```/g, " ")
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-      .replace(/<[^>]+>/g, " ")
+    decodeEntities(
+      value
+        .replace(/```[\s\S]*?```/g, " ")
+        .replace(/<(script|style)\b[\s\S]*?<\/\1\s*>/gi, " ")
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+        .replace(/<[^>]+>/g, " "),
+    )
       .replace(/[#*`>|~]/g, " ")
       // Only emphasis underscores go; the ones inside identifiers are content.
       .replace(/(^|[^\w])_+|_+(?=[^\w]|$)/g, "$1 ")
