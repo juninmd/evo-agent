@@ -1,5 +1,6 @@
 import type { Article } from "../knowledge/store.js";
 import { isLaunchOfDay } from "../utils/launch.js";
+import { cosine } from "../utils/vector.js";
 import { modelKey } from "./model-key.js";
 
 // Above the ~144 ceiling of every other score term combined.
@@ -67,6 +68,7 @@ export interface RejectedArticle {
   article: Article;
   reason:
     | "duplicate-story"
+    | "repeat-story"
     | "low-information"
     | "bucket-limit"
     | "primary-limit"
@@ -108,6 +110,12 @@ export interface CurationPolicy {
   minRedditSignals?: number;
   /** Keep at least one post from each community in FOCUS_COMMUNITIES. */
   requireFocusCommunities?: boolean;
+  /** Embedding by article URL; absent entries fall back to the title match. */
+  vectors?: Map<string, Float32Array>;
+  /** Cosine at or above which two stories are the same one. */
+  semanticThreshold?: number;
+  /** Stories published in recent editions; close candidates are rejected as repeats. */
+  priorVectors?: Float32Array[];
   now?: number;
 }
 
@@ -275,15 +283,41 @@ export function curateArticles(
     }))
     .sort((a, b) => b.score - a.score);
 
+  const vectors = policy.vectors;
+  const threshold = policy.semanticThreshold ?? 0.88;
+  // A community thread about a release is a separate signal from the release
+  // itself (the community floors depend on it), so only like kinds merge.
+  const sameMeaning = (a: Article, b: Article): boolean => {
+    if (isCommunitySignal(a) !== isCommunitySignal(b)) return false;
+    const left = vectors?.get(a.url);
+    const right = vectors?.get(b.url);
+    return !!left && !!right && cosine(left, right) >= threshold;
+  };
+
   const deduped: CuratedArticle[] = [];
   for (const candidate of candidates) {
+    const candidateVector = vectors?.get(candidate.article.url);
+    // Community follow-ups and the launch of the day stay eligible even when
+    // yesterday's edition covered the announcement.
+    if (
+      candidateVector &&
+      !isCommunitySignal(candidate.article) &&
+      !isLaunchOfDay(candidate.article, new Date(policy.now ?? Date.now())) &&
+      policy.priorVectors?.some(
+        (prior) => cosine(prior, candidateVector) >= threshold,
+      )
+    ) {
+      rejected.push({ article: candidate.article, reason: "repeat-story" });
+      continue;
+    }
     const candidateModel = modelKey(candidate.article.title);
     const duplicate = deduped.find(
       (existing) =>
         titleSimilarity(existing.article.title, candidate.article.title) >=
           0.72 ||
         (candidateModel !== null &&
-          modelKey(existing.article.title) === candidateModel),
+          modelKey(existing.article.title) === candidateModel) ||
+        sameMeaning(existing.article, candidate.article),
     );
     if (duplicate) {
       duplicate.evidenceUrls.push(candidate.article.url);

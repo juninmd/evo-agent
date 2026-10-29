@@ -13,6 +13,14 @@ vi.mock("../utils/ai.js", () => ({
   ask: vi.fn().mockRejectedValue(new Error("LLM unavailable")),
 }));
 
+// Editions embed through the network; these tests cover the lexical path.
+vi.mock("../agent/semantic-dedup.js", () => ({
+  semanticContext: vi.fn().mockResolvedValue({
+    vectors: new Map(),
+    priorVectors: [],
+  }),
+}));
+
 function article(
   title: string,
   source: string,

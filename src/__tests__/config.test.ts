@@ -7,6 +7,21 @@ const baseEnv = {
 };
 
 describe("loadConfig", () => {
+  it("keeps the embedding dedup threshold in (0, 1]", () => {
+    const env = { ...baseEnv, RUN_MODE: "CRAWL" };
+    expect(loadConfig(env).embedding.duplicateThreshold).toBe(0.88);
+    expect(() => loadConfig({ ...env, EMBEDDING_DUP_THRESHOLD: "88" })).toThrow(
+      /EMBEDDING_DUP_THRESHOLD/,
+    );
+  });
+
+  it("disables embeddings with an empty model", () => {
+    expect(
+      loadConfig({ ...baseEnv, RUN_MODE: "CRAWL", EMBEDDING_MODEL: "" })
+        .embedding.model,
+    ).toBe("");
+  });
+
   it("allows CRAWL mode without publishing credentials", () => {
     const config = loadConfig({ ...baseEnv, RUN_MODE: "CRAWL" });
     expect(config.runMode).toBe("CRAWL");

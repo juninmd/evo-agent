@@ -33,6 +33,7 @@ import { extractEntityTags } from "./entities.js";
 import { getSystemPrompt } from "./improver.js";
 import { renderIntelligenceSection } from "./intelligence.js";
 import { expandEdition } from "./longform.js";
+import { semanticContext } from "./semantic-dedup.js";
 import type { GeneratedArticle, ReportPeriod } from "./types.js";
 
 export { renderEditorialDraft } from "./editorial-renderer.js";
@@ -158,9 +159,14 @@ export async function generateArticle(
       ];
   let recentArticles = uniqueByUrl(withoutExcluded(pool));
   const systemPrompt = getSystemPrompt();
+  // Same story under a different URL or outlet: the exact-URL exclusion misses it.
+  let semantic = await semanticContext(recentArticles, [...excluded]);
 
   const curate = () =>
     curateArticles(recentArticles, {
+      vectors: semantic.vectors,
+      priorVectors: semantic.priorVectors,
+      semanticThreshold: config.embedding.duplicateThreshold,
       perBucket: type === "weekly" ? 5 : 3,
       perBucketOverrides: { reddit: type === "weekly" ? 10 : 6 },
       max: maxHighlights,
@@ -191,6 +197,7 @@ export async function generateArticle(
         (article) => !knownUrls.has(article.url),
       ),
     ];
+    semantic = await semanticContext(recentArticles, [...excluded]);
     curation = curate();
   }
   let usedArticles = curation.selected.map((item) => item.article);
