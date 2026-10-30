@@ -531,4 +531,33 @@ describe("editorial curation", () => {
     expect(result.selected).toHaveLength(6);
     expect(result.selected.some((item) => item.primary)).toBe(true);
   });
+
+  it("keeps consecutive releases apart even when long titles clear the Jaccard bar", () => {
+    // 6 of 8 tokens in common = 0.75 >= 0.72, but 1.131 and 1.132 are different news.
+    const a = article(
+      "Visual Studio Code 1.131 traz novidades",
+      "Feed",
+      "https://a.example/131",
+    );
+    const b = article(
+      "Visual Studio Code 1.132 traz novidades",
+      "Feed",
+      "https://b.example/132",
+    );
+    expect(curateArticles([a, b]).selected).toHaveLength(2);
+  });
+
+  it("still merges the same title republished with the same version", () => {
+    const a = article(
+      "Visual Studio Code 1.131 traz novidades",
+      "Feed",
+      "https://a.example/1",
+    );
+    const b = article(
+      "Visual Studio Code 1.131 traz novidades!",
+      "Feed",
+      "https://b.example/2",
+    );
+    expect(curateArticles([a, b]).selected).toHaveLength(1);
+  });
 });
