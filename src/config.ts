@@ -209,7 +209,7 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
     // Semantic dedup is best-effort: an empty model, or a backend that fails,
     // falls back to the lexical title match.
     embedding: {
-      model: env.EMBEDDING_MODEL ?? "nomic-embed-text",
+      model: env.EMBEDDING_MODEL ?? "local/nomic-embed",
       timeoutMs: positiveNumber(env, "EMBEDDING_TIMEOUT_MS", "20000"),
       duplicateThreshold: cosineThreshold(
         env,

@@ -79,7 +79,7 @@ As variáveis vêm do ambiente ou de um `.env` na raiz (use `.env.example` como 
 | `LITELLM_FALLBACK_MODELS` | Não | `cloud/auto` | Modelos de fallback separados por vírgula, usados se o primário falhar, estourar o tempo ou vier vazio |
 | `LITELLM_MAX_OUTPUT_TOKENS` | Não | `12000` | Máximo de tokens de saída por requisição |
 | `LITELLM_TIMEOUT_MS` | Não | `300000` | Timeout da requisição ao LiteLLM, em milissegundos |
-| `EMBEDDING_MODEL` | Não | `nomic-embed-text` | Modelo de embedding (endpoint `/embeddings` do LiteLLM) usado para deduplicar notícias por significado, na edição e contra edições recentes; vazio desliga e volta à similaridade de título |
+| `EMBEDDING_MODEL` | Não | `local/nomic-embed` | Modelo de embedding (endpoint `/embeddings` do LiteLLM; no cluster, `local/nomic-embed` é o Ollama `ollama-embed`, sem cota) usado para deduplicar notícias por significado, na edição e contra edições recentes; vazio desliga e volta à similaridade de título |
 | `EMBEDDING_TIMEOUT_MS` | Não | `20000` | Timeout por lote de embeddings; falha abre um circuito de 5 min e o ciclo segue sem embeddings |
 | `EMBEDDING_DUP_THRESHOLD` | Não | `0.88` | Similaridade de cosseno a partir da qual duas notícias contam como a mesma história |
 | `TELEGRAM_BOT_TOKEN` | Sim | — | Token da Bot API do Telegram |

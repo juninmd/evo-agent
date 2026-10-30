@@ -15,6 +15,14 @@ describe("loadConfig", () => {
     );
   });
 
+  // The cluster's Gemini-backed nomic-embed-text sits in free-tier cooldown;
+  // local/nomic-embed is the Ollama alias with no quota.
+  it("defaults to the quota-free local embedding alias", () => {
+    expect(loadConfig({ ...baseEnv, RUN_MODE: "CRAWL" }).embedding.model).toBe(
+      "local/nomic-embed",
+    );
+  });
+
   it("disables embeddings with an empty model", () => {
     expect(
       loadConfig({ ...baseEnv, RUN_MODE: "CRAWL", EMBEDDING_MODEL: "" })
