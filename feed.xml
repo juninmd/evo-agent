@@ -7,6 +7,16 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-10-29T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/monthly-2026-10-29-relatorio-mensal-ranking-de-modelos-e-capacidades-avancadas-e-agentes-multimodai</id>
+    <title>Relatorio Mensal: Ranking de modelos e capacidades avançadas e Agentes multimodais com melhoria recursiva</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/monthly-2026-10-29-relatorio-mensal-ranking-de-modelos-e-capacidades-avancadas-e-agentes-multimodai"/>
+    <updated>2026-10-29T00:00:00Z</updated>
+    <summary type="text">O ranking de inteligência divulgado pela Artificial Analysis em 28 de outubro de 2026 mostra Gemini 4 Carbon High assumindo a liderança com 59,4 pontos, enquanto DeepSeek V4.1 Flash 1017 Max lidera os pesos abertos com 32,5 pontos. As mudanças de posição incluem a queda de Claude Opus 5.5 Max, Default Fallback do primeiro para o segundo lugar, o deslocamento de GPT6 Astra Max da segunda para a terceira posição e a presença de GPT6.1 Sol Max no topo do top 10 https://artificialanalysis.ai/modelsintelligence20261028.</summary>
+    <category term="monthly-report"/>
+    <category term="ai-agents"/>
+    <category term="llm"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-29-radar-2026-10-29</id>
     <title>Radar IA — 29/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-29-radar-2026-10-29"/>
@@ -647,21 +657,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-13-muse-wonder-entra-no-top-10-claude-code-expande-rastreio-vs-code-copilot-surpree</id>
-    <title>Muse Wonder entra no Top 10; Claude Code expande rastreio; VS Code Copilot surpreende com orçamento</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-13-muse-wonder-entra-no-top-10-claude-code-expande-rastreio-vs-code-copilot-surpree"/>
-    <updated>2026-10-13T00:00:00Z</updated>
-    <summary type="text">A Meta lança o modelo Muse Wonder com 1 M tokens de contexto, enquanto o Claude Code começa a registrar histórico de builds. O Copilot do VS Code revela erros de quota em ambientes empresariais.</summary>
-    <category term="openrouter"/>
-    <category term="artificial-analysis"/>
-    <category term="hf-daily-papers"/>
-    <category term="ollama"/>
-    <category term="reddit"/>
-    <category term="benchmark"/>
-    <category term="papers"/>
-    <category term="research"/>
-    <category term="local-ai"/>
   </entry>
 </feed>
