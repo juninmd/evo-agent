@@ -165,7 +165,7 @@ export async function generateArticle(
   const curate = () =>
     curateArticles(recentArticles, {
       vectors: semantic.vectors,
-      priorVectors: semantic.priorVectors,
+      priorStories: semantic.priorStories,
       semanticThreshold: config.embedding.duplicateThreshold,
       perBucket: type === "weekly" ? 5 : 3,
       perBucketOverrides: { reddit: type === "weekly" ? 10 : 6 },
