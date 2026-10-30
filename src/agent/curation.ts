@@ -115,7 +115,7 @@ export interface CurationPolicy {
   /** Cosine at or above which two stories are the same one. */
   semanticThreshold?: number;
   /** Stories published in recent editions; close candidates are rejected as repeats. */
-  priorVectors?: Float32Array[];
+  priorStories?: Array<{ title: string; vector: Float32Array }>;
   now?: number;
 }
 
@@ -134,6 +134,18 @@ export function parseTags(value: string): string[] {
   } catch {
     return [];
   }
+}
+
+/**
+ * Consecutive releases of one product ("VS Code 1.131" / "1.132") embed almost
+ * identically yet are different news; titles naming different versions never merge.
+ */
+export function conflictingVersions(left: string, right: string): boolean {
+  const versions = (title: string) =>
+    new Set(title.match(/\d+(?:\.\d+)+/g) ?? []);
+  const a = versions(left);
+  const b = versions(right);
+  return a.size > 0 && b.size > 0 && ![...a].some((version) => b.has(version));
 }
 
 export function normalizeTitle(title: string): string {
@@ -289,6 +301,7 @@ export function curateArticles(
   // itself (the community floors depend on it), so only like kinds merge.
   const sameMeaning = (a: Article, b: Article): boolean => {
     if (isCommunitySignal(a) !== isCommunitySignal(b)) return false;
+    if (conflictingVersions(a.title, b.title)) return false;
     const left = vectors?.get(a.url);
     const right = vectors?.get(b.url);
     return !!left && !!right && cosine(left, right) >= threshold;
@@ -303,8 +316,10 @@ export function curateArticles(
       candidateVector &&
       !isCommunitySignal(candidate.article) &&
       !isLaunchOfDay(candidate.article, new Date(policy.now ?? Date.now())) &&
-      policy.priorVectors?.some(
-        (prior) => cosine(prior, candidateVector) >= threshold,
+      policy.priorStories?.some(
+        (prior) =>
+          cosine(prior.vector, candidateVector) >= threshold &&
+          !conflictingVersions(prior.title, candidate.article.title),
       )
     ) {
       rejected.push({ article: candidate.article, reason: "repeat-story" });

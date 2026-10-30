@@ -97,7 +97,7 @@ describe("curateArticles with embeddings", () => {
     ]);
     const result = curateArticles([a, b], {
       vectors,
-      priorVectors: [v(1, 0.05)],
+      priorStories: [{ title: "Historia anterior", vector: v(1, 0.05) }],
     });
     expect(result.selected.map((s) => s.article.url)).toEqual([b.url]);
     expect(result.rejected).toEqual([{ article: a, reason: "repeat-story" }]);
@@ -125,9 +125,47 @@ describe("curateArticles with embeddings", () => {
     const vectors = new Map([[thread.url, v(1, 0)]]);
     const result = curateArticles([thread], {
       vectors,
-      priorVectors: [v(1, 0)],
+      priorStories: [{ title: "Historia anterior", vector: v(1, 0) }],
     });
     expect(result.selected).toHaveLength(1);
+  });
+
+  it("never treats consecutive releases of one product as the same story", () => {
+    // Real pairs from the corpus: neural and hashed vectors both score them ~0.9+.
+    const v131 = article(
+      "Visual Studio Code 1.131",
+      "https://code.example/131",
+    );
+    const v132 = article(
+      "Visual Studio Code 1.132",
+      "https://code.example/132",
+    );
+    const vectors = new Map([
+      [v131.url, v(1, 0)],
+      [v132.url, v(1, 0.001)],
+    ]);
+    expect(curateArticles([v131, v132], { vectors }).selected).toHaveLength(2);
+    const repeat = curateArticles([v132], {
+      vectors,
+      priorStories: [{ title: v131.title, vector: v(1, 0) }],
+    });
+    expect(repeat.selected).toHaveLength(1);
+  });
+
+  it("still merges a rewording that carries the same version", () => {
+    const x = article(
+      "Claude Code 2.1 chega com novo modo",
+      "https://x.example/1",
+    );
+    const y = article(
+      "Anthropic libera Claude Code 2.1",
+      "https://y.example/2",
+    );
+    const vectors = new Map([
+      [x.url, v(1, 0)],
+      [y.url, v(1, 0.001)],
+    ]);
+    expect(curateArticles([x, y], { vectors }).selected).toHaveLength(1);
   });
 
   it("behaves as before when there are no vectors", () => {
@@ -194,7 +232,8 @@ describe("semanticContext", () => {
     const ctx = await semanticContext([cand], [used.url], async (t) =>
       t.map(() => v(5, 5)),
     );
-    expect(ctx.priorVectors).toHaveLength(1);
+    expect(ctx.priorStories).toHaveLength(1);
+    expect(ctx.priorStories[0].title).toBe(used.title);
     expect(ctx.vectors.has(cand.url)).toBe(true);
   });
 });

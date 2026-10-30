@@ -17,7 +17,7 @@ vi.mock("../utils/ai.js", () => ({
 vi.mock("../agent/semantic-dedup.js", () => ({
   semanticContext: vi.fn().mockResolvedValue({
     vectors: new Map(),
-    priorVectors: [],
+    priorStories: [],
   }),
 }));
 

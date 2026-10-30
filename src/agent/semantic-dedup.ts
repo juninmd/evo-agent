@@ -13,12 +13,12 @@ export type Embed = (texts: string[]) => Promise<Float32Array[] | null>;
 export interface SemanticContext {
   vectors: Map<string, Float32Array>;
   /** Vectors of stories already published recently; a candidate close to one is a repeat. */
-  priorVectors: Float32Array[];
+  priorStories: Array<{ title: string; vector: Float32Array }>;
 }
 
 export const EMPTY_SEMANTIC: SemanticContext = {
   vectors: new Map(),
-  priorVectors: [],
+  priorStories: [],
 };
 
 const BATCH_SIZE = 64;
@@ -68,9 +68,9 @@ export async function semanticContext(
   if (!embeddingsEnabled()) return EMPTY_SEMANTIC;
   const prior = getArticlesByUrls(recentlyUsedUrls);
   const vectors = await vectorsFor([...candidates, ...prior], embed);
-  const priorVectors = prior.flatMap((article) => {
+  const priorStories = prior.flatMap((article) => {
     const vector = vectors.get(article.url);
-    return vector ? [vector] : [];
+    return vector ? [{ title: article.title, vector }] : [];
   });
-  return { vectors, priorVectors };
+  return { vectors, priorStories };
 }
