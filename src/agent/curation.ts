@@ -328,8 +328,12 @@ export function curateArticles(
     const candidateModel = modelKey(candidate.article.title);
     const duplicate = deduped.find(
       (existing) =>
-        titleSimilarity(existing.article.title, candidate.article.title) >=
-          0.72 ||
+        (titleSimilarity(existing.article.title, candidate.article.title) >=
+          0.72 &&
+          !conflictingVersions(
+            existing.article.title,
+            candidate.article.title,
+          )) ||
         (candidateModel !== null &&
           modelKey(existing.article.title) === candidateModel) ||
         sameMeaning(existing.article, candidate.article),
