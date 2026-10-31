@@ -7,6 +7,23 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-10-30T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-10-30-langgraph-1-2-19-corrige-streaming-e-opencode-v2-2-5-adiciona-shortcuts-de-workt</id>
+    <title>LangGraph 1.2.19 corrige streaming e OpenCode v2.2.5 adiciona shortcuts de worktree</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-30-langgraph-1-2-19-corrige-streaming-e-opencode-v2-2-5-adiciona-shortcuts-de-workt"/>
+    <updated>2026-10-30T00:00:00Z</updated>
+    <summary type="text">Atualizações de SDK corrigem reconexão SSE e preservação de cursor; agente de terminal lança atalhos para worktree e shell mode. Relatos de usuários indicam regressão no modo voz do Codex e limites de uso confusos no ChatGPT Plus.</summary>
+    <category term="langgraph"/>
+    <category term="opencode"/>
+    <category term="reddit"/>
+    <category term="hacker-news"/>
+    <category term="hf-daily-papers"/>
+    <category term="openai"/>
+    <category term="agents"/>
+    <category term="coding-agent"/>
+    <category term="codex"/>
+    <category term="vscode"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-30-radar-2026-10-30</id>
     <title>Radar IA — 30/10/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-30-radar-2026-10-30"/>
@@ -641,21 +658,5 @@
     <category term="opencode"/>
     <category term="boas-praticas"/>
     <category term="dicas"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-14-gemini-4-argon-agentswe-e-ajustes-de-seguranca-em-copilot-e-claude-code</id>
-    <title>Gemini 4 Argon, AgentSWE, e Ajustes de Segurança em Copilot e Claude Code</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-14-gemini-4-argon-agentswe-e-ajustes-de-seguranca-em-copilot-e-claude-code"/>
-    <updated>2026-10-14T00:00:00Z</updated>
-    <summary type="text">O Google lança seu modelo de raciocínio mais potente, enquanto o GitHub e o Anthropic continuam refinando controles de acesso e personalização de agentes. Usuários reportam migrações forçadas e ajustes emLint e inline suggestions.</summary>
-    <category term="openrouter"/>
-    <category term="hf-daily-papers"/>
-    <category term="github"/>
-    <category term="copilot-cli"/>
-    <category term="reddit"/>
-    <category term="papers"/>
-    <category term="research"/>
-    <category term="copilot"/>
-    <category term="changelog"/>
   </entry>
 </feed>
