@@ -7,6 +7,23 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-11-01T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/weekly-2026-11-01-vibegameframework-e-coderabbit-impulsionam-criacao-de-jogos-e-seguranca-em-codig</id>
+    <title>VibeGameFramework e CodeRabbit impulsionam criação de jogos e segurança em código</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/weekly-2026-11-01-vibegameframework-e-coderabbit-impulsionam-criacao-de-jogos-e-seguranca-em-codig"/>
+    <updated>2026-11-01T00:00:00Z</updated>
+    <summary type="text">O lançamento do VibeGame permite a criação de jogos 2D inteiramente por linguagem natural, enquanto o CodeRabbit usa GPT-6.1 Sol para mapear riscos de segurança em bases de código complexas.</summary>
+    <category term="weekly-report"/>
+    <category term="hf-daily-papers"/>
+    <category term="hacker-news"/>
+    <category term="openai"/>
+    <category term="reddit"/>
+    <category term="github"/>
+    <category term="papers"/>
+    <category term="research"/>
+    <category term="front-page"/>
+    <category term="claudecode"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/biweekly-2026-11-01-relatorio-quinzenal-arquiteturas-de-agentes-e-novas-direcoes-de-modelos</id>
     <title>Relatório Quinzenal: Arquiteturas de Agentes e Novas Direções de Modelos</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/biweekly-2026-11-01-relatorio-quinzenal-arquiteturas-de-agentes-e-novas-direcoes-de-modelos"/>
@@ -646,24 +663,5 @@
     <category term="google"/>
     <category term="githubcopilot"/>
     <category term="claudecode"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-15-radar-2026-10-15</id>
-    <title>Radar IA — 15/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-15-radar-2026-10-15"/>
-    <updated>2026-10-15T00:00:00Z</updated>
-    <summary type="text">Radar de 108 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
-    <category term="radar"/>
-    <category term="ia"/>
-    <category term="trending"/>
-    <category term="benchmarks"/>
-    <category term="github"/>
-    <category term="models"/>
-    <category term="reddit"/>
-    <category term="hackernews"/>
-    <category term="releases"/>
-    <category term="vendors"/>
-    <category term="papers"/>
-    <category term="community"/>
   </entry>
 </feed>
