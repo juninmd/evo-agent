@@ -23,6 +23,25 @@
     <category term="chinese"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-11-02-radar-2026-11-02</id>
+    <title>Radar IA — 02/11/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-02-radar-2026-11-02"/>
+    <updated>2026-11-02T00:00:00Z</updated>
+    <summary type="text">Radar de 91 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="papers"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/techlead-2026-11-02-techlead-2026-11-02</id>
     <title>Radar Techlead — 02/11/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/techlead-2026-11-02-techlead-2026-11-02"/>
@@ -637,20 +656,5 @@
     <category term="openai"/>
     <category term="claudecode"/>
     <category term="vscode"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-17-deepseek-v4-1-flash-leva-ia-multimodal-a-nova-linha-de-referencia</id>
-    <title>DeepSeek V4.1 Flash leva IA multimodal a nova linha de referência</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-17-deepseek-v4-1-flash-leva-ia-multimodal-a-nova-linha-de-referencia"/>
-    <updated>2026-10-17T00:00:00Z</updated>
-    <summary type="text">Modelo DeepSeek desbloqueia vídeo, áudio e linguagem com 1M tokens, enquanto o Claude Code aprimora revisão automática e o GitHub Copilot ajusta modo interativo em tempo real.</summary>
-    <category term="hf-trending-models"/>
-    <category term="reddit"/>
-    <category term="langgraph"/>
-    <category term="huggingface"/>
-    <category term="claudecode"/>
-    <category term="codex"/>
-    <category term="vscode"/>
-    <category term="agents"/>
   </entry>
 </feed>
