@@ -7,6 +7,20 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-11-01T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-11-01-claude-opus-5-6-e-jogo-game-off-shift-influenciam-roadmap-de-ia</id>
+    <title>Claude Opus 5.6 e jogo Game Off SHIFT influenciam roadmap de IA</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-11-01-claude-opus-5-6-e-jogo-game-off-shift-influenciam-roadmap-de-ia"/>
+    <updated>2026-11-01T00:00:00Z</updated>
+    <summary type="text">Uma nova geração de modelos de decisão entra em fase de testes enquanto a comunidade celebra o tema SHIFT no Game Off. Esses anúncios e relatos de usuários revelam desafios de integração e limitações de custo.</summary>
+    <category term="github"/>
+    <category term="reddit"/>
+    <category term="developer"/>
+    <category term="claudecode"/>
+    <category term="copilot"/>
+    <category term="codex"/>
+    <category term="openai"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-11-01-radar-2026-11-01</id>
     <title>Radar IA — 01/11/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-01-radar-2026-11-01"/>
@@ -646,24 +660,5 @@
     <category term="papers"/>
     <category term="research"/>
     <category term="copilot"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-16-radar-2026-10-16</id>
-    <title>Radar IA — 16/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-16-radar-2026-10-16"/>
-    <updated>2026-10-16T00:00:00Z</updated>
-    <summary type="text">Radar de 105 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
-    <category term="radar"/>
-    <category term="ia"/>
-    <category term="trending"/>
-    <category term="benchmarks"/>
-    <category term="github"/>
-    <category term="models"/>
-    <category term="reddit"/>
-    <category term="hackernews"/>
-    <category term="releases"/>
-    <category term="vendors"/>
-    <category term="papers"/>
-    <category term="community"/>
   </entry>
 </feed>
