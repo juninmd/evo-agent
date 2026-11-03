@@ -24,6 +24,25 @@
     <category term="claude"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-11-03-radar-2026-11-03</id>
+    <title>Radar IA — 03/11/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-03-radar-2026-11-03"/>
+    <updated>2026-11-03T00:00:00Z</updated>
+    <summary type="text">Radar de 106 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="github"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="vendors"/>
+    <category term="papers"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/articles/2026-11-02-falha-de-uso-de-computador-no-codex-macos-apos-atualizacao-e-consumo-elevado-de-</id>
     <title>Falha de uso de computador no Codex macOS após atualização e consumo elevado de tokens no pi agent</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-11-02-falha-de-uso-de-computador-no-codex-macos-apos-atualizacao-e-consumo-elevado-de-"/>
@@ -639,23 +658,5 @@
     <category term="llm-framework"/>
     <category term="codex"/>
     <category term="vscode"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-18-radar-2026-10-18</id>
-    <title>Radar IA — 18/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-18-radar-2026-10-18"/>
-    <updated>2026-10-18T00:00:00Z</updated>
-    <summary type="text">Radar de 65 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Comunidade e produtos.</summary>
-    <category term="radar"/>
-    <category term="ia"/>
-    <category term="trending"/>
-    <category term="benchmarks"/>
-    <category term="github"/>
-    <category term="models"/>
-    <category term="reddit"/>
-    <category term="hackernews"/>
-    <category term="releases"/>
-    <category term="vendors"/>
-    <category term="community"/>
   </entry>
 </feed>
