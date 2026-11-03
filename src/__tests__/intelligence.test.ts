@@ -447,3 +447,38 @@ describe("crawlArtificialAnalysisIntelligence", () => {
     expect(saveArticle).not.toHaveBeenCalled();
   });
 });
+
+describe("renderIntelligenceSection onlyWhenChanged", () => {
+  it("omits an unchanged ranking and keeps a changed one", async () => {
+    const models = [
+      {
+        slug: "a",
+        name: "Model A",
+        creator: "X",
+        intelligenceIndex: 50,
+        rank: 1,
+        isOpenWeights: false,
+      },
+    ] as never;
+    const same = {
+      hasChanges: false,
+      summary: "Sem alterações",
+      modelChanges: [],
+    } as never;
+    const moved = {
+      hasChanges: true,
+      summary: "Mudanças",
+      modelChanges: [],
+    } as never;
+    expect(
+      await renderIntelligenceSection(undefined, models, same, {
+        onlyWhenChanged: true,
+      }),
+    ).toBe("");
+    expect(
+      await renderIntelligenceSection(undefined, models, moved, {
+        onlyWhenChanged: true,
+      }),
+    ).toContain("Índice de Inteligência");
+  });
+});

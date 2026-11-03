@@ -34,6 +34,7 @@ import { getSystemPrompt } from "./improver.js";
 import { renderIntelligenceSection } from "./intelligence.js";
 import { expandEdition } from "./longform.js";
 import { semanticContext } from "./semantic-dedup.js";
+import { groundDraftFraming } from "./title-grounding.js";
 import type { GeneratedArticle, ReportPeriod } from "./types.js";
 
 export { renderEditorialDraft } from "./editorial-renderer.js";
@@ -284,6 +285,14 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
   draft = await expandEdition(ask, draft, usedArticles, period);
 
   const articleBody = renderEditorialDraft(draft, usedArticles, period);
+  // The framing was written before expansion dropped or rewrote highlights.
+  const grounded = groundDraftFraming(draft, articleBody);
+  if (grounded.replaced.length > 0) {
+    log.warn(
+      `Ungrounded ${grounded.replaced.join(" and ")} replaced from published highlights`,
+    );
+    draft = grounded.draft;
+  }
   const referencedArticles = articlesFromDraft(draft, usedArticles);
   const evidence = draft.highlights.flatMap((highlight) => {
     const article = usedArticles[highlight.sourceIndex];
@@ -306,7 +315,12 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
     ...new Set([...entityTags, ...buildTagsFromGroups(groups)]),
   ].slice(0, 10);
   // Optional enrichment: a ranking outage must not cost the whole edition.
-  const intelligence = await renderIntelligenceSection().catch((err) => {
+  const intelligence = await renderIntelligenceSection(
+    undefined,
+    undefined,
+    undefined,
+    { onlyWhenChanged: true },
+  ).catch((err) => {
     log.warn(`Intelligence section skipped: ${(err as Error).message}`);
     return "";
   });

@@ -245,6 +245,9 @@ function editorialScore(
   );
 }
 
+const EVENT_PROMO =
+  /\b(game jam|game off|hackathon|webinar|giveaway|sweepstakes|call for (papers|speakers)|save the date|register now|inscri[cç][õo]es abertas)\b/i;
+
 export function curateArticles(
   articles: Article[],
   policy: CurationPolicy = {},
@@ -255,6 +258,11 @@ export function curateArticles(
   const rejected: RejectedArticle[] = [];
   const informative = articles.filter((article) => {
     const summary = article.summary?.trim() ?? "";
+    // Jams, webinars and giveaways say nothing a reader can act on.
+    if (EVENT_PROMO.test(article.title)) {
+      rejected.push({ article, reason: "low-information" });
+      return false;
+    }
     // Launch catalogs often ship a one-line description; the launch is still the story.
     if (isLaunchOfDay(article, new Date(policy.now ?? Date.now()))) return true;
     if (
