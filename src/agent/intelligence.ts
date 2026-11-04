@@ -107,6 +107,7 @@ export async function renderIntelligenceSection(
   now = new Date(),
   customModels?: IntelligenceModelRecord[],
   customDiff?: IntelligenceDiff,
+  options: { onlyWhenChanged?: boolean } = {},
 ): Promise<string> {
   let models = customModels;
   let diff = customDiff;
@@ -146,6 +147,9 @@ export async function renderIntelligenceSection(
   if (!diff) {
     diff = diffIntelligenceSnapshots(models, null);
   }
+
+  // An identical top-10 table every day is filler, not news.
+  if (options.onlyWhenChanged && !diff.hasChanges) return "";
 
   return [
     "## Índice de Inteligência (Artificial Analysis)",

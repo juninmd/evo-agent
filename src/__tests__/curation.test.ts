@@ -561,3 +561,24 @@ describe("editorial curation", () => {
     expect(curateArticles([a, b]).selected).toHaveLength(1);
   });
 });
+
+describe("event and promo filter", () => {
+  it("rejects game jams and webinars as low-information", () => {
+    const base = {
+      id: 1,
+      source: "GitHub Blog",
+      url: "https://github.blog/a",
+      summary: "x".repeat(120),
+      tags: "[]",
+      crawled_at: new Date().toISOString(),
+      engagement_score: 0,
+    } as never;
+    const jam = {
+      ...(base as object),
+      title: "Game Off 2026: The theme is SHIFT",
+    } as never;
+    const result = curateArticles([jam]);
+    expect(result.selected).toHaveLength(0);
+    expect(result.rejected[0]?.reason).toBe("low-information");
+  });
+});

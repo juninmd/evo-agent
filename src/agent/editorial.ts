@@ -19,6 +19,8 @@ export interface EditorialHighlight {
   whatHappened: string;
   whyItMatters: string;
   evidence: string;
+  /** 1-5: how much a reader can act on this item. Below 3 is pruned when quotas allow. */
+  utility?: number;
   /** Long-form prose produced by the expansion pass. Absent in the agenda draft. */
   analysis?: string;
 }
@@ -107,6 +109,41 @@ export function editorialPeriod(articles: Article[]): string {
   return first === last ? first : `${first} a ${last}`;
 }
 
+// "Equipes devem revisar X" fits any news item; it names no version, flag, cost or component.
+const GENERIC_IMPACT =
+  /\b(devem|precisam|deveriam)\s+(revisar|atualizar|avaliar|monitorar|acompanhar|considerar)\b/i;
+const CONCRETE_DETAIL = /`|\d/;
+
+export function isGenericImpact(text: string): boolean {
+  return GENERIC_IMPACT.test(text) && !CONCRETE_DETAIL.test(text);
+}
+
+function fold(text: string): string {
+  return text.toLowerCase().normalize("NFD").replace(/\p{M}/gu, "");
+}
+
+/**
+ * Numbers and mid-headline proper names that the cited source never mentions.
+ * The first word is skipped: sentence case capitalizes ordinary words there.
+ */
+export function ungroundedHeadlineTerms(
+  headline: string,
+  source: Article,
+): string[] {
+  const corpus = fold(`${source.title} ${source.summary} ${source.source}`);
+  const words = headline
+    .split(/\s+/)
+    .map((w) => w.replace(/^[("“'`]+|[)"”'`.,;:!?]+$/g, ""));
+  const numbers = (headline.match(/\d[\d.,]*/g) ?? [])
+    .map((n) => n.replace(/[.,]+$/, ""))
+    .filter((n) => !corpus.includes(n));
+  const names = words
+    .slice(1)
+    .filter((w) => /^\p{Lu}/u.test(w) && w.length >= 3 && !/\d/.test(w))
+    .filter((w) => !corpus.includes(fold(w)));
+  return [...numbers, ...names];
+}
+
 export function validateEditorialDraft(
   draft: EditorialDraft,
   sources: Article[],
@@ -144,6 +181,20 @@ export function validateEditorialDraft(
       highlight.whyItMatters.trim().length < 30
     ) {
       errors.push(`highlight ${index + 1} lacks grounded detail`);
+    }
+    const cited = sources[highlight.sourceIndex];
+    if (
+      cited &&
+      ungroundedHeadlineTerms(highlight.headline, cited).length > 0
+    ) {
+      errors.push(
+        `highlight ${index + 1} headline cites terms absent from its source (${ungroundedHeadlineTerms(highlight.headline, cited).join(", ")})`,
+      );
+    }
+    if (isGenericImpact(highlight.whyItMatters)) {
+      errors.push(
+        `highlight ${index + 1} whyItMatters is generic: name the version, flag, cost or component affected`,
+      );
     }
     if (
       highlight.evidence?.trim().length < 30 ||
@@ -272,7 +323,28 @@ export function parseEditorialDraft(
       draft,
     );
   }
-  return draft;
+  return pruneLowUtility(draft, sources, maxHighlights);
+}
+
+const MIN_UTILITY = 3;
+
+/**
+ * Quotas are a floor, not a goal: an item the model rates as not actionable
+ * leaves the edition whenever the remaining draft still clears every rule.
+ */
+export function pruneLowUtility(
+  draft: EditorialDraft,
+  sources: Article[],
+  maxHighlights: number,
+): EditorialDraft {
+  const kept = draft.highlights.filter(
+    (h) => !(typeof h.utility === "number" && h.utility < MIN_UTILITY),
+  );
+  if (kept.length === draft.highlights.length) return draft;
+  const pruned = { ...draft, highlights: kept };
+  return validateEditorialDraft(pruned, sources, { maxHighlights }).length === 0
+    ? pruned
+    : draft;
 }
 
 /**
@@ -337,7 +409,14 @@ export function buildEditorialPrompt(
   articles: Article[],
   period: string,
   maxHighlights: number,
+  priorCoverage: Map<number, string> = new Map(),
 ): string {
+  const covered = [...priorCoverage]
+    .map(
+      ([index, title]) =>
+        `  - [${index}] já coberta por «${sanitizeForPrompt(title, 160)}»`,
+    )
+    .join("\n");
   const minimumHighlights = Math.min(5, articles.length, maxHighlights);
   const communityIndexes = articles.flatMap((article, index) =>
     /reddit|hacker news|tabnews|community/i.test(article.source) ? [index] : [],
@@ -378,7 +457,8 @@ Retorne JSON válido:
       "headline": "rótulo factual curto",
       "whatHappened": "o que ocorreu, somente com fatos presentes em EVIDENCE",
       "whyItMatters": "impacto técnico concreto para engenharia, operação ou produto",
-      "evidence": "trecho factual curto extraído ou fielmente condensado de EVIDENCE"
+      "evidence": "trecho factual curto extraído ou fielmente condensado de EVIDENCE",
+      "utility": 1 a 5, quanto o leitor consegue agir com isso (5 = muda uma decisão de versão, custo, segurança ou arquitetura; 1-2 = evento, promoção ou relato isolado sem consequência técnica)
     }
   ],
   "synthesis": "2-3 parágrafos conectando apenas os destaques selecionados"
@@ -420,6 +500,13 @@ Regras:
 - Título e headlines em caixa de frase do português: só a primeira palavra e nomes próprios com maiúscula ("Claude Code adiciona header de rastreio", nunca "Claude Code Adiciona Header De Rastreio").
 - whatHappened e whyItMatters são frases completas terminadas em ponto, não tópicos telegráficos.
 - Descarte piadas, memes e comparações culturais sem conteúdo técnico verificável, mesmo que venham de uma comunidade em foco.
+- O headline só pode citar produtos, versões e números presentes na fonte do sourceIndex; nunca misture fatos de duas fontes.
+- Em "whyItMatters", não escreva "devem revisar/atualizar/avaliar" sem dizer o quê (versão, flag, custo ou componente).
+- ${
+    covered
+      ? `Estas fontes repetem pauta publicada nos últimos dias; só use uma se a EVIDENCE trouxer fato novo (outra versão com mudança diferente, correção, desdobramento) e diga qual é a novidade, senão prefira outra fonte:\n${covered}`
+      : "Nenhuma fonte repete pauta recente."
+  }
 - Um ranking ou métrica sem alteração desde a medição anterior não é notícia: não o use como destaque nem no título.
 - Não inclua Markdown, links ou diagrama; o programa adicionará as citações.`;
 }

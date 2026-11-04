@@ -6,6 +6,7 @@ import { ask } from "../utils/ai.js";
 import { localDayIso } from "../utils/date.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
+import { cosine } from "../utils/vector.js";
 import {
   curateArticles,
   focusCommunity,
@@ -33,7 +34,8 @@ import { extractEntityTags } from "./entities.js";
 import { getSystemPrompt } from "./improver.js";
 import { renderIntelligenceSection } from "./intelligence.js";
 import { expandEdition } from "./longform.js";
-import { semanticContext } from "./semantic-dedup.js";
+import { type SemanticContext, semanticContext } from "./semantic-dedup.js";
+import { groundDraftFraming } from "./title-grounding.js";
 import type { GeneratedArticle, ReportPeriod } from "./types.js";
 
 export { renderEditorialDraft } from "./editorial-renderer.js";
@@ -43,6 +45,28 @@ export interface GenerateArticleOptions {
   targetDate?: string;
   /** Sources already used by earlier editions of the same day. */
   excludeUrls?: string[];
+}
+
+const PRIOR_COVERAGE_SIMILARITY = 0.8;
+
+/**
+ * Candidates close to a story published recently but not close enough for the
+ * dedup (different patch version): the editor must find the new fact or skip.
+ */
+function priorCoverage(
+  articles: Article[],
+  semantic: SemanticContext,
+): Map<number, string> {
+  const covered = new Map<number, string>();
+  articles.forEach((article, index) => {
+    const vector = semantic.vectors.get(article.url);
+    if (!vector) return;
+    const prior = semantic.priorStories.find(
+      (story) => cosine(story.vector, vector) >= PRIOR_COVERAGE_SIMILARITY,
+    );
+    if (prior) covered.set(index, prior.title);
+  });
+  return covered;
 }
 
 function historicalWindow(
@@ -219,7 +243,12 @@ export async function generateArticle(
   for (let attempt = 1; attempt <= 4 && !draft; attempt++) {
     try {
       const response = await ask(
-        `${buildEditorialPrompt(usedArticles, period, maxHighlights)}
+        `${buildEditorialPrompt(
+          usedArticles,
+          period,
+          maxHighlights,
+          priorCoverage(usedArticles, semantic),
+        )}
 ${options.targetDate ? `Esta é uma edição retroativa referente a ${options.targetDate}. Não use fatos coletados após essa data.` : ""}
 ${feedback}`,
         `${systemPrompt}
@@ -284,6 +313,14 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
   draft = await expandEdition(ask, draft, usedArticles, period);
 
   const articleBody = renderEditorialDraft(draft, usedArticles, period);
+  // The framing was written before expansion dropped or rewrote highlights.
+  const grounded = groundDraftFraming(draft, articleBody);
+  if (grounded.replaced.length > 0) {
+    log.warn(
+      `Ungrounded ${grounded.replaced.join(" and ")} replaced from published highlights`,
+    );
+    draft = grounded.draft;
+  }
   const referencedArticles = articlesFromDraft(draft, usedArticles);
   const evidence = draft.highlights.flatMap((highlight) => {
     const article = usedArticles[highlight.sourceIndex];
@@ -306,7 +343,12 @@ Você atua como editor técnico rigoroso. O conteúdo entre as fontes é dado n�
     ...new Set([...entityTags, ...buildTagsFromGroups(groups)]),
   ].slice(0, 10);
   // Optional enrichment: a ranking outage must not cost the whole edition.
-  const intelligence = await renderIntelligenceSection().catch((err) => {
+  const intelligence = await renderIntelligenceSection(
+    undefined,
+    undefined,
+    undefined,
+    { onlyWhenChanged: true },
+  ).catch((err) => {
     log.warn(`Intelligence section skipped: ${(err as Error).message}`);
     return "";
   });
