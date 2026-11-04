@@ -3,6 +3,7 @@ import {
   hasPromptLeak,
   isGenericTitle,
 } from "./editorial.js";
+import { ungroundedNumbers } from "./title-grounding.js";
 import type { GeneratedArticle } from "./writer.js";
 
 /**
@@ -88,6 +89,15 @@ export function validateArticle(article: GeneratedArticle): string[] {
     errors.push(
       `article body is too short (${article.content.length}/${MIN_CONTENT_CHARS} chars)`,
     );
+  }
+  const body = article.content
+    .replace(/^\s*# .*\n/, "")
+    .split("## Fontes e Referências")[0];
+  if (ungroundedNumbers(article.title, body).length > 0) {
+    errors.push("article title cites a number absent from its body");
+  }
+  if (ungroundedNumbers(article.summary, body).length > 0) {
+    errors.push("article summary cites a number absent from its body");
   }
   const highlights = article.content.match(
     /## Destaques[\s\S]*?(?=\n## |\n---|$)/i,

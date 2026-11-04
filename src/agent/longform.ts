@@ -223,7 +223,7 @@ async function expandSynthesis(
 
 ${agenda}
 
-Escreva 2 parágrafos diretos, entre ${SYNTHESIS_MIN_CHARS} e ${SYNTHESIS_MAX_CHARS} caracteres no total (nunca mais que isso), mostrando o que essas pautas, lidas juntas, dizem sobre a direção técnica do momento, onde elas se contradizem e o que ainda não está resolvido. Não repita as pautas uma a uma nem faça resumo enumerado.
+Escreva 2 parágrafos diretos, entre ${SYNTHESIS_MIN_CHARS} e ${SYNTHESIS_MAX_CHARS} caracteres no total (nunca mais que isso), abrindo com UMA tese testável que as pautas sustentam (diga qual pauta a sustenta), depois onde elas se contradizem e o que ainda não está resolvido. Ignore pautas que não sustentam a tese (eventos, prêmios, relatos isolados). Não repita as pautas uma a uma nem faça resumo enumerado.
 
 ${STYLE_RULES}
 

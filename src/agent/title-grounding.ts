@@ -25,12 +25,17 @@ function stems(text: string): string[] {
  * rewrite highlights. Returns the claims they make that the published body
  * never supports: a number absent from it, or too many unsupported words.
  */
+export function ungroundedNumbers(text: string, body: string): string[] {
+  const folded = fold(body);
+  return (text.match(/\d[\d.,]*/g) ?? [])
+    .map((n) => n.replace(/[.,]+$/, ""))
+    .filter((n) => !folded.includes(n));
+}
+
 export function ungroundedClaims(text: string, body: string): string[] {
   const folded = fold(body);
   const known = new Set(folded.match(/[a-z0-9]+/g)?.map((w) => w.slice(0, 5)));
-  const numbers = (text.match(/\d[\d.,]*/g) ?? [])
-    .map((n) => n.replace(/[.,]+$/, ""))
-    .filter((n) => !folded.includes(n));
+  const numbers = ungroundedNumbers(text, body);
   const words = stems(text);
   const missing = words.filter((word) => !known.has(word));
   const share = words.length ? missing.length / words.length : 0;

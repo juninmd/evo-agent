@@ -26,11 +26,16 @@ O que derruba a qualidade é o enquadramento e o enchimento, não a coleta.
 - **#3** O ranking só entra na edição diária quando há mudança (`onlyWhenChanged`). O radar mantém o comportamento atual.
 - **#5 (parcial)** `EVENT_PROMO` na curadoria descarta game jams, hackathons, webinars, sorteios e chamadas de inscrição como `low-information`.
 
-## Proposta (não implementada)
+## Também corrigido
 
-1. **Cooldown por produto+tema (#4).** Antes do `repeat-story`, comparar o *resumo* do candidato com as pautas dos últimos 7 dias do mesmo produto. Só publica se trouxer fato novo; senão vira uma linha em "Também saiu" ou é omitido. O guard de versão continua valendo para modelos, não para patches do mesmo componente.
-2. **Cotas como piso suave (#5).** Hoje a cota de comunidade/Reddit/primárias força pauta fraca. Trocar por: cada pauta recebe `utility` 1–5 do modelo (decisão concreta que o leitor toma); abaixo de 3 sai, e as cotas se reduzem para o que sobrar. Edição de 5 boas pautas vale mais que 10 com 4 de enchimento.
-3. **Checagem de fonte × headline (#2).** Em `validateEditorialDraft`, produto e número do headline devem aparecer no título/resumo da fonte citada; senão rejeita com feedback ao modelo.
-4. **Detector de "por que importa" genérico (#6).** Rejeitar `whyItMatters` que só traga "devem revisar/atualizar/avaliar" sem objeto específico (versão, flag, custo, componente).
-5. **Fechamento com tese (#7).** Pedir uma afirmação testável e a pauta que a sustenta; sem tese, omitir a seção em vez de enumerar.
-6. **Métrica contínua.** Rodar `ungroundedClaims` e a taxa de repetição de tema em `benchmark:editorial`, para a regressão aparecer no CI.
+- **#4** O prompt editorial recebe as fontes parecidas (cosseno ≥ 0,80) com pautas publicadas nos últimos dias e só aceita se a evidência trouxer fato novo. A deduplicação semântica não foi afrouxada: o guard de versão (#53/#55) segue valendo, porque não há como separar "patch repetido" de "release nova" só pelo vetor.
+- **#5** O modelo atribui `utility` (1–5) a cada pauta. Pautas abaixo de 3 saem **somente se** o rascunho restante ainda cumprir todas as regras e cotas (`pruneLowUtility`).
+- **#2** O headline não pode citar número nem nome próprio (exceto a 1ª palavra) ausente do título, resumo ou nome da fonte citada.
+- **#6** `whyItMatters` do tipo "devem revisar/atualizar/avaliar" sem crase nem número é rejeitado, com feedback ao modelo.
+- **#7** O fechamento abre com uma tese e ignora pautas que não a sustentam.
+- **Métrica** `validateArticle` (e portanto `benchmark:editorial` e a publicação) rejeita título ou resumo com número ausente do corpo.
+
+## Limites conhecidos
+
+- A checagem de palavras (>45 %) só reescreve título/resumo; não bloqueia a publicação, porque paráfrase legítima gera falso positivo.
+- A repetição de tema (#4) depende do modelo obedecer ao prompt; vale medir a taxa depois de alguns dias de edições.
