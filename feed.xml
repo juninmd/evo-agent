@@ -7,6 +7,18 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-11-05T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/bimonthly-2026-11-05-relatorio-bimestral-multimodal-ai-video-generation-e-agentic-computer-systems-ro</id>
+    <title>Relatorio Bimestral: Multimodal AI Video Generation e Agentic Computer Systems &amp; Routing</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/bimonthly-2026-11-05-relatorio-bimestral-multimodal-ai-video-generation-e-agentic-computer-systems-ro"/>
+    <updated>2026-11-05T00:00:00Z</updated>
+    <summary type="text">OpenRouter disponibilizou o Google Gemini Omni 1.2 Flash, um modelo nativo multimodal para geração e edição de vídeo, com 131.072 tokens de contexto. O modelo gera clipes de até 15 segundos e é o sucessor direto do Omni 1.1 Flash. Fontehttps://openrouter.ai/google/geminiomni1.2flash
+ O langgraphsdk foi atualizado para a versão 0.4.13, introduzindo o cancelreason em Run e a opção select em threads.getstate e gethistory. Essas mudanças melhoram o controle de execução e a consulta de estados em agentes de IA. Fontehttps://github.com/langchainai/langgraph/releases/tag/sdk%3D%3D0.4.13
+ O artigo &quot;Wave Forcing: Towards SpeedofLight Streaming Video Generation&quot; propõe um método para geração de vídeo streaming em tempo real, abordando gargalos de eficiência e consistência em métodos autorregressivos</summary>
+    <category term="bimonthly-report"/>
+    <category term="ai-agents"/>
+    <category term="llm"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-11-05-radar-2026-11-05</id>
     <title>Radar IA — 05/11/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-05-radar-2026-11-05"/>
@@ -648,22 +660,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-19-gpt-6-astra-expande-inteligencia-incorporada-e-claude-code-implementa-controle-d</id>
-    <title>GPT-6-Astra expande inteligência incorporada e Claude Code implementa controle de permissões</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-19-gpt-6-astra-expande-inteligencia-incorporada-e-claude-code-implementa-controle-d"/>
-    <updated>2026-10-19T00:00:00Z</updated>
-    <summary type="text">Novos benchmarks de robótica testam a generalização do GPT-6-Astra enquanto ferramentas de terminal refinam o controle humano sobre agentes. Relatos de usuários apontam instabilidades em predições de composer e drenos anômalos de tokens.</summary>
-    <category term="hf-daily-papers"/>
-    <category term="claude-code"/>
-    <category term="copilot-cli"/>
-    <category term="github"/>
-    <category term="reddit"/>
-    <category term="papers"/>
-    <category term="research"/>
-    <category term="anthropic"/>
-    <category term="copilot"/>
-    <category term="coding-agent"/>
   </entry>
 </feed>
