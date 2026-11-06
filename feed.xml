@@ -7,6 +7,16 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-11-05T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/monthly-2026-11-05-relatorio-mensal-geracao-de-video-e-midia-e-agentes-e-roteamento-de-agi</id>
+    <title>Relatorio Mensal: Geração de Vídeo e Mídia e Agentes e Roteamento de AGI</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/monthly-2026-11-05-relatorio-mensal-geracao-de-video-e-midia-e-agentes-e-roteamento-de-agi"/>
+    <updated>2026-11-05T00:00:00Z</updated>
+    <summary type="text">O artigo HF Daily Papers proposta um sistema de roteamento de modelos e políticas que orquestra um ecossistema heterogêneo de modelos especializados, ferramentas e políticas para alcançar capacidadesAGI. Em vez de depender de um único modelo abrangente, o método direciona tarefas para os componentes mais adequados, permitindo compreensão, geração, raciocínio e ação em vários domínios e modalidades. Essa abordagem modulareshift a engenharia de AGI em direção a arquiteturas baseadas em agentes mais flexíveis e escalonáveis.https://huggingface.co/papers/2611.05275</summary>
+    <category term="monthly-report"/>
+    <category term="ai-agents"/>
+    <category term="llm"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/bimonthly-2026-11-05-relatorio-bimestral-multimodal-ai-video-generation-e-agentic-computer-systems-ro</id>
     <title>Relatorio Bimestral: Multimodal AI Video Generation e Agentic Computer Systems &amp; Routing</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/bimonthly-2026-11-05-relatorio-bimestral-multimodal-ai-video-generation-e-agentic-computer-systems-ro"/>
@@ -641,24 +651,5 @@
     <category term="copilot"/>
     <category term="coding-agent"/>
     <category term="claudecode"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-20-radar-2026-10-20</id>
-    <title>Radar IA — 20/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-20-radar-2026-10-20"/>
-    <updated>2026-10-20T00:00:00Z</updated>
-    <summary type="text">Radar de 109 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
-    <category term="radar"/>
-    <category term="ia"/>
-    <category term="trending"/>
-    <category term="benchmarks"/>
-    <category term="github"/>
-    <category term="models"/>
-    <category term="reddit"/>
-    <category term="hackernews"/>
-    <category term="releases"/>
-    <category term="vendors"/>
-    <category term="papers"/>
-    <category term="community"/>
   </entry>
 </feed>
