@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 06/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>88 itens · 36 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>06/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>7 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1>Cursor lançou Voice Chat com agentes em tempo real no desktop, web e iOS.</h1>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Cursor lançou Voice Chat com agentes em tempo real no desktop, web e iOS.</li><li>Codex CLI chegou à versão rust-v0.167.0.</li><li>Copilot CLI 1.0.107 adicionou comando <code>/code</code> para abrir sessão no VS Code e suporte a tier Fusion.</li><li>GitHub Copilot Usage Metrics API agora sinaliza usuários sem telemetria ou com versões de IDE/extensão abaixo do mínimo.</li><li>GitHub Copilot Usage Metrics API incluiu detalhes de code review e taxa de itens endereçados em relatórios de repositório.</li><li>LangGraph SDK Python 0.4.14 adicionou <code>strict_resume</code> em <code>runs.create</code>, <code>stream</code> e <code>wait</code>, além de <code>tools</code> e <code>lifecycle</code> no <code>StreamMode</code>.</li><li>LangGraph CLI 0.4.42 trouxe comando <code>deploy metrics</code> e correções de segurança em dependências.</li><li>Ollama v0.40.15 adicionou suporte ao Kimi Code CLI.</li><li>LiteLLM v1.108.1 passou a assinar imagens Docker com cosign usando chave introduzida no commit e82a3c6.</li><li>Microsoft Agent Framework Python 1.25.0 removeu suporte a Python 3.10 e publicou 44 distribuições de workspace.</li><li>OpenAI lançou benchmark BioBasicsBench com 100 tarefas para avaliar agentes em ciência de bancada (wet-lab).</li><li>Paper &quot;Turns Matter&quot; propõe crédito em nível de turno (turn-level credit) para RL em streaming de vídeo via GRPO.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Mudanças de auto-mode no Claude Code v2.1.319 exigem <code>CLAUDE_CODE_AUTO_MODE_SERVER=0</code> para fallback quando gateways LLM bloqueiam chamadas ao servidor.</p><p>Goldman Sachs baniu uso de Claude Code e GitHub Copilot por milhares de funcionários, citando riscos de segurança.</p><p>Perplexity lançou agentes de IA para trabalho, indicando movimento de produto de busca para execução de tarefas.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/moonshotai/Kimi-K3.1-Pro.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro">moonshotai/Kimi-K3.1-Pro</a></h3>
+<p>image-text-to-text · 916 likes · 11658 downloads · trending 862 <span class="meta">HF Trending Models · <b>862</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/speridlabs/idol">speridlabs/idol</a> <span class="meta">HF Trending Models · <b>700</b></span></li><li><a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> <span class="meta">HF Trending Models · <b>377</b></span></li><li><a href="https://huggingface.co/Pika-Labs/Pika-H3-Flex">Pika-Labs/Pika-H3-Flex</a> <span class="meta">HF Trending Models · <b>368</b></span></li><li><a href="https://huggingface.co/ccore/Qwen3.5-4B-3D-Coder">ccore/Qwen3.5-4B-3D-Coder</a> <span class="meta">HF Trending Models · <b>367</b></span></li><li><a href="https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B">mistralai/Mistral-Large-4-1T-A52B</a> <span class="meta">HF Trending Models · <b>350</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/agenticAI/comments/1xpodb0/i_built_an_opensource_sandbox_for_local_ai_coding/">I built an open-source sandbox for local AI coding agents using gVisor</a></h3>
+<p>When a local AI coding agent writes and executes code, that code can run with the same permissions as the agent itself. I wanted something between blindly trusting generated code and managing a fleet of heavyweight… <span class="meta">Reddit: AgenticAI</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/opencode/comments/1xpna16/opencode_go_deepseek_v4_flash/">opencode go deepseek v4 flash</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/opencode/comments/1xpoh4u/best_10_i_ever_spent_online/">Best $10 i ever spent online</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/AI_Agents/comments/1xpotno/if_you_had_a_physical_controller_for_your_ai/">If you had a physical controller for your AI agents, what would you want it to do?</a> <span class="meta">Reddit: AI Agents</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1xpk6uw/i_had_opus_55_plan_my_project_and_pick_the_model/">I had Opus 5.5 plan my project and pick the model + effort for each session. It worked great</a> <span class="meta">Reddit: ClaudeAI</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1xpkjqd/claude_says_23_days_your_agents_finish_in_an_hour/">Claude says &quot;2–3 days.&quot; Your agents finish in an hour.</a> <span class="meta">Reddit: ClaudeAI</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/issues/107757" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/issues/107757">Claude Code sends your email address to websites</a></h3>
+<p>Claude Code sends your email address to websites | ⬆ 87 points | 💬 16 comments | by motoroco <span class="meta">Hacker News · <b>119</b></span></p></article>
+<ul class="brief"><li><a href="https://www.planned-obsolescence.org/p/ai-is-dramatically-accelerating-ai">AI is dramatically accelerating AI research</a> <span class="meta">Hacker News · <b>136</b></span></li><li><a href="https://www.perplexity.ai/en-GB/hub/blog/teammates-are-agents-for-complex-ongoing-work">Perplexity launches AI agents for work</a> <span class="meta">Hacker News · <b>123</b></span></li><li><a href="https://finance.yahoo.com/technology/ai/articles/mark-cuban-says-facebook-knowingly-213000020.html">Cuban: Facebook knowingly runs AI deepfake scam ads; docs say $16B fraud revenue</a> <span class="meta">Hacker News · <b>94</b></span></li><li><a href="https://obelisk.club/research/app-store-2026">App Store 2026 in numbers: AI, pricing, abandoned apps</a> <span class="meta">Hacker News · <b>73</b></span></li><li><a href="https://village.dev/blog/closed-ai-models-now-dominate-the-price-performance-frontier/">Closed AI models dominate the price-performance frontier</a> <span class="meta">Hacker News · <b>64</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.319" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.319">v2.1.319</a></h3>
+<p>What&#39;s changed Changed auto mode with telemetry or feature flags off, including behind LLM gateways: calls the server can&#39;t check are asked about or denied, with no fallback to the built-in classifier; set… <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.167.0">rust-v0.167.0</a> <span class="meta">Codex CLI Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.107">1.0.107</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://cursor.com/changelog/voice-chat">Voice Chat with Agents</a> <span class="meta">Cursor Changelog</span></li><li><a href="https://github.blog/changelog/2026-11-05-usage-metrics-api-flags-telemetry-and-version-gaps">Usage metrics API flags telemetry and version gaps</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/microsoft/agent-framework/releases/tag/dotnet-1.28.0">dotnet-1.28.0</a> <span class="meta">Microsoft Agent Framework Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>5</span></h2>
+<article class="note"><h3><a href="https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science">Measuring how AI agents handle everyday wet-lab science</a></h3>
+<p>OpenAI introduces BioBasicsBench, a 100-task benchmark measuring how well AI agents interpret raw experimental data and handle everyday wet-lab science. <span class="meta">OpenAI Blog</span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/blog/allenai/toyblocks">ToyBlocks: A controlled world for robot learning and evaluation</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://openai.com/index/partnering-with-hacktron">Partnering with Hacktron to find vulnerabilities in OpenAI’s systems</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/open-asr-leaderboard-liva">Egyptian and Nigerian English join the Open ASR Leaderboard</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://openai.com/index/australian-universities-ai-native-graduates">Australian universities are creating AI-native graduates</a> <span class="meta">OpenAI Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2611.06728" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.06728.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2611.06728">Turns Matter: Advancing Streaming Video RL via Turn-Level Credit</a></h3>
+<p>Streaming video understanding requires models to repeatedly decide whether to respond or continue observing. Recently, Group Relative Policy Optimization (GRPO) has been applied to this setting, with existing approaches… <span class="meta">HF Daily Papers · <b>82</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2611.06918">From Pixels to Actions - Towards Native Vision-Language-Action Policies</a> <span class="meta">HF Daily Papers · <b>60</b></span></li><li><a href="https://huggingface.co/papers/2611.06910">FrontierPhysics: Evaluating Agents for End-to-End Physics Research</a> <span class="meta">HF Daily Papers · <b>46</b></span></li><li><a href="https://huggingface.co/papers/2611.06483">What Does Multi-Turn Reinforcement Learning Really Improve in LLM Agents?</a> <span class="meta">HF Daily Papers · <b>37</b></span></li><li><a href="https://huggingface.co/papers/2610.37257">GameVerse: A Minute-Scale Gameplay Dataset for Long-Horizon Interactive World Modeling</a> <span class="meta">HF Daily Papers · <b>36</b></span></li><li><a href="https://huggingface.co/papers/2611.04408">Halley: A Predictive Control Plane for Optical AI Data Center Networks</a> <span class="meta">HF Daily Papers · <b>31</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://dev.to/johnnylemonny/one-markdown-file-can-hijack-your-ai-coding-agent-the-hidden-cost-of-blindly-trusting-agentsmd-167n">One Markdown File Can Hijack Your AI Coding Agent: The Hidden Cost of Blindly Trusting AGENTS.md</a></h3>
+<p>How a single AGENTS.md or CLAUDE.md file in your Downloads folder or a pull request can silently hijack your AI coding agent, steal OAuth tokens, and execute shell commands—plus how to lock down your local workflow. <span class="meta">Dev.to (ai) · <b>40</b></span></p></article>
+<ul class="brief"><li><a href="https://www.tabnews.com.br/uriel/apenas-4-dos-mais-de-70-projetos-que-fiz-deram-dinheiro-e-cresceram-levelsio">Apenas 4 dos mais de 70 projetos que fiz deram dinheiro e cresceram - Levelsio</a> <span class="meta">TabNews · <b>18</b></span></li><li><a href="https://dev.to/tokenlat/deterministic-delivery-is-an-architecture-decision-not-a-model-setting-2091">Deterministic delivery is an architecture decision, not a model setting</a> <span class="meta">Dev.to (llm) · <b>10</b></span></li><li><a href="https://dev.to/royalpinto007/stop-building-agents-as-while-loops-model-them-as-state-machines-47ak">Stop Building Agents as While-Loops. Model Them as State Machines.</a> <span class="meta">Dev.to (agents) · <b>9</b></span></li><li><a href="https://news.google.com/rss/articles/CBMi5wFBVV95cUxNckI2RW5SeGRMQmt0NlVlRUhPT3lLdFRLVldSelVscGg4eWZIYmtDWkp4STlmbXJVRWFhcWRpV0tOZ3ZwSTJ6TmtxY2tNclF6dnJUZnVCdWt3cVB4N0tLc0lzbFZLUDRMMWJzaUNWbHVNZkpMTDJ4S0gtZ1o3bU5XS3lCeHVZVW9YNnRmVG5Udzg1d253aWdEVS16QnNqcnkwUE9LMUItaGJjY1V4TkI3bmp5NlR4bG4xTjljTWFzWWF0RGpHY0VMQ1RpTjNMRWtDWnl4a3RuOXRSaDZ0allHR04ybUV3cXM?oc=5">Four layers of context engineering for production AI agents: How Deep Insight applies them in working code - Amazon Web Services (AWS)</a> <span class="meta">Google News (AI agents for work)</span></li><li><a href="https://www.v2ex.com/t/1255109">很久没开 JetBrains 家产品了</a> <span class="meta">V2EX Tech</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-06</span></footer>
+</div></body></html>
