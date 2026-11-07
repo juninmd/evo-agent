@@ -59,6 +59,29 @@ describe("feed item selection", () => {
     expect(feedItemSummary({})).toBe("");
   });
 
+  it("strips noisy HTML elements from full content via digest-kit extractArticleFromHtml", () => {
+    const noisyHtml = `
+      <div>
+        <nav><a href="/home">Home</a></nav>
+        <div class="ad-banner">Ad 50% off</div>
+        <article>
+          <h2>New Model Released</h2>
+          <p>Anthropic launched Claude 4 with advanced reasoning and tool use capabilities.</p>
+        </article>
+        <footer>Copyright 2026</footer>
+      </div>
+    `;
+    const summary = feedItemSummary({
+      contentSnippet: "",
+      content: noisyHtml,
+    });
+    expect(summary).toContain("New Model Released");
+    expect(summary).toContain("Anthropic launched Claude 4");
+    expect(summary).not.toContain("Ad 50% off");
+    expect(summary).not.toContain("Home");
+    expect(summary).not.toContain("Copyright 2026");
+  });
+
   it("flags changesets releases that only bump dependencies", () => {
     expect(
       isEmptyRelease(
