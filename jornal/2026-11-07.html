@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 07/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>70 itens · 29 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>07/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>7 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1>Qwen 3.8-27B atingiu 7.845.288 downloads no HF.</h1>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Qwen 3.8-27B atingiu 7.845.288 downloads no HF.</li><li>Lightricks LTX-2.5 obteve 2.607.491 downloads no HF.</li><li>ccore Qwen3.5-4B-3D-Coder lidera downloads no HF com 190.243.</li><li>OpenCode v2.2.6 permite pooling de conexão MCP para processos mais rápidos.</li><li>Copilot CLI 1.0.108-1 corrige anexos PDF no Grok 4.7 e 4.6.</li><li>Vercel AI SDK Xai 3.0.151 adiciona suporte a safetyIdentifier em requisições.</li><li>LiteLLM 1.108.2 marca o lançamento LTS com tag dedicada.</li><li>GitHub Copilot ganhou gestão de reviews via REST e GraphQL APIs.</li><li>VFlash do HF aborda planejamento visual rápido para tarefas de robótica.</li><li>Harness-S apresenta aprendizado generalizável através de variantes de harness.</li><li>Anthropic detalha componentes de memória de agente, como &quot;dreaming&quot;.</li><li>Okta introduziu gateway de runtime de agente para segurança de identidade.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Restrições de autonomia de agentes estão sendo debatidas por autoridades como Singapura.</p><p>O uso de Contextual Retrieval é mais eficaz que apenas aumentar a janela de contexto em RAG financeiro.</p><p>A integração do @GitHub em Slack e Teams está disponível para uso geral.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/moonshotai/Kimi-K3.1-Pro.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro">moonshotai/Kimi-K3.1-Pro</a></h3>
+<p>image-text-to-text · 1488 likes · 18432 downloads · trending 1002 <span class="meta">HF Trending Models · <b>1002</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/speridlabs/idol">speridlabs/idol</a> <span class="meta">HF Trending Models · <b>700</b></span></li><li><a href="https://huggingface.co/ccore/Qwen3.5-4B-3D-Coder">ccore/Qwen3.5-4B-3D-Coder</a> <span class="meta">HF Trending Models · <b>418</b></span></li><li><a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> <span class="meta">HF Trending Models · <b>383</b></span></li><li><a href="https://huggingface.co/burner22/numbat">burner22/numbat</a> <span class="meta">HF Trending Models · <b>335</b></span></li><li><a href="https://huggingface.co/FusionCow/Sulphur-3">FusionCow/Sulphur-3</a> <span class="meta">HF Trending Models · <b>330</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/agenticAI/comments/1xqbqye/hey_i_have_zero_programming_experience_and_want/">hey I have zero programming experience and want to learn about AI agents.</a></h3>
+<p>submitted by /u/Ok-Negotiation4133 [link] [comments] <span class="meta">Reddit: AgenticAI</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/agenticAI/comments/1xqdqsx/shared_context_layer_for_team_where_how/">shared context layer for team - where / how?</a> <span class="meta">Reddit: AgenticAI</span></li><li><a href="https://www.reddit.com/r/agenticAI/comments/1xqg9sw/visa_tested_22_ai_models_on_shopping_tasks_only/">Visa tested 22 AI models on shopping tasks. Only 57.2% of runs passed.</a> <span class="meta">Reddit: AgenticAI</span></li><li><a href="https://www.reddit.com/r/agenticAI/comments/1xqgn93/semalith_yet_another_tool_for_your_ontology_graph/"># Semalith: yet another tool for your ontology graph</a> <span class="meta">Reddit: AgenticAI</span></li><li><a href="https://www.reddit.com/r/AI_Agents/comments/1xqgy1a/am_i_the_only_one_who_gets_super_anxious_waiting/">Am I the only one who gets super anxious waiting for an agent to finish working?</a> <span class="meta">Reddit: AI Agents</span></li><li><a href="https://www.reddit.com/r/AI_Agents/comments/1xqhjcz/building_webscraping_into_agentic_pipelines/">Building Web-scraping into Agentic Pipelines</a> <span class="meta">Reddit: AI Agents</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/Video-Rebirth/hyperflow-h3-flash" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/Video-Rebirth/hyperflow-h3-flash" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/Video-Rebirth/hyperflow-h3-flash">Show HN: We compressed a 31B video+audio diffusion model to 14B, 6 steps, INT8</a></h3>
+<p>Show HN: We compressed a 31B video+audio diffusion model to 14B, 6 steps, INT8 | ⬆ 32 points | 💬 9 comments | by jiant <span class="meta">Hacker News · <b>50</b></span></p></article>
+<ul class="brief"><li><a href="https://apiiro.com/blog/coding-agents-leaking-secrets-github-dont-ask-again">Claude Code&#39;s &quot;Don&#39;t Ask Again&quot; exposes passwords in 1,122 public GitHub files</a> <span class="meta">Hacker News · <b>98</b></span></li><li><a href="https://businessexaminer.ca/victoria-articles/item/microsoft-researcher-john-langford-exits-as-ai-frontiers-group-is-declared/">Microsoft Researcher John Langford Exits. AI Frontiers Group Declared Finished</a> <span class="meta">Hacker News · <b>81</b></span></li><li><a href="https://hunch.net/?p=13764006">The End of AI Frontiers</a> <span class="meta">Hacker News · <b>65</b></span></li><li><a href="https://www.kadoa.com/companies/insights/ai-selloff-perspective">The AI sell-off compared to well-known stock market crashes</a> <span class="meta">Hacker News · <b>62</b></span></li><li><a href="https://github.com/andrewboldi/tmux-restore">Show HN: Tmux-restore saves tmux windows and agent sessions across reboots</a> <span class="meta">Hacker News · <b>35</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anomalyco/opencode/releases/tag/v2.2.6" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anomalyco/opencode" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>OpenCode Releases</figcaption></figure><h3><a href="https://github.com/anomalyco/opencode/releases/tag/v2.2.6">v2.2.6</a></h3>
+<p>Highlights Shared MCP Connections: Turn on pooling for an MCP server to share one connection across projects with the same setup, so you run fewer processes and start faster. ( 61185) GUI Plugin Themes and New Slots:… <span class="meta">OpenCode Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.108-1">1.0.108-1</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-11-06-copilot-code-review-api-management-and-review-overview-updates">Copilot code review: API management and review overview updates</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/vercel/ai/releases/tag/%40ai-sdk%2Fxai%402.0.103">@ai-sdk/xai@2.0.103</a> <span class="meta">Vercel AI SDK Releases</span></li><li><a href="https://github.com/BerriAI/litellm/releases/tag/v1.108.2">1.108.2 (LTS)</a> <span class="meta">LiteLLM Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.108-0">1.0.108-0</a> <span class="meta">Copilot CLI Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>2</span></h2>
+<article class="note"><h3><a href="https://www.anthropic.com/research/components-of-agent-memory">The components of agent memory</a></h3>
+<p>For Claude to learn from experience, it has to decide what’s worth remembering before it knows what’s next. Here’s how “dreaming” helps it organize memory and correct mistakes. <span class="meta">Anthropic Engineering</span></p></article>
+<ul class="brief"><li><a href="https://github.blog/ai-and-ml/github-copilot/beyond-code-generation-a-developers-guide-to-agentic-engineering/">Beyond code generation: A developer’s guide to agentic engineering</a> <span class="meta">GitHub Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2611.08449" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.08449.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2611.08449">VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding</a></h3>
+<p>Models for physical AI tasks, such as robotics and autonomous driving, need not reason solely in language. They can use visual plans--points, bounding boxes, and trajectories--to represent spatial goals and anticipate… <span class="meta">HF Daily Papers · <b>89</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2611.04277">Harness-S: Learning from Sibling Harnesses for Generalizable Agent Training</a> <span class="meta">HF Daily Papers · <b>60</b></span></li><li><a href="https://huggingface.co/papers/2611.00883">Random Is Almost Enough? Stable and Low-Cost Benchmark Compression via BestRand</a> <span class="meta">HF Daily Papers · <b>54</b></span></li><li><a href="https://huggingface.co/papers/2611.08373">SLA: Scaling Spatial-Language-Action Model via Continual Pre-training</a> <span class="meta">HF Daily Papers · <b>50</b></span></li><li><a href="https://huggingface.co/papers/2611.05376">From Autonomous Agents to Cognitive Symbionts: Toward AI-Augmented Human Intelligence</a> <span class="meta">HF Daily Papers · <b>40</b></span></li><li><a href="https://huggingface.co/papers/2611.06741">TailSteer: Trajectory-Tail Steering for Drift-Resistant Multi-turn Image Editing</a> <span class="meta">HF Daily Papers · <b>40</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://www.tabnews.com.br/S1LV4/como-reduzi-em-98-por-cento-o-uso-de-contexto-e-os-custos-de-ia-no-meu-workflow">Pitch: Como reduzi em 98% o uso de contexto (e os custos) de IA no meu workflow (open-source)</a></h3>
+<p>Link do Projeto: https://github.com/S1LV4/th0th OBS: POST ATUALIZADO (CONFORME NOVO UPDATE NO SISTEMA) Se você usa assistentes de IA no seu dia a dia para desenvolver, provavelmente já esbarrou em dois grandes gargalos:… <span class="meta">TabNews · <b>99</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/suirindo/when-an-ai-agent-says-done-what-exactly-has-finished-5h3p">When an AI Agent Says &#39;Done,&#39; What Exactly Has Finished?</a> <span class="meta">Dev.to (agents) · <b>77</b></span></li><li><a href="https://dev.to/gde/being-doing-having-why-50-years-of-senior-craft-lives-in-context-not-code-29dl">Being, Doing, Having: Why 50 Years of Senior Craft Lives in Context, Not Code</a> <span class="meta">Dev.to (ai) · <b>30</b></span></li><li><a href="https://dev.to/lightningdev123/openrouters-free-model-apis-in-2026-working-with-request-limits-instead-of-token-caps-413f">OpenRouter&#39;s Free Model APIs in 2026: Working With Request Limits Instead of Token Caps</a> <span class="meta">Dev.to (llm) · <b>13</b></span></li><li><a href="https://news.google.com/rss/articles/CBMihAFBVV95cUxQUC1kdnFlTWV1b2VMQ1V5Q2tvV2RDd194Qlhuczl6N2JXQ1RORzEyME1SWUs1RmFSd2h0ckF3MTM0cTVncU9EaDB0Wm0tZHRIak0wbm9wR3VDZFJIdk5WZ2xUZk5SSGgxZ2JUSlgwN3Z2Qk8tNnFhY3JocVE0QVpYdzhqWkI?oc=5">Grok 4.6 vs Qwen3.8-Max vs DeepSeek V4 Flash [2026] - tech-insider.org</a> <span class="meta">Google News (deepseek v4 latency)</span></li><li><a href="https://www.v2ex.com/t/1255253">在 agent 时代，深度还是广度更重要？</a> <span class="meta">V2EX Tech</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-07</span></footer>
+</div></body></html>
