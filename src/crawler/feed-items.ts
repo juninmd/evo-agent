@@ -1,3 +1,4 @@
+import { extractArticleFromHtml } from "@juninmd/digest-kit/core";
 import type Parser from "rss-parser";
 
 /** Older posts are archive, not news; also covers the weekly and biweekly reports. */
@@ -105,8 +106,21 @@ export function isPrereleaseTitle(title: string): boolean {
 
 /** Atom feeds (Simon Willison, Node.js, Hugging Face) leave contentSnippet empty. */
 export function feedItemSummary(item: FeedItem): string {
-  const text =
-    item.contentSnippet?.trim() ||
-    summarizeSourceContent(item.content ?? item.summary ?? "");
-  return summarizeSourceContent(text, FEED_SUMMARY_MAX);
+  if (item.contentSnippet?.trim()) {
+    return summarizeSourceContent(item.contentSnippet.trim(), FEED_SUMMARY_MAX);
+  }
+  const raw = item.content ?? item.summary ?? "";
+  if (/<[a-z][\s\S]*>/i.test(raw)) {
+    const extracted = extractArticleFromHtml(raw, {
+      fallbackToBody: true,
+      charThreshold: 0,
+    });
+    if (extracted?.contentMarkdown) {
+      return summarizeSourceContent(
+        extracted.contentMarkdown,
+        FEED_SUMMARY_MAX,
+      );
+    }
+  }
+  return summarizeSourceContent(raw, FEED_SUMMARY_MAX);
 }
