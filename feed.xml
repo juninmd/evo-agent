@@ -24,6 +24,22 @@
     <category term="coding"/>
   </entry>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-11-08-radar-2026-11-08</id>
+    <title>Radar IA — 08/11/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-08-radar-2026-11-08"/>
+    <updated>2026-11-08T00:00:00Z</updated>
+    <summary type="text">Radar de 51 sinais de IA das ultimas 24h: Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Comunidade e produtos.</summary>
+    <category term="radar"/>
+    <category term="ia"/>
+    <category term="trending"/>
+    <category term="benchmarks"/>
+    <category term="models"/>
+    <category term="reddit"/>
+    <category term="hackernews"/>
+    <category term="releases"/>
+    <category term="community"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-11-07-radar-2026-11-07</id>
     <title>Radar IA — 07/11/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-07-radar-2026-11-07"/>
@@ -641,17 +657,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/devtips-2026-10-22-devtips-2026-10-22</id>
-    <title>Código com IA na Prática — 22/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/devtips-2026-10-22-devtips-2026-10-22"/>
-    <updated>2026-10-22T00:00:00Z</updated>
-    <summary type="text">6 novidades de Claude Code, VS Code e OpenCode transformadas em prática.</summary>
-    <category term="claude-code"/>
-    <category term="vscode"/>
-    <category term="opencode"/>
-    <category term="boas-praticas"/>
-    <category term="dicas"/>
   </entry>
 </feed>

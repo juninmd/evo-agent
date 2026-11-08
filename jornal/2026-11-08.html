@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 08/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>51 itens · 23 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>08/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>5 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1>Lightricks LTX-2.5 atingiu 2643778 downloads no HF Trending.</h1>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Lightricks LTX-2.5 atingiu 2643778 downloads no HF Trending.</li><li>Qwen/Qwen3.8-27B liderou HF Trending com 7813215 downloads.</li><li>ccore/Qwen3.5-4B-3D-Coder registrou 221506 downloads no HF Trending.</li><li>LiteLLM 1.108.3 (LTS) foi lançado com tag LTS atualizada.</li><li>OpenAI levantou $11B com uma avaliação de $1.25T.</li><li>Goldman Sachs está retirando o uso de Claude de bankers e traders.</li><li>Grafana gcx e MCP Server atingiram GA para desenvolvimento de agentes.</li><li>Snowflake divulgou rastreamento de agentes com Cortex AI Gateway.</li><li>Dev.to apresentou LiveReview, um revisor de código consciente de raio de explosão.</li><li>CrewAI 1.15.38 foi atualizado, suportando leitura de URLs de planilhas.</li><li>Llama-modchip permite rodar 284B DeepSeek em 64GB RAM sem GPU.</li><li>DeepSeek Pricing 2026 detalha custos de API e plano gratuito.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Crescimento acentuado de modelos multimodais no Hugging Face (LTX-2.5 e Qwen3.8-27B).</p><p>Maturidade da infraestrutura de agentes com a chegada do GA do Grafana MCP e rastreamento de ponta a ponta (Snowflake).</p><p>Riscos de dependência de terceiros e vulnerabilidades de agentes, evidenciados por ataques e a retirada de Claude pelo Goldman Sachs.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/speridlabs/idol" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/speridlabs/idol.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/speridlabs/idol">speridlabs/idol</a></h3>
+<p>image-to-3d · 1110 likes · 20689 downloads · trending 745 <span class="meta">HF Trending Models · <b>745</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro">moonshotai/Kimi-K3.1-Pro</a> <span class="meta">HF Trending Models · <b>529</b></span></li><li><a href="https://huggingface.co/ccore/Qwen3.5-4B-3D-Coder">ccore/Qwen3.5-4B-3D-Coder</a> <span class="meta">HF Trending Models · <b>427</b></span></li><li><a href="https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic">xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic</a> <span class="meta">HF Trending Models · <b>404</b></span></li><li><a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> <span class="meta">HF Trending Models · <b>378</b></span></li><li><a href="https://huggingface.co/ricursiveAI/Ripple-65B-Preview">ricursiveAI/Ripple-65B-Preview</a> <span class="meta">HF Trending Models · <b>359</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/GithubCopilot/comments/1xr6hy9/builtin_browser_with_cheap_models/">Built-in browser with cheap models</a></h3>
+<p>VS Code&#39;s built-in browser is an extremely useful feature when used alongside Copilot. I typically use it to debug style issues, or verify behavior under certain circumstances. Sometimes it becomes part of a session&#39;s… <span class="meta">Reddit: GithubCopilot</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/codex/comments/1xr967n/i_got_tired_of_codex_getting_bloated_so_i/">I got tired of codex getting bloated, so i stripped out all the telemetry, ads , work mode, slides, pets, docs, promotion popups and it improved speed massively.</a> <span class="meta">Reddit: Codex</span></li><li><a href="https://www.reddit.com/r/codex/comments/1xr9rfg/everyones_fix_for_coding_agents_is_a_markdown_file/">Everyone’s fix for coding agents is a markdown file</a> <span class="meta">Reddit: Codex</span></li><li><a href="https://www.reddit.com/r/claude/comments/1xqyvlh/cache_longevity_codex_v_claude/">Cache longevity: Codex v Claude</a> <span class="meta">Reddit: Claude</span></li><li><a href="https://www.reddit.com/r/claude/comments/1xqzx6n/opus_now_a_complete_idiot/">Opus now a complete idiot</a> <span class="meta">Reddit: Claude</span></li><li><a href="https://www.reddit.com/r/claude/comments/1xr1o71/the_absurd_state_of_ai_game_dev/">The absurd state of AI game dev</a> <span class="meta">Reddit: Claude</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/synchopate/llama-modchip" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/synchopate/llama-modchip" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/synchopate/llama-modchip">Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU</a></h3>
+<p>Llama-modchip: 284B DeepSeek on 64GB RAM, no GPU | ⬆ 30 points | 💬 12 comments | by joshcsimmons <span class="meta">Hacker News · <b>54</b></span></p></article>
+<ul class="brief"><li><a href="https://caleb.software/posts/claude-to-pi.html">Goodbye Claude, Hello Pi</a> <span class="meta">Hacker News · <b>155</b></span></li><li><a href="https://www.thestateofai.com/news/goldman-sachs-claude-code-traders-bankers">Goldman Sachs Is Pulling Claude Code from Its Bankers and Traders</a> <span class="meta">Hacker News · <b>139</b></span></li><li><a href="https://sergeykuhne.com/blog/fighting-ai-brain-fry">How I Fight AI Brain Fry</a> <span class="meta">Hacker News · <b>129</b></span></li><li><a href="https://www.wsj.com/tech/ai/silicon-valley-promises-ai-will-cure-disease-drugmaker-ceos-arent-buying-it-5218511c">Silicon Valley Promises AI Will Cure Disease. Drugmaker CEOs Aren&#39;t Buying It</a> <span class="meta">Hacker News · <b>127</b></span></li><li><a href="https://www.bloomberg.com/news/newsletters/2026-11-08/apple-explores-turning-siri-ai-into-chatgpt-dots-like-agent-ios-28-shake-up">Apple CEO Presses Software Chief to Pursue More Ambitious AI Strategy</a> <span class="meta">Hacker News · <b>107</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>1</span></h2>
+<article class="note"><figure><a href="https://github.com/BerriAI/litellm/releases/tag/v1.108.3" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/BerriAI/litellm" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>LiteLLM Releases</figcaption></figure><h3><a href="https://github.com/BerriAI/litellm/releases/tag/v1.108.3">1.108.3 (LTS)</a></h3>
+<p>Tip The lts image tag always points to the latest LTS release. Pull ghcr.io/berriai/litellm:lts to stay on the newest LTS patch Verify this release cosign verify \ --key… <span class="meta">LiteLLM Releases</span></p></article>
+
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/crewAIInc/crewAI/releases/tag/1.15.38" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/crewAIInc/crewAI" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>CrewAI Framework</figcaption></figure><h3><a href="https://github.com/crewAIInc/crewAI/releases/tag/1.15.38">1.15.38</a></h3>
+<p>What&#39;s Changed Features Make gpt-6-luna crewAI&#39;s default model everywhere Read spreadsheet URLs in an agent&#39;s input with tools over every row Tag eval usage spans with target and a per-evaluation id Add --no-open to… <span class="meta">CrewAI Framework</span></p></article>
+<ul class="brief"><li><a href="https://dev.to/lovestaco/you-tried-git-lrc-meet-livereview-7od">You tried git-lrc. Meet LiveReview 👀</a> <span class="meta">Dev.to (ai) · <b>61</b></span></li><li><a href="https://dev.to/aheadkit/i-fed-my-ai-agent-a-poisoned-log-line-it-tried-to-hijack-itself-in-4-minutes-1nii">I Fed My AI Agent a Poisoned Log Line — It Tried to Hijack Itself in 4 Minutes</a> <span class="meta">Dev.to (agents) · <b>23</b></span></li><li><a href="https://www.tabnews.com.br/bmarino01/antes-de-comprar-meu-primeiro-nas-baias-discos-cmr-memoria-e-a-conta-que-pesa">Antes de comprar meu primeiro NAS: baias, discos CMR, memória e a conta que pesa</a> <span class="meta">TabNews · <b>12</b></span></li><li><a href="https://dev.to/ericthompson21/the-cost-of-self-hosting-open-source-llms-gpus-staffing-and-operations-37ib">The Cost of Self-Hosting Open-Source LLMs: GPUs, Staffing, and Operations</a> <span class="meta">Dev.to (llm) · <b>11</b></span></li><li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxNU2pGWWJHVVUzRnlNSGV3YVp5ZlR2TmRBU0wyOXFMNUk1SE1KdWtXYkNmQlZNQi1pYXBCQ1VxdDc0eUhNYzE2cUhBSzQ1OWJDSkxTekdiLUtSVDBISUVmN0VxNVVUTnQwRDRFUklvd041WU1ERXJ1VVFYTEM5bGNJYmNSeU45cEk?oc=5">Developer Guide to the CrewAI Agent Framework for Python - The New Stack</a> <span class="meta">Google News (crewai framework update)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-08</span></footer>
+</div></body></html>
