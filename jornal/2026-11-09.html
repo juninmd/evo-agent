@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 09/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>77 itens · 30 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>09/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>7 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Lançamento do dia</p><h1><a href="https://openrouter.ai/anthropic/claude-fable-5.2">Anthropic: Claude Fable 5.2</a></h1><p class="dek">1000000 tokens de contexto. Claude Fable 5.2 is Anthropic&#39;s most capable model for the most demanding technical work, with gains over Fable 5.1 in coding, reasoning, and vision. In prerelease testing it completed…</p>
+<ul class="also"><li><a href="https://openrouter.ai/meta/muse-ember">Meta: Muse Ember</a> <span class="meta">OpenRouter: New Models</span></li></ul></div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Anthropic Claude Fable 5.2 lançado com 1M tokens de contexto, preço de $8/$40 por Mtok e leitura de cache a $0.20/Mtok.</li><li>Meta Muse Ember lançado com 1.048.576 tokens de contexto, focado em raciocínio complexo e execução de ferramentas para agentes.</li><li>Claude Code v2.1.321 define Claude Fable 5.2 como modelo padrão Fable e adiciona flag <code>--settings</code> para aplicar arquivo de configuração a toda sessão remota.</li><li>GitHub Secret Scanning passa a detectar segredos em logs de workflows do GitHub Actions em public preview.</li><li>Ollama v0.40.16-rc0 adiciona suporte ao modelo Ripple Preview no runner MLX com otimizações de atenção e ativação MLP.</li><li>Copilot CLI v1.0.109-0 melhora prompts de confirmação para <code>/share</code> e <code>/export</code> seguindo symlinks e aprova subdomínios por sessão.</li><li>Copilot CLI v1.0.108 adiciona <code>sandbox.userPolicy.filesystem.enumeratePaths</code> no Windows e habilita indexação tgrep gerenciada por padrão.</li><li>Artificial Analysis coloca Claude Fable 5.2 no topo do Índice de Inteligência com 64.6; líder em pesos abertos é Kimi K3.1 Pro com 46.5.</li><li>DeepSeek V4.1 Flash atinge 72.8% em benchmark de ciberintrusão, aproximando-se do GPT-6 Sol Daybreak da OpenAI.</li><li>Google Ads MCP Server ganha 4 ferramentas de escrita, mas ainda não permite alterar orçamentos.</li><li>AWS disponibiliza Claude Fable 5.2 e Mythos 5.2 no Amazon Bedrock e Claude Platform on AWS.</li><li>Paper Wake 5 apresenta framework Python para teste, fuzzing e análise estática de Solidity, separando throughput de design de entrada.</li><li>Paper GreyZone mapeia ameaças de aplicações agenticas em produção nos domínios de código, bancário e comércio.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Preço de cache do Fable 5.2 ($0.20/Mtok) pode mudar economia de agentes com contextos longos recorrentes.</p><p>Muse Ember posicionado para &quot;subtarefas de agente de código&quot; sinaliza aposta da Meta em modelos pequenos especializados em tool-use.</p><p>Secret scanning em logs de Actions expõe vazamentos que antes passavam despercebidos em CI/CD; revise pipelines públicos.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/speridlabs/idol" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/speridlabs/idol.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/speridlabs/idol">speridlabs/idol</a></h3>
+<p>image-to-3d · 1379 likes · 22854 downloads · trending 791 <span class="meta">HF Trending Models · <b>791</b></span></p></article>
+<ul class="brief"><li><a href="https://openrouter.ai/anthropic/claude-fable-5.2">Anthropic: Claude Fable 5.2</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic">xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic</a> <span class="meta">HF Trending Models · <b>673</b></span></li><li><a href="https://openrouter.ai/meta/muse-ember">Meta: Muse Ember</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro">moonshotai/Kimi-K3.1-Pro</a> <span class="meta">HF Trending Models · <b>561</b></span></li><li><a href="https://huggingface.co/ricursiveAI/Ripple-65B-Preview">ricursiveAI/Ripple-65B-Preview</a> <span class="meta">HF Trending Models · <b>390</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/AI_Agents/comments/1xs52yf/ia_in_my_job/">IA in my job</a></h3>
+<p>we have to look up property owners&#39; phone numbers online, and I waste an incredible amount of time searching through various websites one by one. We have their full names and addresses, but not their phone numbers,… <span class="meta">Reddit: AI Agents</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xs3y17/got_another_good_reminder_why_local_matters_today/">Got another good reminder why local matters today</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xs46nh/omni_voice_is_the_fastest_and_best_voice_clone/">Omni Voice is the fastest and best voice clone TTS out there. I&#39;ve tested them all.</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xs4eyc/if_you_want_to_learn_about_batch_inferencing/">If you want to learn about batch inferencing</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xs4kit/dialectic_requirements_and_verifiable_tests_will/">Dialectic, Requirements, and Verifiable tests will drastically increase your model&#39;s code output quality</a> <span class="meta">Reddit: LocalLLaMA</span></li><li><a href="https://www.reddit.com/r/opencode/comments/1xru6ph/is_opencode_go_10_subscription_good/">Is OpenCode Go 10$ subscription good?</a> <span class="meta">Reddit: OpenCode</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/samir-sarwar/samir-vllm" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/samir-sarwar/samir-vllm" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/samir-sarwar/samir-vllm">6 Hours of YouTube and 85 handtyped pages of notes on LLM Inference – Start here</a></h3>
+<p>6 Hours of YouTube and 85 handtyped pages of notes on LLM Inference – Start here | ⬆ 44 points | 💬 6 comments | by samirswr <span class="meta">Hacker News · <b>56</b></span></p></article>
+<ul class="brief"><li><a href="https://www.anthropic.com/claude-fable-and-mythos-5-2">Claude Fable 5.2 and Mythos 5.2</a> <span class="meta">Hacker News · <b>786</b></span></li><li><a href="https://matteoraso.github.io/im-not-convinced-the-ai-bubble-exists.html">I&#39;m not convinced the AI bubble exists</a> <span class="meta">Hacker News · <b>377</b></span></li><li><a href="https://www.stork.ai/newsletter/2026-11-08-apple-capped-engineers-at-a-200-daily-ai-budget">Apple capped engineers at a $200 daily AI budget</a> <span class="meta">Hacker News · <b>188</b></span></li><li><a href="https://research.meta.ai/blog/muse-ember">Our Smallest, Most Efficient Model: Muse Ember</a> <span class="meta">Hacker News · <b>93</b></span></li><li><a href="https://zenodo.org/records/23682548">Ginux: A New Kernel Runs Linux Userspace, Made via Human-Directed AI Engineering</a> <span class="meta">Hacker News · <b>91</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>5</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.321" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.321">v2.1.321</a></h3>
+<p>What&#39;s changed Added Claude Fable 5.2 (claude-fable-5-2), now the default Fable model — 1M context, $8/$40 per Mtok with $0.20/Mtok cache reads Added --settings to claude remote-control, which applies a settings file to… <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.109-0">1.0.109-0</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-11-09-secret-scanning-detects-secrets-in-github-actions-workflow-logs">Secret scanning detects secrets in GitHub Actions workflow logs</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/ollama/ollama/releases/tag/v0.40.16-rc0">v0.40.16-rc0: Add ripple preview support to the MLX runner (#19592)</a> <span class="meta">Ollama Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.108">1.0.108</a> <span class="meta">Copilot CLI Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://openai.com/index/coderabbit-codex-daybreak">CodeRabbit scales agentic software development and ships 20x more</a></h3>
+<p>CodeRabbit uses OpenAI models to govern and trust AI-generated code and Codex to ship 20 times more software with the same engineering team. <span class="meta">OpenAI Blog</span></p></article>
+<ul class="brief"><li><a href="https://devblogs.microsoft.com/foundry/when-one-pass-isnt-enough-agentic-mode-in-azure-content-understanding/">When one pass isn’t enough: agentic mode in Azure Content Understanding</a> <span class="meta">Microsoft Foundry Blog</span></li><li><a href="https://research.google/blog/exploring-the-worlds-languages-with-language-explorer/">Exploring the world&#39;s languages with Language Explorer</a> <span class="meta">Google Research</span></li><li><a href="https://huggingface.co/blog/nvidia/nemotron-personas-finance-japan">Nemotron-Personas-Finance-Japan: A Synthetic Dataset Capturing Japan&#39;s Demographics and Financial Context </a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://openai.com/index/introducing-control-room">Introducing Control Room: Human control over AI workloads</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/amazon/higher-order-pruning-experts">Your Experts Have Partners. There&#39;s HOPE for Keeping Them Together</a> <span class="meta">Hugging Face Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><h3><a href="https://arxiv.org/abs/2611.09307">Wake 5: A Python Framework for Solidity Testing, Fuzzing, and Static Analysis</a></h3>
+<p>arXiv:2611.09307v1 Announce Type: new Abstract: Smart-contract fuzzers differ by an order of magnitude in throughput and by design in how they construct inputs, yet published comparisons rarely separate the two. We… <span class="meta">arXiv cs.SE</span></p></article>
+<ul class="brief"><li><a href="https://arxiv.org/abs/2611.09260">Navigating Complexity: A User-Centered Evaluation of Project Management Tools</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2611.09234">Integrating MBSE Principles with AI to Improve the Quality of Requirements in SMEs Context</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2611.09218">BOXBOX: Recursive Harness Self-Improvement for Long-Running Performance Optimization</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2611.09212">On the Limits of Execution Traces for Repairing Assertion Failures in LLM-Generated Code</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2611.09161">GreyZone: Production-quality Agentic Application Threats</a> <span class="meta">arXiv cs.SE</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks%3D%3D1.7.3" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/langchain-ai/langchain" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>LangChain Docs &amp; Updates</figcaption></figure><h3><a href="https://github.com/langchain-ai/langchain/releases/tag/langchain-fireworks%3D%3D1.7.3">langchain-fireworks==1.7.3</a></h3>
+<p>Changes since langchain-fireworks==1.7.2 release(fireworks): 1.7.3 ( 41773) max_tokens from model profiles ( 41772) 41762) 41745) <span class="meta">LangChain Docs &amp; Updates</span></p></article>
+<ul class="brief"><li><a href="https://artificialanalysis.ai/models">Artificial Analysis: Claude Fable 5.2 assume a liderança do Índice de Inteligência</a> <span class="meta">Artificial Analysis · <b>95</b></span></li><li><a href="https://dev.to/gde/stop-asking-llms-to-do-math-client-side-functions-in-flutter-genui-with-blocsignals-23bh">Stop Asking LLMs to Do Math: Client-Side Functions in Flutter GenUI with bloc_signals</a> <span class="meta">Dev.to (ai) · <b>45</b></span></li><li><a href="https://dev.to/hiper2d/how-much-does-it-cost-to-run-a-text-game-with-llms-57o7">How much does it cost to run a text game with LLMs</a> <span class="meta">Dev.to (llm) · <b>20</b></span></li><li><a href="https://www.tabnews.com.br/eduardocorreas/como-uma-pessoa-cega-chama-uber-como-sabe-que-esta-pedindo-pizza-e-nao-hamburguer-pelo-ifood">Como uma pessoa cega chama Uber? Como sabe que está pedindo pizza e não hamburguer pelo iFood?</a> <span class="meta">TabNews · <b>12</b></span></li><li><a href="https://dev.to/dailycontext/our-looping-factory-cut-dev-page-load-time-by-75-and-counting-1hnf">Our Looping Factory Cut DEV Page Load Time by 75% and Counting</a> <span class="meta">Dev.to (agents) · <b>6</b></span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-09</span></footer>
+</div></body></html>
