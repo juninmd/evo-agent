@@ -7,6 +7,20 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-11-09T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-11-09-anthropic-dreams-e-roteamento-moe-para-melhoria-na-memoria-de-agentes</id>
+    <title>Anthropic Dreams e roteamento MoE para melhoria na memória de agentes</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-11-09-anthropic-dreams-e-roteamento-moe-para-melhoria-na-memoria-de-agentes"/>
+    <updated>2026-11-09T00:00:00Z</updated>
+    <summary type="text">A funcionalidade Dreams da Anthropic aprimora a reorganização de memória de agentes, enquanto ferramentas locais e segurança de agentes são priorizadas no cenário atual.</summary>
+    <category term="google-news"/>
+    <category term="reddit"/>
+    <category term="anthropic-dreams-api-memory"/>
+    <category term="claudecode"/>
+    <category term="codex"/>
+    <category term="openai"/>
+    <category term="vscode"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/techlead-2026-11-09-techlead-2026-11-09</id>
     <title>Radar Techlead — 09/11/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/techlead-2026-11-09-techlead-2026-11-09"/>
@@ -631,22 +645,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-22-minimax-m3-1-flash-expande-contexto-para-1m-tokens-claude-code-corrige-sandbox-e</id>
-    <title>MiniMax M3.1 Flash expande contexto para 1M tokens; Claude Code corrige sandbox e MCP</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-22-minimax-m3-1-flash-expande-contexto-para-1m-tokens-claude-code-corrige-sandbox-e"/>
-    <updated>2026-10-22T00:00:00Z</updated>
-    <summary type="text">Lançamentos oficiais trazem modelos multimodais de longo contexto e correções de segurança em ferramentas de IA, enquanto relatos de usuários expõem limites de uso, falhas de cobrança e lacunas de privacidade em ambientes corporativos.</summary>
-    <category term="hf-daily-papers"/>
-    <category term="claude-code"/>
-    <category term="github"/>
-    <category term="vercel-ai-sdk"/>
-    <category term="microsoft-agent-framework"/>
-    <category term="copilot-cli"/>
-    <category term="openrouter"/>
-    <category term="reddit"/>
-    <category term="ollama"/>
-    <category term="opencode"/>
   </entry>
 </feed>
