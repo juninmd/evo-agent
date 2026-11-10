@@ -13,6 +13,7 @@ export default defineConfig({
         "src/__tests__/**",
         "src/fixtures/**",
         "src/agent/benchmark-cli.ts",
+        "src/benchmarks/perf-cli.ts",
         "src/observability/health-cli.ts",
         "src/index.ts",
       ],

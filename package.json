@@ -9,6 +9,7 @@
     "start": "node dist/index.js",
     "health": "tsx src/observability/health-cli.ts",
     "benchmark:editorial": "tsx src/agent/benchmark-cli.ts",
+    "benchmark:perf": "tsx src/benchmarks/perf-cli.ts",
     "prompt:rollback": "tsx src/agent/prompt-rollback-cli.ts",
     "edition": "tsx src/agent/edition-cli.ts",
     "backfill:articles": "node dist/agent/backfill-cli.js",
