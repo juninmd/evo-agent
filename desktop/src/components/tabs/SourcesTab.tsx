@@ -34,6 +34,7 @@ export default function SourcesTab() {
   );
 
   const rows = sources.data?.items ?? [];
+  const busiest = Math.max(1, ...rows.map((item) => item.recentArticles));
   const recent = articles.data?.items ?? [];
 
   return (
@@ -69,7 +70,7 @@ export default function SourcesTab() {
           </div>
         )}
         {!sources.data && !sources.error ? (
-          <Skeleton label={t("app.loading")} />
+          <Skeleton label={t("app.loading")} shape="table" />
         ) : rows.length === 0 ? (
           <EmptyState message={t("sources.empty")} />
         ) : (
@@ -103,12 +104,30 @@ export default function SourcesTab() {
                     )}
                   </td>
                   <td className={`${CELL_NUM} evo-num text-muted`}>
-                    {formatCount(item.recentArticles)}
+                    {/* Barra na celula: o volume se compara de relance, e o
+                        numero ao lado continua sendo a leitura exata. */}
+                    <span className="flex items-center justify-end gap-2">
+                      <span
+                        aria-hidden="true"
+                        className="hidden h-1 w-24 overflow-hidden rounded-full bg-hover sm:block"
+                      >
+                        <span
+                          className="block h-full rounded-full bg-accent"
+                          style={{
+                            width: `${(item.recentArticles / busiest) * 100}%`,
+                          }}
+                        />
+                      </span>
+                      <span className="min-w-[3ch]">
+                        {formatCount(item.recentArticles)}
+                      </span>
+                    </span>
                   </td>
                   <td className={`${CELL} whitespace-nowrap text-muted`}>
                     {item.lastSeenAt ? formatRelative(item.lastSeenAt) : "—"}
                   </td>
-                  <td className={CELL}>
+                  {/* A direita, como o cabecalho da coluna: e um numero. */}
+                  <td className={CELL_NUM}>
                     {item.consecutiveFailures > 0 ? (
                       <Badge tone="warn">
                         {formatCount(item.consecutiveFailures)}

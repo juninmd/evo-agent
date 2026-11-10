@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { api, errText } from "../lib/api";
 import { formatCount, formatFullDateTime, metricNumber } from "../lib/format";
 import {
-  type MessageKey,
   editionKindLabel,
+  lifecycleLabel,
   notificationLabel,
+  revisionReasonLabel,
   t,
 } from "../lib/i18n";
 import type { EditionDetail } from "../lib/types";
@@ -12,6 +13,7 @@ import Badge, { type Tone } from "./Badge";
 import ErrorBanner from "./ErrorBanner";
 import { CloseIcon, ExternalIcon } from "./Icons";
 import Skeleton from "./Skeleton";
+import SegmentedBar from "./charts/SegmentedBar";
 
 const TONES: Record<string, Tone> = {
   delivered: "ok",
@@ -20,13 +22,57 @@ const TONES: Record<string, Tone> = {
   suppressed: "neutral",
 };
 
-/** Chaves de `EditorialMetrics` (src/agent/types.ts) com rotulo pt-BR. */
-const EDITORIAL_METRICS: { key: string; label: MessageKey }[] = [
-  { key: "considered", label: "editions.metrics.considered" },
-  { key: "selected", label: "editions.metrics.selected" },
-  { key: "rejected", label: "editions.metrics.rejected" },
-  { key: "primarySources", label: "editions.metrics.primarySources" },
-];
+/**
+ * Quanto do que foi considerado entrou na edicao, e quanto disso e fonte
+ * primaria. Sem os tres numeros (paginas antigas, radar) nao ha funil.
+ */
+function Funnel({ metrics }: { metrics: Record<string, unknown> }) {
+  const considered = metricNumber(metrics, "considered");
+  const selected = metricNumber(metrics, "selected");
+  const rejected = metricNumber(metrics, "rejected");
+  if (considered === null || selected === null || rejected === null) {
+    return null;
+  }
+  const primary = Math.min(
+    selected,
+    metricNumber(metrics, "primarySources") ?? 0,
+  );
+  return (
+    <section>
+      <h3 className="text-xs font-semibold text-fg">{t("editions.funnel")}</h3>
+      <p className="mb-1.5 text-[11px] text-muted">
+        {t("editions.funnelHint", {
+          selected: formatCount(selected),
+          considered: formatCount(considered),
+        })}
+      </p>
+      <SegmentedBar
+        label={t("editions.funnel")}
+        formatValue={formatCount}
+        segments={[
+          {
+            key: "primary",
+            label: t("editions.funnelPrimary"),
+            value: primary,
+            className: "bg-accent",
+          },
+          {
+            key: "other",
+            label: t("editions.funnelOther"),
+            value: selected - primary,
+            className: "bg-info",
+          },
+          {
+            key: "rejected",
+            label: t("editions.metrics.rejected"),
+            value: rejected,
+            className: "bg-line",
+          },
+        ]}
+      />
+    </section>
+  );
+}
 
 export default function EditionDetailPanel({
   slug,
@@ -56,7 +102,7 @@ export default function EditionDetailPanel({
   }, [slug]);
 
   return (
-    <aside className="evo-card flex min-h-0 flex-col overflow-hidden">
+    <aside className="evo-card evo-enter flex min-h-0 flex-col overflow-hidden">
       <header className="flex shrink-0 items-center justify-between gap-2 border-b border-edge px-3 py-2">
         <h2 className="truncate font-mono text-xs font-semibold text-fg">
           {slug}
@@ -99,6 +145,22 @@ export default function EditionDetailPanel({
               >
                 {notificationLabel(detail.edition.notificationStatus)}
               </Badge>
+              {detail.edition.status !== "published" && (
+                <Badge
+                  tone={
+                    detail.edition.status === "retracted" ? "danger" : "info"
+                  }
+                >
+                  {lifecycleLabel(detail.edition.status)}
+                </Badge>
+              )}
+              {detail.edition.revision > 1 && (
+                <Badge>
+                  {t("editions.revision", {
+                    revision: detail.edition.revision,
+                  })}
+                </Badge>
+              )}
               {detail.edition.tags.map((tag) => (
                 <Badge key={tag}>{tag}</Badge>
               ))}
@@ -108,23 +170,7 @@ export default function EditionDetailPanel({
               <p className="text-xs text-muted">{detail.edition.summary}</p>
             )}
 
-            <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-              {EDITORIAL_METRICS.map((metric) => (
-                <div
-                  key={metric.key}
-                  className="rounded-lg border border-edge px-2 py-1.5"
-                >
-                  <dt className="text-[10px] uppercase text-faint">
-                    {t(metric.label)}
-                  </dt>
-                  <dd className="evo-num text-sm text-fg">
-                    {formatCount(
-                      metricNumber(detail.edition.editorialMetrics, metric.key),
-                    )}
-                  </dd>
-                </div>
-              ))}
-            </dl>
+            <Funnel metrics={detail.edition.editorialMetrics} />
 
             {detail.edition.notificationError && (
               <div className="rounded-lg border border-danger/40 bg-danger/10 px-2 py-1.5 text-[11px] text-danger">
@@ -175,6 +221,36 @@ export default function EditionDetailPanel({
                 ))}
               </ul>
             </section>
+
+            {detail.revisions.length > 1 && (
+              <section>
+                <h3 className="text-xs font-semibold text-fg">
+                  {t("editions.revisions")}
+                </h3>
+                <ol className="mt-1 flex flex-col text-[11px]">
+                  {detail.revisions.map((revision) => (
+                    <li
+                      key={revision.revision}
+                      className="flex items-center justify-between gap-2 border-t border-edge/60 py-1 first:border-t-0"
+                    >
+                      <span className="text-fg">
+                        <span className="evo-num font-medium">
+                          {t("editions.revision", {
+                            revision: revision.revision,
+                          })}
+                        </span>{" "}
+                        <span className="text-muted">
+                          · {revisionReasonLabel(revision.reason)}
+                        </span>
+                      </span>
+                      <span className="whitespace-nowrap text-faint">
+                        {formatFullDateTime(revision.createdAt)}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
           </div>
         )}
       </div>

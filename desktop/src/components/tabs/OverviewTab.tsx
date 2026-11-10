@@ -1,8 +1,9 @@
+import { api } from "../../lib/api";
 import { formatCount, formatDateTime, formatNumber } from "../../lib/format";
 import { healthReasonLabel, t } from "../../lib/i18n";
 import type { TabId } from "../../lib/tabs";
 import type { Overview, Stats } from "../../lib/types";
-import Badge from "../Badge";
+import { usePoll } from "../../lib/usePoll";
 import Card from "../Card";
 import CycleTable from "../CycleTable";
 import EditionTable from "../EditionTable";
@@ -10,17 +11,68 @@ import ErrorBanner from "../ErrorBanner";
 import RunPanel from "../RunPanel";
 import Skeleton from "../Skeleton";
 import StatTile from "../StatTile";
+import CycleStrip from "../charts/CycleStrip";
+import Meter from "../charts/Meter";
+import PublicationCalendar from "../charts/PublicationCalendar";
+import SegmentedBar from "../charts/SegmentedBar";
+
+const CALENDAR_DAYS = 35;
+
+/** Leitura propria e lenta: o calendario so muda quando sai uma edicao. */
+function CalendarCard() {
+  const calendar = usePoll(
+    "calendar",
+    () => api.calendar(CALENDAR_DAYS),
+    300_000,
+  );
+  return (
+    <Card
+      title={t("calendar.title")}
+      hint={
+        calendar.data
+          ? t("calendar.hint", {
+              days: calendar.data.days.length,
+              target: calendar.data.target,
+            })
+          : undefined
+      }
+    >
+      {calendar.error && !calendar.data ? (
+        <ErrorBanner
+          message={t("common.loadFailed", { error: calendar.error })}
+          busy={calendar.loading}
+          onRetry={calendar.reload}
+        />
+      ) : !calendar.data ? (
+        <Skeleton label={t("app.loading")} shape="chart" />
+      ) : (
+        <PublicationCalendar calendar={calendar.data} />
+      )}
+    </Card>
+  );
+}
 
 function StatGrid({ stats, overview }: { stats: Stats; overview: Overview }) {
   return (
-    <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+    <div className="evo-stagger grid grid-cols-2 gap-2 lg:grid-cols-4">
       <StatTile
         label={t("overview.editionsToday")}
         value={`${overview.editionsToday}/${overview.dailyEditionsTarget}`}
         tone={
           overview.editionsToday >= overview.dailyEditionsTarget ? "ok" : "warn"
         }
-      />
+      >
+        <Meter
+          value={overview.editionsToday}
+          max={overview.dailyEditionsTarget}
+          label={t("overview.editionsProgress")}
+          className={
+            overview.editionsToday >= overview.dailyEditionsTarget
+              ? "text-ok"
+              : "text-warn"
+          }
+        />
+      </StatTile>
       <StatTile
         label={t("overview.recentArticles")}
         value={formatCount(stats.recentArticles)}
@@ -90,10 +142,14 @@ export default function OverviewTab({
     );
   }
   if (!overview) {
-    return <Skeleton label={t("app.loading")} />;
+    return <Skeleton label={t("app.loading")} shape="tiles" />;
   }
 
   const { health } = overview;
+  const healthySources = Math.max(
+    0,
+    overview.sources.total - overview.sources.failing,
+  );
 
   return (
     <div className="flex flex-col gap-3">
@@ -126,10 +182,8 @@ export default function OverviewTab({
         <StatGrid stats={overview.stats} overview={overview} />
       </section>
 
-      <div className="grid items-start gap-3 lg:grid-cols-2">
-        <Card title={t("overview.runTitle")}>
-          <RunPanel overview={overview} modes={runModes} onStarted={onRetry} />
-        </Card>
+      <div className="grid items-start gap-3 lg:grid-cols-3">
+        <CalendarCard />
 
         <Card
           title={t("overview.sources")}
@@ -148,23 +202,33 @@ export default function OverviewTab({
             </button>
           }
         >
-          <div className="flex flex-wrap gap-1.5">
-            <Badge tone={overview.sources.failing > 0 ? "warn" : "ok"}>
-              {t("overview.sourcesFailing", {
-                count: formatCount(overview.sources.failing),
-              })}
-            </Badge>
-            <Badge tone="accent">
-              {t("overview.sourcesPrimary", {
-                count: formatCount(overview.sources.primary),
-              })}
-            </Badge>
-            <Badge>
-              {t("overview.sourcesTotal", {
-                count: formatCount(overview.sources.total),
-              })}
-            </Badge>
-          </div>
+          <SegmentedBar
+            label={t("overview.sourcesBar")}
+            formatValue={formatCount}
+            segments={[
+              {
+                key: "healthy",
+                label: t("overview.sourcesHealthy"),
+                value: healthySources,
+                className: "bg-ok",
+              },
+              {
+                key: "failing",
+                label: t("overview.sourcesFailingLabel"),
+                value: overview.sources.failing,
+                className: "bg-warn",
+              },
+            ]}
+          />
+          <p className="mt-1.5 text-[11px] text-muted">
+            {t("overview.sourcesPrimary", {
+              count: formatCount(overview.sources.primary),
+            })}
+            {" · "}
+            {t("overview.sourcesTotal", {
+              count: formatCount(overview.sources.total),
+            })}
+          </p>
           {overview.intelligence && (
             <div className="mt-2 border-t border-edge pt-2">
               <p className="text-[11px] uppercase tracking-wide text-faint">
@@ -183,6 +247,10 @@ export default function OverviewTab({
               </p>
             </div>
           )}
+        </Card>
+
+        <Card title={t("overview.runTitle")}>
+          <RunPanel overview={overview} modes={runModes} onStarted={onRetry} />
         </Card>
       </div>
 
@@ -209,13 +277,17 @@ export default function OverviewTab({
             : undefined
         }
         actions={
-          <button
-            type="button"
-            className="evo-btn"
-            onClick={() => onOpenTab("cycles")}
-          >
-            {t("overview.viewAll")}
-          </button>
+          <>
+            {/* A API devolve o mais novo primeiro; a fita le no sentido do tempo. */}
+            <CycleStrip runs={[...overview.lastCycles].reverse()} />
+            <button
+              type="button"
+              className="evo-btn"
+              onClick={() => onOpenTab("cycles")}
+            >
+              {t("overview.viewAll")}
+            </button>
+          </>
         }
       >
         <CycleTable runs={overview.lastCycles} compact />

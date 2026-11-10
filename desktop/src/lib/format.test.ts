@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  formatAxisNumber,
   formatCount,
   formatDateTime,
   formatDuration,
@@ -74,5 +75,16 @@ describe("hostOf", () => {
     expect(hostOf("http://127.0.0.1:8787")).toBe("127.0.0.1:8787");
     expect(hostOf("https://agente.example/api")).toBe("agente.example");
     expect(hostOf("not a url")).toBe("not a url");
+  });
+});
+
+describe("formatAxisNumber", () => {
+  it("writes small ticks in full and large ones compact", () => {
+    expect(formatAxisNumber(0)).toBe("0");
+    expect(formatAxisNumber(82.5)).toBe("82,5");
+    expect(formatAxisNumber(2000)).toBe("2.000");
+    // O Intl separa numero e unidade com um espaco inseparavel.
+    expect(formatAxisNumber(20_000).replace(/\s/g, " ")).toBe("20 mil");
+    expect(formatAxisNumber(1_500_000).replace(/\s/g, " ")).toBe("1,5 mi");
   });
 });

@@ -67,6 +67,12 @@ const catalog = {
   "overview.sourcesTotal": "{count} fonte|{count} fontes",
   "overview.intelligence": "Ranking de modelos",
   "overview.intelligenceHint": "Medido em {day}",
+  "overview.sourcesHealthy": "Saudáveis",
+  "overview.sourcesFailingLabel": "Com falha",
+  "overview.sourcesBar": "Saúde das fontes acompanhadas",
+  "overview.cycleStrip":
+    "Estado dos últimos ciclos, do mais antigo ao mais novo",
+  "overview.editionsProgress": "Edições publicadas hoje frente à meta",
   "overview.latestEditions": "Últimas edições",
   "overview.lastCycles": "Últimos ciclos",
   "overview.viewAll": "Ver todas",
@@ -98,6 +104,18 @@ const catalog = {
   "editions.metrics.rejected": "Rejeitadas",
   "editions.metrics.primarySources": "Primárias",
   "editions.attempts": "Tentativas",
+  "editions.score": "Qualidade",
+  "editions.scoreOf": "Pontuação editorial: {score} de 100",
+  "editions.lifecycle.published": "Publicada",
+  "editions.lifecycle.corrected": "Corrigida",
+  "editions.lifecycle.retracted": "Retratada",
+  "editions.revision": "Revisão {revision}",
+  "editions.revisions": "Histórico de revisões",
+  "editions.funnel": "Funil editorial",
+  "editions.funnelHint":
+    "{selected} de {considered} fontes consideradas entraram na edição",
+  "editions.funnelPrimary": "Primárias",
+  "editions.funnelOther": "Outras selecionadas",
   "editions.evidence": "Evidência preservada",
   "editions.evidenceHint":
     "{count} fonte citada nesta publicação|{count} fontes citadas nesta publicação",
@@ -129,6 +147,14 @@ const catalog = {
   "cycles.metrics": "Métricas",
   "cycles.count": "{total} execução|{total} execuções",
   "cycles.empty": "Nenhuma execução registrada.",
+  "cycles.chartTitle": "Duração por ciclo",
+  "cycles.chartHint": "Do mais antigo ao mais novo · cor pelo estado",
+  "cycles.summary": "Resumo dos ciclos listados",
+  "cycles.successRate": "Taxa de sucesso",
+  "cycles.successRateHint": "{succeeded} de {decided} concluídos",
+  "cycles.median": "Duração mediana",
+  "cycles.p95": "Duração p95",
+  "cycles.failures": "Falhas",
   "cycles.status.succeeded": "Sucesso",
   "cycles.status.failed": "Falha",
   "cycles.status.skipped": "Ignorado",
@@ -168,6 +194,11 @@ const catalog = {
   "metrics.avg": "Média",
   "metrics.min": "Mín",
   "metrics.tip": "Clique no nome de uma métrica para ver a série ao lado.",
+  "metrics.lastValue": "Última",
+  "metrics.p95": "P95",
+  "metrics.readings": "Leituras",
+  "metrics.copyCsv": "Copiar CSV",
+  "metrics.range": "Faixa entre mínimo e máximo, com a média marcada",
 
   "settings.title": "Ajustes",
   "settings.apiUrl": "URL da API",
@@ -203,6 +234,24 @@ const catalog = {
   "settings.themeLight": "Claro",
   "settings.themeSystem": "Seguir o sistema",
   "settings.notConfigured": "Informe a URL e o token do agente para começar.",
+
+  "chart.keyboardHint": "{name}: use as setas para percorrer as leituras",
+  "chart.seriesSummary":
+    "{count} leitura: {last}|{count} leituras, da primeira ({first}) à última ({last})",
+  "chart.reading": "{value} em {time}",
+  "chart.cycleReading": "{type}, {status}, início {time}, duração {duration}",
+
+  "calendar.title": "Calendário de publicações",
+  "calendar.hint": "Últimos {days} dias · meta diária de {target}",
+  "calendar.day":
+    "{date}: {count} edição de {target}|{date}: {count} edições de {target}",
+  "calendar.failed": "{count} notificação falhou|{count} notificações falharam",
+  "calendar.summary": "{complete} de {days} dias com a meta de {target} batida",
+  "calendar.empty": "{count} dia sem edição|{count} dias sem edição",
+  "calendar.less": "Menos",
+  "calendar.more": "Mais",
+
+  "shortcuts.hint": "Atalhos: 1 a 7 trocam de aba · R atualiza",
 
   // Badges de atencao nas abas: um numero que exige olhar, nao decoracao.
   "attention.pendingNotifications":
@@ -274,6 +323,31 @@ export function editionKindLabel(
   return edition.period
     ? `${t("editions.kind.report")}: ${edition.period}`
     : t("editions.kind.report");
+}
+
+export function lifecycleLabel(status: Edition["status"]): string {
+  const known = ["published", "corrected", "retracted"];
+  return known.includes(status)
+    ? t(`editions.lifecycle.${status}` as MessageKey)
+    : status;
+}
+
+/**
+ * O motivo de uma revisao e um slug do agente (`initial`, `update`, `baseline`,
+ * `retracted: <texto>`); o texto livre depois de `retracted:` e preservado.
+ */
+const REVISION_REASONS: Record<string, string> = {
+  initial: "publicação inicial",
+  update: "atualização",
+  baseline: "linha de base",
+  "reconciled from repository": "reconciliada com o repositório",
+};
+
+export function revisionReasonLabel(reason: string): string {
+  if (reason.startsWith("retracted:")) {
+    return `retratada:${reason.slice("retracted:".length)}`;
+  }
+  return REVISION_REASONS[reason] ?? reason;
 }
 
 export function notificationLabel(

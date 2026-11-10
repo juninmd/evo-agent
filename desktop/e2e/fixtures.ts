@@ -39,6 +39,9 @@ export const overview = {
       notificationAttempts: 1,
       notificationError: null,
       editorialMetrics: { considered: 42, selected: 6, rejected: 36, primarySources: 3 },
+      status: "corrected",
+      qualityScore: 84,
+      revision: 2,
       publishedAt: "2026-10-17 12:05:00",
     },
     {
@@ -54,6 +57,9 @@ export const overview = {
       notificationAttempts: 2,
       notificationError: "Telegram API 429",
       editorialMetrics: { considered: 88, selected: 24, rejected: 64, primarySources: 9 },
+      status: "published",
+      qualityScore: null,
+      revision: 1,
       publishedAt: "2026-10-16 21:00:00",
     },
   ],
@@ -173,9 +179,34 @@ export const articles = {
   ],
 };
 
+/**
+ * Historico para o grafico de duracao: os dois ciclos da visao geral no topo
+ * (mais novos) e, abaixo, coletas e alertas com duracoes que nao se repetem,
+ * para as celulas continuarem identificaveis nos testes.
+ */
+const olderCycles = Array.from({ length: 22 }, (_, index) => {
+  const id = 410 - index;
+  const failed = index === 6 || index === 7;
+  const skipped = index === 13;
+  const type = index % 3 === 0 ? "model_alerts" : "crawl";
+  const duration = type === "crawl" ? 95 + ((index * 37) % 140) : 9 + (index % 5);
+  const hour = String(11 - Math.floor(index / 2)).padStart(2, "0");
+  const minute = index % 2 === 0 ? "00" : "30";
+  return {
+    id,
+    type,
+    status: failed ? "failed" : skipped ? "skipped" : "succeeded",
+    metrics: {},
+    error: failed ? "timeout of 10000ms exceeded" : null,
+    startedAt: `2026-10-17 ${hour}:${minute}:00`,
+    finishedAt: `2026-10-17 ${hour}:${minute}:30`,
+    durationSeconds: skipped ? 0 : duration,
+  };
+});
+
 export const cycles = {
-  total: 2,
-  items: overview.lastCycles,
+  total: overview.lastCycles.length + olderCycles.length,
+  items: [...overview.lastCycles, ...olderCycles],
 };
 
 export const prompts = {
@@ -210,11 +241,11 @@ export const metrics = {
   summary: [
     {
       name: "llm.latency_ms",
-      samples: 12,
-      average: 24807.5,
+      samples: 19,
+      average: 24036.84,
       minimum: 9100,
       maximum: 61000,
-      lastRecorded: "2026-10-17 12:00:00",
+      lastRecorded: "2026-10-17 13:00:00",
     },
     {
       name: "editorial.quality_score",
@@ -228,14 +259,50 @@ export const metrics = {
   points: [],
 };
 
+/** Latencias em ordem cronologica; a API devolve a mais recente primeiro. */
+const latencies = [
+  9100, 12400, 15400, 14800, 18200, 24800, 22100, 26500, 31800, 61000, 38400,
+  27600, 22500, 20900, 19800, 23200, 24300, 22800, 21100,
+];
+
 export const metricSeries = {
   hours: 48,
   summary: metrics.summary.slice(0, 1),
-  points: [9100, 15400, 24800, 61000, 22500, 19800, 24300, 21100].map((value, index) => ({
-    value,
-    labels: { type: "daily" },
-    recordedAt: `2026-10-17 1${index % 10}:00:00`,
-  })),
+  points: latencies
+    .map((value, index) => ({
+      value,
+      labels: { type: "daily" },
+      recordedAt: `2026-10-${index < 5 ? "16" : "17"} ${String(
+        index < 5 ? 19 + index : index - 5,
+      ).padStart(2, "0")}:00:00`,
+    }))
+    .reverse(),
+};
+
+/** 35 dias ate hoje (17/10), com dias cheios, parciais, vazios e uma falha. */
+export const calendar = {
+  target: 3,
+  today: overview.day,
+  days: Array.from({ length: 35 }, (_, index) => {
+    const date = new Date(Date.UTC(2026, 8, 13 + index))
+      .toISOString()
+      .slice(0, 10);
+    const published =
+      date === overview.day
+        ? overview.editionsToday
+        : index % 11 === 4
+          ? 0
+          : index % 5 === 2
+            ? 1
+            : index % 7 === 3
+              ? 2
+              : 3;
+    return {
+      date,
+      published,
+      failedNotifications: index === 20 ? 1 : 0,
+    };
+  }),
 };
 
 export const editionDetail = {
@@ -255,6 +322,20 @@ export const editionDetail = {
       sourceTitle: "Modelo Exemplo 3 chega com janela de 1M tokens",
       excerpt: "O anúncio cita ganhos de 30% em tarefas longas.",
       observedAt: "2026-10-17 09:00:00",
+    },
+  ],
+  revisions: [
+    {
+      revision: 2,
+      reason: "update",
+      contentHash: "9f2c1d",
+      createdAt: "2026-10-17 13:40:00",
+    },
+    {
+      revision: 1,
+      reason: "initial",
+      contentHash: "41aa07",
+      createdAt: "2026-10-17 12:05:00",
     },
   ],
 };
@@ -280,6 +361,7 @@ export const responses: Record<string, unknown> = {
   cycles,
   prompts,
   metrics,
+  calendar,
   run_start: runAccepted,
   open_external: null,
 };

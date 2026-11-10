@@ -1,8 +1,14 @@
 import { formatCount, metricNumber } from "../lib/format";
-import { editionKindLabel, notificationLabel, t } from "../lib/i18n";
+import {
+  editionKindLabel,
+  lifecycleLabel,
+  notificationLabel,
+  t,
+} from "../lib/i18n";
 import type { Edition } from "../lib/types";
 import Badge, { type Tone } from "./Badge";
 import EmptyState from "./EmptyState";
+import Meter from "./charts/Meter";
 import {
   CELL,
   CELL_NUM,
@@ -14,6 +20,21 @@ import {
   TH_NUM,
   TH_NUM_LAST,
 } from "./table";
+
+/** Faixas da pontuacao editorial (0-100), as mesmas do portao de promocao. */
+export function scoreTone(score: number): "ok" | "warn" | "danger" {
+  if (score >= 80) return "ok";
+  if (score >= 60) return "warn";
+  return "danger";
+}
+
+const SCORE_TEXT = { ok: "text-ok", warn: "text-warn", danger: "text-danger" };
+
+const LIFECYCLE_TONES: Record<Edition["status"], Tone> = {
+  published: "neutral",
+  corrected: "info",
+  retracted: "danger",
+};
 
 const NOTIFICATION_TONES: Record<Edition["notificationStatus"], Tone> = {
   delivered: "ok",
@@ -44,6 +65,7 @@ export default function EditionTable({
           <th className={TH}>{t("editions.filterStatus")}</th>
           {!compact && (
             <>
+              <th className={TH}>{t("editions.score")}</th>
               <th className={TH_NUM}>{t("editions.sources")}</th>
               <th className={TH_NUM}>{t("editions.quality")}</th>
               <th className={TH_NUM_LAST}>{t("editions.attempts")}</th>
@@ -72,6 +94,14 @@ export default function EditionTable({
               <span className={`${MONO} text-faint`}>
                 {edition.date} · {edition.slug}
               </span>
+              {/* "Publicada" e o estado normal: so o desvio ganha badge. */}
+              {edition.status !== "published" && (
+                <span className="ml-1.5">
+                  <Badge tone={LIFECYCLE_TONES[edition.status] ?? "neutral"}>
+                    {lifecycleLabel(edition.status)}
+                  </Badge>
+                </span>
+              )}
             </td>
             <td className={CELL}>
               <Badge tone={NOTIFICATION_TONES[edition.notificationStatus]}>
@@ -80,6 +110,25 @@ export default function EditionTable({
             </td>
             {!compact && (
               <>
+                <td className={CELL}>
+                  {edition.qualityScore === null ? (
+                    <span className="text-faint">—</span>
+                  ) : (
+                    <span className="flex w-20 flex-col gap-1">
+                      <span className="evo-num font-medium text-fg">
+                        {edition.qualityScore}
+                      </span>
+                      <Meter
+                        value={edition.qualityScore}
+                        max={100}
+                        label={t("editions.scoreOf", {
+                          score: edition.qualityScore,
+                        })}
+                        className={SCORE_TEXT[scoreTone(edition.qualityScore)]}
+                      />
+                    </span>
+                  )}
+                </td>
                 <td className={`${CELL_NUM} evo-num text-muted`}>
                   {formatCount(
                     metricNumber(edition.editorialMetrics, "selected"),

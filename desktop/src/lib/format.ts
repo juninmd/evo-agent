@@ -64,6 +64,18 @@ export function formatNumber(value: number, digits = 1): string {
   }).format(value);
 }
 
+/**
+ * Rotulo de eixo: por extenso abaixo de 10 mil, compacto dali em diante
+ * ("20 mil", "1,5 mi"), para o eixo nao roubar a largura do grafico.
+ */
+export function formatAxisNumber(value: number): string {
+  if (Math.abs(value) < 10_000) return formatNumber(value, 2);
+  return new Intl.NumberFormat(LOCALE, {
+    notation: "compact",
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
 export function formatPercent(value: number): string {
   return new Intl.NumberFormat(LOCALE, {
     style: "percent",

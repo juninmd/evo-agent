@@ -75,7 +75,8 @@ export default function AppHeader({
             onClick={onRefresh}
             disabled={loading}
             aria-label={t("app.refresh")}
-            title={t("app.refresh")}
+            aria-keyshortcuts="R"
+            title={`${t("app.refresh")} (R)`}
           >
             <RefreshIcon
               className={`size-3.5 ${loading ? "animate-spin" : ""}`}

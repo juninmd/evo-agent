@@ -121,7 +121,7 @@ export default function EditionsTab() {
           </div>
         )}
         {!poll.data && !poll.error ? (
-          <Skeleton label={t("app.loading")} />
+          <Skeleton label={t("app.loading")} shape="table" />
         ) : (
           <EditionTable editions={items} onOpen={setOpenSlug} />
         )}

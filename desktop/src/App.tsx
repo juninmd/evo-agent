@@ -13,13 +13,15 @@ import SourcesTab from "./components/tabs/SourcesTab";
 import { api, errText } from "./lib/api";
 import { attentionFor } from "./lib/attention";
 import { t } from "./lib/i18n";
-import { type TabId, panelId } from "./lib/tabs";
+import { shortcutFor } from "./lib/shortcuts";
+import { type TabId, panelId, tabId } from "./lib/tabs";
 import {
   type ThemeId,
   applyTheme,
   followSystemTheme,
   loadTheme,
   nextTheme,
+  withThemeTransition,
 } from "./lib/theme";
 import type { SettingsView } from "./lib/types";
 import { usePoll } from "./lib/usePoll";
@@ -34,6 +36,15 @@ export default function App() {
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
+
+  // O atributo troca dentro da transicao (o fade precisa do antes e do depois);
+  // o efeito acima repete a aplicacao, que e idempotente, e persiste a escolha.
+  const changeTheme = useCallback((next: ThemeId) => {
+    withThemeTransition(() => {
+      applyTheme(next);
+      setTheme(next);
+    });
+  }, []);
 
   // O SO pode trocar de tema com o console aberto.
   useEffect(
@@ -75,6 +86,26 @@ export default function App() {
     meta.reload();
   }, [overview, meta]);
 
+  useEffect(() => {
+    if (!configured) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      const action = shortcutFor(event, event.target as HTMLElement | null);
+      if (!action) return;
+      event.preventDefault();
+      if (action.kind === "refresh") {
+        refresh();
+        return;
+      }
+      setTab(action.tab);
+      // O foco acompanha: as setas continuam a navegacao a partir da aba nova.
+      window.requestAnimationFrame(() =>
+        document.getElementById(tabId(action.tab))?.focus(),
+      );
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [configured, refresh]);
+
   if (settingsError) {
     return (
       <div className="p-3">
@@ -87,7 +118,7 @@ export default function App() {
   if (!settings) {
     return (
       <div className="p-3">
-        <Skeleton label={t("app.loading")} />
+        <Skeleton label={t("app.loading")} shape="tiles" />
       </div>
     );
   }
@@ -102,7 +133,7 @@ export default function App() {
         loading={overview.loading}
         onRefresh={refresh}
         theme={theme}
-        onCycleTheme={() => setTheme((current) => nextTheme(current))}
+        onCycleTheme={() => changeTheme(nextTheme(theme))}
       />
 
       {configured ? (
@@ -118,7 +149,8 @@ export default function App() {
         aria-busy={overview.loading}
         className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3"
       >
-        <div className="flex min-h-full flex-col gap-3">
+        {/* `key` pela aba: o painel novo entra com a animacao de entrada. */}
+        <div key={tab} className="evo-enter flex min-h-full flex-col gap-3">
           {!configured ? (
             <>
               <div className="rounded-lg border border-warn/40 bg-warn/10 px-3 py-2 text-xs text-warn">
@@ -128,7 +160,7 @@ export default function App() {
                 settings={settings}
                 meta={meta.data}
                 theme={theme}
-                onTheme={setTheme}
+                onTheme={changeTheme}
                 onSaved={onSaved}
               />
             </>
@@ -156,7 +188,7 @@ export default function App() {
                   settings={settings}
                   meta={meta.data}
                   theme={theme}
-                  onTheme={setTheme}
+                  onTheme={changeTheme}
                   onSaved={onSaved}
                 />
               )}

@@ -48,3 +48,24 @@ export function nextTheme(theme: ThemeId): ThemeId {
   if (theme === "claro") return "sistema";
   return "escuro";
 }
+
+type TransitionDocument = Document & {
+  startViewTransition?: (update: () => void) => unknown;
+};
+
+/**
+ * Roda `update` dentro de uma View Transition quando o webview tem a API e a
+ * pessoa nao pediu menos movimento; senao, roda direto. A troca de tema vira
+ * um fade curto em vez de um corte seco.
+ */
+export function withThemeTransition(update: () => void): void {
+  const target = document as TransitionDocument;
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  if (reduced || typeof target.startViewTransition !== "function") {
+    update();
+    return;
+  }
+  target.startViewTransition(update);
+}
