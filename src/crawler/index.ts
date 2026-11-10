@@ -1,16 +1,15 @@
 import { isSafeExternalUrl } from "@juninmd/digest-kit/core";
 import axios from "axios";
-import type { BrowserContextOptions, Page } from "playwright";
-import { chromium } from "playwright-extra";
-import stealth from "puppeteer-extra-plugin-stealth";
 import Parser from "rss-parser";
 import { normalizeTitle } from "../agent/curation.js";
 import { getSearchKeywords } from "../agent/improver.js";
 import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
+import { mapLimit } from "../utils/concurrency.js";
 import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { log } from "../utils/logger.js";
 import { AGENT_SOURCES } from "./agent-sources.js";
+import { closeSharedBrowser, withStealthPage } from "./browser.js";
 import {
   type FeedItem,
   feedItemSummary,
@@ -37,81 +36,10 @@ import {
   redditFeedDue,
   redditGet,
 } from "./reddit.js";
+import { DEFAULT_SOURCES, type FeedSource } from "./sources.js";
 import { TECHLEAD_SOURCES } from "./techlead-sources.js";
 
-export { summarizeSourceContent };
-
-chromium.use(stealth());
-
-const BROWSER_LAUNCH_ARGS = ["--no-sandbox", "--disable-setuid-sandbox"];
-
-let sharedBrowser: Awaited<ReturnType<typeof chromium.launch>> | null = null;
-
-/** One browser for the whole crawl; pages per task instead of per launch. */
-async function getSharedBrowser() {
-  if (!sharedBrowser) {
-    sharedBrowser = await chromium.launch({
-      headless: true,
-      args: BROWSER_LAUNCH_ARGS,
-    });
-  }
-  return sharedBrowser;
-}
-
-async function closeSharedBrowser() {
-  if (sharedBrowser) {
-    await sharedBrowser.close();
-    sharedBrowser = null;
-  }
-}
-
-const STEALTH_USER_AGENT =
-  "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36";
-
-/**
- * Owns the Playwright context lifecycle. Contexts are not reclaimed until the
- * browser closes, so every call site that opened one by hand leaked a context
- * plus a page for the rest of the crawl -- one per 403/429 fallback.
- */
-export async function withStealthPage<T>(
-  run: (page: Page) => Promise<T>,
-  options: BrowserContextOptions = {},
-): Promise<T> {
-  const browser = await getSharedBrowser();
-  const context = await browser.newContext({
-    userAgent: STEALTH_USER_AGENT,
-    viewport: { width: 1280, height: 720 },
-    ...options,
-  });
-  try {
-    return await run(await context.newPage());
-  } finally {
-    await context.close().catch((err: unknown) => {
-      log.warn(`Failed to close browser context: ${(err as Error).message}`);
-    });
-  }
-}
-
-/** Runs fn over items with at most `limit` in flight at once. */
-async function mapLimit<T, R>(
-  items: T[],
-  limit: number,
-  fn: (item: T) => Promise<R>,
-): Promise<R[]> {
-  const results: R[] = new Array(items.length);
-  let next = 0;
-  const workers = Array.from(
-    { length: Math.min(limit, items.length) },
-    async () => {
-      while (next < items.length) {
-        const index = next++;
-        results[index] = await fn(items[index]);
-      }
-    },
-  );
-  await Promise.all(workers);
-  return results;
-}
+export { summarizeSourceContent, withStealthPage };
 
 const parser = new Parser({
   timeout: 10000,
@@ -120,43 +48,6 @@ const parser = new Parser({
       "Mozilla/5.0 (Windows 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
   },
 });
-
-interface FeedSource {
-  name: string;
-  url: string;
-  tags: string[];
-  // HTML sources are scraped via Playwright instead of RSS parsing.
-  html?: { hrefPrefix: string; baseUrl: string; excludePrefix?: string };
-}
-
-interface RedditComment {
-  body: string;
-  score: number;
-  depth: number;
-}
-
-interface RedditCommentNode {
-  kind?: string;
-  data?: {
-    body?: string;
-    score?: number;
-    author?: string;
-    replies?: string | RedditListing;
-  };
-}
-
-interface RedditListing {
-  data?: {
-    children?: RedditCommentNode[];
-  };
-}
-
-interface RedditPostCandidate {
-  subreddit: string;
-  title: string;
-  url: string;
-  summary: string;
-}
 
 /**
  * "Crawler failed for Google Research: " nao diz nada. Um erro sem mensagem
@@ -206,30 +97,7 @@ export function describeCrawlerError(err: unknown): string {
 
 function isV2exAiRelevant(title: string): boolean {
   const lower = title.toLowerCase();
-  const keywords = [
-    "ai",
-    "agent",
-    "claude",
-    "codex",
-    "copilot",
-    "gpt",
-    "llm",
-    "mimo",
-    "模型",
-    "智能体",
-    "deepseek",
-    "gemini",
-    "opus",
-    "qwen",
-    "cursor",
-    "litellm",
-    "vibecoding",
-    "vibe coding",
-    "向量",
-    "脱敏",
-    "屎山",
-  ];
-  return keywords.some((kw) => lower.includes(kw));
+  return V2EX_AI_KEYWORDS.some((keyword) => lower.includes(keyword));
 }
 
 const V2EX_AI_KEYWORDS = [
@@ -256,317 +124,7 @@ const V2EX_AI_KEYWORDS = [
   "屎山",
 ];
 
-const DEFAULT_SOURCES: FeedSource[] = [
-  // Grandes empresas de IA
-  {
-    name: "Google AI Blog",
-    url: "https://blog.google/technology/ai/rss/",
-    tags: ["google", "ai"],
-  },
-  {
-    name: "Anthropic News",
-    url: "https://www.anthropic.com/news",
-    tags: ["anthropic", "claude", "ai"],
-    html: { hrefPrefix: "/news/", baseUrl: "https://www.anthropic.com" },
-  },
-  {
-    name: "OpenAI Blog",
-    url: "https://openai.com/blog/rss.xml",
-    tags: ["openai", "ai"],
-  },
-  // Developer tools & IDEs com IA
-  {
-    name: "VSCode Updates",
-    url: "https://code.visualstudio.com/feed.xml",
-    tags: ["vscode", "tools", "ai-assistant"],
-  },
-  {
-    name: "VSCode Blogs",
-    url: "https://code.visualstudio.com/blogs",
-    tags: ["vscode", "tools", "ai-assistant"],
-    html: { hrefPrefix: "/blogs/", baseUrl: "https://code.visualstudio.com" },
-  },
-  {
-    name: "GitHub Blog",
-    url: "https://github.blog/feed/",
-    tags: ["github", "developer", "ai"],
-  },
-  // ML/AI Platforms & Tools
-  {
-    name: "Hugging Face Blog",
-    url: "https://huggingface.co/blog/feed.xml",
-    tags: ["huggingface", "ai", "models"],
-  },
-  {
-    name: "Lil'Log (Lilian Weng)",
-    url: "https://lilianweng.github.io/index.xml",
-    tags: ["ai", "ml", "research", "llm"],
-  },
-  {
-    name: "Simon Willison's Weblog",
-    url: "https://simonwillison.net/atom/entries/",
-    tags: ["ai", "llm", "developer", "tools"],
-  },
-  {
-    name: "PyTorch Blog",
-    url: "https://pytorch.org/blog/feed/",
-    tags: ["pytorch", "ml", "training", "inference"],
-  },
-  // Research papers
-  {
-    name: "arXiv cs.SE",
-    url: "https://rss.arxiv.org/rss/cs.SE",
-    tags: [
-      "arxiv",
-      "software-engineering",
-      "programming",
-      "research",
-      "papers",
-    ],
-  },
-  {
-    name: "Reddit: ClaudeAI",
-    url: "https://www.reddit.com/r/ClaudeAI/.rss",
-    tags: ["reddit", "claude", "ai"],
-  },
-  {
-    name: "Reddit: ClaudeCode",
-    url: "https://www.reddit.com/r/ClaudeCode/.rss",
-    tags: ["reddit", "claude", "coding", "ai"],
-  },
-  {
-    name: "Reddit: Claude",
-    url: "https://www.reddit.com/r/claude/.rss",
-    tags: ["reddit", "claude", "ai"],
-  },
-  {
-    name: "Reddit: VSCode",
-    url: "https://www.reddit.com/r/vscode/.rss",
-    tags: ["reddit", "vscode", "tools"],
-  },
-  {
-    name: "Reddit: GithubCopilot",
-    url: "https://www.reddit.com/r/GithubCopilot/.rss",
-    tags: ["reddit", "github", "copilot", "ai"],
-  },
-  {
-    name: "Reddit: Codex",
-    url: "https://www.reddit.com/r/codex/.rss",
-    tags: ["reddit", "codex", "openai", "coding", "ai"],
-  },
-  {
-    name: "Reddit: KiloCode",
-    url: "https://www.reddit.com/r/kilocode/.rss",
-    tags: ["reddit", "kilocode", "coding"],
-  },
-  {
-    name: "Reddit: OpenCode",
-    url: "https://www.reddit.com/r/opencode/.rss",
-    tags: ["reddit", "opencode", "coding"],
-  },
-  {
-    name: "Reddit: LocalLLaMA",
-    url: "https://www.reddit.com/r/LocalLLaMA/.rss",
-    tags: ["reddit", "llm", "local-ai", "models"],
-  },
-  {
-    name: "Reddit: AI Agents",
-    url: "https://www.reddit.com/r/AI_Agents/.rss",
-    tags: ["reddit", "agents", "ai"],
-  },
-  {
-    name: "Reddit: AgenticAI",
-    url: "https://www.reddit.com/r/AgenticAI/.rss",
-    tags: ["reddit", "agents", "ai"],
-  },
-  {
-    name: "Reddit: LangChain",
-    url: "https://www.reddit.com/r/LangChain/.rss",
-    tags: ["reddit", "langchain", "agents", "rag"],
-  },
-  {
-    name: "Reddit: Ollama",
-    url: "https://www.reddit.com/r/ollama/.rss",
-    tags: ["reddit", "ollama", "local-ai", "llm"],
-  },
-  {
-    name: "Reddit: WindsurfAI",
-    url: "https://www.reddit.com/r/WindsurfAI/.rss",
-    tags: ["reddit", "windsurf", "coding", "ai"],
-  },
-  {
-    name: "Reddit Search: ai agents",
-    url: "https://www.reddit.com/search/.rss?q=ai+agents&sort=new",
-    tags: ["reddit", "agents", "ai", "search"],
-  },
-  {
-    name: "Reddit Search: local llm",
-    url: "https://www.reddit.com/search/.rss?q=local+llm&sort=new",
-    tags: ["reddit", "llm", "local-ai", "search"],
-  },
-  {
-    name: "Reddit Search: cursor windsurf copilot",
-    url: "https://www.reddit.com/search/.rss?q=cursor+OR+windsurf+OR+copilot&sort=new",
-    tags: ["reddit", "coding", "ai", "search"],
-  },
-  {
-    name: "Reddit Search: claude code",
-    url: "https://www.reddit.com/search/.rss?q=claude+code&sort=new",
-    tags: ["reddit", "claude", "coding", "ai", "search"],
-  },
-  // AI coding tools specific
-  {
-    name: "Reddit Search: Claude AI",
-    url: "https://www.reddit.com/search/.rss?q=claude+ai+coding&sort=new",
-    tags: ["reddit", "claude", "ai-coding", "search"],
-  },
-  {
-    name: "Reddit Search: Cursor IDE",
-    url: "https://www.reddit.com/search/.rss?q=cursor+ide&sort=new",
-    tags: ["reddit", "cursor", "ai-coding", "search"],
-  },
-  {
-    name: "Reddit Search: GitHub Copilot tips",
-    url: "https://www.reddit.com/search/.rss?q=github+copilot+tips&sort=new",
-    tags: ["reddit", "copilot", "ai-coding", "search"],
-  },
-  {
-    name: "Reddit Search: prompt engineering",
-    url: "https://www.reddit.com/search/.rss?q=prompt+engineering&sort=new",
-    tags: ["reddit", "prompt-eng", "llm", "search"],
-  },
-  {
-    name: "Reddit Search: LLM agents",
-    url: "https://www.reddit.com/search/.rss?q=llm+agents&sort=new",
-    tags: ["reddit", "agents", "llm", "search"],
-  },
-  {
-    name: "Reddit Search: RAG systems",
-    url: "https://www.reddit.com/search/.rss?q=RAG+retrieval+augmented&sort=new",
-    tags: ["reddit", "rag", "llm", "search"],
-  },
-  {
-    name: "V2EX Tech",
-    url: "https://www.v2ex.com/feed/tab/tech.xml",
-    tags: ["v2ex", "chinese", "ai", "developer"],
-  },
-  {
-    name: "Together AI",
-    url: "https://www.together.ai/blog/rss.xml",
-    tags: ["ai frontier", "togetherai", "ai"],
-  },
-  {
-    name: "Google Research",
-    url: "https://research.google/blog/rss/",
-    tags: ["ai frontier", "googleresearch", "ai"],
-  },
-  {
-    name: "Google DeepMind",
-    url: "https://deepmind.google/blog/rss.xml",
-    tags: ["ai frontier", "googledeepmind", "ai"],
-  },
-  // AI Agent Frameworks
-  {
-    name: "LangChain Docs & Updates",
-    url: "https://github.com/langchain-ai/langchain/releases.atom",
-    tags: ["langchain", "agents", "llm-framework"],
-  },
-  {
-    name: "LangGraph Releases",
-    url: "https://github.com/langchain-ai/langgraph/releases.atom",
-    tags: ["langgraph", "agents", "llm-framework"],
-  },
-  {
-    name: "CrewAI Framework",
-    url: "https://github.com/joaomdmoura/crewai/releases.atom",
-    tags: ["crewai", "agents", "llm-framework"],
-  },
-  {
-    name: "Dify Releases",
-    url: "https://github.com/langgenius/dify/releases.atom",
-    tags: ["dify", "agents", "llm-framework"],
-  },
-  {
-    name: "LiteLLM Releases",
-    url: "https://github.com/BerriAI/litellm/releases.atom",
-    tags: ["litellm", "llm-framework", "infra"],
-  },
-  {
-    name: "vLLM Releases",
-    url: "https://github.com/vllm-project/vllm/releases.atom",
-    tags: ["vllm", "inference", "infra"],
-  },
-  {
-    name: "Ollama Releases",
-    url: "https://github.com/ollama/ollama/releases.atom",
-    tags: ["ollama", "local-ai", "infra"],
-  },
-  // AI Research & Leaders
-  {
-    name: "Anthropic Research",
-    url: "https://www.anthropic.com/research",
-    tags: ["anthropic", "research", "ai"],
-    // Team pages share the prefix and are navigation, not publications.
-    html: {
-      hrefPrefix: "/research/",
-      baseUrl: "https://www.anthropic.com",
-      excludePrefix: "/research/team/",
-    },
-  },
-  {
-    name: "Latent Space",
-    url: "https://latent.space/feed",
-    tags: ["ai-engineering", "agents", "research"],
-  },
-  {
-    name: "Ahead of AI (Sebastian Raschka)",
-    url: "https://magazine.sebastianraschka.com/feed",
-    tags: ["ai", "llm", "research"],
-  },
-  {
-    name: "Last Week in AI",
-    url: "https://lastweekin.ai/feed",
-    tags: ["ai", "news", "research"],
-  },
-  // Data Science & Analytics (IA-focused)
-  {
-    name: "Towards Data Science (Medium)",
-    url: "https://towardsdatascience.com/feed",
-    tags: ["medium", "data", "ai", "ml"],
-  },
-  {
-    name: "AWS Machine Learning Blog",
-    url: "https://aws.amazon.com/blogs/machine-learning/feed/",
-    tags: ["aws", "ml", "ai", "bedrock"],
-  },
-  // News & Aggregators
-  {
-    name: "MarkTechPost",
-    url: "https://www.marktechpost.com/feed/",
-    tags: ["news", "ai", "papers"],
-  },
-  {
-    name: "MIT Technology Review (AI)",
-    url: "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-    tags: ["news", "ai", "policy"],
-  },
-  {
-    name: "Ben's Bites",
-    url: "https://www.bensbites.com/feed",
-    tags: ["news", "ai", "products"],
-  },
-  {
-    name: "Meta Engineering",
-    url: "https://engineering.fb.com/feed/",
-    tags: ["meta", "ai", "engineering"],
-  },
-  // Product showcase
-  {
-    name: "Product Hunt (AI category)",
-    url: "https://www.producthunt.com/feed?category=artificial-intelligence",
-    tags: ["producthunt", "ai", "products"],
-  },
-];
+const EXTRA_CRAWLER_CONCURRENCY = 3;
 
 const CIRCUIT_OPEN_THRESHOLD = 3;
 const CIRCUIT_SKIP_CYCLES = 5;
@@ -1409,10 +967,14 @@ async function crawlAllInner(): Promise<CrawlReport> {
     { name: "Reddit Community Signals", fn: crawlRedditCommunitySignals },
     { name: "TabNews", fn: crawlTabNews },
   ];
-  for (const extra of extras) {
+  // Each extra talks to its own host, and the Reddit sweep alone may pace
+  // itself for up to 20 minutes: in sequence, everything listed after it
+  // waited for it. A small bound keeps the shared browser and the event loop
+  // from being flooded.
+  await mapLimit(extras, EXTRA_CRAWLER_CONCURRENCY, async (extra) => {
     if (!circuitAllow(extra.name)) {
       log.debug(`Circuit breaker: skipping "${extra.name}"`);
-      continue;
+      return;
     }
     try {
       const count = await extra.fn();
@@ -1424,7 +986,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
       circuitFailure(extra.name);
       log.warn(`${extra.name} crawler failed: ${(err as Error).message}`);
     }
-  }
+  });
 
   const failed = Object.entries(metrics)
     .filter(([, v]) => v.failed)

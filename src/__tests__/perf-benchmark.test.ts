@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatReport,
   runPerfBenchmark,
+  runSchedulingBenchmark,
 } from "../benchmarks/perf-benchmark.js";
 import {
   SMOKE_SCALE,
@@ -76,6 +77,11 @@ describe("perf benchmark", () => {
 
     expect(table).toContain("| a | 10 | 1 | 12 | 2 | 10x faster | yes |");
     expect(table).toContain("| b | 2 | 4 | 3 | 5 | 2.0x slower | NO |");
+  });
+
+  it("times the bounded schedule against the sequential one", async () => {
+    const result = await runSchedulingBenchmark(6, 5, 3);
+    expect(result.sequentialMs).toBeGreaterThan(result.boundedMs);
   });
 
   it("generates the same rows for the same seed", () => {

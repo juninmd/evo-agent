@@ -20,9 +20,8 @@ process.env.DB_PATH = join(directory, "bench.db");
 process.env.LOG_LEVEL = "error";
 
 try {
-  const { formatReport, runPerfBenchmark } = await import(
-    "./perf-benchmark.js"
-  );
+  const { formatReport, runPerfBenchmark, runSchedulingBenchmark } =
+    await import("./perf-benchmark.js");
   const { SMOKE_SCALE, YEAR_SCALE } = await import("./perf-seed.js");
   const { getDb } = await import("../knowledge/store.js");
 
@@ -40,6 +39,12 @@ try {
     : undefined;
   console.log(`node ${report.node}`);
   console.log(formatReport(report, baseline));
+
+  const scheduling = await runSchedulingBenchmark();
+  console.log(
+    `\nextra crawlers, simulated (${scheduling.crawlers} stubs x ${scheduling.latencyMs} ms): ` +
+      `sequential ${scheduling.sequentialMs} ms, ${scheduling.limit} at a time ${scheduling.boundedMs} ms`,
+  );
 } finally {
   rmSync(directory, { recursive: true, force: true });
 }

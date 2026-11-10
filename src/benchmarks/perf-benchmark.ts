@@ -3,6 +3,7 @@ import { performance } from "node:perf_hooks";
 import { type CurationPolicy, curateArticles } from "../agent/curation.js";
 import { type Route, createRoutes } from "../api/routes.js";
 import { db, getDb } from "../knowledge/store.js";
+import { mapLimit } from "../utils/concurrency.js";
 import {
   type SeedScale,
   buildArticles,
@@ -342,4 +343,38 @@ export function formatReport(
     );
   }
   return lines.join("\n");
+}
+
+export interface SchedulingResult {
+  crawlers: number;
+  latencyMs: number;
+  sequentialMs: number;
+  boundedMs: number;
+  limit: number;
+}
+
+/**
+ * The extra crawlers used to run one after the other; they now run three at a
+ * time. This times the scheduler itself with stub crawlers that only wait, so
+ * it shows the shape of the change, not a network measurement.
+ */
+export async function runSchedulingBenchmark(
+  crawlers = 9,
+  latencyMs = 40,
+  limit = 3,
+): Promise<SchedulingResult> {
+  const stubs = Array.from({ length: crawlers }, (_, index) => index);
+  const wait = () => new Promise((resolve) => setTimeout(resolve, latencyMs));
+  const time = async (concurrency: number) => {
+    const started = performance.now();
+    await mapLimit(stubs, concurrency, wait);
+    return round(performance.now() - started);
+  };
+  return {
+    crawlers,
+    latencyMs,
+    sequentialMs: await time(1),
+    boundedMs: await time(limit),
+    limit,
+  };
 }
