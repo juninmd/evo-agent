@@ -1,149 +1,37 @@
 import { createHash } from "node:crypto";
-import { mkdirSync } from "node:fs";
-import { dirname } from "node:path";
-import Database from "better-sqlite3";
-import { config } from "../config.js";
 import type { OperationalStats } from "../observability/health.js";
+import {
+  parseJsonArray,
+  parseJsonObject,
+  parseJsonStringArray,
+} from "../utils/json.js";
 import { canonicalUrl, stripTracking } from "../utils/url.js";
+import { getDb, sqliteTs, stmt } from "./database.js";
+import type {
+  AgentState,
+  Article,
+  CycleRun,
+  IntelligenceModelRecord,
+  IntelligenceSnapshot,
+  IntelligenceSnapshotRow,
+  MetricEvent,
+  MetricSummary,
+  PromptVersion,
+  PublishedArticle,
+  PublishedEvidence,
+  SaveArticleInput,
+  SaveIntelligenceSnapshotInput,
+  SavePublishedInput,
+  Snippet,
+  SourceHealth,
+  SourceTotal,
+} from "./types.js";
 
-export interface Article {
-  id: number;
-  title: string;
-  source: string;
-  url: string;
-  summary: string;
-  tags: string;
-  engagement_score: number;
-  crawled_at: string;
-}
-
-export interface Snippet {
-  id: number;
-  title: string;
-  language: string;
-  code: string;
-  explanation: string;
-  source_url: string;
-  created_at: string;
-}
-
-export interface AgentState {
-  key: string;
-  value: string;
-  updated_at: string;
-}
-
-export interface SourceHealth {
-  source: string;
-  consecutive_failures: number;
-  skip_remaining: number;
-  updated_at: string;
-}
-
-export interface PublishedArticle {
-  id: number;
-  slug: string;
-  title: string;
-  url: string;
-  date: string;
-  summary: string;
-  tags: string[];
-  kind: "article" | "report";
-  period: string | null;
-  notification_status: "pending" | "delivered" | "dead_letter" | "suppressed";
-  notification_attempts: number;
-  next_notification_at: string;
-  notification_error: string | null;
-  editorial_metrics: Record<string, unknown>;
-  status: EditionStatus;
-  quality_score: number | null;
-  revision: number;
-  published_at: string;
-}
-
-/** Lifecycle of the published page, independent of the Telegram outbox. */
-export type EditionStatus = "published" | "corrected" | "retracted";
-
-export interface PromptVersion {
-  id: number;
-  prompt: string;
-  score: number;
-  status: "promoted" | "rejected" | "rolled_back";
-  reason: string;
-  created_at: string;
-}
-
-export interface PublishedEvidence {
-  article_url: string;
-  source_url: string;
-  source_title: string;
-  excerpt: string;
-  observed_at: string;
-}
-
-export interface CycleRun {
-  id: number;
-  type: string;
-  status: "running" | "succeeded" | "failed" | "skipped";
-  metrics_json: string;
-  error: string | null;
-  started_at: string;
-  finished_at: string | null;
-}
-
-export interface MetricEvent {
-  id: number;
-  name: string;
-  value: number;
-  labels_json: string;
-  recorded_at: string;
-}
-
-export interface MetricSummary {
-  name: string;
-  samples: number;
-  average: number;
-  minimum: number;
-  maximum: number;
-  last_recorded: string;
-}
-
-export interface SourceTotal {
-  source: string;
-  total: number;
-  last_seen: string;
-}
-
-let _db: Database.Database | null = null;
-
-export function getDb(): Database.Database {
-  if (_db) return _db;
-  mkdirSync(dirname(config.dbPath), { recursive: true });
-  _db = new Database(config.dbPath);
-  _db.pragma("journal_mode = WAL");
-  // Reclaims space incrementally; full VACUUM would block the event loop on a
-  // large DB. Existing databases only pick this up after their next VACUUM.
-  _db.pragma("auto_vacuum = INCREMENTAL");
-  migrate(_db);
-  return _db;
-}
-
-const _stmtCache = new Map<string, Database.Statement>();
-
-/** Memoized prepared statements: re-preparing on every call is wasteful. */
-function stmt(sql: string): Database.Statement {
-  let statement = _stmtCache.get(sql);
-  if (!statement) {
-    statement = getDb().prepare(sql);
-    _stmtCache.set(sql, statement);
-  }
-  return statement;
-}
-
-/** ISO string with 'T' and millis → SQLite format 'YYYY-MM-DD HH:MM:SS'. */
-function sqliteTs(iso: string): string {
-  return iso.replace("T", " ").replace(/\.\d+Z$/, "");
-}
+// The store is the facade the rest of the agent imports: the connection, the
+// schema and the row types live in their own modules and are re-exported here.
+export { getDb } from "./database.js";
+export { migrate, qualifiedSlug } from "./schema.js";
+export type * from "./types.js";
 
 const PRIMARY_SOURCE_SQL = `
   lower(source) LIKE '%anthropic%'
@@ -162,334 +50,6 @@ export const TECHLEAD_SOURCE_PREFIX = "Techlead: ";
 const NOT_TECHLEAD_SQL = `source NOT LIKE '${TECHLEAD_SOURCE_PREFIX}%'`;
 // LiteLLM is already crawled as an AI source and is part of the stack too.
 const TECHLEAD_SQL = `(source LIKE '${TECHLEAD_SOURCE_PREFIX}%' OR source = 'LiteLLM Releases')`;
-
-// One transaction: a failed step leaves the schema untouched, and a file
-// database pays one sync instead of one per statement.
-export function migrate(db: Database.Database) {
-  db.transaction(() => applyMigrations(db))();
-}
-
-function applyMigrations(db: Database.Database) {
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS articles (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      source TEXT NOT NULL,
-      url TEXT UNIQUE NOT NULL,
-      summary TEXT,
-      tags TEXT DEFAULT '[]',
-      engagement_score INTEGER DEFAULT 0,
-      crawled_at TEXT DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS snippets (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT NOT NULL,
-      language TEXT NOT NULL DEFAULT 'typescript',
-      code TEXT NOT NULL,
-      explanation TEXT,
-      source_url TEXT,
-      created_at TEXT DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS agent_state (
-      key TEXT PRIMARY KEY,
-      value TEXT NOT NULL,
-      updated_at TEXT DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS published_articles (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      slug TEXT UNIQUE NOT NULL,
-      title TEXT NOT NULL,
-      url TEXT NOT NULL,
-      date TEXT NOT NULL DEFAULT '',
-      summary TEXT NOT NULL DEFAULT '',
-      tags TEXT NOT NULL DEFAULT '[]',
-      kind TEXT NOT NULL DEFAULT 'article',
-      period TEXT,
-      notification_status TEXT NOT NULL DEFAULT 'pending',
-      notification_attempts INTEGER NOT NULL DEFAULT 0,
-      next_notification_at TEXT NOT NULL DEFAULT (datetime('now')),
-      notification_error TEXT,
-      editorial_metrics TEXT NOT NULL DEFAULT '{}',
-      status TEXT NOT NULL DEFAULT 'published',
-      quality_score INTEGER,
-      revision INTEGER NOT NULL DEFAULT 1,
-      published_at TEXT DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS edition_revisions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      edition_url TEXT NOT NULL,
-      revision INTEGER NOT NULL,
-      content TEXT NOT NULL,
-      content_hash TEXT NOT NULL,
-      reason TEXT NOT NULL DEFAULT 'initial',
-      created_at TEXT NOT NULL DEFAULT (datetime('now')),
-      UNIQUE(edition_url, revision)
-    );
-
-    CREATE TABLE IF NOT EXISTS cycle_runs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      type TEXT NOT NULL,
-      status TEXT NOT NULL DEFAULT 'running',
-      metrics_json TEXT NOT NULL DEFAULT '{}',
-      error TEXT,
-      started_at TEXT NOT NULL DEFAULT (datetime('now')),
-      finished_at TEXT
-    );
-
-    CREATE TABLE IF NOT EXISTS source_health (
-      source TEXT PRIMARY KEY,
-      consecutive_failures INTEGER NOT NULL DEFAULT 0,
-      skip_remaining INTEGER NOT NULL DEFAULT 0,
-      updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS prompt_versions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      prompt TEXT NOT NULL,
-      score INTEGER NOT NULL,
-      status TEXT NOT NULL,
-      reason TEXT NOT NULL,
-      created_at TEXT NOT NULL DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS metric_events (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      value REAL NOT NULL,
-      labels_json TEXT NOT NULL DEFAULT '{}',
-      recorded_at TEXT NOT NULL DEFAULT (datetime('now'))
-    );
-
-    CREATE TABLE IF NOT EXISTS published_evidence (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      article_url TEXT NOT NULL,
-      source_url TEXT NOT NULL,
-      source_title TEXT NOT NULL,
-      excerpt TEXT NOT NULL,
-      observed_at TEXT NOT NULL DEFAULT (datetime('now')),
-      UNIQUE(article_url, source_url)
-    );
-
-    -- Keyed by model too: vectors from different models are not comparable.
-    CREATE TABLE IF NOT EXISTS article_embeddings (
-      url TEXT NOT NULL,
-      model TEXT NOT NULL,
-      vector BLOB NOT NULL,
-      created_at TEXT NOT NULL DEFAULT (datetime('now')),
-      PRIMARY KEY (url, model)
-    );
-
-    CREATE INDEX IF NOT EXISTS idx_articles_crawled_at
-      ON articles(crawled_at);
-    CREATE INDEX IF NOT EXISTS idx_metric_events_recorded_at
-      ON metric_events(recorded_at);
-    CREATE INDEX IF NOT EXISTS idx_published_evidence_article
-      ON published_evidence(article_url);
-
-    CREATE TABLE IF NOT EXISTS intelligence_snapshots (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      captured_at TEXT NOT NULL DEFAULT (datetime('now')),
-      day TEXT NOT NULL,
-      source_url TEXT NOT NULL,
-      models_json TEXT NOT NULL,
-      top_model TEXT NOT NULL,
-      top_score REAL NOT NULL,
-      changes_json TEXT DEFAULT '{}'
-    );
-    CREATE INDEX IF NOT EXISTS idx_intelligence_snapshots_day
-      ON intelligence_snapshots(day);
-  `);
-
-  // Databases created before engagement_score existed need the column added;
-  // CREATE TABLE IF NOT EXISTS is a no-op for them.
-  const articleColumns = db
-    .prepare("PRAGMA table_info(articles)")
-    .all() as Array<{ name: string }>;
-  if (!articleColumns.some((c) => c.name === "engagement_score")) {
-    db.exec(
-      "ALTER TABLE articles ADD COLUMN engagement_score INTEGER DEFAULT 0",
-    );
-  }
-
-  // Dedup key, separate from url: url is the link readers click and must not
-  // be rewritten (dropping "www." breaks hosts that only resolve with it).
-  if (!articleColumns.some((c) => c.name === "url_key")) {
-    db.exec("ALTER TABLE articles ADD COLUMN url_key TEXT");
-  }
-  db.exec(
-    "CREATE INDEX IF NOT EXISTS idx_articles_url_key ON articles(url_key)",
-  );
-  const unkeyed = db
-    .prepare("SELECT id, url FROM articles WHERE url_key IS NULL")
-    .all() as Array<{ id: number; url: string }>;
-  const setKey = db.prepare("UPDATE articles SET url_key = ? WHERE id = ?");
-  for (const row of unkeyed) setKey.run(canonicalUrl(row.url), row.id);
-
-  const publishedColumns = db
-    .prepare("PRAGMA table_info(published_articles)")
-    .all() as Array<{ name: string }>;
-  const additions: Array<[string, string]> = [
-    ["date", "TEXT NOT NULL DEFAULT ''"],
-    ["summary", "TEXT NOT NULL DEFAULT ''"],
-    ["tags", "TEXT NOT NULL DEFAULT '[]'"],
-    ["kind", "TEXT NOT NULL DEFAULT 'article'"],
-    ["period", "TEXT"],
-    ["notification_status", "TEXT NOT NULL DEFAULT 'pending'"],
-    ["notification_attempts", "INTEGER NOT NULL DEFAULT 0"],
-    ["next_notification_at", "TEXT"],
-    ["notification_error", "TEXT"],
-    ["editorial_metrics", "TEXT NOT NULL DEFAULT '{}'"],
-    ["status", "TEXT NOT NULL DEFAULT 'published'"],
-    ["quality_score", "INTEGER"],
-    ["revision", "INTEGER NOT NULL DEFAULT 1"],
-  ];
-  for (const [name, definition] of additions) {
-    if (!publishedColumns.some((column) => column.name === name)) {
-      db.exec(
-        `ALTER TABLE published_articles ADD COLUMN ${name} ${definition}`,
-      );
-    }
-  }
-
-  db.exec(`
-    UPDATE published_articles
-    SET date = COALESCE(NULLIF(date, ''), substr(published_at, 1, 10)),
-        kind = CASE WHEN url LIKE '%/reports/%' THEN 'report' ELSE kind END,
-        next_notification_at = COALESCE(next_notification_at, published_at, datetime('now'))
-    WHERE date = '' OR kind = 'article' OR next_notification_at IS NULL;
-
-    UPDATE published_articles
-    SET notification_status = 'delivered',
-        notification_error = 'legacy record migrated without notification state'
-    WHERE notification_status = 'pending'
-      AND notification_attempts = 0
-      AND summary = ''
-      AND editorial_metrics = '{}';
-  `);
-
-  qualifyLegacySlugs(db);
-
-  db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_articles_engagement
-      ON articles(engagement_score DESC);
-    CREATE INDEX IF NOT EXISTS idx_published_articles_date
-      ON published_articles(kind, date);
-  `);
-}
-
-/**
- * A slug taken from the title alone repeats across days, and the UNIQUE(slug)
- * upsert then replaced the older edition's row. Rows written before the date
- * joined the slug get it now; a slug that already carries its date (reports,
- * retroactive editions) is left alone, and a clash keeps the old slug.
- */
-function qualifyLegacySlugs(db: Database.Database) {
-  const rows = db
-    .prepare("SELECT id, slug, date FROM published_articles WHERE date <> ''")
-    .all() as Array<{ id: number; slug: string; date: string }>;
-  const taken = new Set(rows.map((row) => row.slug));
-  const rename = db.prepare(
-    "UPDATE published_articles SET slug = ? WHERE id = ?",
-  );
-  for (const row of rows) {
-    const next = qualifiedSlug(row.slug, row.date);
-    if (next === row.slug || taken.has(next)) continue;
-    rename.run(next, row.id);
-    taken.add(next);
-  }
-}
-
-/** Date-qualified identity: the same title on two days is two editions. */
-export function qualifiedSlug(slug: string, date: string): string {
-  return slug.includes(date) ? slug : `${date}-${slug}`;
-}
-
-export interface SaveArticleInput {
-  title: string;
-  source: string;
-  url: string;
-  summary: string;
-  tags: string;
-  engagement_score?: number;
-}
-
-export interface SavePublishedInput {
-  slug: string;
-  title: string;
-  url: string;
-  date: string;
-  summary: string;
-  tags: string[];
-  kind: "article" | "report";
-  period?: string;
-  editorialMetrics?: object;
-  evidence?: Array<{
-    sourceUrl: string;
-    sourceTitle: string;
-    excerpt: string;
-  }>;
-  notificationStatus?: PublishedArticle["notification_status"];
-  qualityScore?: number | null;
-  /** Full Markdown as committed; enables revisions, diffs and preview. */
-  content?: string;
-  revisionReason?: string;
-}
-
-export interface IntelligenceModelRecord {
-  name: string;
-  slug: string;
-  creator: string;
-  intelligenceIndex: number;
-  isOpenWeights: boolean;
-  isReasoning: boolean;
-  releaseDate?: string;
-  contextWindowTokens?: number;
-  rank: number;
-}
-
-export interface IntelligenceSnapshotRow {
-  id: number;
-  captured_at: string;
-  day: string;
-  source_url: string;
-  models_json: string;
-  top_model: string;
-  top_score: number;
-  changes_json: string;
-}
-
-export interface IntelligenceSnapshot {
-  id: number;
-  captured_at: string;
-  day: string;
-  source_url: string;
-  models: IntelligenceModelRecord[];
-  top_model: string;
-  top_score: number;
-  changes: Record<string, unknown>;
-}
-
-export interface SaveIntelligenceSnapshotInput {
-  day: string;
-  source_url?: string;
-  models: IntelligenceModelRecord[];
-  changes?: Record<string, unknown>;
-}
-
-let _urlExistsStmt: ReturnType<Database.Database["prepare"]> | null = null;
-
-function urlExistsStmt() {
-  if (!_urlExistsStmt) {
-    _urlExistsStmt = stmt(
-      "SELECT 1 FROM articles WHERE url = ? OR url_key = ?",
-    );
-  }
-  return _urlExistsStmt;
-}
 
 type PublishedRow = Omit<PublishedArticle, "tags" | "editorial_metrics"> & {
   tags: string;
@@ -537,8 +97,8 @@ function recordRevision(
 function hydratePublished(row: PublishedRow): PublishedArticle {
   return {
     ...row,
-    tags: safeJsonArray(row.tags),
-    editorial_metrics: safeJsonObject(row.editorial_metrics),
+    tags: parseJsonStringArray(row.tags),
+    editorial_metrics: parseJsonObject(row.editorial_metrics),
   };
 }
 
@@ -637,7 +197,10 @@ export const db = {
 
   urlExists(url: string): boolean {
     // Raw too: rows stored before url_key existed match by their URL.
-    return !!urlExistsStmt().get([url, canonicalUrl(url)]);
+    return !!stmt("SELECT 1 FROM articles WHERE url = ? OR url_key = ?").get(
+      url,
+      canonicalUrl(url),
+    );
   },
 
   saveSnippet(s: Omit<Snippet, "id" | "created_at">) {
@@ -1031,10 +594,10 @@ export const db = {
       captured_at: row.captured_at,
       day: row.day,
       source_url: row.source_url,
-      models: safeJsonArrayOfObjects<IntelligenceModelRecord>(row.models_json),
+      models: parseJsonArray<IntelligenceModelRecord>(row.models_json),
       top_model: row.top_model,
       top_score: row.top_score,
-      changes: safeJsonObject(row.changes_json),
+      changes: parseJsonObject(row.changes_json),
     };
   },
 
@@ -1048,10 +611,10 @@ export const db = {
       captured_at: row.captured_at,
       day: row.day,
       source_url: row.source_url,
-      models: safeJsonArrayOfObjects<IntelligenceModelRecord>(row.models_json),
+      models: parseJsonArray<IntelligenceModelRecord>(row.models_json),
       top_model: row.top_model,
       top_score: row.top_score,
-      changes: safeJsonObject(row.changes_json),
+      changes: parseJsonObject(row.changes_json),
     }));
   },
 
@@ -1117,11 +680,31 @@ export const db = {
 
   /**
    * One row per state key; the caller decides which keys are safe to publish.
+   * `prefix` narrows in SQL: values such as the system prompt or the ebook
+   * are large, and loading them only to drop them was most of the query.
    */
-  getStateEntries(limit = 200): AgentState[] {
-    return stmt("SELECT * FROM agent_state ORDER BY key ASC LIMIT ?").all(
-      limit,
-    ) as AgentState[];
+  getStateEntries(limit = 200, prefix = ""): AgentState[] {
+    if (!prefix) {
+      return stmt("SELECT * FROM agent_state ORDER BY key ASC LIMIT ?").all(
+        limit,
+      ) as AgentState[];
+    }
+    // A primary-key range: every key that starts with `prefix`.
+    const upper =
+      prefix.slice(0, -1) +
+      String.fromCharCode(prefix.charCodeAt(prefix.length - 1) + 1);
+    return stmt(
+      `SELECT * FROM agent_state WHERE key >= ? AND key < ?
+       ORDER BY key ASC LIMIT ?`,
+    ).all(prefix, upper, limit) as AgentState[];
+  },
+
+  /** When a key was last written, without reading its value. */
+  getStateUpdatedAt(key: string): string | null {
+    const row = stmt("SELECT updated_at FROM agent_state WHERE key = ?").get(
+      key,
+    ) as { updated_at: string } | undefined;
+    return row?.updated_at ?? null;
   },
 
   getSourceHealthAll(limit = 200): SourceHealth[] {
@@ -1180,34 +763,3 @@ export const db = {
     ).all(name, `-${sinceHours} hours`, limit) as MetricEvent[];
   },
 };
-
-function safeJsonArray(value: string): string[] {
-  try {
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed)
-      ? parsed.filter((item): item is string => typeof item === "string")
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-function safeJsonArrayOfObjects<T>(value: string): T[] {
-  try {
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? (parsed as T[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-function safeJsonObject(value: string): Record<string, unknown> {
-  try {
-    const parsed = JSON.parse(value);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
-      ? parsed
-      : {};
-  } catch {
-    return {};
-  }
-}

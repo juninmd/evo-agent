@@ -199,6 +199,15 @@ function storeCases(scale: SeedScale): Case[] {
       },
     },
     {
+      name: "store.startCycle + finishCycle (x100)",
+      iterations: 10,
+      run: () => {
+        for (let i = 0; i < 100; i++) {
+          db.finishCycle(db.startCycle("bench"), "succeeded", { saved: i });
+        }
+      },
+    },
+    {
       name: "store.recordMetric (x100)",
       iterations: 10,
       run: () => {

@@ -1,4 +1,5 @@
-import { type Article, getDb } from "./store.js";
+import { getDb, stmt } from "./database.js";
+import type { Article } from "./types.js";
 
 // Below SQLite's default 999-variable limit.
 const CHUNK = 500;
@@ -35,7 +36,7 @@ export function saveVectors(
   model: string,
   entries: Array<[url: string, vector: Float32Array]>,
 ) {
-  const insert = getDb().prepare(
+  const insert = stmt(
     `INSERT OR REPLACE INTO article_embeddings (url, model, vector)
      VALUES (?, ?, ?)`,
   );

@@ -1,4 +1,6 @@
-import { type EditionStatus, type PublishedArticle, getDb } from "./store.js";
+import { parseJsonObject, parseJsonStringArray } from "../utils/json.js";
+import { getDb, stmt } from "./database.js";
+import type { EditionStatus, PublishedArticle } from "./types.js";
 
 export interface EditionQuery {
   kind?: "article" | "report";
@@ -43,33 +45,11 @@ export function likePattern(term: string): string {
   return `%${escapeLike(term)}%`;
 }
 
-function parseList(value: string): string[] {
-  try {
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed)
-      ? parsed.filter((item): item is string => typeof item === "string")
-      : [];
-  } catch {
-    return [];
-  }
-}
-
-function parseObject(value: string): Record<string, unknown> {
-  try {
-    const parsed = JSON.parse(value);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
-      ? parsed
-      : {};
-  } catch {
-    return {};
-  }
-}
-
 function hydrate(row: Row): PublishedArticle {
   return {
     ...row,
-    tags: parseList(row.tags),
-    editorial_metrics: parseObject(row.editorial_metrics),
+    tags: parseJsonStringArray(row.tags),
+    editorial_metrics: parseJsonObject(row.editorial_metrics),
   };
 }
 
@@ -131,34 +111,30 @@ export function queryEditions(query: EditionQuery): {
   total: number;
   items: PublishedArticle[];
 } {
-  const db = getDb();
   const { sql, params } = whereFor(query);
+  // The SQL text varies only with which filters are present, so the statement
+  // cache stays bounded and a repeated listing skips the prepare.
   const total = (
-    db
-      .prepare(`SELECT count(*) AS total FROM published_articles ${sql}`)
-      .get(...params) as { total: number }
+    stmt(`SELECT count(*) AS total FROM published_articles ${sql}`).get(
+      ...params,
+    ) as { total: number }
   ).total;
   const order =
     query.sort === "score"
       ? "quality_score IS NULL, quality_score DESC, published_at DESC, id DESC"
       : "date DESC, published_at DESC, id DESC";
-  const rows = db
-    .prepare(
-      `SELECT * FROM published_articles ${sql}
-       ORDER BY ${order} LIMIT ? OFFSET ?`,
-    )
-    .all(...params, query.limit, query.offset) as Row[];
+  const rows = stmt(
+    `SELECT * FROM published_articles ${sql}
+     ORDER BY ${order} LIMIT ? OFFSET ?`,
+  ).all(...params, query.limit, query.offset) as Row[];
   return { total, items: rows.map(hydrate) };
 }
 
 export function getRevisions(url: string): RevisionMeta[] {
-  const rows = getDb()
-    .prepare(
-      `SELECT revision, reason, content_hash AS contentHash, created_at AS createdAt
-       FROM edition_revisions WHERE edition_url = ? ORDER BY revision DESC`,
-    )
-    .all(url) as RevisionMeta[];
-  return rows;
+  return stmt(
+    `SELECT revision, reason, content_hash AS contentHash, created_at AS createdAt
+     FROM edition_revisions WHERE edition_url = ? ORDER BY revision DESC`,
+  ).all(url) as RevisionMeta[];
 }
 
 /** Latest revision when `revision` is omitted. */
@@ -166,21 +142,16 @@ export function getRevisionContent(
   url: string,
   revision?: number,
 ): { revision: number; content: string } | null {
-  const db = getDb();
   const row = (
     revision === undefined
-      ? db
-          .prepare(
-            `SELECT revision, content FROM edition_revisions
-             WHERE edition_url = ? ORDER BY revision DESC LIMIT 1`,
-          )
-          .get(url)
-      : db
-          .prepare(
-            `SELECT revision, content FROM edition_revisions
-             WHERE edition_url = ? AND revision = ?`,
-          )
-          .get(url, revision)
+      ? stmt(
+          `SELECT revision, content FROM edition_revisions
+           WHERE edition_url = ? ORDER BY revision DESC LIMIT 1`,
+        ).get(url)
+      : stmt(
+          `SELECT revision, content FROM edition_revisions
+           WHERE edition_url = ? AND revision = ?`,
+        ).get(url, revision)
   ) as { revision: number; content: string } | undefined;
   return row ?? null;
 }
@@ -190,18 +161,16 @@ export function getRevisionContent(
  * the gaps: a missing day is a day with zero editions, which is the signal.
  */
 export function editionCalendar(fromDay: string): CalendarDay[] {
-  return getDb()
-    .prepare(
-      `SELECT date,
-              count(*) AS published,
-              sum(CASE WHEN notification_status = 'dead_letter' THEN 1 ELSE 0 END)
-                AS failedNotifications
-       FROM published_articles
-       WHERE kind = 'article' AND status <> 'retracted' AND date >= ?
-       GROUP BY date
-       ORDER BY date`,
-    )
-    .all(fromDay) as CalendarDay[];
+  return stmt(
+    `SELECT date,
+            count(*) AS published,
+            sum(CASE WHEN notification_status = 'dead_letter' THEN 1 ELSE 0 END)
+              AS failedNotifications
+     FROM published_articles
+     WHERE kind = 'article' AND status <> 'retracted' AND date >= ?
+     GROUP BY date
+     ORDER BY date`,
+  ).all(fromDay) as CalendarDay[];
 }
 
 /**
@@ -210,16 +179,14 @@ export function editionCalendar(fromDay: string): CalendarDay[] {
  */
 export function requeueNotification(slug: string): boolean {
   return (
-    getDb()
-      .prepare(
-        `UPDATE published_articles
-         SET notification_status = 'pending',
-             notification_attempts = 0,
-             next_notification_at = datetime('now'),
-             notification_error = NULL
-         WHERE slug = ? AND status <> 'retracted'`,
-      )
-      .run(slug).changes > 0
+    stmt(
+      `UPDATE published_articles
+       SET notification_status = 'pending',
+           notification_attempts = 0,
+           next_notification_at = datetime('now'),
+           notification_error = NULL
+       WHERE slug = ? AND status <> 'retracted'`,
+    ).run(slug).changes > 0
   );
 }
 
@@ -228,15 +195,12 @@ export function markRetracted(
   reason: string,
   content: string,
 ): number {
-  const db = getDb();
-  const apply = db.transaction(() => {
-    const last = db
-      .prepare(
-        "SELECT max(revision) AS revision FROM edition_revisions WHERE edition_url = ?",
-      )
-      .get(url) as { revision: number | null };
+  const apply = getDb().transaction(() => {
+    const last = stmt(
+      "SELECT max(revision) AS revision FROM edition_revisions WHERE edition_url = ?",
+    ).get(url) as { revision: number | null };
     const revision = (last.revision ?? 0) + 1;
-    db.prepare(
+    stmt(
       `INSERT INTO edition_revisions
          (edition_url, revision, content, content_hash, reason)
        VALUES (?, ?, ?, ?, ?)`,
@@ -247,7 +211,7 @@ export function markRetracted(
       `retracted-${revision}`,
       `retracted: ${reason}`,
     );
-    db.prepare(
+    stmt(
       `UPDATE published_articles
        SET status = 'retracted', revision = ?,
            notification_status = CASE WHEN notification_status = 'pending'
@@ -260,18 +224,17 @@ export function markRetracted(
 }
 
 export function setQualityScore(url: string, score: number | null) {
-  getDb()
-    .prepare("UPDATE published_articles SET quality_score = ? WHERE url = ?")
-    .run(score, url);
+  stmt("UPDATE published_articles SET quality_score = ? WHERE url = ?").run(
+    score,
+    url,
+  );
 }
 
 export function countEvidence(url: string): number {
   return (
-    getDb()
-      .prepare(
-        "SELECT count(*) AS total FROM published_evidence WHERE article_url = ?",
-      )
-      .get(url) as { total: number }
+    stmt(
+      "SELECT count(*) AS total FROM published_evidence WHERE article_url = ?",
+    ).get(url) as { total: number }
   ).total;
 }
 
@@ -281,13 +244,11 @@ export function countEvidence(url: string): number {
  * yesterday is eligible again today.
  */
 export function recentEvidenceUrls(fromDay: string): string[] {
-  const rows = getDb()
-    .prepare(
-      `SELECT DISTINCT e.source_url AS sourceUrl
-       FROM published_evidence e
-       JOIN published_articles p ON p.url = e.article_url
-       WHERE p.kind = 'article' AND p.status <> 'retracted' AND p.date >= ?`,
-    )
-    .all(fromDay) as Array<{ sourceUrl: string }>;
+  const rows = stmt(
+    `SELECT DISTINCT e.source_url AS sourceUrl
+     FROM published_evidence e
+     JOIN published_articles p ON p.url = e.article_url
+     WHERE p.kind = 'article' AND p.status <> 'retracted' AND p.date >= ?`,
+  ).all(fromDay) as Array<{ sourceUrl: string }>;
   return rows.map((row) => row.sourceUrl);
 }

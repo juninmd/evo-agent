@@ -9,11 +9,12 @@ import {
 import { db } from "../knowledge/store.js";
 import { evaluateHealth } from "../observability/health.js";
 import { addDays, localDayIso } from "../utils/date.js";
+import { parseJsonObject } from "../utils/json.js";
 import { ApiError, intParam, stringParam } from "./http.js";
 import {
+  EXPOSABLE_STATE_PREFIX,
   isExposableStateKey,
   mergeSources,
-  parseJsonObject,
   toCrawledArticle,
   toCycleRun,
   toEdition,
@@ -253,10 +254,7 @@ export function createRoutes(deps: RouteDeps): Route[] {
       path: "/api/v1/prompts",
       handler: () => {
         const prompt = db.getState("system_prompt");
-        const entries = db.getStateEntries(500);
-        const updatedAt =
-          entries.find((entry) => entry.key === "system_prompt")?.updated_at ??
-          null;
+        const updatedAt = db.getStateUpdatedAt("system_prompt");
         return {
           active: prompt ? { prompt, chars: prompt.length, updatedAt } : null,
           items: db.getPromptVersions(50).map(toPromptVersion),
@@ -290,7 +288,7 @@ export function createRoutes(deps: RouteDeps): Route[] {
       path: "/api/v1/state",
       handler: () => ({
         items: db
-          .getStateEntries(500)
+          .getStateEntries(500, EXPOSABLE_STATE_PREFIX)
           .filter((entry) => isExposableStateKey(entry.key))
           .map(toStateEntry),
       }),

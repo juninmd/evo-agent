@@ -9,6 +9,7 @@ import type {
   SourceHealth,
   SourceTotal,
 } from "../knowledge/store.js";
+import { parseJsonObject, parseJsonStringArray } from "../utils/json.js";
 
 export interface EditionDto {
   slug: string;
@@ -112,27 +113,11 @@ export function parseSqliteUtc(
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-export function parseJsonObject(value: string): Record<string, unknown> {
-  try {
-    const parsed = JSON.parse(value);
-    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
-      ? (parsed as Record<string, unknown>)
-      : {};
-  } catch {
-    return {};
-  }
-}
-
-function safeJsonStrings(value: string | string[]): string[] {
-  if (Array.isArray(value)) return value.filter((v) => typeof v === "string");
-  try {
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed)
-      ? parsed.filter((item): item is string => typeof item === "string")
-      : [];
-  } catch {
-    return [];
-  }
+/** `tags` is a JSON column on crawled rows and already a list on editions. */
+function tagList(value: string | string[]): string[] {
+  return Array.isArray(value)
+    ? value.filter((tag) => typeof tag === "string")
+    : parseJsonStringArray(value);
 }
 
 export function toEdition(row: PublishedArticle): EditionDto {
@@ -163,7 +148,7 @@ export function toCrawledArticle(row: Article): CrawledArticleDto {
     source: row.source,
     url: row.url,
     summary: row.summary ?? "",
-    tags: safeJsonStrings(row.tags),
+    tags: tagList(row.tags),
     engagementScore: row.engagement_score ?? 0,
     crawledAt: row.crawled_at,
     primary: isPrimarySourceName(row.source),
@@ -217,8 +202,10 @@ export function toStateEntry(row: AgentState): StateEntryDto {
  * `agent_state` also carries `system_prompt`; the console only publishes the
  * bookkeeping keys, so a future secret stored there never reaches the client.
  */
+export const EXPOSABLE_STATE_PREFIX = "last_";
+
 export function isExposableStateKey(key: string): boolean {
-  return key.startsWith("last_");
+  return key.startsWith(EXPOSABLE_STATE_PREFIX);
 }
 
 export function mergeSources(
