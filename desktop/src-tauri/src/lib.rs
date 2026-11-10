@@ -37,6 +37,7 @@ pub fn run() {
             cmd_feeds::cycles,
             cmd_feeds::prompts,
             cmd_feeds::metrics,
+            cmd_feeds::calendar,
             cmd_runs::run_start,
         ])
         .run(tauri::generate_context!())

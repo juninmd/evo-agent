@@ -40,7 +40,22 @@ export type Edition = {
   notificationAttempts: number;
   notificationError: string | null;
   editorialMetrics: Record<string, unknown>;
+  /** Ciclo de vida da pagina, independente da notificacao. */
+  status: EditionLifecycle;
+  /** 0-100; `null` em paginas sem selecao curada (radar, relatorios). */
+  qualityScore: number | null;
+  revision: number;
   publishedAt: string;
+};
+
+export type EditionLifecycle = "published" | "corrected" | "retracted";
+
+/** Uma versao commitada do Markdown de uma edicao, sem o corpo. */
+export type Revision = {
+  revision: number;
+  reason: string;
+  contentHash: string;
+  createdAt: string;
 };
 
 export type CrawledArticle = {
@@ -118,7 +133,24 @@ export type Evidence = {
   observedAt: string;
 };
 
-export type EditionDetail = { edition: Edition; evidence: Evidence[] };
+export type EditionDetail = {
+  edition: Edition;
+  evidence: Evidence[];
+  revisions: Revision[];
+};
+
+export type CalendarDay = {
+  date: string;
+  published: number;
+  failedNotifications: number;
+};
+
+/** `GET /api/v1/calendar`: um item por dia local, dias vazios incluidos. */
+export type Calendar = {
+  target: number;
+  today: string;
+  days: CalendarDay[];
+};
 
 export type Page<T> = { total: number; items: T[] };
 export type ArticlePage = {

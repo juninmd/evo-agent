@@ -98,6 +98,19 @@ fn reads_every_console_endpoint_from_a_live_agent() {
             )
             .await
             .expect("sources");
+        let calendar = client
+            .get::<evo_agent_console_lib::types::Calendar>(
+                "/api/v1/calendar",
+                &[("days", "35".to_string())],
+            )
+            .await
+            .expect("calendar");
+        println!(
+            "calendar: {} dias, meta {}",
+            calendar.days.len(),
+            calendar.target
+        );
+        assert_eq!(calendar.days.len(), 35);
         client
             .get::<evo_agent_console_lib::types::Metrics>(
                 "/api/v1/metrics",

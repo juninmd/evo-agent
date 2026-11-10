@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import type {
   ArticlePage,
+  Calendar,
   CycleRun,
   Edition,
   EditionDetail,
@@ -62,6 +63,9 @@ export const api = {
       name: options.name ?? null,
       hours: options.hours ?? null,
     }),
+
+  calendar: (days?: number) =>
+    invoke<Calendar>("calendar", { days: days ?? null }),
 
   runStart: (mode: string) => invoke<RunAccepted>("run_start", { mode }),
   openExternal: (url: string) => invoke<void>("open_external", { url }),

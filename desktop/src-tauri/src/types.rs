@@ -58,7 +58,34 @@ pub struct Edition {
     pub notification_attempts: i64,
     pub notification_error: Option<String>,
     pub editorial_metrics: serde_json::Value,
+    /// `published`, `corrected` or `retracted`. The three lifecycle fields
+    /// default so a console newer than the agent still reads the listing.
+    #[serde(default = "default_edition_status")]
+    pub status: String,
+    /// 0-100; `None` for pages that carry no curated selection.
+    #[serde(default)]
+    pub quality_score: Option<i64>,
+    #[serde(default = "default_revision")]
+    pub revision: i64,
     pub published_at: String,
+}
+
+fn default_edition_status() -> String {
+    "published".to_string()
+}
+
+fn default_revision() -> i64 {
+    1
+}
+
+/// One committed version of an edition's Markdown, without the body.
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Revision {
+    pub revision: i64,
+    pub reason: String,
+    pub content_hash: String,
+    pub created_at: String,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -169,6 +196,25 @@ pub struct Evidence {
 pub struct EditionDetail {
     pub edition: Edition,
     pub evidence: Vec<Evidence>,
+    #[serde(default)]
+    pub revisions: Vec<Revision>,
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CalendarDay {
+    pub date: String,
+    pub published: i64,
+    pub failed_notifications: i64,
+}
+
+/// `GET /api/v1/calendar`: one entry per local day, empty days included.
+#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Calendar {
+    pub target: i64,
+    pub today: String,
+    pub days: Vec<CalendarDay>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -262,3 +308,7 @@ pub struct RunAccepted {
     pub accepted: bool,
     pub run: RunHandle,
 }
+
+#[path = "types_tests.rs"]
+#[cfg(test)]
+mod tests;

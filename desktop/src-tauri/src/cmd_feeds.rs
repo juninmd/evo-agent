@@ -4,7 +4,7 @@ use crate::commands::client_for;
 use crate::error::AppError;
 use crate::params::{opt_number, opt_text};
 use crate::state::AppState;
-use crate::types::{ArticlePage, CycleRun, Metrics, Page, Prompts, SourcePage};
+use crate::types::{ArticlePage, Calendar, CycleRun, Metrics, Page, Prompts, SourcePage};
 
 #[tauri::command]
 pub async fn articles(
@@ -67,4 +67,11 @@ pub async fn metrics(
 ) -> Result<Metrics, AppError> {
     let query = [("name", opt_text(name)), ("hours", opt_number(hours))];
     client_for(&state)?.get("/api/v1/metrics", &query).await
+}
+
+/// Editions per local day against the daily target; the API fills the gaps.
+#[tauri::command]
+pub async fn calendar(state: State<'_, AppState>, days: Option<i64>) -> Result<Calendar, AppError> {
+    let query = [("days", opt_number(days))];
+    client_for(&state)?.get("/api/v1/calendar", &query).await
 }

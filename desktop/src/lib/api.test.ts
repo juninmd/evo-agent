@@ -83,6 +83,12 @@ describe("api", () => {
       primary: false,
     });
 
+    await api.calendar();
+    expect(invoke).toHaveBeenLastCalledWith("calendar", { days: null });
+
+    await api.calendar(35);
+    expect(invoke).toHaveBeenLastCalledWith("calendar", { days: 35 });
+
     await api.metrics({ name: "llm.latency_ms", hours: 24 });
     expect(invoke).toHaveBeenLastCalledWith("metrics", {
       name: "llm.latency_ms",
