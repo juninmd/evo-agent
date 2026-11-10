@@ -1,6 +1,6 @@
 import type { Article } from "../knowledge/store.js";
 import { isLaunchOfDay } from "../utils/launch.js";
-import { cosine } from "../utils/vector.js";
+import { cosineWithNorms, squaredNorm } from "../utils/vector.js";
 import { modelKey } from "./model-key.js";
 
 // Above the ~144 ceiling of every other score term combined.
@@ -141,11 +141,17 @@ export function parseTags(value: string): string[] {
  * identically yet are different news; titles naming different versions never merge.
  */
 export function conflictingVersions(left: string, right: string): boolean {
-  const versions = (title: string) =>
-    new Set(title.match(/\d+(?:\.\d+)+/g) ?? []);
-  const a = versions(left);
-  const b = versions(right);
-  return a.size > 0 && b.size > 0 && ![...a].some((version) => b.has(version));
+  return versionsConflict(titleVersions(left), titleVersions(right));
+}
+
+function titleVersions(title: string): Set<string> {
+  return new Set(title.match(/\d+(?:\.\d+)+/g) ?? []);
+}
+
+function versionsConflict(a: Set<string>, b: Set<string>): boolean {
+  if (a.size === 0 || b.size === 0) return false;
+  for (const version of a) if (b.has(version)) return false;
+  return true;
 }
 
 export function normalizeTitle(title: string): string {
@@ -195,13 +201,45 @@ export function isCommunitySignal(article: Article): boolean {
   return /reddit|hacker news|tabnews|community/i.test(article.source);
 }
 
-function titleSimilarity(left: string, right: string): number {
-  const a = new Set(normalizeTitle(left).split(" ").filter(Boolean));
-  const b = new Set(normalizeTitle(right).split(" ").filter(Boolean));
+function titleTokens(title: string): Set<string> {
+  return new Set(normalizeTitle(title).split(" ").filter(Boolean));
+}
+
+/** Jaccard index of two token sets. */
+function tokenSimilarity(a: Set<string>, b: Set<string>): number {
   if (a.size === 0 || b.size === 0) return 0;
-  const intersection = [...a].filter((token) => b.has(token)).length;
-  const union = new Set([...a, ...b]).size;
-  return intersection / union;
+  let intersection = 0;
+  for (const token of a) if (b.has(token)) intersection++;
+  return intersection / (a.size + b.size - intersection);
+}
+
+/**
+ * Everything the dedup pass compares, derived once per article. The pass is
+ * quadratic: normalizing both titles and re-matching versions and model names
+ * inside every comparison took 8 s on a 2000-article report pool.
+ */
+interface StoryFeatures {
+  tokens: Set<string>;
+  versions: Set<string>;
+  model: string | null;
+  community: boolean;
+  vector: Float32Array | undefined;
+  squaredNorm: number;
+}
+
+function storyFeatures(
+  article: Article,
+  vectors: Map<string, Float32Array> | undefined,
+): StoryFeatures {
+  const vector = vectors?.get(article.url);
+  return {
+    tokens: titleTokens(article.title),
+    versions: titleVersions(article.title),
+    model: modelKey(article.title),
+    community: isCommunitySignal(article),
+    vector,
+    squaredNorm: vector ? squaredNorm(vector) : 0,
+  };
 }
 
 function editorialScore(
@@ -305,48 +343,70 @@ export function curateArticles(
 
   const vectors = policy.vectors;
   const threshold = policy.semanticThreshold ?? 0.88;
-  // A community thread about a release is a separate signal from the release
-  // itself (the community floors depend on it), so only like kinds merge.
-  const sameMeaning = (a: Article, b: Article): boolean => {
-    if (isCommunitySignal(a) !== isCommunitySignal(b)) return false;
-    if (conflictingVersions(a.title, b.title)) return false;
-    const left = vectors?.get(a.url);
-    const right = vectors?.get(b.url);
-    return !!left && !!right && cosine(left, right) >= threshold;
+  const referenceDate = new Date(policy.now ?? Date.now());
+  const priorStories = (policy.priorStories ?? []).map((prior) => ({
+    vector: prior.vector,
+    squaredNorm: squaredNorm(prior.vector),
+    versions: titleVersions(prior.title),
+  }));
+  const sameStory = (existing: StoryFeatures, candidate: StoryFeatures) => {
+    const conflict = versionsConflict(existing.versions, candidate.versions);
+    if (
+      !conflict &&
+      tokenSimilarity(existing.tokens, candidate.tokens) >= 0.72
+    ) {
+      return true;
+    }
+    if (candidate.model !== null && existing.model === candidate.model) {
+      return true;
+    }
+    // A community thread about a release is a separate signal from the release
+    // itself (the community floors depend on it), so only like kinds merge.
+    return (
+      existing.community === candidate.community &&
+      !conflict &&
+      existing.vector !== undefined &&
+      candidate.vector !== undefined &&
+      cosineWithNorms(
+        existing.vector,
+        existing.squaredNorm,
+        candidate.vector,
+        candidate.squaredNorm,
+      ) >= threshold
+    );
   };
 
   const deduped: CuratedArticle[] = [];
+  // Parallel to `deduped`: the features of the article each slot holds.
+  const dedupedFeatures: StoryFeatures[] = [];
   for (const candidate of candidates) {
-    const candidateVector = vectors?.get(candidate.article.url);
+    const features = storyFeatures(candidate.article, vectors);
+    const candidateVector = features.vector;
     // Community follow-ups and the launch of the day stay eligible even when
     // yesterday's edition covered the announcement.
     if (
       candidateVector &&
-      !isCommunitySignal(candidate.article) &&
-      !isLaunchOfDay(candidate.article, new Date(policy.now ?? Date.now())) &&
-      policy.priorStories?.some(
+      !features.community &&
+      !isLaunchOfDay(candidate.article, referenceDate) &&
+      priorStories.some(
         (prior) =>
-          cosine(prior.vector, candidateVector) >= threshold &&
-          !conflictingVersions(prior.title, candidate.article.title),
+          cosineWithNorms(
+            prior.vector,
+            prior.squaredNorm,
+            candidateVector,
+            features.squaredNorm,
+          ) >= threshold &&
+          !versionsConflict(prior.versions, features.versions),
       )
     ) {
       rejected.push({ article: candidate.article, reason: "repeat-story" });
       continue;
     }
-    const candidateModel = modelKey(candidate.article.title);
-    const duplicate = deduped.find(
-      (existing) =>
-        (titleSimilarity(existing.article.title, candidate.article.title) >=
-          0.72 &&
-          !conflictingVersions(
-            existing.article.title,
-            candidate.article.title,
-          )) ||
-        (candidateModel !== null &&
-          modelKey(existing.article.title) === candidateModel) ||
-        sameMeaning(existing.article, candidate.article),
+    const index = dedupedFeatures.findIndex((existing) =>
+      sameStory(existing, features),
     );
-    if (duplicate) {
+    if (index >= 0) {
+      const duplicate = deduped[index];
       duplicate.evidenceUrls.push(candidate.article.url);
       // A primary source deduped behind a higher-scored community repost of
       // the same story must stay selectable -- otherwise "requirePrimary"
@@ -356,17 +416,18 @@ export function curateArticles(
           article: duplicate.article,
           reason: "duplicate-story",
         });
-        const index = deduped.indexOf(duplicate);
         deduped[index] = {
           ...candidate,
           evidenceUrls: duplicate.evidenceUrls,
         };
+        dedupedFeatures[index] = features;
         continue;
       }
       rejected.push({ article: candidate.article, reason: "duplicate-story" });
       continue;
     }
     deduped.push(candidate);
+    dedupedFeatures.push(features);
   }
 
   const selected: CuratedArticle[] = [];
