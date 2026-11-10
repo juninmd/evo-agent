@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 10/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>95 itens · 39 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>10/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>7 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Lançamento do dia</p><h1><a href="https://openrouter.ai/baidu/ernie-light-dt-1.0-intl">Baidu: ERNIE-Light-DT-1.0</a></h1><p class="dek">1024000 tokens de contexto. ERNIE-Light-DT-1.0 is based on open-source GLM models and includes research findings from Baidu Search&#39;s Lightning large model. It features Baidu Sparse Attention (BSA), a unique sparse…</p>
+<ul class="also"><li><a href="https://openrouter.ai/baidu/ernie-5.5-flash-preview">Baidu: ERNIE-5.5-Flash-Preview</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://openrouter.ai/google/gemini-4-carbon">Google: Gemini 4 Carbon</a> <span class="meta">OpenRouter: New Models</span></li></ul></div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Baidu: ERNIE-Light-DT-1.0 lançou com 1.024.000 tokens de contexto.</li><li>Baidu: ERNIE-5.5-Flash-Preview lançou com 280 bilhões de parâmetros e 1.024.000 tokens de contexto.</li><li>Google: Gemini 4 Carbon lançou com 1.048.576 tokens de contexto e está disponível no GitHub Copilot.</li><li>Claude Code v2.1.322 adicionou modo rápido no Vertex AI nas regiões global, us e eu.</li><li>OpenCode v2.2.7 adicionou GitHub Copilot Auto com roteamento automático de modelos.</li><li>Copilot CLI 1.0.110-0 adicionou respostas mascaradas para prompts de git, ssh e sudo via /experimental.</li><li>Gemini CLI v0.68.0 foi lançado com ajustes de escopo e correções de CLI.</li><li>Ollama v0.40.16 adicionou suporte ao modelo Ripple no runner MLX.</li><li>vLLM v0.34.0rc0 migrou Gemma e StableLM para o backend Transformers.</li><li>DeepMind: AlphaProof Code escreveu três milhões de linhas de provas em Lean para criptografia do Signal.</li><li>DeepMind: Gemini Robotics 2.5 avançou em destreza robótica generalizada.</li><li>GitHub anunciou seis vulnerabilidades de segurança afetando clones recursivos, referências, merges, patches binários e imports.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Integração do Gemini 4 Carbon no GitHub Copilot e seu impacto em tarefas de código agente.</p><p>Segredo vazado pelo botão &quot;don&#39;t ask again&quot; do Claude Code em repositórios públicos do GitHub.</p><p>Reclamações sobre custos de créditos do GitHub Copilot.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/speridlabs/idol" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/speridlabs/idol.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/speridlabs/idol">speridlabs/idol</a></h3>
+<p>image-to-3d · 1625 likes · 24747 downloads · trending 847 <span class="meta">HF Trending Models · <b>847</b></span></p></article>
+<ul class="brief"><li><a href="https://openrouter.ai/baidu/ernie-light-dt-1.0-intl">Baidu: ERNIE-Light-DT-1.0</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic">xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic</a> <span class="meta">HF Trending Models · <b>822</b></span></li><li><a href="https://openrouter.ai/baidu/ernie-5.5-flash-preview">Baidu: ERNIE-5.5-Flash-Preview</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro">moonshotai/Kimi-K3.1-Pro</a> <span class="meta">HF Trending Models · <b>588</b></span></li><li><a href="https://openrouter.ai/google/gemini-4-carbon">Google: Gemini 4 Carbon</a> <span class="meta">OpenRouter: New Models</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/ClaudeAI/comments/1xs3e2p/guys_i_did_it/">Reddit: GUYS I DID IT</a></h3>
+<p>I was granted cyber defense access and now have mythos 5.1, this is not a drill! This will be crucial in the defense software I’m building, so excited! Edit: I also received mythos 5.2 + fable 5.2 Edit 2: I see people… <span class="meta">Reddit Post Signals (ClaudeAI)</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1xrevbv/claude_saved_my_old_iphone_from_becoming_ewaste/">Reddit: Claude saved my old iPhone from becoming ewaste</a> <span class="meta">Reddit Post Signals (ClaudeAI)</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1xstews/i_built_a_webcam_xray_mirror_with_claude_fable_52/">Reddit: I built a webcam X-ray mirror with Claude Fable 5.2</a> <span class="meta">Reddit Post Signals (ClaudeAI)</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1xs0dct/fable_52_just_landed/">Reddit: Fable 5.2 just landed.</a> <span class="meta">Reddit Post Signals (ClaudeAI)</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1xsjwqc/fable_518_is_unusable_on_pro_hit_my_limit_after/">Reddit: Fable 51.8 is UNUSABLE on Pro. Hit my limit after ONE (1) prompt. Cancelled.</a> <span class="meta">Reddit Post Signals (ClaudeAI)</span></li><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1xsk5k9/instead_of_collecting_dust_claude_makes_your_old/">Reddit: Instead of collecting dust, Claude makes your old Kindle useful again</a> <span class="meta">Reddit Post Signals (ClaudeAI)</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/GoogleChrome/modern-web-guidance" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/GoogleChrome/modern-web-guidance" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/GoogleChrome/modern-web-guidance">Show HN: Get your coding agent off ~2019 JavaScript, onto modern web primitives</a></h3>
+<p>Show HN: Get your coding agent off ~2019 JavaScript, onto modern web primitives | ⬆ 36 points | 💬 7 comments | by paulirish <span class="meta">Hacker News · <b>50</b></span></p></article>
+<ul class="brief"><li><a href="https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/">Gemini 4 Carbon is now available</a> <span class="meta">Hacker News · <b>246</b></span></li><li><a href="https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/">AI usage generates a fragile codebase</a> <span class="meta">Hacker News · <b>156</b></span></li><li><a href="https://claude.com/resources/articles/sheets-whiteboards-data">Claude Whiteboards, Claude Sheets, and Claude Data</a> <span class="meta">Hacker News · <b>80</b></span></li><li><a href="https://www.reddit.com/r/ClaudeCode/comments/1xq2n3t/a_year_after_the_100_ai_mandate_nobody/">A year after the 100% AI mandate nobody understands our code</a> <span class="meta">Hacker News · <b>48</b></span></li><li><a href="https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor">Fireworks AI security breach impacts Notion and their customers</a> <span class="meta">Hacker News · <b>45</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.322" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.322">v2.1.322</a></h3>
+<p>What&#39;s changed Added fast mode on Vertex in the global, us and eu regions, falling back to standard speed if Vertex refuses it <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/anomalyco/opencode/releases/tag/v2.2.7">v2.2.7</a> <span class="meta">OpenCode Releases</span></li><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.167.1">rust-v0.167.1</a> <span class="meta">Codex CLI Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.110-0">1.0.110-0</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.com/google-gemini/gemini-cli/releases/tag/v0.68.0">Release v0.68.0</a> <span class="meta">Gemini CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-11-10-gemini-4-carbon-in-github-copilot">Gemini 4 Carbon in GitHub Copilot</a> <span class="meta">GitHub Changelog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://blog.google/products-and-platforms/platforms/android/gemini-intelligence-november-features-devices/">Gemini Intelligence: New features, on more devices</a></h3>
+<p>Gemini Intelligence is rolling out to more devices. See how expanded capabilities across these devices help you do more. <span class="meta">Google AI Blog</span></p></article>
+<ul class="brief"><li><a href="https://openai.com/index/introducing-businesses-chatgpt">Introducing Businesses in ChatGPT</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/hub-gcp-marketplace">Pay for Hugging Face Hub with your Google Cloud Account</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://github.blog/open-source/git/git-security-vulnerabilities-announced-7/">Git security vulnerabilities announced</a> <span class="meta">GitHub Blog</span></li><li><a href="https://deepmind.google/blog/gemini-4-carbon-is-now-available/">Gemini 4 Carbon is now available</a> <span class="meta">Google DeepMind</span></li><li><a href="https://huggingface.co/blog/decision">Decision Models in Hugging Face</a> <span class="meta">Hugging Face Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2611.08264" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.08264.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2611.08264">SplatAnything: Gaussian Spacing Normalization for Feed-forward 3DGS across Arbitrary Scenes</a></h3>
+<p>We identify a key limitation of existing feed-forward 3DGS methods: Gaussian attributes are typically predicted in a radial-distance-normalized space that canonicalizes a global radial statistic of the reconstructed… <span class="meta">HF Daily Papers · <b>62</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2611.03953">P^2-MOPD: Accelerating Multi-Teacher On-Policy Distillation via Parameter Priors</a> <span class="meta">HF Daily Papers · <b>56</b></span></li><li><a href="https://huggingface.co/papers/2611.08175">PCBRouteAgent: How Close Are LLM Agents to Becoming PCB Routing Engineers?</a> <span class="meta">HF Daily Papers · <b>39</b></span></li><li><a href="https://huggingface.co/papers/2611.06856">LongBanana: An Expert-Verified Benchmark for Long-Context Multi-Reference Image Synthesis</a> <span class="meta">HF Daily Papers · <b>32</b></span></li><li><a href="https://huggingface.co/papers/2611.09124">Toward the Era of Agentic Embodied Intelligence</a> <span class="meta">HF Daily Papers · <b>30</b></span></li><li><a href="https://huggingface.co/papers/2611.04720">OneTrans-GSR: A Generative Slate Ranking Paradigm Unifying Reranking and Mix-Ranking with One Autoregressive Transformer</a> <span class="meta">HF Daily Papers · <b>29</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://dev.to/thebitforge/everyone-is-building-ai-to-replace-developers-nobody-is-building-the-plan-for-what-comes-after-4a5o">Everyone Is Building AI to Replace Developers. Nobody Is Building the Plan for What Comes After.</a></h3>
+<p>Quick game. Open the launch post for any AI coding tool and count the verbs. Generates. Refactors.... <span class="meta">Dev.to (ai) · <b>104</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/murooka_az_dev/benign-injection-how-far-a-single-line-like-known-issue-or-handled-elsewhere-bends-an-ais-34ni">Benign Injection: How Far a Single Line Like &quot;Known Issue&quot; or &quot;Handled Elsewhere&quot; Bends an AI&#39;s Judgment</a> <span class="meta">Dev.to (llm) · <b>25</b></span></li><li><a href="https://dev.to/debashish_ghosal/our-agent-gate-blocked-every-bad-change-so-everyone-started-rubber-stamping-it-3kok">Our Agent Gate Blocked Every Bad Change. So Everyone Started Rubber-Stamping It.</a> <span class="meta">Dev.to (agents) · <b>13</b></span></li><li><a href="https://www.tabnews.com.br/brunozilio/lancei-o-superfik-um-canvas-nativo-e-open-source-para-trabalhar-com-agentes-de-ia">Pitch: Lancei o Superfik: um canvas nativo e open source para trabalhar com agentes de IA</a> <span class="meta">TabNews · <b>8</b></span></li><li><a href="https://news.google.com/rss/articles/CBMiwgFBVV95cUxPOU5xSFZuWDJtM0R4NkhiV3ZYZEQtTFE2cVNFa2F5aEFFSXpVYUYtcWVjN3A3bVp0RjlYbUFmeDdjUHZ2U3ZNWTNTTDVEdndPSW0xTEMzU0dLQUxab3h0XzktZm9yQ013eG5oYlQ4WmJ2YmFLY1B4M2ZGeVBTSnd4Y1FZbDQxbTA2dHRlb0NKY01URTBQWEx5V3FqWFBXckY0OUJuV2FsdWRqZi1mRnRuOGpHUzlBZC12YkpMY25GcmNiQQ?oc=5">Apply fine-grained access control with Bedrock AgentCore Gateway interceptors | Artificial Intelligence - Amazon Web Services (AWS)</a> <span class="meta">Google News (Amazon Bedrock AgentCore RBAC)</span></li><li><a href="https://news.google.com/rss/articles/CBMivAFBVV95cUxOX2JJUnlrYURCS05xbldzRC1LVVlCQ3ZtcG9XZXU1dU5NNWJxV1JzdG5FbjJ3bHdhZml2SkJFSks4cTQ3aGloV0Nsd01kRVZDZTdOMUNSWmwtS3g0M3dteWVNNDJ3VXJtbWZrSWV1Y01QRW9WVm96c1JFaU9ZeU5ZT3ZYNXZTQjhMZ2p6RHdLTlhHang4NEVuZ1Fyd3BvUENubjlSUEtIeTMwa1NReXJITjk2SmRuVWw4NG1LQQ?oc=5">Introducing Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber - blog.google</a> <span class="meta">Google News (Gemini Flash-Lite speed)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-10</span></footer>
+</div></body></html>
