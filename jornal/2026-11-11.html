@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 11/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>95 itens · 37 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>11/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>7 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1>Microsoft Foundry Content Understanding adicionou suporte às famílias de modelos GPT-5.6, GPT-6 e GPT-6.1 para workflows de documentos, texto, fala e vídeo.</h1>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Microsoft Foundry Content Understanding adicionou suporte às famílias de modelos GPT-5.6, GPT-6 e GPT-6.1 para workflows de documentos, texto, fala e vídeo.</li><li>Google lançou a Gemini Decisions API, alimentada pelo modelo Gemini Decision 1, retornando probabilidades calibradas para até 1.000 perguntas multimodais a US$ 0,10 por 1M tokens de entrada.</li><li>Google DeepMind lançou AlphaGenome 2 para prever impacto de variações de DNA em tipos celulares humanos específicos e doenças.</li><li>OpenCode lançou versões 0.5.1 e 0.5.2 do process-daemon em sequência.</li><li>Copilot CLI v1.0.110-1 corrigiu bug de sessão reaberta com <code>--resume</code> marcada como em uso e preservou indentação em status lines customizadas.</li><li>LiteLLM v1.109.0, v1.108.5 e v1.106.8 adicionaram verificação de assinatura de imagens Docker via cosign com chave introduzida no commit e82a3c6.</li><li>Vercel AI SDK @ai-sdk/openai v3.0.141 e v2.0.143 adicionaram suporte a atualizações de formato da Responses API posicionada para preservar reasoning e prompt cache.</li><li>VS Code 1.147 (Insiders) lançado com notas de versão publicadas.</li><li>Hugging Face destacou modelo speridlabs/idol para geração image-to-3D com 26.470 downloads.</li><li>Hugging Face destacou modelo Lightricks/LTX-2.5 para image-to-video com 2,79 milhões de downloads.</li><li>Google lançou Tabletop (Labs), experimento para colaboração em grupo com itinerários interativos, enquetes e brackets.</li><li>GitHub disponibilizou Issue types e fields para contas pessoais, trazendo capacidades de planejamento padronizadas a desenvolvedores individuais.</li></ol>
+<div class="watch"><h2>O que observar</h2><p><strong>Preço e acesso Gemini Decisions</strong>: US$ 0,10/M tokens de entrada para decisões calibradas multimodais pode mudar custo-benefício de classificação/roteamento em produção.</p><p><strong>Modelos GPT-5.6/6/6.1 no Foundry</strong>: Disponibilidade imediata no Azure Content Understanding sinaliza rollout silencioso de nova geração OpenAI/Microsoft para workloads enterprise.</p><p><strong>AlphaGenome 2 open</strong>: Modelo de fundação para genômica preditiva agora acessível; avaliar integração em pipelines de bioinformática ou drug discovery.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic">xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic</a></h3>
+<p>text-generation · 1191 likes · 14378 downloads · trending 928 <span class="meta">HF Trending Models · <b>928</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/speridlabs/idol">speridlabs/idol</a> <span class="meta">HF Trending Models · <b>924</b></span></li><li><a href="https://huggingface.co/moonshotai/Kimi-K3.1-Pro">moonshotai/Kimi-K3.1-Pro</a> <span class="meta">HF Trending Models · <b>616</b></span></li><li><a href="https://huggingface.co/ricursiveAI/Ripple-65B-Preview">ricursiveAI/Ripple-65B-Preview</a> <span class="meta">HF Trending Models · <b>465</b></span></li><li><a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> <span class="meta">HF Trending Models · <b>390</b></span></li><li><a href="https://huggingface.co/NousResearch/Arete-27B">NousResearch/Arete-27B</a> <span class="meta">HF Trending Models · <b>387</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/GithubCopilot/comments/1xtos3b/how_is_this_not_fraud_60_is_my_maximum_monthly/">How is this not fraud? 60% is my maximum monthly usage of my maximum monthly usage?</a></h3>
+<p>submitted by /u/DumplingXox [link] [comments] <span class="meta">Reddit: GithubCopilot</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/GithubCopilot/comments/1xtugso/just_blogged_ai_learnings_from_upgrading_my_blog/">Just blogged &quot;AI Learnings from Upgrading My Blog&quot;</a> <span class="meta">Reddit: GithubCopilot</span></li><li><a href="https://www.reddit.com/r/ClaudeCode/comments/1xtqilp/anyone_using_free_models_as_subagents_to_save/">Anyone using free models as subagents to save their Claude usage?</a> <span class="meta">Reddit: ClaudeCode</span></li><li><a href="https://www.reddit.com/r/ClaudeCode/comments/1xtrcb2/approval_latency_is_the_real_bottleneck_in_agent/">approval latency is the real bottleneck in agent loops, so which prompts should a human even see?</a> <span class="meta">Reddit: ClaudeCode</span></li><li><a href="https://www.reddit.com/r/ClaudeCode/comments/1xtskai/i_switched_opus_to_medium_and_only_ask_fable_for/">I switched Opus to medium and only ask Fable for reviews</a> <span class="meta">Reddit: ClaudeCode</span></li><li><a href="https://www.reddit.com/r/ClaudeCode/comments/1xtssot/i_made_my_home_assistant_dashboard_a_3d_dollhouse/">I made my Home Assistant dashboard a 3D dollhouse of my home with Opus 5.5</a> <span class="meta">Reddit: ClaudeCode</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/klad-app/klad" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/klad-app/klad" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Hacker News</figcaption></figure><h3><a href="https://github.com/klad-app/klad">Show HN: Klad, a paint app your coding agent can drive (source-available)</a></h3>
+<p>Show HN: Klad, a paint app your coding agent can drive (source-available) | ⬆ 29 points | 💬 10 comments | by ambewas <span class="meta">Hacker News · <b>49</b></span></p></article>
+<ul class="brief"><li><a href="https://pietromiotti.com/latest/maya-site">My AI agents found an unmapped Maya site</a> <span class="meta">Hacker News · <b>1520</b></span></li><li><a href="https://www.vulncheck.com/blog/anthropic-glasswing-november-update">Tracking Anthropic-discovered vulnerabilities</a> <span class="meta">Hacker News · <b>702</b></span></li><li><a href="https://pietromiotti.com/latest/maya-site/?maya">Google SWE points 48 AI agents at NASA Lidar, finds unmapped Maya pyramid in 72h</a> <span class="meta">Hacker News · <b>433</b></span></li><li><a href="https://cabird.com/talks/shipping-faster/">AI, activity, and outcomes in software engineering</a> <span class="meta">Hacker News · <b>210</b></span></li><li><a href="https://osssaysno.com">OSS projects banning AI-generated contributions</a> <span class="meta">Hacker News · <b>153</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anomalyco/opencode/releases/tag/process-daemon-v0.5.2" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anomalyco/opencode" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>OpenCode Releases</figcaption></figure><h3><a href="https://github.com/anomalyco/opencode/releases/tag/process-daemon-v0.5.2">process-daemon-v0.5.2</a></h3>
+<p>chore(process-daemon): release 0.5.2 ( 63381) <span class="meta">OpenCode Releases</span></p></article>
+<ul class="brief"><li><a href="https://code.visualstudio.com/updates/v1_147">Visual Studio Code 1.147 (Insiders)</a> <span class="meta">VSCode Updates</span></li><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.167.2">rust-v0.167.2</a> <span class="meta">Codex CLI Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.110-1">1.0.110-1</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-11-11-issue-types-and-fields-are-available-for-personal-accounts">Issue types and fields are available for personal accounts</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/vllm-project/vllm/releases/tag/v0.34.0rc1">v0.34.0rc1</a> <span class="meta">vLLM Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://research.google/blog/using-wearables-to-enable-cardiovascular-kidney-metabolic-ckm-risk-profiling-for-personalized-coaching/">Using wearables to enable cardiovascular-kidney-metabolic (CKM) risk profiling for personalized coaching</a></h3>
+<p>Health &amp; Bioscience <span class="meta">Google Research</span></p></article>
+<ul class="brief"><li><a href="https://devblogs.microsoft.com/foundry/content-understanding-adds-gpt-5-6-gpt-6-and-gpt-6-1-choose-the-right-model-for-your-workload/">Content Understanding adds GPT-5.6, GPT-6, and GPT-6.1: Choose the right model for your workload</a> <span class="meta">Microsoft Foundry Blog</span></li><li><a href="https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/">Gemini Decisions API: Fast, calibrated multimodal decisions</a> <span class="meta">Google AI Blog</span></li><li><a href="https://openai.com/index/jiostar-vijay-seshadri">JioStar’s chief architect on AI discovery at 500M-user scale</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://deepmind.google/blog/alphagenome-2-deciphering-how-cells-read-dna-to-better-understand-disease/">AlphaGenome 2: Deciphering how cells read DNA to better understand disease</a> <span class="meta">Google DeepMind</span></li><li><a href="https://huggingface.co/blog/token-pooling">Token Pooling-Aware Training for Multi-Vector Embedding Models</a> <span class="meta">Hugging Face Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2611.12806" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.12806.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2611.12806">Learning Heterogeneous Tactile Representation for General Dexterous Manipulation</a></h3>
+<p>Tactile sensing is an indispensable modality for contact-rich dexterous manipulation, a capability that hints at the ultimate frontiers of embodied intelligence. However, commercially available tactile sensors are still… <span class="meta">HF Daily Papers · <b>94</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2611.10771">WorldFoundry: Towards Unified Infrastructure for World Intelligence</a> <span class="meta">HF Daily Papers · <b>55</b></span></li><li><a href="https://huggingface.co/papers/2611.12762">Sage-Taiyi: A Metacognitive Architecture for Scientific Discovery</a> <span class="meta">HF Daily Papers · <b>53</b></span></li><li><a href="https://huggingface.co/papers/2611.12886">Reframe: Observation-Aligned Multi-Teacher On-Policy Distillation for Agentic Visual Reasoning</a> <span class="meta">HF Daily Papers · <b>41</b></span></li><li><a href="https://huggingface.co/papers/2610.42148">Flide: Accelerating Decision Inference with Exact State Forking</a> <span class="meta">HF Daily Papers · <b>35</b></span></li><li><a href="https://huggingface.co/papers/2611.08452">ReproBridge: Building Reproducibility into ML Research Artifacts</a> <span class="meta">HF Daily Papers · <b>34</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://dev.to/riadgaffar/i-ran-125-prompt-injection-attacks-on-my-ai-agent-none-got-through-and-that-wasnt-the-4ib6">I ran 125 prompt-injection attacks on my AI agent. None got through, and that wasn&#39;t the interesting part</a></h3>
+<p>Update, 10 November: Readers were right: the model resisted the attacks, so that run didn&#39;t test the... <span class="meta">Dev.to (llm) · <b>122</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/xulingfeng/we-keep-hearing-about-ai-productivity-the-qa-group-chat-told-a-different-story-2nma">We Keep Hearing About AI Productivity. The QA Group Chat Told a Different Story.</a> <span class="meta">Dev.to (ai) · <b>81</b></span></li><li><a href="https://www.tabnews.com.br/VictorBona/estou-construindo-a-railway-brasileira-em-real-e-com-observabilidade-nativa-e-grande-cobertura-funcional">Pitch: Estou construindo a Railway brasileira, em Real, e com observabilidade nativa e grande cobertura funcional</a> <span class="meta">TabNews · <b>72</b></span></li><li><a href="https://dev.to/yukioikeda/how-to-build-an-ai-agent-that-fixes-bugs-reliably-practice-in-sharkly-o63">How to Build an AI Agent That Fixes Bugs Reliably: Practice in Sharkly</a> <span class="meta">Dev.to (agents) · <b>29</b></span></li><li><a href="https://news.google.com/rss/articles/CBMifkFVX3lxTE5mcFlPeTZvckRaSmtXOEtRNm1LUTVrR0RITmpQcU1aUXplVGlKMmZrUlhkRW1zcGdHb1ZnT1lHVzVMRjAtb3kwdHZKM1NFV0ItbmF3ZjdjVnU0NE9zUE9qSlFtYWRiS2ZiTGZYRDRpMkhvWG13Rk1pSjVtZGFPUQ?oc=5">Google’s Tabletop lets groups build AI planning tools together - The Next Web</a> <span class="meta">Google News (tabletop google labs collaboration)</span></li><li><a href="https://news.google.com/rss/articles/CBMi4gFBVV95cUxNd1k1SkJzVmdBOUFTUXpFaFdkZXR0LVpXMzg2NllQR2FrZnNzMy1saWtfbjVGR3lZTl91ejlVYWN0N01pOFRUSkMzamsxVGJXOHJPRmVHMkxZYlBzTWlVMXNaNjAyUDlmZE9zNUstS0cyQVo2dmtiTFNSS0taSzZNS1V2SzVKT3ZUZ2hQbE9CRkdLS3hoQkM5UkZwTWZpUEtqT1BXbUxPU2NPVGI3ZTJyWnQ0SHV6NGxMWE1VWE5yUjR5ejQ0RHZWY2h4MWtVdW9KZmRXRzhCRzlsc000UE9GZThB?oc=5">JPMorgan Partners With OpenAI: What It Means for JPM&#39;s AI Strategy - The Globe and Mail</a> <span class="meta">Google News (OpenAI Codex)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-11</span></footer>
+</div></body></html>
