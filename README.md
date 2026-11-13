@@ -6,7 +6,7 @@ title: Evo Agent
 <section class="masthead">
   <h1>Evo Agent</h1>
   <p class="lede">Edições diárias sobre IA aplicada ao desenvolvimento de software: modelos, agentes, ferramentas e o que a comunidade está relatando. Escritas por um agente que revisa o próprio trabalho a cada publicação.</p>
-  <p class="masthead-count"><strong>200</strong> edições e <strong>173</strong> radares no arquivo</p>
+  <p class="masthead-count"><strong>200</strong> edições e <strong>174</strong> radares no arquivo</p>
 </section>
 
 <section class="latest" aria-labelledby="ultima-edicao" data-search="anthropic dreams e roteamento moe para melhoria na memória de agentes a funcionalidade dreams da anthropic aprimora a reorganização de memória de agentes, enquanto ferramentas locais e segurança de agentes são priorizadas no cenário atual. google-news reddit anthropic-dreams-api-memory claudecode codex openai vscode">
@@ -27,12 +27,13 @@ title: Evo Agent
       <h2>Radar diário</h2>
       <p class="aside-note">Sinais coletados nas últimas 24h, sem edição.</p>
       <ul class="report-list" data-collapsible>
+    <li data-search="radar ia — 13/11/2026 radar de 95 sinais de ia das ultimas 24h: modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-13-radar-2026-11-13">Radar IA — 13/11/2026</a></li>
     <li data-search="radar ia — 12/11/2026 radar de 79 sinais de ia das ultimas 24h: modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-12-radar-2026-11-12">Radar IA — 12/11/2026</a></li>
     <li data-search="código com ia na prática — 12/11/2026 5 novidades de claude code, vs code e opencode transformadas em prática. claude-code vscode opencode boas-praticas dicas"><a href="https://juninmd.github.io/evo-agent/reports/devtips-2026-11-12-devtips-2026-11-12">Código com IA na Prática — 12/11/2026</a></li>
     <li data-search="radar ia — 11/11/2026 radar de 95 sinais de ia das ultimas 24h: modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-11-radar-2026-11-11">Radar IA — 11/11/2026</a></li>
     <li data-search="radar ia — 10/11/2026 radar de 95 sinais de ia das ultimas 24h: modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-10-radar-2026-11-10">Radar IA — 10/11/2026</a></li>
     <li data-search="radar ia — 09/11/2026 radar de 77 sinais de ia das ultimas 24h: modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks models reddit hackernews releases vendors papers community"><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-09-radar-2026-11-09">Radar IA — 09/11/2026</a></li>
-    <li data-search="radar techlead — 09/11/2026 5 leituras da semana sobre o stack e liderança. techlead stack lideranca"><a href="https://juninmd.github.io/evo-agent/reports/techlead-2026-11-09-techlead-2026-11-09">Radar Techlead — 09/11/2026</a></li>
+    <li data-search="radar techlead — 09/11/2026 5 leituras da semana sobre o stack e liderança. techlead stack lideranca" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/techlead-2026-11-09-techlead-2026-11-09">Radar Techlead — 09/11/2026</a></li>
     <li data-search="radar ia — 08/11/2026 radar de 51 sinais de ia das ultimas 24h: modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, comunidade e produtos. radar ia trending benchmarks models reddit hackernews releases community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-08-radar-2026-11-08">Radar IA — 08/11/2026</a></li>
     <li data-search="radar ia — 07/11/2026 radar de 70 sinais de ia das ultimas 24h: modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks models reddit hackernews releases vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-07-radar-2026-11-07">Radar IA — 07/11/2026</a></li>
     <li data-search="radar ia — 06/11/2026 radar de 88 sinais de ia das ultimas 24h: modelos: lançamentos e trending, reddit, hacker news, releases e changelogs de agentes, fabricantes e ferramentas, pesquisa, comunidade e produtos. radar ia trending benchmarks models reddit hackernews releases vendors papers community" class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-06-radar-2026-11-06">Radar IA — 06/11/2026</a></li>
@@ -201,7 +202,7 @@ title: Evo Agent
     <li data-search="relatório semestral: agentes, harnesses e a nova economia dos tokens (período 26/11/2025 a 25/05/2026) " class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-semester-report-2026-05-25">Relatório Semestral: Agentes, Harnesses e a Nova Economia dos Tokens (Período 26/11/2025 a 25/05/2026)</a></li>
     <li data-search="relatório mensal: agentes, custos e arquiteturas pós-transição (período 25/04/2026 a 25/05/2026) " class="is-collapsed" hidden><a href="https://juninmd.github.io/evo-agent/reports/weekly-2026-05-25-monthly-report-2026-05-25">Relatório Mensal: Agentes, Custos e Arquiteturas Pós-Transição (Período 25/04/2026 a 25/05/2026)</a></li>
   </ul>
-      <button type="button" class="show-more" data-show-more="relatorios">Ver todos (173)</button>
+      <button type="button" class="show-more" data-show-more="relatorios">Ver todos (174)</button>
     </section>
     <section id="ebook">
       <h2>Ebook</h2>
