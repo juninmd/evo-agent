@@ -21,26 +21,26 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^3.0.67",
+    "@ai-sdk/openai": "^4.0.111",
     "@juninmd/digest-kit": "^0.4.0",
-    "@octokit/rest": "^21.0.0",
-    "ai": "^6.0.193",
-    "axios": "^1.7.0",
-    "better-sqlite3": "^11.0.0",
+    "@octokit/rest": "^22.0.1",
+    "ai": "^7.0.166",
+    "axios": "^1.21.1",
+    "better-sqlite3": "^13.0.3",
     "node-cron": "^4.2.1",
-    "playwright": "^1.60.0",
+    "playwright": "^1.65.0",
     "playwright-extra": "^4.3.6",
-    "puppeteer-extra-plugin-stealth": "2.7.0",
+    "puppeteer-extra-plugin-stealth": "2.11.2",
     "rss-parser": "^3.13.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.0",
-    "@types/better-sqlite3": "^7.6.11",
-    "@types/node": "^22.0.0",
-    "@vitest/coverage-v8": "^4.1.8",
-    "tsx": "^4.19.0",
-    "typescript": "^5.7.0",
-    "vitest": "^4.1.8"
+    "@biomejs/biome": "^2.6.6",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.6.6",
+    "@vitest/coverage-v8": "^5.1.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
   }
 }
