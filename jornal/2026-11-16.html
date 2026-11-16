@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 16/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>68 itens · 30 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>16/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>7 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Lançamento do dia</p><h1><a href="https://openrouter.ai/tencent/hy4-flash">Tencent: Hy4 flash</a></h1><p class="dek">1048576 tokens de contexto. Hy4 flash is a cost-efficient variant of Hy4 from Tencent, served with roughly a quarter of the flagship&#39;s parameter count for lower latency and cost. It targets code assistance, agent...</p>
+<ul class="also"><li><a href="https://openrouter.ai/qwen/qwen4-max">Qwen: Qwen4 Max</a> <span class="meta">OpenRouter: New Models</span></li></ul></div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Tencent lança Hy4 flash (OpenRouter) com 1 048 576 tokens de contexto, variante de custo‑eficiente do Hy4.</li><li>Qwen4 Max (OpenRouter) disponibiliza 1 000 000 tokens de contexto e aceita texto, imagem e vídeo como entrada.</li><li>GitHub anuncia descontinuação dos modelos Copilot a partir de 16 de novembro 2026.</li><li>Limite de orçamento no GitHub Enterprise Cloud sobe para 40 000 orçamentos por conta, quatro vezes o anterior.</li><li>Copilot CLI recebe versão 1.0.113‑0, trazendo correções e ajustes de funcionalidade.</li><li>Ollama lança v0.40.17‑rc1, introduz verificação especulativa em lote no mlxrunner.</li><li>LiteLLM version 1.108.10 implementa verificação de assinatura Docker com cosign.</li><li>DeepSeek‑V4‑Pro‑Qwen3.5‑9B‑UNCENSORED‑heretic (HF) acumula 7 527 curtidas e 27 037 downloads.</li><li>HerAgent (arXiv:2611.18443) propõe checkpointing por blocos para ambientes de agentes de código.</li><li>DesignSpecs (arXiv:2611.17713) disponibiliza dataset DESIGN.md de especificações visuais para agentes de IA.</li><li>Choosing Quantized Code LLMs (arXiv:2611.17605) avalia tamanho de arquivo e energia por tarefa resolvida em LLMs de código.</li><li>Together AI publica orientações para proteger o cache de prefixo em fluxos de agente de longo prazo.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Monitorar a substituição dos modelos Copilot por novos recursos de agente após a descontinuação de 2026.</p><p>Avaliar o impacto do aumento de orçamento para 40 000 contas no controle de custos de desenvolvimento.</p><p>Acompanhar as publicações arXiv de checkpointing e design de especificação que influenciam a robustez de agentes de código.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic">xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic</a></h3>
+<p>text-generation · 7527 likes · 27037 downloads · trending 4138 <span class="meta">HF Trending Models · <b>4138</b></span></p></article>
+<ul class="brief"><li><a href="https://openrouter.ai/tencent/hy4-flash">Tencent: Hy4 flash</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/MiniMaxAI/MiniMax-H3-Image">MiniMaxAI/MiniMax-H3-Image</a> <span class="meta">HF Trending Models · <b>1069</b></span></li><li><a href="https://openrouter.ai/qwen/qwen4-max">Qwen: Qwen4 Max</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen/Qwen3.8-27B</a> <span class="meta">HF Trending Models · <b>447</b></span></li><li><a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> <span class="meta">HF Trending Models · <b>416</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/LocalLLaMA/comments/1xxz46x/i_dont_get_all_the_strata_hates_around_here/">I don&#39;t get all the Strata hates around here</a></h3>
+<p>It&#39;s free and original developer clearly had a very good understanding of how computer hardware works and fully leveraged that to write something amazing to be able to run large models on average hardware that most… <span class="meta">Reddit: LocalLLaMA</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/opencode/comments/1xy1jx5/token_economizer/">Token economizer</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/opencode/comments/1xy26f5/how_fast_does_gpt_6_luna_consume_tokens/">How fast does gpt 6 luna consume tokens?</a> <span class="meta">Reddit: OpenCode</span></li><li><a href="https://www.reddit.com/r/codex/comments/1xxtah8/how_i_run_my_agent_fleet_to_build_my_product/">How I run my agent fleet to build my product</a> <span class="meta">Reddit: Codex</span></li><li><a href="https://www.reddit.com/r/codex/comments/1xxtbzk/what_do_you_actually_do_while_your_ai_coding/">What do you actually do while your AI coding agent is working? And how much are you spending on AI these days?</a> <span class="meta">Reddit: Codex</span></li><li><a href="https://www.reddit.com/r/codex/comments/1xxuprr/reql_update_faster_context_retrieval_and_fewer/">REQL update: faster context retrieval and fewer tokens for coding agents</a> <span class="meta">Reddit: Codex</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>3</span></h2>
+<article class="note"><h3><a href="https://www.businessinsider.com/ai-math-class-university-homework-caltech-careers-2026-11">Caltech professor no longer grades homework&#39;s because everyone uses AI</a></h3>
+<p>Caltech professor no longer grades homework&#39;s because everyone uses AI | ⬆ 34 points | 💬 25 comments | by ishanz <span class="meta">Hacker News · <b>84</b></span></p></article>
+<ul class="brief"><li><a href="https://qwen.ai/blog?id=qwen4-max">Qwen4-Max</a> <span class="meta">Hacker News · <b>36</b></span></li><li><a href="https://www.hntrends.com/2026/november.html">&quot;Who is Hiring?&quot; postings stuck near 12-year lows as AI reaches half of all jobs</a> <span class="meta">Hacker News · <b>26</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.113-0" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/github/copilot-cli" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Copilot CLI Releases</figcaption></figure><h3><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.113-0">1.0.113-0</a></h3>
+<p>Fixes and changes <span class="meta">Copilot CLI Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.blog/changelog/2026-11-16-budget-limit-increased-to-40000-budgets-per-account">Budget limit increased to 40,000 budgets per account</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/BerriAI/litellm/releases/tag/v1.108.10">v1.108.10</a> <span class="meta">LiteLLM Releases</span></li><li><a href="https://github.com/ollama/ollama/releases/tag/v0.40.17-rc1">v0.40.17-rc1: mlxrunner: batch speculative verification (#19663)</a> <span class="meta">Ollama Releases</span></li><li><a href="https://github.blog/changelog/2026-11-16-github-copilot-models-deprecated-on-november-16-2026">GitHub Copilot models deprecated on November 16, 2026</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.blog/changelog/2026-11-16-bulk-start-ai-scan-for-repositories">Bulk start AI Scan for repositories</a> <span class="meta">GitHub Changelog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://www.together.ai/blog/making-open-models-work-for-long-horizon-agentic-workloads">Making open models work for long-horizon agentic workloads</a></h3>
+<p>Every agent turn resends the full session. Together AI and Ollama break down how to protect the prefix cache, from the harness to the GPU. <span class="meta">Together AI</span></p></article>
+<ul class="brief"><li><a href="https://openai.com/business/customer-stories/holiday-extras-dots">At Holiday Extras, dots get to work before anyone asks</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/openrouter">Hugging Face and OpenRouter join forces to make open-weight models easy to run</a> <span class="meta">Hugging Face Blog</span></li><li><a href="https://blog.google/products-and-platforms/products/maps/ask-maps-holiday-travel-features-2026/">New Ask Maps features to help with holiday travel and prep</a> <span class="meta">Google AI Blog</span></li><li><a href="https://openai.com/index/science-at-the-frontier">Science at the Frontier: How scientists use ChatGPT</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://www.together.ai/blog/how-we-do-agent-evals-at-together-ai">How we make Together AI easy for coding agents to use</a> <span class="meta">Together AI</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><h3><a href="https://arxiv.org/abs/2611.18477">Evaluating Feedback-Driven Black-Box Processes via Stochastic Modeling and Simulation</a></h3>
+<p>arXiv:2611.18477v1 Announce Type: new Abstract: We study feedback-driven black-box processes across software engineering and machine learning. These processes are inherently sequential: policies generate inputs, observe… <span class="meta">arXiv cs.SE</span></p></article>
+<ul class="brief"><li><a href="https://arxiv.org/abs/2611.18443">HerAgent: A Block-Level Checkpointing Harness for Coding-Agent Environment Setup</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2611.17713">DesignSpecs: A DESIGN.md Dataset of Visual Design Specifications for AI Agents</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2611.17669">SZZBench: Controlled Git Histories with Explicit Oracles for Diagnosing SZZ Implementations</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2611.17605">Choosing Quantized Code LLMs by File Size and Energy per Solved Task</a> <span class="meta">arXiv cs.SE</span></li><li><a href="https://arxiv.org/abs/2611.17581">Beyond Source Code: Evaluating Natural Language Specifications for LLM-Based C-to-Rust Translation</a> <span class="meta">arXiv cs.SE</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://dev.to/xulingfeng/stratagem-34-derek-gave-up-acceptance-sign-off-the-ai-still-cant-tell-who-won-25f8">Stratagem #34: Derek Gave Up Acceptance Sign-Off. The AI Still Can&#39;t Tell Who Won.</a></h3>
+<p>People do not injure themselves without cause; the wound must be real. Mix truth with falsehood, and... <span class="meta">Dev.to (ai) · <b>57</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/michalwolinski/how-to-evaluate-ai-agents-grade-the-world-not-the-transcript-2a44">How to Evaluate AI Agents: Grade the World, Not the Transcript</a> <span class="meta">Dev.to (llm) · <b>31</b></span></li><li><a href="https://www.tabnews.com.br/Centelha/antes-de-pedir-uma-prova-a-ia-defina-o-que-o-codigo-deve-garantir">Antes de pedir uma prova à IA, defina o que o código deve garantir</a> <span class="meta">TabNews · <b>11</b></span></li><li><a href="https://dev.to/jmccarthy/ai-coding-agents-need-to-keep-their-promises-2nhh">AI Coding Agents Need to Keep Their Promises</a> <span class="meta">Dev.to (agents) · <b>8</b></span></li><li><a href="https://news.google.com/rss/articles/CBMilAFBVV95cUxQUmpQend1b3gyQkJfMldRX25IX1pFbU1vTnd4SFZoT2lXd19ZNXJHZXZkU1RUVlMxNFBCMWJUU1dUcGNLa2hzZVBDRHF5R3BKUXpYYjV3TDk4bnJaU0pIS0pFbEhDYW03RlE0Yi15VmNGV3h1dHpfWWNEMGNqYW5vRVl1MWJWQ1FycTRhNXh6WUlsaVdD?oc=5">Alibaba Qwen4-Max: 2.4T Parameters, 60% Lower Task Cost - shattered.io</a> <span class="meta">Google News (Qwen4 Max 1M contexto)</span></li><li><a href="https://aws.amazon.com/blogs/machine-learning/taxonomy-of-multi-agent-design-patterns-anti-patterns-and-lessons-from-manufacturing/">Taxonomy of multi-agent design patterns, anti-patterns, and lessons from manufacturing</a> <span class="meta">AWS Machine Learning Blog</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-16</span></footer>
+</div></body></html>
