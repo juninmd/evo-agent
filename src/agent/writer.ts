@@ -543,7 +543,11 @@ async function generatePeriodReportSinglePass(
   const systemPrompt = `You are a Principal AI Architect and technical newsletter editor.
 You curate crawled AI research, news, and code snippets into a high-signal ${cfg.label} digest of only the most interesting developments.
 Always write in Brazilian Portuguese (pt-BR).
-Return Markdown only. Do not return JSON, YAML front matter, or code fences around the full answer.`;
+Return Markdown only. Do not return JSON, YAML front matter, or code fences around the full answer.
+
+${CURATION_GUIDANCE}
+
+${MERMAID_GUIDANCE}`;
 
   const context = clampContext(
     recentArticles
@@ -573,11 +577,7 @@ Return Markdown only.
 The first line must be a single H1 title in pt-BR, for example:
 # ${titleLabel}: titulo tecnico do periodo
 
-Use only facts from Period ${periodStr}. Do not mention months or dates outside this period.
-
-${CURATION_GUIDANCE}
-
-${MERMAID_GUIDANCE}`;
+Use only facts from Period ${periodStr}. Do not mention months or dates outside this period.`;
 
   log.info(
     `Generating ${cfg.label} report (single-pass, ${cfg.days}d period)...`,
@@ -712,17 +712,15 @@ async function summarizeGroup(
     )
     .join("\n");
 
-  const systemPrompt =
-    "You are a technical newsletter editor. Return Markdown only.";
+  // Instrução fixa no system: o prefixo igual entre chamadas aproveita o cache de prompt.
+  const systemPrompt = `You are a technical newsletter editor. Return Markdown only.\n\n${CURATION_GUIDANCE}`;
   const userPrompt = `Write a concise digest section in pt-BR for the theme "${group.theme}" (Period: ${periodStr}).
 Each item must have its own bullet point with 2-4 dense sentences and source link.
 Items:
 ${list}
 
 Start with:
-## ${group.theme}
-
-${CURATION_GUIDANCE}`;
+## ${group.theme}`;
 
   // ~42% do peso do pool cloud/auto sao modelos de raciocinio (gpt-oss-20b,
   // nemotron-3-nano-omni), que gastam tokens em reasoning_content ANTES do
@@ -740,16 +738,13 @@ async function buildTrendsSection(
   periodStr: string,
 ): Promise<string> {
   const themes = groups.map((g) => g.theme).join(", ");
-  const systemPrompt =
-    "You are a Principal AI Architect. Return Markdown only.";
+  const systemPrompt = `You are a Principal AI Architect. Return Markdown only.\n\n${MERMAID_GUIDANCE}`;
   const userPrompt = `Based on these thematic groups from the period ${periodStr}: ${themes}
 
 Write 2-3 short paragraphs in pt-BR connecting the cross-cutting trends. Include Mermaid only if the themes form a real causal flow or architecture.
 
 Start with:
-## Tendências
-
-${MERMAID_GUIDANCE}`;
+## Tendências`;
 
   // Mesma causa de summarizeGroup: budget curto demais para sobrar content
   // depois do reasoning_content dos modelos de raciocinio do pool cloud/auto.

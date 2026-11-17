@@ -62,10 +62,10 @@ describe("loadConfig", () => {
   });
 
   // LiteLLM owns provider choice and fallbacks; the app must only ever ask for cloud/auto.
-  it("defaults every model in the chain to cloud/auto", () => {
+  it("defaults to cloud/auto and leaves fallbacks to the LiteLLM chain", () => {
     const { litellm } = loadConfig({ RUN_MODE: "CRAWL" });
     expect(litellm.model).toBe("cloud/auto");
-    expect(litellm.fallbackModels).toEqual(["cloud/auto"]);
+    expect(litellm.fallbackModels).toEqual([]);
   });
 
   it("supports side-effect-free module configuration in CI", () => {

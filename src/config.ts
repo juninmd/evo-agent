@@ -195,7 +195,9 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
       apiKey: env.LITELLM_API_KEY ?? env.OPENCODE_API_KEY ?? "no-key",
       // Provider choice and fallbacks live in the LiteLLM cloud/auto chain.
       model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/auto",
-      fallbackModels: (env.LITELLM_FALLBACK_MODELS ?? "cloud/auto")
+      // A cadeia de fallback do cloud/auto já roda dentro do LiteLLM; aqui só
+      // entra um modelo diferente do principal (repetir o mesmo era no-op).
+      fallbackModels: (env.LITELLM_FALLBACK_MODELS ?? "")
         .split(",")
         .map((model) => model.trim())
         .filter(Boolean),
