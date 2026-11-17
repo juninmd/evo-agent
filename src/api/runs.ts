@@ -11,6 +11,7 @@ export const RUNNABLE_MODES = [
   "RADAR",
   "TECHLEAD",
   "DEV_TIPS",
+  "SKILL_WEEK",
   "WEEKLY",
   "BIWEEKLY",
   "MONTHLY",

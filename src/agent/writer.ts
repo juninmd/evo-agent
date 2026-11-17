@@ -405,6 +405,8 @@ const PERIOD_CONFIG: Record<ReportPeriod, PeriodConfig> = {
   techlead: { days: 7, label: "techlead", highlights: [1, 5] },
   // Same as radar: rendered by agent/dev-tips.ts.
   devtips: { days: 7, label: "devtips", highlights: [1, 5] },
+  // Same as radar: rendered by agent/skill-week.
+  skillweek: { days: 7, label: "skillweek", highlights: [1, 60] },
   weekly: { days: 7, label: "semanal", highlights: [16, 24] },
   // Pisos de biweekly/monthly/bimonthly/semester eram 20/28/34/45. Medido em
   // 2026-09-05 (gpt-oss-120b e qwen3-next-80b, cache limpo): o gerador cita

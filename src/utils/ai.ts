@@ -6,6 +6,8 @@ import { log } from "./logger.js";
 export interface AskOptions {
   maxOutputTokens?: number;
   timeoutMs?: number;
+  /** Tried before the configured chain; formats that teach pin a stronger model. */
+  model?: string;
 }
 
 type MetricRecorder = (
@@ -28,9 +30,11 @@ export async function ask(
   const apiBase = config.litellm.apiBase;
   const apiKey = config.litellm.apiKey;
   const primaryModel = config.litellm.model;
-  const modelChain = [primaryModel, ...config.litellm.fallbackModels].filter(
-    (m, i, arr) => m && arr.indexOf(m) === i,
-  );
+  const modelChain = [
+    options?.model ?? "",
+    primaryModel,
+    ...config.litellm.fallbackModels,
+  ].filter((m, i, arr) => m && arr.indexOf(m) === i);
   const timeoutMs = options?.timeoutMs ?? config.litellm.timeoutMs;
   const maxOutputTokens =
     options?.maxOutputTokens ?? config.litellm.maxOutputTokens;

@@ -10,6 +10,8 @@ export const RUN_MODE_SUMMARY: Record<RunMode, string> = {
   RADAR: "Publish the cross-source radar (tables + reading), exit",
   TECHLEAD: "Publish the tech-lead digest, exit",
   DEV_TIPS: "Weekly tips from Claude Code, VS Code and OpenCode release notes",
+  SKILL_WEEK:
+    "Weekly lesson: one hands-on tutorial plus every vetted item, exit",
   WEEKLY: "Publish the weekly report, exit",
   BIWEEKLY: "Publish the biweekly report, exit",
   MONTHLY: "Publish the monthly report, exit",
