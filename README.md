@@ -76,7 +76,7 @@ As variáveis vêm do ambiente ou de um `.env` na raiz (use `.env.example` como 
 | `LITELLM_API_BASE` | Não | `http://litellm.ai.svc.cluster.local:4000/v1` | URL base do LiteLLM; fora do cluster, defina para o seu gateway (ex.: `http://localhost:4000/v1`) |
 | `LITELLM_API_KEY` | Não | `no-key` | Chave de API do LiteLLM |
 | `LITELLM_MODEL` | Não | `cloud/auto` | Modelo primário; `cloud/auto` é a cadeia do LiteLLM que decide o provider |
-| `LITELLM_FALLBACK_MODELS` | Não | `cloud/auto` | Modelos de fallback separados por vírgula, usados se o primário falhar, estourar o tempo ou vier vazio |
+| `LITELLM_FALLBACK_MODELS` | Não | — | Modelos de fallback (diferentes do primário) separados por vírgula, usados se o primário falhar, estourar o tempo ou vier vazio. A cadeia do `cloud/auto` já roda no LiteLLM |
 | `LITELLM_MAX_OUTPUT_TOKENS` | Não | `12000` | Máximo de tokens de saída por requisição |
 | `LITELLM_TIMEOUT_MS` | Não | `300000` | Timeout da requisição ao LiteLLM, em milissegundos |
 | `EMBEDDING_MODEL` | Não | `local/nomic-embed` | Modelo de embedding (endpoint `/embeddings` do LiteLLM; no cluster, `local/nomic-embed` é o Ollama `ollama-embed`, sem cota) usado para deduplicar notícias por significado, na edição e contra edições recentes; vazio desliga e volta à similaridade de título |
