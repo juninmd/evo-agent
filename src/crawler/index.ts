@@ -10,9 +10,11 @@ import { config } from "../config.js";
 import { db } from "../knowledge/store.js";
 import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { log } from "../utils/logger.js";
+import { AGENT_SKILLS_SOURCE, crawlAgentSkills } from "./agent-skills.js";
 import { AGENT_SOURCES } from "./agent-sources.js";
 import {
   type FeedItem,
+  feedItemBody,
   feedItemSummary,
   isEmptyRelease,
   isPrereleaseTitle,
@@ -1270,7 +1272,11 @@ async function crawlAllInner(): Promise<CrawlReport> {
       if (!feedData?.items) return;
 
       const newsworthy = feedData.items
-        .map((item: FeedItem) => ({ ...item, summary: feedItemSummary(item) }))
+        .map((item: FeedItem) => ({
+          ...item,
+          summary: feedItemSummary(item),
+          body: feedItemBody(item),
+        }))
         .filter(
           (item) =>
             !isEmptyRelease(item.summary) &&
@@ -1286,6 +1292,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
           source: source.name,
           url: item.link,
           summary: item.summary ?? "",
+          body: item.body,
           tags: JSON.stringify(source.tags),
           engagement_score: 0,
         });
@@ -1402,6 +1409,7 @@ async function crawlAllInner(): Promise<CrawlReport> {
       },
     },
     { name: "GitHub Trending", fn: crawlGitHubTrending },
+    { name: AGENT_SKILLS_SOURCE, fn: () => crawlAgentSkills() },
     { name: "Hacker News Algolia", fn: crawlHackerNewsAlgolia },
     { name: HF_PAPERS_SOURCE, fn: () => crawlHuggingFacePapers() },
     { name: HF_TRENDING_SOURCE, fn: () => crawlTrendingModels() },

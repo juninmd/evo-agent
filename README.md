@@ -30,13 +30,15 @@ flowchart TD
 
 ## Funcionalidades
 
-- **Coleta multi-fonte**: RSS/HTML, busca por palavra-chave no Google News, SearXNG para Reddit/X.com, Hacker News, TabNews, GitHub Trending, Hugging Face Daily Papers (ranqueado por votos), modelos em alta no Hugging Face, lançamentos de modelos dos grandes laboratórios (catálogo OpenRouter, últimos 14 dias), release notes de coding agents (Claude Code, Codex, Gemini CLI, Copilot CLI, Cursor, MCP) e análise de sinais da comunidade no Reddit. Itens de feed com mais de 14 dias são ignorados e corpos Atom preenchem snippets vazios
+- **Coleta multi-fonte**: RSS/HTML, busca por palavra-chave no Google News, SearXNG para Reddit/X.com, Hacker News, TabNews, GitHub Trending, repositórios de skills de agentes (GitHub `topic:agent-skills`, ordenados por estrelas, com README), Hugging Face Daily Papers (ranqueado por votos), modelos em alta no Hugging Face, lançamentos de modelos dos grandes laboratórios (catálogo OpenRouter, últimos 14 dias), release notes de coding agents (Claude Code, Codex, Gemini CLI, Copilot CLI, Cursor, MCP) e análise de sinais da comunidade no Reddit. Itens de feed com mais de 14 dias são ignorados e corpos Atom preenchem snippets vazios
 - **Ciclo de auto-aprimoramento**: o system prompt e as palavras-chave de busca evoluem a partir do conteúdo ingerido
 - **Orquestração confiável**: ciclos sobrepostos são pulados e cada execução fica registrada no SQLite
 - **Pontuação editorial**: recência, engajamento, autoridade da fonte, diversidade e evidência entre fontes definem a seleção
 - **Proveniência da evidência**: cada destaque selecionado preserva URL da fonte, título e trecho de apoio
 - **Auto-aprimoramento com guarda**: candidatos de prompt são pontuados, versionados, promovidos só sem regressão e podem sofrer rollback
-- **Geração de artigos**: três edições diárias longas (≥5 assuntos cada, sem repetir fontes no dia) e relatórios semanais/periódicos em pt-BR via LLM, com evidência ampliada de Reddit/comunidade quando disponível
+- **Geração de artigos**: uma edição diária longa (sem repetir fontes no dia) e relatórios semanais/periódicos em pt-BR via LLM, com evidência ampliada de Reddit/comunidade quando disponível
+- **Skill da semana** (`SKILL_WEEK`): uma aula prática por semana, com passo a passo, exercício e armadilhas. Todo bloco de código e todo comando precisa existir na fonte, senão a aula é descartada e a edição sai sem ela. Não há cota de tópicos: cada item recebe nota de 0 a 10 (executável, tração, transferível entre harnesses, novo nos últimos 60 dias, mensurável) e cai em uma faixa, "Experimente" (card com comando ou artefato) ou "Fique sabendo" (uma linha). Um orçamento de cerca de 12 min de leitura rebaixa itens de faixa em vez de cortá-los. Posts de Reddit, HN e Google News só viram item com repositório, docs ou release por trás; debates entram agregados no "Termômetro"; pré-releases, notícias de negócio e repetidos são descartados e contados no rodapé. O "Placar" traz os repositórios de skills mais estrelados e o índice da Artificial Analysis
+- **Material completo das fontes**: além do resumo, o crawler guarda o corpo de feeds e READMEs em Markdown com os blocos de código (coluna `body`, até 12 mil caracteres) e os links externos de posts do Reddit
 - **Ebook vivo**: manual semanal e refinável de desenvolvimento assistido por IA, publicado no GitHub Pages
 - **Publicação atômica no GitHub Pages**: artigo, layouts e índices entram em um único commit
 - **Páginas descobríveis**: URL canônica, metadados Open Graph/Twitter, feed Atom e sitemap em toda página publicada
@@ -76,6 +78,7 @@ As variáveis vêm do ambiente ou de um `.env` na raiz (use `.env.example` como 
 | `LITELLM_API_BASE` | Não | `http://litellm.ai.svc.cluster.local:4000/v1` | URL base do LiteLLM; fora do cluster, defina para o seu gateway (ex.: `http://localhost:4000/v1`) |
 | `LITELLM_API_KEY` | Não | `no-key` | Chave de API do LiteLLM |
 | `LITELLM_MODEL` | Não | `cloud/auto` | Modelo primário; `cloud/auto` é a cadeia do LiteLLM que decide o provider |
+| `SKILL_WEEK_MODEL` | Não | vazio | Modelo tentado primeiro na aula da `SKILL_WEEK`; vazio usa `LITELLM_MODEL` e os fallbacks |
 | `LITELLM_FALLBACK_MODELS` | Não | — | Modelos de fallback (diferentes do primário) separados por vírgula, usados se o primário falhar, estourar o tempo ou vier vazio. A cadeia do `cloud/auto` já roda no LiteLLM |
 | `LITELLM_MAX_OUTPUT_TOKENS` | Não | `12000` | Máximo de tokens de saída por requisição |
 | `LITELLM_TIMEOUT_MS` | Não | `300000` | Timeout da requisição ao LiteLLM, em milissegundos |
@@ -91,7 +94,7 @@ As variáveis vêm do ambiente ou de um `.env` na raiz (use `.env.example` como 
 | `CRAWL_INTERVAL_MINUTES` | Não | `40` | Frequência do ciclo de aprendizado no modo daemon |
 | `ARTICLE_CRON` | Não | `0 8,13,18 * * *` | Cron das edições diárias (uma edição por horário) |
 | `MODEL_ALERT_CRON` | Não | `*/30 * * * *` | Cron do alerta de novos LLMs (catálogo OpenRouter, grandes fornecedores, Telegram) |
-| `DAILY_EDITIONS` | Não | `3` | Edições publicadas por dia; uma varredura às 22h preenche horários perdidos |
+| `DAILY_EDITIONS` | Não | `1` | Edições publicadas por dia; uma varredura às 22h preenche horários perdidos |
 | `SEARXNG_URL` | Não | `http://searxng.searxng.svc.cluster.local` | URL da instância SearXNG |
 | `API_HOST` | Não | `127.0.0.1` | Endereço de bind do `RUN_MODE=API` |
 | `API_PORT` | Não | `8787` | Porta do `RUN_MODE=API` |
@@ -121,6 +124,7 @@ Defina `RUN_MODE` para controlar a execução (`npm start -- --help` imprime est
 | `DAILY_SWEEP` | Publica o que falta do orçamento de edições de hoje, recuperando um horário que falhou antes; não faz nada se o dia está completo |
 | `RADAR` | Publica o radar entre fontes (tabelas determinísticas mais uma leitura escrita pelo modelo, sem portão editorial) e sai |
 | `TECHLEAD` | Publica o digest para tech leads e sai |
+| `SKILL_WEEK` | Publica a "Skill da semana" (aula prática + itens verificados em faixas, Placar e Termômetro) como `skillweek-<data>` e sai; no `DAEMON` roda aos sábados às 10h; falha só quando nenhum item da semana passa no filtro |
 | `DEV_TIPS` | Transforma as release notes da semana de Claude Code, VS Code e OpenCode em dicas práticas (o que mudou, como usar, boa prática), publicadas como `devtips-<data>`, e sai; falha sem candidatos e cai para um ranking quando a saída do modelo cita algo fora do material |
 | `WEEKLY` | Gera e publica um artigo semanal e sai |
 | `BIWEEKLY` | Gera e publica um relatório quinzenal e sai |
@@ -189,6 +193,7 @@ src/
     feed-items.ts       # Janela de recência, seleção mais novo primeiro, fallback de resumo
     hf-papers.ts        # Hugging Face Daily Papers ranqueado por votos
     model-launches.ts   # Modelos em alta no HF + lançamentos de modelos (OpenRouter)
+    agent-skills.ts     # Repositórios de skills de agentes (GitHub topic:agent-skills + README)
     reddit.ts           # Ritmo, rate limit e sinais da comunidade do Reddit
     reddit-smoke.ts     # Smoke test isolado dos sinais do Reddit
   knowledge/
@@ -197,6 +202,7 @@ src/
     improver.ts         # Auto-aprimoramento: atualiza prompt e palavras-chave a partir das fontes recentes
     writer.ts           # Geração de artigos e relatórios semanais via LLM
     ebook.ts            # Refino do manual vivo
+    skill-week/         # Skill da semana: nota, faixas sem cota, aula com código ancorado na fonte
     editorial-renderer.ts # Renderização determinística de artigos e citações
     prompt-policy.ts    # Política de promoção e rollback de prompts
   newspaper/

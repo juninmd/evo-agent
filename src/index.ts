@@ -9,6 +9,7 @@ import { refineEbook } from "./agent/ebook.js";
 import { runImprovementCycle } from "./agent/improver.js";
 import { rollbackPrompt } from "./agent/prompt-policy.js";
 import { generateRadar } from "./agent/radar.js";
+import { generateSkillWeek } from "./agent/skill-week/index.js";
 import { generateTechleadDigest } from "./agent/techlead.js";
 import {
   DAILY_WINDOW_DAYS,
@@ -280,6 +281,31 @@ async function devTipsCycle() {
   };
 }
 
+async function skillWeekCycle() {
+  log.info("=== Skill week cycle start ===");
+  const edition = await generateSkillWeek();
+  db.recordMetric("skillweek.selected_sources", edition.sources.length);
+  const url = await publishWeeklyReport(edition, "skillweek");
+  const notificationStatus = await processNotification(
+    db,
+    sendPendingNotification,
+    {
+      url,
+      title: edition.title,
+      summary: edition.summary,
+      kind: "report",
+      notification_attempts: 0,
+    },
+  );
+  db.setState("last_skillweek_at", new Date().toISOString());
+  log.info(`=== Skill week published: ${url} ===`);
+  return {
+    url,
+    notified: notificationStatus === "delivered",
+    selectedSources: edition.sources.length,
+  };
+}
+
 async function ebookCycle() {
   log.info("=== Ebook cycle start ===");
   const ebook = await refineEbook();
@@ -362,6 +388,7 @@ const ONE_SHOT_MODES: Partial<Record<RunMode, () => Promise<number>>> = {
   RADAR: () => runCycle("radar", radarCycle),
   TECHLEAD: () => runCycle("techlead", techleadCycle),
   DEV_TIPS: () => runCycle("devtips", devTipsCycle),
+  SKILL_WEEK: () => runCycle("skillweek", skillWeekCycle),
   WEEKLY: () => runCycle("weekly", () => reportCycle("weekly")),
   BIWEEKLY: () => runCycle("biweekly", () => reportCycle("biweekly")),
   MONTHLY: () => runCycle("monthly", () => reportCycle("monthly")),
@@ -490,6 +517,18 @@ async function main() {
     { timezone: config.timezone },
   );
 
+  // Saturday morning: the week's releases are in and there is time to practice.
+  const skillWeekCron = "0 10 * * 6";
+  cron.schedule(
+    skillWeekCron,
+    () => {
+      cycles
+        .run("skillweek", skillWeekCycle)
+        .catch((e) => log.error(`Skill week cycle error: ${errMsg(e)}`));
+    },
+    { timezone: config.timezone },
+  );
+
   const ebookCron = "30 19 * * 0";
   cron.schedule(
     ebookCron,
@@ -522,7 +561,7 @@ async function main() {
   );
 
   log.info(
-    `Scheduled: learn=${learnInterval}, article=${config.articleCron} (${config.dailyEditions}/dia), sweep=${dailySweepCron}, radar=${config.radarCron}, weekly=${weeklyCron}, ebook=${ebookCron}, modelAlerts=${config.modelAlertCron}`,
+    `Scheduled: learn=${learnInterval}, article=${config.articleCron} (${config.dailyEditions}/dia), sweep=${dailySweepCron}, radar=${config.radarCron}, weekly=${weeklyCron}, skillWeek=${skillWeekCron}, ebook=${ebookCron}, modelAlerts=${config.modelAlertCron}`,
   );
 
   // A cycle killed mid-run left its row 'running' until the 6h stale sweep, so

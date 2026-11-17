@@ -10,6 +10,7 @@ export type RunMode =
   | "RADAR"
   | "TECHLEAD"
   | "DEV_TIPS"
+  | "SKILL_WEEK"
   | "WEEKLY"
   | "BIWEEKLY"
   | "MONTHLY"
@@ -29,6 +30,7 @@ const RUN_MODES = new Set<RunMode>([
   "RADAR",
   "TECHLEAD",
   "DEV_TIPS",
+  "SKILL_WEEK",
   "WEEKLY",
   "BIWEEKLY",
   "MONTHLY",
@@ -195,6 +197,8 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
       apiKey: env.LITELLM_API_KEY ?? env.OPENCODE_API_KEY ?? "no-key",
       // Provider choice and fallbacks live in the LiteLLM cloud/auto chain.
       model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/auto",
+      // Optional pin for the weekly lesson; empty keeps the default chain.
+      skillWeekModel: env.SKILL_WEEK_MODEL?.trim() ?? "",
       // A cadeia de fallback do cloud/auto já roda dentro do LiteLLM; aqui só
       // entra um modelo diferente do principal (repetir o mesmo era no-op).
       fallbackModels: (env.LITELLM_FALLBACK_MODELS ?? "")
@@ -224,7 +228,8 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
     radarCron,
     modelAlertCron,
     timezone,
-    dailyEditions: positiveNumber(env, "DAILY_EDITIONS", "3"),
+    // One edition a day: the weekly lesson carries the depth (SKILL_WEEK).
+    dailyEditions: positiveNumber(env, "DAILY_EDITIONS", "1"),
     dbPath: env.DB_PATH ?? join(process.cwd(), "data", "knowledge.db"),
     searxngUrl: validUrl(
       env,

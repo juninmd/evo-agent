@@ -5,11 +5,13 @@ import type Parser from "rss-parser";
 export const FEED_MAX_AGE_DAYS = 14;
 export const FEED_ITEMS_PER_SOURCE = 10;
 const FEED_SUMMARY_MAX = 500;
+/** Enough for a release note or a README section; the prompt clamps again. */
+export const FEED_BODY_MAX = 12_000;
 
 export type FeedItem = Pick<
   Parser.Item,
   "title" | "link" | "isoDate" | "pubDate" | "contentSnippet" | "content"
-> & { summary?: string };
+> & { summary?: string; body?: string };
 
 const NAMED_ENTITIES: Record<string, string> = {
   amp: "&",
@@ -123,4 +125,22 @@ export function feedItemSummary(item: FeedItem): string {
     }
   }
   return summarizeSourceContent(raw, FEED_SUMMARY_MAX);
+}
+
+/**
+ * The source text as Markdown, code blocks included, for formats that teach
+ * from it. Empty when the item carries no more than a title.
+ */
+export function feedItemBody(item: FeedItem): string {
+  const raw = item.content ?? item.summary ?? "";
+  if (/<[a-z][\s\S]*>/i.test(raw)) {
+    const extracted = extractArticleFromHtml(raw, {
+      fallbackToBody: true,
+      charThreshold: 0,
+    });
+    if (extracted?.contentMarkdown) {
+      return extracted.contentMarkdown.trim().slice(0, FEED_BODY_MAX);
+    }
+  }
+  return (raw || item.contentSnippet || "").trim().slice(0, FEED_BODY_MAX);
 }
