@@ -15,6 +15,8 @@ export interface Article {
   tags: string;
   engagement_score: number;
   crawled_at: string;
+  /** Source text as Markdown with code blocks kept; null for rows saved before it existed. */
+  body?: string | null;
 }
 
 export interface Snippet {
@@ -320,6 +322,11 @@ function applyMigrations(db: Database.Database) {
   if (!articleColumns.some((c) => c.name === "url_key")) {
     db.exec("ALTER TABLE articles ADD COLUMN url_key TEXT");
   }
+
+  // Summaries strip code; teaching formats need the source text as written.
+  if (!articleColumns.some((c) => c.name === "body")) {
+    db.exec("ALTER TABLE articles ADD COLUMN body TEXT");
+  }
   db.exec(
     "CREATE INDEX IF NOT EXISTS idx_articles_url_key ON articles(url_key)",
   );
@@ -415,6 +422,7 @@ export interface SaveArticleInput {
   summary: string;
   tags: string;
   engagement_score?: number;
+  body?: string;
 }
 
 export interface SavePublishedInput {
@@ -548,12 +556,13 @@ export const db = {
     // engagement instead of being silently ignored; crawl time stays the first
     // sighting so recency semantics are preserved.
     return stmt(
-      `INSERT INTO articles (title, source, url, url_key, summary, tags, engagement_score)
-       VALUES (@title, @source, @url, @url_key, @summary, @tags, @engagement_score)
+      `INSERT INTO articles (title, source, url, url_key, summary, tags, engagement_score, body)
+       VALUES (@title, @source, @url, @url_key, @summary, @tags, @engagement_score, @body)
        ON CONFLICT(url) DO UPDATE SET
          summary = excluded.summary,
          tags = excluded.tags,
-         engagement_score = excluded.engagement_score`,
+         engagement_score = excluded.engagement_score,
+         body = COALESCE(excluded.body, articles.body)`,
     ).run({
       title: a.title,
       source: a.source,
@@ -562,6 +571,7 @@ export const db = {
       summary: a.summary,
       tags: a.tags,
       engagement_score: a.engagement_score ?? 0,
+      body: a.body || null,
     });
   },
 

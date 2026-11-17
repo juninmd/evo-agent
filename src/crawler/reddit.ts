@@ -36,6 +36,25 @@ interface RedditPostCandidate {
   title: string;
   url: string;
   summary: string;
+  /** Post text plus the outbound links it cites (repos, docs, releases). */
+  body?: string;
+}
+
+const REDDIT_HOST =
+  /(^|\.)(reddit\.com|redd\.it|redditmedia\.com|redditstatic\.com)$/i;
+
+/** Outbound links of a post: they are what make it teachable, not the votes. */
+export function redditOutboundLinks(html: string): string[] {
+  const links = new Set<string>();
+  for (const match of html.matchAll(/href="(https?:\/\/[^"]+)"/gi)) {
+    const url = match[1].replace(/&amp;/g, "&");
+    try {
+      if (!REDDIT_HOST.test(new URL(url).hostname)) links.add(url);
+    } catch {
+      // Malformed href: not a link a reader could follow either.
+    }
+  }
+  return [...links].slice(0, 10);
 }
 
 const REDDIT_COMMUNITY_SUBREDDITS = [
@@ -412,7 +431,11 @@ async function getRedditPostCandidates(
       item.contentSnippet ?? item.content ?? "",
       1000,
     );
-    return [{ subreddit, title: item.title, url: item.link, summary }];
+    const links = redditOutboundLinks(item.content ?? "");
+    const body = links.length
+      ? `${summary}\n\nLinks:\n${links.map((link) => `- ${link}`).join("\n")}`
+      : summary;
+    return [{ subreddit, title: item.title, url: item.link, summary, body }];
   });
 }
 
@@ -513,6 +536,7 @@ function saveCommunitySignal(
     source: `Reddit Community Signals (${post.subreddit})`,
     url,
     summary: buildCommunitySignalSummary(post, comments),
+    body: post.body,
     tags: JSON.stringify([
       "reddit",
       "community-signals",
@@ -532,6 +556,7 @@ function savePostSignal(post: RedditPostCandidate, url: string): boolean {
     source: `Reddit Post Signals (${post.subreddit})`,
     url,
     summary: buildRedditPostSignalSummary(post),
+    body: post.body,
     tags: JSON.stringify([
       "reddit",
       "post-signals",
