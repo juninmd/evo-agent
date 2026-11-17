@@ -22,6 +22,17 @@ export function setAiMetricRecorder(recorder: MetricRecorder) {
   metricRecorder = recorder;
 }
 
+let cachedProvider:
+  | { key: string; provider: ReturnType<typeof createOpenAI> }
+  | undefined;
+
+function providerFor(baseURL: string, apiKey: string) {
+  const key = `${baseURL}\n${apiKey}`;
+  if (cachedProvider?.key !== key)
+    cachedProvider = { key, provider: createOpenAI({ baseURL, apiKey }) };
+  return cachedProvider.provider;
+}
+
 export async function ask(
   userPrompt: string,
   systemPrompt?: string,
@@ -39,10 +50,7 @@ export async function ask(
   const maxOutputTokens =
     options?.maxOutputTokens ?? config.litellm.maxOutputTokens;
 
-  const openai = createOpenAI({
-    baseURL: apiBase,
-    apiKey: apiKey,
-  });
+  const openai = providerFor(apiBase, apiKey);
 
   let lastErr: unknown;
 
@@ -52,7 +60,8 @@ export async function ask(
     log.info(`Calling LiteLLM model via AI SDK: ${modelName} via ${apiBase}`);
 
     let attempt = 0;
-    const maxAttempts = 5;
+    // O LiteLLM já reintenta e troca de deployment; aqui só cobre a cota do pool inteiro.
+    const maxAttempts = 3;
     let delay = 3000;
 
     while (true) {
@@ -63,6 +72,10 @@ export async function ask(
           system: systemPrompt,
           prompt: userPrompt,
           abortSignal: AbortSignal.timeout(timeoutMs),
+          // O laço abaixo já faz o retry de 429 com backoff, e o LiteLLM tem
+          // num_retries próprio. Com o padrão do SDK (2) cada falha virava
+          // até 3 × 6 chamadas antes de chegar ao fallback.
+          maxRetries: 0,
           ...(maxOutputTokens ? { maxOutputTokens } : {}),
         });
         const { text } = result;

@@ -199,7 +199,9 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
       model: env.LITELLM_MODEL ?? env.OPENCODE_MODEL ?? "cloud/auto",
       // Optional pin for the weekly lesson; empty keeps the default chain.
       skillWeekModel: env.SKILL_WEEK_MODEL?.trim() ?? "",
-      fallbackModels: (env.LITELLM_FALLBACK_MODELS ?? "cloud/auto")
+      // A cadeia de fallback do cloud/auto já roda dentro do LiteLLM; aqui só
+      // entra um modelo diferente do principal (repetir o mesmo era no-op).
+      fallbackModels: (env.LITELLM_FALLBACK_MODELS ?? "")
         .split(",")
         .map((model) => model.trim())
         .filter(Boolean),
