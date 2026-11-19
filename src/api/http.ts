@@ -97,7 +97,8 @@ export function intParam(
 
 /**
  * Compares a `/api/v1/editions/:slug` template with a pathname. Returns the
- * captured parameters, or null when the shapes differ.
+ * captured parameters, or null when the shapes differ. Throws ApiError(400)
+ * when a captured segment is not valid percent-encoding.
  */
 export function matchPath(
   template: string,
@@ -111,7 +112,11 @@ export function matchPath(
   for (let i = 0; i < expected.length; i++) {
     const segment = expected[i];
     if (segment.startsWith(":")) {
-      params[segment.slice(1)] = decodeURIComponent(actual[i]);
+      try {
+        params[segment.slice(1)] = decodeURIComponent(actual[i]);
+      } catch {
+        throw new ApiError(400, "path contains an invalid percent escape");
+      }
       continue;
     }
     if (segment !== actual[i]) return null;
