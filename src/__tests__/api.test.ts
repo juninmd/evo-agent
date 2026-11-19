@@ -380,6 +380,8 @@ describe("api server", () => {
 
     expect((await get("/api/v1/editions/missing")).status).toBe(404);
     expect((await get("/api/v1/editions?kind=other")).status).toBe(400);
+    // A truncated percent escape is a client error, not an "internal error"
+    expect((await get("/api/v1/editions/%E0%A4%A")).status).toBe(400);
   });
 
   it("flags primary sources on the crawled-article feed", async () => {
