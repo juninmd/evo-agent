@@ -2,6 +2,7 @@ import { ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL } from "../crawler/intelligence.js
 import { db } from "../knowledge/store.js";
 import { newspaperAttachment, newspaperLink } from "../newspaper/index.js";
 import { ask } from "../utils/ai.js";
+import { localDayIso } from "../utils/date.js";
 import { log } from "../utils/logger.js";
 import { renderIntelligenceSection } from "./intelligence.js";
 import {
@@ -96,8 +97,9 @@ export function fallbackReading(buckets: RadarBucket[]): string {
   ].join("\n");
 }
 
-export function radarDate(now = new Date()): string {
-  return now.toISOString().slice(0, 10);
+/** Local day (config.timezone), the same key the RADAR_CRON schedule runs on. */
+export function radarDate(now = new Date(), timeZone?: string): string {
+  return localDayIso(now, timeZone);
 }
 
 export function radarTitle(day: string): string {
