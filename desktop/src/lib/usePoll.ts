@@ -50,8 +50,10 @@ export function usePoll<T>(
     }
 
     let cancelled = false;
+    let lastRunAt = 0;
 
     const run = async (background: boolean) => {
+      lastRunAt = Date.now();
       if (!background) {
         setState((previous) => ({ ...previous, loading: true }));
       }
@@ -86,10 +88,22 @@ export function usePoll<T>(
       // Uma janela escondida nao precisa bater na API a cada 30 s.
       if (document.visibilityState === "visible") void run(true);
     }, intervalMs);
+    // Sem leitura enquanto escondida: ao voltar, o painel atrasado se atualiza
+    // na hora em vez de esperar o proximo tique.
+    const onVisible = () => {
+      if (
+        document.visibilityState === "visible" &&
+        Date.now() - lastRunAt >= intervalMs
+      ) {
+        void run(true);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
 
     return () => {
       cancelled = true;
       window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, [key, intervalMs]);
 
