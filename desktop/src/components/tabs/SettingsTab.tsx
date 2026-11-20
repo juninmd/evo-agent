@@ -120,7 +120,15 @@ export default function SettingsTab({
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <Card title={t("settings.title")}>
         {/* Os campos ficam contidos: um input de 1000 px nao se le. */}
-        <div className="flex max-w-2xl flex-col gap-3">
+        {/* Um form de verdade: Enter num campo salva, como o usuario espera. */}
+        <form
+          className="flex max-w-2xl flex-col gap-3"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (busy !== null || baseUrl.trim() === "") return;
+            void save(token === "" ? null : token, t("settings.saved"));
+          }}
+        >
           <label className="flex flex-col gap-1 text-xs text-muted">
             {t("settings.apiUrl")}
             <input
@@ -157,12 +165,9 @@ export default function SettingsTab({
 
           <div className="flex flex-wrap items-center gap-1.5">
             <button
-              type="button"
+              type="submit"
               className="evo-btn evo-btn-primary"
               disabled={busy !== null || baseUrl.trim() === ""}
-              onClick={() =>
-                void save(token === "" ? null : token, t("settings.saved"))
-              }
             >
               {t("settings.save")}
             </button>
@@ -190,7 +195,7 @@ export default function SettingsTab({
             <output className="block text-[11px] text-ok">{notice}</output>
           )}
           {error && <ErrorBanner message={error} />}
-        </div>
+        </form>
       </Card>
 
       <div className="grid items-start gap-3 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">

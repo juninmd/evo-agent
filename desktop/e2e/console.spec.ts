@@ -224,6 +224,14 @@ test("execução manual anuncia o resultado, inclusive a falha", async ({ page }
   await expect(status).toHaveClass(/text-danger/);
 });
 
+test("Enter num campo dos ajustes salva a configuração", async ({ page }) => {
+  await open(page);
+  await page.getByRole("tab", { name: "Ajustes" }).click();
+  await page.getByLabel("API_TOKEN").fill("novo-token");
+  await page.getByLabel("API_TOKEN").press("Enter");
+  await expect(page.getByText("Configuração salva")).toBeVisible();
+});
+
 test("voltar para a janela depois de um tempo escondida atualiza o painel na hora", async ({ page }) => {
   await page.clock.install();
   await open(page);
