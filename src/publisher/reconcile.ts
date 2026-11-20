@@ -1,6 +1,6 @@
 import type { Octokit } from "@octokit/rest";
 import type { ReportPeriod } from "../agent/types.js";
-import { type SavePublishedInput, db } from "../knowledge/store.js";
+import { db, type SavePublishedInput } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 
 type GitHubClient = Pick<Octokit, "git" | "repos">;

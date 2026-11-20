@@ -1,8 +1,8 @@
 import axios from "axios";
 import {
+  db,
   type IntelligenceModelRecord,
   type IntelligenceSnapshot,
-  db,
 } from "../knowledge/store.js";
 import { localDayIso } from "../utils/date.js";
 import { HTTP_LIMITS } from "../utils/http-limits.js";

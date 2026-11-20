@@ -1,4 +1,4 @@
-import { type EditionStatus, type PublishedArticle, getDb } from "./store.js";
+import { type EditionStatus, getDb, type PublishedArticle } from "./store.js";
 
 export interface EditionQuery {
   kind?: "article" | "report";

@@ -7,15 +7,15 @@ import {
   shortModelName,
 } from "../agent/intelligence.js";
 import {
-  type IntelligenceDiff,
   crawlArtificialAnalysisIntelligence,
   diffIntelligenceSnapshots,
   extractIntelligenceModels,
+  type IntelligenceDiff,
 } from "../crawler/intelligence.js";
 import {
-  type IntelligenceModelRecord,
   db,
   getDb,
+  type IntelligenceModelRecord,
   migrate,
 } from "../knowledge/store.js";
 

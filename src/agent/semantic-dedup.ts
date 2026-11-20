@@ -5,7 +5,7 @@ import {
   saveVectors,
 } from "../knowledge/embedding-cache.js";
 import type { Article } from "../knowledge/store.js";
-import { embedTexts, embeddingsEnabled } from "../utils/embeddings.js";
+import { embeddingsEnabled, embedTexts } from "../utils/embeddings.js";
 import { log } from "../utils/logger.js";
 
 export type Embed = (texts: string[]) => Promise<Float32Array[] | null>;

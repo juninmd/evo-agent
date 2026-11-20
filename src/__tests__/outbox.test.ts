@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
-  type PendingNotification,
   nextRetryAt,
+  type PendingNotification,
   processNotificationOutbox,
 } from "../notifier/outbox.js";
 

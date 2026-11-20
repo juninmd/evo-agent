@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { validateArticle } from "../agent/article-validation.js";
+import type { EditorialDraft } from "../agent/editorial.js";
 import {
   buildEditorialPrompt,
   isGenericImpact,
   pruneLowUtility,
   ungroundedHeadlineTerms,
 } from "../agent/editorial.js";
-import type { EditorialDraft } from "../agent/editorial.js";
 import { editorialBenchmarkCases } from "../fixtures/editorial-benchmark.js";
 import type { Article } from "../knowledge/store.js";
 

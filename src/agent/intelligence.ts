@@ -1,12 +1,12 @@
 import {
   ARTIFICIAL_ANALYSIS_INTELLIGENCE_URL,
-  type IntelligenceDiff,
-  type ModelChange,
   crawlArtificialAnalysisIntelligence,
   diffIntelligenceSnapshots,
+  type IntelligenceDiff,
+  type ModelChange,
   shortModelName,
 } from "../crawler/intelligence.js";
-import { type IntelligenceModelRecord, db } from "../knowledge/store.js";
+import { db, type IntelligenceModelRecord } from "../knowledge/store.js";
 import { localDayIso } from "../utils/date.js";
 import { escapeHtml } from "../utils/escape.js";
 import { log } from "../utils/logger.js";

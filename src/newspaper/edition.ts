@@ -3,7 +3,7 @@ import { cleanSummary, displayUrl } from "../agent/radar-format.js";
 import type { LaunchOfDay } from "../agent/radar-launches.js";
 import type { Article } from "../knowledge/store.js";
 import { imageFor } from "./images.js";
-import { type Reading, parseReading, plainText } from "./inline.js";
+import { parseReading, plainText, type Reading } from "./inline.js";
 
 export interface Story {
   title: string;

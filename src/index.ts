@@ -18,7 +18,7 @@ import {
   generatePeriodReport,
 } from "./agent/writer.js";
 import { startApiServer } from "./api/server.js";
-import { type RunMode, config, loadConfig } from "./config.js";
+import { config, loadConfig, type RunMode } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
 import { fetchModelCatalog } from "./crawler/model-launches.js";
 import { recentEvidenceUrls } from "./knowledge/editions.js";
