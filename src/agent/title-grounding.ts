@@ -1,5 +1,5 @@
-import { leadSentence } from "./editorial-renderer.js";
 import type { EditorialDraft } from "./editorial.js";
+import { leadSentence } from "./editorial-renderer.js";
 
 // Function words and title verbs that paraphrase rather than quote the body.
 const STOP = new Set(

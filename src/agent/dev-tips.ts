@@ -1,6 +1,6 @@
 import axios from "axios";
-import { db } from "../knowledge/store.js";
 import type { Article } from "../knowledge/store.js";
+import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { localDayIso } from "../utils/date.js";
 import { HTTP_LIMITS } from "../utils/http-limits.js";

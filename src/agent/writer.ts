@@ -15,6 +15,14 @@ import {
   sourceBucket,
 } from "./curation.js";
 import {
+  buildEditorialPrompt,
+  type EditorialDraft,
+  EditorialValidationError,
+  editorialPeriod,
+  isGenericTitle,
+  parseEditorialDraft,
+} from "./editorial.js";
+import {
   articlesFromDraft,
   buildReferencesSection,
   buildTagsFromGroups,
@@ -22,14 +30,6 @@ import {
   groupBySourceType,
   renderEditorialDraft,
 } from "./editorial-renderer.js";
-import {
-  type EditorialDraft,
-  EditorialValidationError,
-  buildEditorialPrompt,
-  editorialPeriod,
-  isGenericTitle,
-  parseEditorialDraft,
-} from "./editorial.js";
 import { extractEntityTags } from "./entities.js";
 import { getSystemPrompt } from "./improver.js";
 import { renderIntelligenceSection } from "./intelligence.js";

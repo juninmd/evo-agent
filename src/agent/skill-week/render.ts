@@ -1,7 +1,7 @@
 import type { Article } from "../../knowledge/store.js";
 import { sourceBucket } from "../curation.js";
 import { firstSnippet } from "./artifacts.js";
-import type { DiscardReason, Discarded, ScoredItem } from "./scoring.js";
+import type { Discarded, DiscardReason, ScoredItem } from "./scoring.js";
 import type { ThermometerTopic, Tiers } from "./tiers.js";
 
 const DISCARD_LABELS: Record<DiscardReason, string> = {

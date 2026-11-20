@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import type { EditorialDraft } from "../agent/editorial.js";
 import {
   articlesFromDraft,
   buildReferencesSection,
   editorialTheme,
   leadSentence,
 } from "../agent/editorial-renderer.js";
-import type { EditorialDraft } from "../agent/editorial.js";
 import { generateArticle, renderEditorialDraft } from "../agent/writer.js";
 import { type Article, db } from "../knowledge/store.js";
 

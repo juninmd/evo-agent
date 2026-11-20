@@ -1,7 +1,7 @@
 import type { GeneratedArticle } from "../agent/types.js";
 import { config } from "../config.js";
 import { markRetracted } from "../knowledge/editions.js";
-import { type PublishedArticle, db } from "../knowledge/store.js";
+import { db, type PublishedArticle } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 import { buildPublicationBatch, commitFiles } from "./github.js";
 import { buildMarkdown } from "./site-renderer.js";

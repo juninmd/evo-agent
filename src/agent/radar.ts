@@ -5,15 +5,15 @@ import { ask } from "../utils/ai.js";
 import { log } from "../utils/logger.js";
 import { renderIntelligenceSection } from "./intelligence.js";
 import {
-  type RadarBucket,
   bucketRadarArticles,
   dedupeByUrl,
+  type RadarBucket,
 } from "./radar-buckets.js";
 import { cell, displayUrl, rowSummary } from "./radar-format.js";
 import { launchesOfDay, renderLaunchHighlights } from "./radar-launches.js";
 import {
-  RADAR_SYSTEM_PROMPT,
   extractReading,
+  RADAR_SYSTEM_PROMPT,
   readingOrder,
 } from "./radar-reading.js";
 import type { GeneratedArticle } from "./types.js";

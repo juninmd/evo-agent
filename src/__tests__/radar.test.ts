@@ -7,6 +7,7 @@ vi.mock("../utils/ai.js", () => ({
     .fn()
     .mockResolvedValue("## TL;DR\n\n1. Launch\n\n## O que observar\n\n- Item"),
 }));
+
 import {
   bucketRadarArticles,
   dedupeByUrl,

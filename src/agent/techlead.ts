@@ -1,5 +1,5 @@
-import { db } from "../knowledge/store.js";
 import type { Article } from "../knowledge/store.js";
+import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
 import { localDayIso } from "../utils/date.js";
 import { log } from "../utils/logger.js";

@@ -1,14 +1,14 @@
 import {
+  createServer,
   type IncomingMessage,
   type ServerResponse,
-  createServer,
 } from "node:http";
 import { config } from "../config.js";
 import { getDb } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
 import { isAuthorized } from "./auth.js";
 import { ApiError, matchPath, readJsonBody, sendJson } from "./http.js";
-import { type Route, createRoutes } from "./routes.js";
+import { createRoutes, type Route } from "./routes.js";
 import { createRunSpawner } from "./runs.js";
 
 /**

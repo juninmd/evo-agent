@@ -1,4 +1,5 @@
 import { UNTRUSTED_MATERIAL_RULE } from "./prompt-guards.js";
+
 const MIN_TLDR_ITEMS = 5;
 // The model leads with whatever it reads first: news before popularity.
 const READING_PRIORITY = [

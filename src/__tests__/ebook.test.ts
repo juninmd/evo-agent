@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  EBOOK_TITLE,
   buildEbookUserPrompt,
+  EBOOK_TITLE,
   selectEbookSources,
   validateEbook,
 } from "../agent/ebook.js";

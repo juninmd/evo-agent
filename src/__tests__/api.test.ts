@@ -9,7 +9,7 @@ import {
   toCrawledArticle,
   toCycleRun,
 } from "../api/read-model.js";
-import { type RunChild, createRunSpawner, planRun } from "../api/runs.js";
+import { createRunSpawner, planRun, type RunChild } from "../api/runs.js";
 import { createApiServer } from "../api/server.js";
 import { config } from "../config.js";
 import { db, getDb } from "../knowledge/store.js";

@@ -21,7 +21,7 @@ import {
   toPromptVersion,
   toStateEntry,
 } from "./read-model.js";
-import { RUNNABLE_MODES, type RunSpawner, planRun } from "./runs.js";
+import { planRun, RUNNABLE_MODES, type RunSpawner } from "./runs.js";
 
 export interface RouteContext {
   params: Record<string, string>;

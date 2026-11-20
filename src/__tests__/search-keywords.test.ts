@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_SEARCH_KEYWORDS,
-  type KeywordState,
   getSearchKeywords,
+  type KeywordState,
   saveSearchKeywords,
 } from "../agent/search-keywords.js";
 
