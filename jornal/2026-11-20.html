@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 20/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>76 itens · 32 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>20/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>6 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Lançamento do dia</p><h1><a href="https://openrouter.ai/mistralai/pixtral-large-2502">Mistral: Pixtral Large 2502</a></h1><p class="dek">128000 tokens de contexto. Pixtral Large 2502 is the February 2025 version of Mistral AI&#39;s large multimodal model, following Pixtral Large 2411. It accepts text and image input, including documents, charts, and natural…</p>
+</div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Mistral lança Pixtral Large 2502 com 128 000 tokens de contexto.</li><li>Claude Code v2.1.329 adiciona alerta de trust dialog e aviso de falha de hooks.</li><li>Codex CLI 0.171.0 traz nova versão.</li><li>Copilot CLI 1.0.115-3 corrige picker de @ mention.</li><li>GitHub Enterprise Server 3.23 release candidate disponibiliza Projects e novas funcionalidades.</li><li>Ollama v0.40.17-rc3 inclui suporte ao Inkling 2‑Mini.</li><li>Vercel AI SDK @ai-sdk/xai 5.0.48 corrige derivação de IDs de vídeo e modelo de fala.</li><li>LiteLLM v1.110.2 mescla PR 52920 para backport estável.</li><li>Jeveration (System One) publica paper demonstrando geração de imagens em um único passo.</li><li>ALIVE introduz modelo de streaming de vídeo interativo para monitoramento proativo.</li><li>Tencent Hy4 está disponível na Together AI, com teste de input de imagem e coding em browser game.</li><li>RadixArk lança DaisyRose‑27B, modelo agente de coding treinado exclusivamente com RL, dobrando Terminal Bench 4.1 pass@1 para 12.0.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>Monitorar a disponibilidade e custo da API do Pixtral Large 2502, pois a janela de 128 k tokens pode atrair uso intensivo de multimodal.</p><p>Avaliar o impacto do alerta de trust dialog no Claude Desktop, especialmente em ambientes com hooks gerenciados.</p><p>Verificar a compatibilidade do Inkling 2‑Mini no Ollama 0.40.17‑rc3 para pipelines de streaming de vídeo.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/higurashi-ai/Haru-4B" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/higurashi-ai/Haru-4B.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/higurashi-ai/Haru-4B">higurashi-ai/Haru-4B</a></h3>
+<p>audio-to-audio · 3635 likes · 6266 downloads · trending 318.5 <span class="meta">HF Trending Models · <b>318.5</b></span></p></article>
+<ul class="brief"><li><a href="https://openrouter.ai/mistralai/pixtral-large-2502">Mistral: Pixtral Large 2502</a> <span class="meta">OpenRouter: New Models</span></li><li><a href="https://huggingface.co/tencent/Hy4-flash">tencent/Hy4-flash</a> <span class="meta">HF Trending Models · <b>285</b></span></li><li><a href="https://huggingface.co/apple/FastFrames-L">apple/FastFrames-L</a> <span class="meta">HF Trending Models · <b>268</b></span></li><li><a href="https://huggingface.co/harness-hub/Qwen3.8-27B-pi-adapted">harness-hub/Qwen3.8-27B-pi-adapted</a> <span class="meta">HF Trending Models · <b>253.5</b></span></li><li><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen/Qwen3.8-27B</a> <span class="meta">HF Trending Models · <b>242.5</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>6</span></h2>
+<article class="note"><h3><a href="https://alpo.ge/remark.pdf">Anthropic employee claims general proof of the Riemann Hypothesis [pdf]</a></h3>
+<p>Anthropic employee claims general proof of the Riemann Hypothesis [pdf] | ⬆ 182 points | 💬 55 comments | by iamronaldo <span class="meta">Hacker News · <b>292</b></span></p></article>
+<ul class="brief"><li><a href="https://arxiv.org/abs/2611.21885">Language Models Can Rewrite Their Own Weights</a> <span class="meta">Hacker News · <b>229</b></span></li><li><a href="https://www.nbcnews.com/business/markets/anthropic-shares-markets-selloff-nasdaq-rcna610394">Anthropic shares tank after IPO as the Nasdaq erases 2026 gains</a> <span class="meta">Hacker News · <b>150</b></span></li><li><a href="https://architectlabs.com/blog/frostbite">Frostbite: A new CPU architecture discovered, designed and verified by AI</a> <span class="meta">Hacker News · <b>143</b></span></li><li><a href="https://www.theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off">Global stock markets slump as Anthropic&#39;s record IPO fails to stem AI sell-off</a> <span class="meta">Hacker News · <b>90</b></span></li><li><a href="https://git-aarvin.github.io/mei/">Gemini 4 Neon is the new #1 on the Models Engineering Index</a> <span class="meta">Hacker News · <b>87</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.329" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.329">v2.1.329</a></h3>
+<p>What&#39;s changed Added a trust dialog warning that says where a folder&#39;s hooks are declared Added a warning in the conversation, in Claude Desktop and other non-interactive hosts, when hooks in managed settings fail to… <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/openai/codex/releases/tag/rust-v0.171.0">rust-v0.171.0</a> <span class="meta">Codex CLI Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.115-3">1.0.115-3</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.blog/changelog/2026-11-20-github-enterprise-server-3-23-release-candidate">GitHub Enterprise Server 3.23 release candidate</a> <span class="meta">GitHub Changelog</span></li><li><a href="https://github.com/ollama/ollama/releases/tag/v0.40.17-rc3">v0.40.17-rc3</a> <span class="meta">Ollama Releases</span></li><li><a href="https://github.com/vercel/ai/releases/tag/%40ai-sdk%2Fxai%405.0.48">@ai-sdk/xai@5.0.48</a> <span class="meta">Vercel AI SDK Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>6</span></h2>
+<article class="note"><h3><a href="https://huggingface.co/blog/inkling2mini">Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup</a></h3>
+<p> <span class="meta">Hugging Face Blog</span></p></article>
+<ul class="brief"><li><a href="https://openai.com/business/customer-stories/hebbia">Hebbia sees improvements in financial research with GPT-6 Astra</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://www.together.ai/blog/qwen3-tts">Qwen3 TTS is now available on Together AI</a> <span class="meta">Together AI</span></li><li><a href="https://devblogs.microsoft.com/foundry/managed-compute-ga/">Serve open models in production with Foundry Managed Compute</a> <span class="meta">Microsoft Foundry Blog</span></li><li><a href="https://openai.com/index/introducing-medchembench">Can AI help scientists identify promising drug candidates?</a> <span class="meta">OpenAI Blog</span></li><li><a href="https://huggingface.co/blog/harness-adapters-at-scale">Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost</a> <span class="meta">Hugging Face Blog</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2611.24738" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.24738.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2611.24738">Jeveration: System One Models Now Generate</a></h3>
+<p>System One models such as Jev return decisions through fast, parallel prediction. In this paper, we introduce Jeveration, showing that the same decision paradigm can also generate high-quality images in a single forward… <span class="meta">HF Daily Papers · <b>117</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2611.23068">The Resolution Hypothesis: Agent Evolution&#39;s Key Is Identifying Improvements</a> <span class="meta">HF Daily Papers · <b>39</b></span></li><li><a href="https://huggingface.co/papers/2611.21366">ALIVE: Making Streaming Video Models Interactive</a> <span class="meta">HF Daily Papers · <b>36</b></span></li><li><a href="https://huggingface.co/papers/2611.14848">Tideway: Phase-Aware Tiered Memory Management for MoE Inference on Consumer Devices</a> <span class="meta">HF Daily Papers · <b>29</b></span></li><li><a href="https://huggingface.co/papers/2611.11318">PROLA: Principal-Orthogonal Low-rank Adaptation for Predictive Spatiotemporal Weather Downscaling</a> <span class="meta">HF Daily Papers · <b>29</b></span></li><li><a href="https://huggingface.co/papers/2611.24154">Game2Player: Scaling Gameplay Experience for Visual Agents through Environment-Player Co-Development</a> <span class="meta">HF Daily Papers · <b>27</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><h3><a href="https://dev.to/kenielzep97/everybody-has-an-ai-apocalypse-story-almost-nobody-reads-the-fine-print-43hm">Everybody Has an AI Apocalypse Story. Almost Nobody Reads the Fine Print.</a></h3>
+<p>Think back to the first time you pictured AI. Maybe it was HAL&#39;s calm red eye refusing to open the... <span class="meta">Dev.to (ai) · <b>33</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/galadev/i-route-every-ai-agent-to-the-cheapest-model-with-quota-heres-what-broke-3p5h">I Route Every AI Agent to the Cheapest Model with Quota. Here&#39;s What Broke</a> <span class="meta">Dev.to (agents) · <b>21</b></span></li><li><a href="https://dev.to/andrewbaisden/updf-review-can-an-ai-pdf-editor-replace-adobe-acrobat-in-a-developers-workflow-2976">UPDF Review - Can an AI PDF Editor Replace Adobe Acrobat in a Developer&#39;s Workflow?</a> <span class="meta">Dev.to (llm) · <b>4</b></span></li><li><a href="https://latent.space/p/formal-verification/">The War Against Slop and an Emerging Weapon to Fight it: Formal Verification</a> <span class="meta">Latent Space</span></li><li><a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxQSEJKdDFlUjJlOEZlbFA3Ty1neWI5NUpJRElHZzMtSGxTbUpLTTdjVFg3TFhIcVJab2NraDY1R3UzYkw5UDgzRk9lb0dGd19QZjJyZmVTMm9jOW8xeTFRdTlnc3lKQk8xYk93Q01lSGcxQV9lcXhnYUV1STVaMXdxbE1TSjR5VXB1amd0YjlNc3l5ZThvaG16dFpUamJ3WnNKOU8wbUZsNlNmcTBXTDdN?oc=5">How to securely connect internal Cloud Run MCP servers to Gemini Enterprise - Google for Developers Blog</a> <span class="meta">Google News (Model Context Protocol)</span></li><li><a href="https://aws.amazon.com/blogs/machine-learning/announcing-amazon-textract-insights-verifiable-generative-ai-for-documents/">Announcing Amazon Textract Insights: Verifiable generative AI for documents</a> <span class="meta">AWS Machine Learning Blog</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-20</span></footer>
+</div></body></html>
