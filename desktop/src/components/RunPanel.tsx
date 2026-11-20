@@ -17,17 +17,26 @@ export default function RunPanel({
   onStarted: () => void;
 }) {
   const [busy, setBusy] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [notice, setNotice] = useState<{
+    text: string;
+    failed: boolean;
+  } | null>(null);
 
   async function start(mode: string) {
     setBusy(mode);
     setNotice(null);
     try {
       await api.runStart(mode);
-      setNotice(t("overview.runStarted", { mode: runModeLabel(mode) }));
+      setNotice({
+        text: t("overview.runStarted", { mode: runModeLabel(mode) }),
+        failed: false,
+      });
       onStarted();
     } catch (error) {
-      setNotice(t("overview.runFailed", { error: errText(error) }));
+      setNotice({
+        text: t("overview.runFailed", { error: errText(error) }),
+        failed: true,
+      });
     } finally {
       setBusy(null);
     }
@@ -65,7 +74,12 @@ export default function RunPanel({
       {!enabled && (
         <p className="text-[11px] text-muted">{t("overview.runDisabled")}</p>
       )}
-      {notice && <p className="text-[11px] text-muted">{notice}</p>}
+      {/* Sempre montada (role=status): leitor de tela so anuncia regiao viva ja existente. */}
+      <output
+        className={`text-[11px] ${notice?.failed ? "text-danger" : "text-muted"}`}
+      >
+        {notice?.text}
+      </output>
     </div>
   );
 }

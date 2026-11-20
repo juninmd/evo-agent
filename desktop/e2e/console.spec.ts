@@ -17,6 +17,9 @@ async function mockIpc(page: Page, overrides: Record<string, unknown> = {}) {
         if (command === "metrics" && args?.name) {
           return Promise.resolve(fixtures.metricSeries);
         }
+        // `{ __reject: "msg" }` simula o comando Rust devolvendo Err(String).
+        const value = fixtures[command] as { __reject?: string } | undefined;
+        if (value?.__reject) return Promise.reject(value.__reject);
         return Promise.resolve(fixtures[command] ?? null);
       },
     };
@@ -210,4 +213,13 @@ test("uma falha da API mantém o painel anterior e oferece repetir", async ({ pa
 
   await expect(page.getByText(/sem conexão com o agente/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Tentar de novo" })).toBeVisible();
+});
+
+test("execução manual anuncia o resultado, inclusive a falha", async ({ page }) => {
+  await open(page, { run_start: { __reject: "outro ciclo já está rodando" } });
+
+  await page.getByRole("button", { name: "Daily" }).click();
+  const status = page.getByRole("status").filter({ hasText: "Não foi possível iniciar" });
+  await expect(status).toContainText("outro ciclo já está rodando");
+  await expect(status).toHaveClass(/text-danger/);
 });
