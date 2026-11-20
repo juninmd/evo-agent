@@ -361,7 +361,14 @@ describe("radar", () => {
   });
 
   it("names the edition by day", () => {
-    expect(radarDate(new Date("2026-08-06T23:30:00Z"))).toBe("2026-08-06");
+    expect(radarDate(new Date("2026-08-06T23:30:00Z"), "UTC")).toBe(
+      "2026-08-06",
+    );
+    // RADAR_CRON defaults to 21:00 America/Sao_Paulo, which is already the
+    // next UTC day: the edition must still carry the local date.
+    expect(
+      radarDate(new Date("2026-08-07T00:00:00Z"), "America/Sao_Paulo"),
+    ).toBe("2026-08-06");
     expect(radarTitle("2026-08-06")).toBe("Radar IA — 06/08/2026");
   });
 
