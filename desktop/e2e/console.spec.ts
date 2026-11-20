@@ -231,3 +231,36 @@ test("Enter num campo dos ajustes salva a configuração", async ({ page }) => {
   await page.getByLabel("API_TOKEN").press("Enter");
   await expect(page.getByText("Configuração salva")).toBeVisible();
 });
+
+test("voltar para a janela depois de um tempo escondida atualiza o painel na hora", async ({ page }) => {
+  await page.clock.install();
+  await open(page);
+
+  // Conta as leituras de overview a partir daqui.
+  await page.evaluate(() => {
+    const w = window as unknown as {
+      __TAURI_INTERNALS__: { invoke: (c: string, a?: unknown) => Promise<unknown> };
+      __OVERVIEW_READS__: number;
+    };
+    const original = w.__TAURI_INTERNALS__.invoke;
+    w.__OVERVIEW_READS__ = 0;
+    w.__TAURI_INTERNALS__.invoke = (command, args) => {
+      if (command === "overview") w.__OVERVIEW_READS__ += 1;
+      return original(command, args);
+    };
+  });
+  const setVisibility = (state: string) =>
+    page.evaluate((value) => {
+      Object.defineProperty(document, "visibilityState", { value, configurable: true });
+      document.dispatchEvent(new Event("visibilitychange"));
+    }, state);
+  const reads = () =>
+    page.evaluate(() => (window as unknown as { __OVERVIEW_READS__: number }).__OVERVIEW_READS__);
+
+  await setVisibility("hidden");
+  await page.clock.runFor(5 * 60_000);
+  expect(await reads()).toBe(0);
+
+  await setVisibility("visible");
+  await expect.poll(reads).toBe(1);
+});
