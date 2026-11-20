@@ -7,6 +7,23 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-11-19T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/articles/2026-11-19-gemini-4-carbon-e-xing-4-redefinem-rag-e-inferencia-local</id>
+    <title>Gemini 4 Carbon e Xing 4 redefinem RAG e inferência local</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-11-19-gemini-4-carbon-e-xing-4-redefinem-rag-e-inferencia-local"/>
+    <updated>2026-11-19T00:00:00Z</updated>
+    <summary type="text">Gemini 4 Carbon entra no top 10 do Índice de Inteligência (Artificial Analysis) e Xing 4 demonstra inferência em chips Ascend (HF Daily Papers), com redução de custos operacionais e suporte a fluxos agentic.</summary>
+    <category term="artificial-analysis"/>
+    <category term="hf-daily-papers"/>
+    <category term="hacker-news"/>
+    <category term="hf-trending-models"/>
+    <category term="tabnews"/>
+    <category term="reddit"/>
+    <category term="benchmark"/>
+    <category term="papers"/>
+    <category term="research"/>
+    <category term="front-page"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/radar-2026-11-19-radar-2026-11-19</id>
     <title>Radar IA — 19/11/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-11-19-radar-2026-11-19"/>
@@ -622,17 +639,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/devtips-2026-10-29-devtips-2026-10-29</id>
-    <title>Código com IA na Prática — 29/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/devtips-2026-10-29-devtips-2026-10-29"/>
-    <updated>2026-10-29T00:00:00Z</updated>
-    <summary type="text">6 novidades de Claude Code, VS Code e OpenCode transformadas em prática.</summary>
-    <category term="claude-code"/>
-    <category term="vscode"/>
-    <category term="opencode"/>
-    <category term="boas-praticas"/>
-    <category term="dicas"/>
   </entry>
 </feed>
