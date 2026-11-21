@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gazeta dos Agentes — 21/11/2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,800;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--paper:#eceae4;--paper-2:#e2dfd7;--ink:#1a1a19;--ink-soft:#4a4944;--rule:#1a1a19;--hair:#b9b5aa;--accent:#a3261b;
+--display:"UnifrakturMaguntia","Old English Text MT",Georgia,serif;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+--mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}}
+:root[data-theme="dark"]{--paper:#171716;--paper-2:#21211f;--ink:#e7e4dc;--ink-soft:#a9a59b;--rule:#e7e4dc;--hair:#45443f;--accent:#e0695c;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.5;padding-inline:16px;padding-block:24px 48px}
+.sheet{max-width:1180px;margin:0 auto}
+a{color:inherit;text-decoration-color:var(--hair);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:0 3px}
+.ears{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.flag{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(44px,9vw,104px);line-height:1;margin:10px 0 6px}
+.dateline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px 18px;border-top:3px double var(--rule);border-bottom:1px solid var(--rule);padding:6px 2px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.lead{display:grid;grid-template-columns:1.7fr 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+.lead h1{font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.04;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em;overflow-wrap:anywhere}
+.dek{font-style:italic;font-size:19px;color:var(--ink-soft);margin:0 0 14px;text-wrap:pretty}
+.also{list-style:none;padding:0;margin:0 0 14px;font-size:15px}
+.also li{padding:4px 0;border-top:1px dotted var(--hair)}
+.sidebar{border-left:1px solid var(--hair);padding-left:24px}
+.sidebar h2,.desk>h2,.backroom h2{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.tldr{padding-left:22px;margin:0 0 16px;font-size:15px}
+.tldr li{margin-bottom:6px}
+.tldr li::marker{font-family:var(--mono);color:var(--accent);font-size:12px}
+.watch{border-top:2px solid var(--rule);padding-top:10px}
+.watch p{font-style:italic;margin:0 0 8px}
+figure{margin:0 0 12px;background:var(--paper-2);border:1px solid var(--hair)}
+figure a{display:block;line-height:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;aspect-ratio:1200/630;object-fit:cover;filter:grayscale(1) contrast(1.08);mix-blend-mode:multiply;transition:filter .3s}
+figure a:hover img,figure a:focus-visible img{filter:none}
+figcaption{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:5px 8px;border-top:1px solid var(--hair);line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 28px}
+.desk{padding:18px 0 8px;border-bottom:1px solid var(--hair);min-width:0}
+.desk>h2{border-top:3px solid var(--rule);padding-top:6px;display:flex;justify-content:space-between;gap:8px}
+.desk>h2 span{color:var(--ink-soft)}
+.note h3{font-size:18px;line-height:1.2;margin:0 0 3px;font-weight:600;text-wrap:balance;overflow-wrap:anywhere}
+.note p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)}
+.meta b{color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+.brief{list-style:none;padding:0;margin:0}
+.brief li{padding:7px 0;border-top:1px dotted var(--hair);font-size:15px;overflow-wrap:anywhere}
+.brief li:first-child{border-top:0}
+.backroom{background:var(--paper-2);padding:16px 18px;margin-top:22px;border-top:3px solid var(--rule)}
+.backroom p{margin:0;max-width:72ch}
+footer{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;border-top:3px double var(--rule);padding-top:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{mix-blend-mode:normal;opacity:.9}}
+:root[data-theme="dark"] figure img{mix-blend-mode:normal;opacity:.9}
+@media (prefers-reduced-motion:reduce){figure img{transition:none}}
+@media (max-width:900px){.lead{grid-template-columns:1fr}.sidebar{border-left:0;padding-left:0}.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="sheet">
+<header><div class="ears"><span>Edição diária · IA e agentes</span><span>59 itens · 28 fontes</span></div>
+<p class="flag">Gazeta dos Agentes</p>
+<div class="dateline"><span><strong>21/11/2026</strong></span><span>Coleta das últimas 24 horas</span><span>7 editorias</span></div></header>
+<main><section class="lead" aria-label="Manchete">
+<div><p class="kicker">Manchete</p><h1><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen/Qwen3.8-27B atingiu mais de 6.4 mil milhões de downloads no HF.</a></h1>
+<figure><a href="https://huggingface.co/Qwen/Qwen3.8-27B" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/Qwen/Qwen3.8-27B.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure></div>
+<aside class="sidebar"><h2>Em uma frase</h2><ol class="tldr"><li>Qwen/Qwen3.8-27B atingiu mais de 6.4 mil milhões de downloads no HF.</li><li>Lightricks/LTX-2.5 é um modelo trending com 2.9 milhões de downloads no HF.</li><li>Claude Code v2.1.330 adicionou suporte a organizações no Enterprise Admin Console.</li><li>Copilot CLI 1.0.115-6 corrigiu a instalação de plugins em políticas temporárias.</li><li>LiteLLM v1.108.15 incluiu verificação de assinatura de imagem via cosign.</li><li>Cline v4.1.27 adicionou campo de chave de API para configurações do LM Studio.</li><li>Ollama v0.40.17 suporta o modelo Inkling 2 Mini de 26B parâmetros.</li><li>Together AI disponibilizou Qwen4 Max com 30% de desconto até 22/11/2026.</li><li>WeVisForensics é um paper votado 52 sobre detecção forense de vídeo gerado por IA.</li><li>Mind2Act World é um benchmark votado 49 para manipulação robótica com cognição.</li><li>nexu-io/open-design é um workspace colaborativo de design de IA local-first.</li><li>Hacker News priorizou restrições de agentes em SOs móveis com 1121 votos.</li></ol>
+<div class="watch"><h2>O que observar</h2><p>O custo de token está se tornando um item de infraestrutura prioritário, com foco em FinOps para IA (Microsoft, X/Twitter).</p><p>O MCP (Model Context Protocol) está sendo adotado por fornecedores para escalar automação (GitLab).</p><p>O ecossistema de avaliação de agentes (<code>eval-harness</code>) está sendo ativamente discutido em fóruns para governança e runtime.</p></div></aside>
+</section>
+<div class="grid"><section class="desk" aria-labelledby="desk-models">
+<h2 id="desk-models">Modelos: lançamentos e trending <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/thinkingmachines/Inkling-2-Mini" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/models/thinkingmachines/Inkling-2-Mini.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Trending Models</figcaption></figure><h3><a href="https://huggingface.co/thinkingmachines/Inkling-2-Mini">thinkingmachines/Inkling-2-Mini</a></h3>
+<p>image-text-to-text · 481 likes · 136 downloads · trending 349 <span class="meta">HF Trending Models · <b>349</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/higurashi-ai/Haru-4B">higurashi-ai/Haru-4B</a> <span class="meta">HF Trending Models · <b>313</b></span></li><li><a href="https://huggingface.co/harness-hub/Qwen3.8-27B-pi-adapted">harness-hub/Qwen3.8-27B-pi-adapted</a> <span class="meta">HF Trending Models · <b>293</b></span></li><li><a href="https://huggingface.co/Qwen/Qwen3.8-27B">Qwen/Qwen3.8-27B</a> <span class="meta">HF Trending Models · <b>232</b></span></li><li><a href="https://huggingface.co/maxwell-model/Maxwell-V1-Flash">maxwell-model/Maxwell-V1-Flash</a> <span class="meta">HF Trending Models · <b>216</b></span></li><li><a href="https://huggingface.co/Lightricks/LTX-2.5">Lightricks/LTX-2.5</a> <span class="meta">HF Trending Models · <b>181</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-reddit">
+<h2 id="desk-reddit">Reddit <span>6</span></h2>
+<article class="note"><h3><a href="https://www.reddit.com/r/Observability/comments/1xtc1a9/anyone_selfhosting_langfuse_on_okdopenshift_or/">Anyone self-hosting Langfuse on OKD/OpenShift? Or are ... - Reddit</a></h3>
+<p>11 de nov. de 2026 ... What we need: tracing, token/cost tracking per user/team/project, and ideally some evals later on. We also plan to use LiteLLM as AI Gateway ... <span class="meta">Reddit (token cost tracking)</span></p></article>
+<ul class="brief"><li><a href="https://www.reddit.com/r/ClaudeAI/comments/1rw65c5/i_built_an_opensource_harness_that_lets_ai_agents/">I built an open-source harness that lets AI agents run as a company</a> <span class="meta">Reddit (agent harness evaluation)</span></li><li><a href="https://www.reddit.com/r/devops/comments/1touxz4/harness_engineering_the_new_devops_layer_for_ai/">Harness Engineering: The New DevOps Layer for AI Agents - Reddit</a> <span class="meta">Reddit (agent harness evaluation)</span></li><li><a href="https://www.reddit.com/r/VibeCodeDevs/comments/1uodfah/evalharness_agent_harness_evaluation_framework/">eval-harness - agent harness evaluation framework : r/VibeCodeDevs</a> <span class="meta">Reddit (agent harness evaluation)</span></li><li><a href="https://www.reddit.com/r/LocalLLM/comments/1uo99ea/evalharness_agent_harness_evaluation_framework/">eval-harness - agent harness evaluation framework : r/LocalLLM</a> <span class="meta">Reddit (agent harness evaluation)</span></li><li><a href="https://www.reddit.com/r/LangChain/comments/1wgdz83/what_actually_makes_an_agent_eval_harness_and/">What actually makes an agent eval harness and should you build or ...</a> <span class="meta">Reddit (agent harness evaluation)</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-hackernews">
+<h2 id="desk-hackernews">Hacker News <span>3</span></h2>
+<article class="note"><h3><a href="https://signal.org/blog/protecting-your-privacy/">Restricting AI agents in mobile operating systems platforms from capturing data</a></h3>
+<p>Restricting AI agents in mobile operating systems platforms from capturing data | ⬆ 511 points | 💬 305 comments | by dotcoma <span class="meta">Hacker News · <b>1121</b></span></p></article>
+<ul class="brief"><li><a href="http://ricapar.net/ClawDOS/">ClawDOS – An AI coding agent for DOS</a> <span class="meta">Hacker News · <b>41</b></span></li><li><a href="https://www.economist.com/science-and-technology/2026/11/20/ai-may-have-solved-the-most-important-problem-in-mathematics">AI may have solved the most important problem in mathematics</a> <span class="meta">Hacker News · <b>37</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-releases">
+<h2 id="desk-releases">Releases e changelogs de agentes <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.330" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/anthropics/claude-code" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>Claude Code Releases</figcaption></figure><h3><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.330">v2.1.330</a></h3>
+<p>What&#39;s changed Added sign-in to organizations managed in Anthropic&#39;s Enterprise Admin Console: after claude auth login, Claude Code applies the organization&#39;s settings and uses its cloud provider or gateway Added easel,… <span class="meta">Claude Code Releases</span></p></article>
+<ul class="brief"><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.115-6">1.0.115-6</a> <span class="meta">Copilot CLI Releases</span></li><li><a href="https://github.com/BerriAI/litellm/releases/tag/v1.108.15">v1.108.15</a> <span class="meta">LiteLLM Releases</span></li><li><a href="https://github.com/cline/cline/releases/tag/v4.1.27">v4.1.27</a> <span class="meta">Cline Releases</span></li><li><a href="https://github.com/ollama/ollama/releases/tag/v0.40.17">v0.40.17</a> <span class="meta">Ollama Releases</span></li><li><a href="https://github.com/github/copilot-cli/releases/tag/v1.0.115-5">1.0.115-5</a> <span class="meta">Copilot CLI Releases</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-vendors">
+<h2 id="desk-vendors">Fabricantes e ferramentas <span>3</span></h2>
+<article class="note"><h3><a href="https://www.together.ai/blog/qwen4-max">Qwen4 Max is live on Together AI</a></h3>
+<p>Qwen4 Max, Alibaba&#39;s flagship Qwen model, is live on Together AI and 30% off through November 22, 2026. We sent it a bug report and an entire repository in one request. Its patch passed the project&#39;s tests, for 69 cents. <span class="meta">Together AI</span></p></article>
+<ul class="brief"><li><a href="https://devblogs.microsoft.com/foundry/hosted-agents-private-network-setup/">Hosted agents in your own virtual network: five checks when the Agents page times out</a> <span class="meta">Microsoft Foundry Blog</span></li><li><a href="https://research.google/blog/how-google-duplex-evolved-to-also-call-businesses-for-you-in-gemini/">How Google Duplex evolved to also call businesses for you in Gemini</a> <span class="meta">Google Research</span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-papers">
+<h2 id="desk-papers">Pesquisa <span>6</span></h2>
+<article class="note"><figure><a href="https://huggingface.co/papers/2611.21373" tabindex="-1" aria-hidden="true"><img src="https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.21373.png" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>HF Daily Papers</figcaption></figure><h3><a href="https://huggingface.co/papers/2611.21373">WeVisForensics: Self-Evolving Agent for Omni AI-Generated Video Detection</a></h3>
+<p>Recent advances in video generation call for reliable detection grounded in explicit forensic evidence. However, current methods primarily depend on single-pass chain-of-thought reasoning that overlooks brief or… <span class="meta">HF Daily Papers · <b>52</b></span></p></article>
+<ul class="brief"><li><a href="https://huggingface.co/papers/2611.26444">Mind2Act World: A Diagnostic Benchmark for Embodied Mind, Physical Action, and Mind-Action Composition in Robotic Manipulation</a> <span class="meta">HF Daily Papers · <b>49</b></span></li><li><a href="https://huggingface.co/papers/2611.26409">WeMM-Video: Pushing the Frontiers of Open-Source Omni-Modal Video Understanding</a> <span class="meta">HF Daily Papers · <b>43</b></span></li><li><a href="https://huggingface.co/papers/2611.26595">Coda-DaVinci: Reimagining Video Generation with Code2Video</a> <span class="meta">HF Daily Papers · <b>38</b></span></li><li><a href="https://huggingface.co/papers/2611.26590">Probing the &quot;Conscious&quot; Mind: Selective Access and Global Workspace in Vision-Language Models</a> <span class="meta">HF Daily Papers · <b>36</b></span></li><li><a href="https://huggingface.co/papers/2611.26629">Posterior Matching Distillation</a> <span class="meta">HF Daily Papers · <b>35</b></span></li></ul>
+</section>
+<section class="desk" aria-labelledby="desk-community">
+<h2 id="desk-community">Comunidade e produtos <span>6</span></h2>
+<article class="note"><figure><a href="https://github.com/nexu-io/open-design" tabindex="-1" aria-hidden="true"><img src="https://opengraph.githubassets.com/1/nexu-io/open-design" alt="" loading="lazy" referrerpolicy="no-referrer" width="1200" height="630" onerror="this.closest('figure').remove()"></a><figcaption>GitHub Agent Skills</figcaption></figure><h3><a href="https://github.com/nexu-io/open-design">nexu-io/open-design</a></h3>
+<p>The 1st Collaborative AI Design Agent Workspace. Local-first and open source. Create motion, prototypes, websites, apps, dashboards, presentations, images, and videos with your team and AI agents. Share work, exchange… <span class="meta">GitHub Agent Skills · <b>108834</b></span></p></article>
+<ul class="brief"><li><a href="https://dev.to/thethirdcup/the-chairs-are-back-the-coffee-is-on-243p">The Chairs Are Back. The Coffee Is On. ☕</a> <span class="meta">Dev.to (ai) · <b>51</b></span></li><li><a href="https://dev.to/startupcafe/first-post-at-the-startup-cafe-building-project-lumina-and-where-to-release-it-2n58">First Post at The Startup Cafe: Building Project Lumina and Where to Release It</a> <span class="meta">Dev.to (llm) · <b>35</b></span></li><li><a href="https://www.tabnews.com.br/PedroDuarte/arquitetura-hibrida-de-web-scraping-com-ia-compile-once-zero-token-runtime">Arquitetura híbrida de Web scraping com IA: Compile-once, zero-token runtime</a> <span class="meta">TabNews · <b>20</b></span></li><li><a href="https://dev.to/debashish_ghosal/when-agentsmd-claudemd-and-a-skill-disagree-which-one-wins-cp2">When AGENTS.md, CLAUDE.md, and a Skill Disagree, Which One Wins?</a> <span class="meta">Dev.to (agents) · <b>19</b></span></li><li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE81WmVTc1lPV3N1NEJ2OHREdHg3dnhxOWFFaE40YjRfSnB6VEpRRm5xeXgzcFhpWDFmOEwyTTc5S3BPeFRJTElLdl9vUmZ1RU5FTnJ1bWRodEpfUVFEQ0hrRjEtT1g5amZpS0YyYVlGSWc?oc=5">Tencent Hy4 vs DeepSeek V4.1 Pro: Only One Has an Endpoint - OrcaRouter</a> <span class="meta">Google News (deepseek flash)</span></li></ul>
+</section></div></main>
+<section class="backroom" aria-label="Como esta edição é feita"><h2>Bastidores</h2><p>Montada automaticamente pelo evo-agent a partir de releases, catálogos de modelos, papers e comunidades. As tabelas vêm do banco; só o resumo “Em uma frase” é escrito por modelo, com validação de idioma e formato. Imagens: cards públicos do GitHub e do Hugging Face.</p></section>
+<footer><span>Gazeta dos Agentes</span><span>evo-agent · 2026-11-21</span></footer>
+</div></body></html>
