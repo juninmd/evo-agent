@@ -7,6 +7,24 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-11-21T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/weekly-2026-11-21-anthropic-precifica-oferta-publica-inicial-e-ollama-lanca-v0-40-17-com-suporte-a</id>
+    <title>Anthropic precifica oferta pública inicial e Ollama lança v0.40.17 com suporte a Claude Code</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/weekly-2026-11-21-anthropic-precifica-oferta-publica-inicial-e-ollama-lanca-v0-40-17-com-suporte-a"/>
+    <updated>2026-11-21T00:00:00Z</updated>
+    <summary type="text">Anthropic anuncia precificação de oferta pública inicial. Ollama lança v0.40.17 com Inkling 2 Mini e lançamento diferido de ferramentas MCP para Claude Code.</summary>
+    <category term="weekly-report"/>
+    <category term="hacker-news"/>
+    <category term="ollama"/>
+    <category term="litellm"/>
+    <category term="cline"/>
+    <category term="reddit"/>
+    <category term="front-page"/>
+    <category term="local-ai"/>
+    <category term="llm-framework"/>
+    <category term="coding-agent"/>
+    <category term="openai-codex"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/skillweek-2026-11-21-skillweek-2026-11-21</id>
     <title>Laboratório da semana — 21/11/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/skillweek-2026-11-21-skillweek-2026-11-21"/>
@@ -620,24 +638,5 @@
     <category term="coding-agent"/>
     <category term="codex"/>
     <category term="vscode"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/reports/radar-2026-10-30-radar-2026-10-30</id>
-    <title>Radar IA — 30/10/2026</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/radar-2026-10-30-radar-2026-10-30"/>
-    <updated>2026-10-30T00:00:00Z</updated>
-    <summary type="text">Radar de 98 sinais de IA das ultimas 24h: GitHub Trending, Modelos: lançamentos e trending, Reddit, Hacker News, Releases e changelogs de agentes, Fabricantes e ferramentas, Pesquisa, Comunidade e produtos.</summary>
-    <category term="radar"/>
-    <category term="ia"/>
-    <category term="trending"/>
-    <category term="benchmarks"/>
-    <category term="github"/>
-    <category term="models"/>
-    <category term="reddit"/>
-    <category term="hackernews"/>
-    <category term="releases"/>
-    <category term="vendors"/>
-    <category term="papers"/>
-    <category term="community"/>
   </entry>
 </feed>
