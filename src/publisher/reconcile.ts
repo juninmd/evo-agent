@@ -17,6 +17,7 @@ const PERIODS = new Set<string>([
   "techlead",
   "devtips",
   "skillweek",
+  "devbrief",
   "weekly",
   "biweekly",
   "monthly",

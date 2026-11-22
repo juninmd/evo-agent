@@ -3,6 +3,7 @@ export type ReportPeriod =
   | "techlead"
   | "devtips"
   | "skillweek"
+  | "devbrief"
   | "weekly"
   | "biweekly"
   | "monthly"

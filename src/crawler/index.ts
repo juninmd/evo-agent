@@ -7,11 +7,13 @@ import Parser from "rss-parser";
 import { normalizeTitle } from "../agent/curation.js";
 import { getSearchKeywords } from "../agent/improver.js";
 import { config } from "../config.js";
+import { repoStars } from "../knowledge/repo-stars.js";
 import { db } from "../knowledge/store.js";
 import { HTTP_LIMITS } from "../utils/http-limits.js";
 import { log } from "../utils/logger.js";
 import { AGENT_SKILLS_SOURCE, crawlAgentSkills } from "./agent-skills.js";
 import { AGENT_SOURCES } from "./agent-sources.js";
+import { CLAUDE_NOTES_SOURCE, crawlClaudeNotes } from "./claude-notes.js";
 import {
   type FeedItem,
   feedItemBody,
@@ -23,6 +25,7 @@ import {
 } from "./feed-items.js";
 import { crawlHuggingFacePapers, HF_PAPERS_SOURCE } from "./hf-papers.js";
 import { crawlArtificialAnalysisIntelligence } from "./intelligence.js";
+import { crawlMcpRegistry, MCP_REGISTRY_SOURCE } from "./mcp-registry.js";
 import {
   crawlModelLaunches,
   crawlTrendingModels,
@@ -39,6 +42,7 @@ import {
   redditFeedDue,
   redditGet,
 } from "./reddit.js";
+import { enrichCreatedAt, parseStarsToday } from "./repo-velocity.js";
 import { TECHLEAD_SOURCES } from "./techlead-sources.js";
 
 export { summarizeSourceContent };
@@ -448,11 +452,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     tags: ["reddit", "rag", "llm", "search"],
   },
   {
-    name: "V2EX Tech",
-    url: "https://www.v2ex.com/feed/tab/tech.xml",
-    tags: ["v2ex", "chinese", "ai", "developer"],
-  },
-  {
     name: "Together AI",
     url: "https://www.together.ai/blog/rss.xml",
     tags: ["ai frontier", "togetherai", "ai"],
@@ -530,12 +529,6 @@ const DEFAULT_SOURCES: FeedSource[] = [
     url: "https://lastweekin.ai/feed",
     tags: ["ai", "news", "research"],
   },
-  // Data Science & Analytics (IA-focused)
-  {
-    name: "Towards Data Science (Medium)",
-    url: "https://towardsdatascience.com/feed",
-    tags: ["medium", "data", "ai", "ml"],
-  },
   {
     name: "AWS Machine Learning Blog",
     url: "https://aws.amazon.com/blogs/machine-learning/feed/",
@@ -543,24 +536,9 @@ const DEFAULT_SOURCES: FeedSource[] = [
   },
   // News & Aggregators
   {
-    name: "MarkTechPost",
-    url: "https://www.marktechpost.com/feed/",
-    tags: ["news", "ai", "papers"],
-  },
-  {
-    name: "MIT Technology Review (AI)",
-    url: "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
-    tags: ["news", "ai", "policy"],
-  },
-  {
     name: "Ben's Bites",
     url: "https://www.bensbites.com/feed",
     tags: ["news", "ai", "products"],
-  },
-  {
-    name: "Meta Engineering",
-    url: "https://engineering.fb.com/feed/",
-    tags: ["meta", "ai", "engineering"],
   },
   // Product showcase
   {
@@ -730,6 +708,9 @@ async function crawlGitHubTrending(): Promise<number> {
               const langEl = article.querySelector(
                 '[itemprop="programmingLanguage"]',
               );
+              const todayEl = article.querySelector(
+                "span.d-inline-block.float-sm-right",
+              );
               return {
                 name: link?.textContent?.replace(/\s+/g, " ").trim() ?? "",
                 url: link
@@ -738,6 +719,7 @@ async function crawlGitHubTrending(): Promise<number> {
                 description: desc?.textContent?.trim() ?? "",
                 stars: starsEl?.textContent?.trim() ?? "",
                 language: langEl?.textContent?.trim() ?? "",
+                starsToday: todayEl?.textContent?.trim() ?? "",
               };
             });
         });
@@ -745,14 +727,21 @@ async function crawlGitHubTrending(): Promise<number> {
         const day = todayIso();
         for (const repo of repos) {
           if (!repo.url || !repo.name) continue;
-          const signalUrl = trendingSignalUrl(repo.url, label, day);
-          if (db.urlExists(signalUrl)) continue;
-
           const combined = `${repo.name} ${repo.description}`.toLowerCase();
           const isAiRelevant = GITHUB_TRENDING_AI_KEYWORDS.some((kw) =>
             combined.includes(kw),
           );
           if (!isAiRelevant) continue;
+          // Every pass feeds the velocity history, even when the signal exists.
+          repoStars.record({
+            repo: repo.url.replace("https://github.com/", ""),
+            day,
+            stars: parseGitHubStarCount(repo.stars),
+            starsToday: parseStarsToday(repo.starsToday),
+            description: repo.description.slice(0, 300),
+          });
+          const signalUrl = trendingSignalUrl(repo.url, label, day);
+          if (db.urlExists(signalUrl)) continue;
 
           const summary = [
             repo.description,
@@ -787,7 +776,10 @@ async function crawlGitHubTrending(): Promise<number> {
       }
     }
 
-    log.info(`Crawled GitHub Trending, ${newCount} new AI repos`);
+    const enriched = await enrichCreatedAt(todayIso());
+    log.info(
+      `Crawled GitHub Trending, ${newCount} new AI repos, ${enriched} dated`,
+    );
   });
 
   return newCount;
@@ -1410,6 +1402,8 @@ async function crawlAllInner(): Promise<CrawlReport> {
     },
     { name: "GitHub Trending", fn: crawlGitHubTrending },
     { name: AGENT_SKILLS_SOURCE, fn: () => crawlAgentSkills() },
+    { name: CLAUDE_NOTES_SOURCE, fn: () => crawlClaudeNotes() },
+    { name: MCP_REGISTRY_SOURCE, fn: () => crawlMcpRegistry() },
     { name: "Hacker News Algolia", fn: crawlHackerNewsAlgolia },
     { name: HF_PAPERS_SOURCE, fn: () => crawlHuggingFacePapers() },
     { name: HF_TRENDING_SOURCE, fn: () => crawlTrendingModels() },

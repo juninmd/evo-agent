@@ -10,7 +10,7 @@ import {
   type SavePublishedInput,
 } from "../knowledge/store.js";
 import { log } from "../utils/logger.js";
-import { buildAtomFeed } from "./feed.js";
+import { buildAtomFeed, buildThemeFeeds } from "./feed.js";
 import { publicTags } from "./public-tags.js";
 import { reconcilePublished } from "./reconcile.js";
 import {
@@ -279,11 +279,13 @@ export function buildPublicationBatch(
   const indexArticles = uniqueByUrl(articles);
   const indexReports = uniqueByUrl(reports);
   const indexContent = buildIndex(indexArticles, indexReports);
-  const feed = buildAtomFeed([...indexArticles, ...indexReports], {
+  const site = {
     baseUrl: `https://${target.owner}.github.io/${target.repo}/`,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-  });
+  };
+  const feed = buildAtomFeed([...indexArticles, ...indexReports], site);
+  const themeFeeds = buildThemeFeeds([...indexArticles, ...indexReports], site);
   return {
     items,
     files: [
@@ -293,6 +295,7 @@ export function buildPublicationBatch(
       { path: "index.md", content: indexContent },
       { path: "README.md", content: indexContent },
       { path: "feed.xml", content: feed },
+      ...themeFeeds,
     ],
   };
 }

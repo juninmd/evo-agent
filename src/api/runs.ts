@@ -12,6 +12,7 @@ export const RUNNABLE_MODES = [
   "TECHLEAD",
   "DEV_TIPS",
   "SKILL_WEEK",
+  "DEV_BRIEF",
   "WEEKLY",
   "BIWEEKLY",
   "MONTHLY",

@@ -3,6 +3,7 @@ import { config } from "../config.js";
 import type { ModelSignal } from "../crawler/model-launches.js";
 import { escapeHtml } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
+import type { InlineButton } from "./feedback.js";
 
 const BASE = `https://api.telegram.org/bot${config.telegram.botToken}`;
 const MAX_SOURCE_HOSTS = 6;
@@ -48,6 +49,7 @@ function telegramError(err: unknown): string {
 export async function sendMessage(
   text: string,
   link?: TelegramCardLink,
+  extraRows: InlineButton[][] = [],
 ): Promise<TelegramDeliveryResult> {
   try {
     await axios.post(
@@ -65,7 +67,10 @@ export async function sendMessage(
             show_above_text: true,
           },
           reply_markup: {
-            inline_keyboard: [[{ text: link.label, url: link.url }]],
+            inline_keyboard: [
+              [{ text: link.label, url: link.url }],
+              ...extraRows,
+            ],
           },
         }),
       },
@@ -177,4 +182,31 @@ export async function notifyModelLaunch(
     : "";
   const msg = `🚀 <b>Novo modelo</b> · Evo Agent\n\n<b>${escapeHtml(launch.title)}</b>\n\n<blockquote>${escapeHtml(launch.summary)}</blockquote>${launchedAt}`;
   return sendMessage(msg, { url: launch.url, label: "🔎 Ver modelo" });
+}
+
+/** Short daily brief: numbered items, one vote row per item. */
+export async function notifyDevBrief(
+  message: string,
+  url: string,
+  voteRows: InlineButton[][],
+): Promise<TelegramDeliveryResult> {
+  return sendMessage(
+    message,
+    { url, label: "📖 Ver radar completo", previewUrl: siteRootOf(url) },
+    voteRows,
+  );
+}
+
+export async function notifyDevAlert(
+  kind: "claude" | "breaking",
+  title: string,
+  summary: string,
+  url: string,
+): Promise<TelegramDeliveryResult> {
+  const badge =
+    kind === "breaking"
+      ? "⚠️ <b>Vai quebrar</b>"
+      : "🟠 <b>Novidade do Claude</b>";
+  const msg = `${badge} · Evo Agent\n\n<b>${escapeHtml(title)}</b>\n\n<blockquote>${escapeHtml(summary)}</blockquote>`;
+  return sendMessage(msg, { url, label: "🔎 Ler nota oficial" });
 }

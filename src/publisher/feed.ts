@@ -42,7 +42,11 @@ function buildEntry(item: PublishedItem): string {
  * Atom feed of everything on the index. Built here because jekyll-feed only
  * reads `_posts`, while articles and reports are plain pages.
  */
-export function buildAtomFeed(items: PublishedItem[], site: FeedSite): string {
+export function buildAtomFeed(
+  items: PublishedItem[],
+  site: FeedSite,
+  path = "feed.xml",
+): string {
   const entries = items
     .filter((item) => DAY.test(item.date))
     .sort((a, b) => b.date.localeCompare(a.date))
@@ -53,13 +57,54 @@ export function buildAtomFeed(items: PublishedItem[], site: FeedSite): string {
   return `${[
     '<?xml version="1.0" encoding="utf-8"?>',
     '<feed xmlns="http://www.w3.org/2005/Atom">',
-    `  <id>${xml(site.baseUrl)}feed.xml</id>`,
+    `  <id>${xml(site.baseUrl)}${path}</id>`,
     `  <title>${xml(site.title)}</title>`,
     `  <subtitle>${xml(site.description)}</subtitle>`,
-    `  <link rel="self" type="application/atom+xml" href="${xml(site.baseUrl)}feed.xml"/>`,
+    `  <link rel="self" type="application/atom+xml" href="${xml(site.baseUrl)}${path}"/>`,
     `  <link rel="alternate" href="${xml(site.baseUrl)}"/>`,
     `  <updated>${updated}</updated>`,
     ...entries.map(buildEntry),
     "</feed>",
   ].join("\n")}\n`;
+}
+
+/** Per-theme feeds for readers and bots that want one stream only. */
+export const THEME_FEEDS: Array<{
+  slug: string;
+  title: string;
+  match: RegExp;
+}> = [
+  { slug: "claude", title: "Claude", match: /\b(claude|anthropic)\b/i },
+  {
+    slug: "modelos",
+    title: "Modelos",
+    match: /\b(modelos?|models?|llms?|radar-dev)\b/i,
+  },
+  {
+    slug: "repos",
+    title: "Repositórios",
+    match: /\b(github|repos?|reposit\w*|trending|skills?)\b/i,
+  },
+];
+
+export function buildThemeFeeds(
+  items: PublishedItem[],
+  site: FeedSite,
+): Array<{ path: string; content: string }> {
+  return THEME_FEEDS.map((theme) => {
+    const path = `feeds/${theme.slug}.xml`;
+    const matching = items.filter((item) =>
+      theme.match.test(
+        [item.title, item.summary ?? "", ...(item.tags ?? [])].join(" "),
+      ),
+    );
+    return {
+      path,
+      content: buildAtomFeed(
+        matching,
+        { ...site, title: `${site.title} · ${theme.title}` },
+        path,
+      ),
+    };
+  });
 }
