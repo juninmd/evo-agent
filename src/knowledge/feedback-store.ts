@@ -24,10 +24,11 @@ function conn(): Database.Database {
         created_at TEXT NOT NULL DEFAULT (datetime('now'))
       );
       CREATE TABLE IF NOT EXISTS feedback_votes (
-        update_id INTEGER PRIMARY KEY,
+        user_id TEXT NOT NULL,
         key TEXT NOT NULL,
         vote TEXT NOT NULL CHECK (vote IN ('up', 'down', 'known')),
-        voted_at TEXT NOT NULL DEFAULT (datetime('now'))
+        voted_at TEXT NOT NULL DEFAULT (datetime('now')),
+        PRIMARY KEY (user_id, key)
       );
       CREATE INDEX IF NOT EXISTS idx_feedback_votes_key ON feedback_votes(key);
     `);
@@ -56,15 +57,15 @@ export const feedbackStore = {
     );
   },
 
-  /** update_id is Telegram's own id: a replayed update never counts twice. */
-  vote(updateId: number, key: string, vote: Vote): boolean {
-    return (
-      conn()
-        .prepare(
-          "INSERT OR IGNORE INTO feedback_votes (update_id, key, vote) VALUES (?, ?, ?)",
-        )
-        .run(updateId, key, vote).changes > 0
-    );
+  /** One vote per person per item: pressing again replaces it, never adds. */
+  vote(userId: string, key: string, vote: Vote) {
+    conn()
+      .prepare(
+        `INSERT INTO feedback_votes (user_id, key, vote) VALUES (?, ?, ?)
+         ON CONFLICT(user_id, key) DO UPDATE SET
+           vote = excluded.vote, voted_at = datetime('now')`,
+      )
+      .run(userId, key, vote);
   },
 
   /** Votes per source in the window, for the ranking weights. */

@@ -40,12 +40,25 @@ export function parseCallback(
   return match ? { key: match[1], vote: VOTES[match[2]] } : null;
 }
 
+/** TELEGRAM_CHAT_ID may be numeric or "@channel": match either form. */
+export function isConfiguredChat(
+  chat: { id?: number | string; username?: string } | undefined,
+  chatId: string,
+): boolean {
+  if (!chat) return false;
+  if (chatId.startsWith("@")) {
+    return `@${chat.username ?? ""}`.toLowerCase() === chatId.toLowerCase();
+  }
+  return String(chat.id ?? "") === chatId;
+}
+
 interface TelegramUpdate {
   update_id: number;
   callback_query?: {
     id: string;
     data?: string;
-    message?: { chat?: { id?: number | string } };
+    from?: { id?: number };
+    message?: { chat?: { id?: number | string; username?: string } };
   };
 }
 
@@ -100,14 +113,19 @@ export async function pollFeedback(
     next = Math.max(next, update.update_id + 1);
     const query = update.callback_query;
     const parsed = parseCallback(query?.data);
-    const fromChat = String(query?.message?.chat?.id ?? "") === deps.chatId;
-    if (!query || !parsed || !fromChat || !feedbackStore.item(parsed.key)) {
+    const voter = query?.from?.id;
+    if (
+      !query ||
+      !parsed ||
+      voter === undefined ||
+      !isConfiguredChat(query.message?.chat, deps.chatId) ||
+      !feedbackStore.item(parsed.key)
+    ) {
       result.ignored++;
       continue;
     }
-    if (feedbackStore.vote(update.update_id, parsed.key, parsed.vote)) {
-      result.recorded++;
-    }
+    feedbackStore.vote(String(voter), parsed.key, parsed.vote);
+    result.recorded++;
     await deps
       .answer(query.id, ACK[parsed.vote])
       // An expired callback (older than ~15 min) still counts as a vote.

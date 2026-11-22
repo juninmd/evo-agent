@@ -9,7 +9,7 @@ export const REMOVAL_ALERTS_KEY = "removal_alerts_seen";
 const SEEN_CAP = 500;
 const REMOVAL_WARN_DAYS = 7;
 const REMOVAL_TAG = /"removal:(\d{4}-\d{2}-\d{2})"/;
-const NOTE_DAY = /#(\d{4}-\d{2}-\d{2})-\d+$/;
+const NOTE_DAY = /#(\d{4}-\d{2}-\d{2})-[0-9a-f]{10}$/;
 
 export interface DevAlertDeps {
   store: ModelAlertStore;

@@ -11,9 +11,8 @@ const { getDb } = await import("../knowledge/store.js");
 const { feedbackStore, sourceWeights } = await import(
   "../knowledge/feedback-store.js"
 );
-const { feedbackRows, itemKey, parseCallback, pollFeedback } = await import(
-  "../notifier/feedback.js"
-);
+const { feedbackRows, isConfiguredChat, itemKey, parseCallback, pollFeedback } =
+  await import("../notifier/feedback.js");
 const { runDevAlerts, CLAUDE_ALERTS_KEY } = await import(
   "../notifier/dev-alerts.js"
 );
@@ -224,7 +223,7 @@ describe("feedback", () => {
     expect(parseCallback("fb:zz:u")).toBeNull();
   });
 
-  it("records votes from the configured chat only, once per update", async () => {
+  it("records one vote per person, from the configured chat only", async () => {
     const key = itemKey("https://voted");
     feedbackStore.register({
       key,
@@ -239,7 +238,8 @@ describe("feedback", () => {
         update_id: 10,
         callback_query: {
           id: "q1",
-          data: `fb:${key}:u`,
+          data: `fb:${key}:d`,
+          from: { id: 7 },
           message: { chat: { id: 42 } },
         },
       },
@@ -248,6 +248,7 @@ describe("feedback", () => {
         callback_query: {
           id: "q2",
           data: `fb:${key}:d`,
+          from: { id: 8 },
           message: { chat: { id: 999 } },
         },
       },
@@ -256,6 +257,17 @@ describe("feedback", () => {
         callback_query: {
           id: "q3",
           data: "fb:0000000000:u",
+          from: { id: 7 },
+          message: { chat: { id: 42 } },
+        },
+      },
+      // Same person presses again: the vote is replaced, not stacked.
+      {
+        update_id: 13,
+        callback_query: {
+          id: "q4",
+          data: `fb:${key}:u`,
+          from: { id: 7 },
           message: { chat: { id: 42 } },
         },
       },
@@ -267,20 +279,28 @@ describe("feedback", () => {
       answer,
       chatId: "42",
     };
-    expect(await pollFeedback(deps)).toEqual({ recorded: 1, ignored: 2 });
+    expect(await pollFeedback(deps)).toEqual({ recorded: 2, ignored: 2 });
     expect(deps.getUpdates).toHaveBeenCalledWith(0);
-    expect(state.get("telegram_updates_offset")).toBe("13");
-    expect(await pollFeedback(deps)).toEqual({ recorded: 0, ignored: 2 });
+    expect(state.get("telegram_updates_offset")).toBe("14");
     expect(feedbackStore.tallies()).toEqual([
       { source: "MCP Registry", vote: "up", count: 1 },
     ]);
   });
 });
 
+describe("isConfiguredChat", () => {
+  it("matches a numeric id or an @channel username", () => {
+    expect(isConfiguredChat({ id: -100 }, "-100")).toBe(true);
+    expect(isConfiguredChat({ id: -100, username: "Evo" }, "@evo")).toBe(true);
+    expect(isConfiguredChat({ id: -100 }, "@evo")).toBe(false);
+    expect(isConfiguredChat(undefined, "-100")).toBe(false);
+  });
+});
+
 describe("dev alerts", () => {
   const note = (day: string, tags = "[]") =>
     article({
-      url: `https://platform.claude.com/docs/en/release-notes/overview#${day}-0`,
+      url: `https://platform.claude.com/docs/en/release-notes/overview#${day}-abcdef0123`,
       title: `Note ${day}`,
       tags,
     });

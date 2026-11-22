@@ -108,6 +108,18 @@ describe("crawlClaudeNotes", () => {
     expect(deprecation?.summary).not.toContain("](");
   });
 
+  // A bullet added above the others on the same day must not shift their ids.
+  it("keeps ids stable when a note is inserted above others", () => {
+    const before = parseReleaseNotes(PAGE).map(noteUrl);
+    const edited = PAGE.replace(
+      "### April 1, 2026\n\n",
+      "### April 1, 2026\n\n* We’ve added a brand new thing.\n",
+    );
+    const after = parseReleaseNotes(edited).map(noteUrl);
+    expect(after).toHaveLength(before.length + 1);
+    expect(after.filter((url) => !before.includes(url))).toHaveLength(1);
+  });
+
   it("fails loudly when the page format changes", async () => {
     await expect(
       crawlClaudeNotes(new Date(), { fetch: async () => "<html></html>" }),

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import axios from "axios";
 import { db } from "../knowledge/store.js";
 import { HTTP_LIMITS } from "../utils/http-limits.js";
@@ -137,8 +138,16 @@ export function upcomingRemovals(
     .sort((left, right) => left.date.localeCompare(right.date));
 }
 
+/**
+ * Anchored by content, not position: a bullet added above others on the same
+ * day must not shift every id (dropping the new note, re-saving an old one).
+ */
 export function noteUrl(note: ReleaseNote): string {
-  return `${CLAUDE_NOTES_URL}#${note.day}-${note.index}`;
+  const hash = createHash("sha256")
+    .update(plainNote(note.text))
+    .digest("hex")
+    .slice(0, 10);
+  return `${CLAUDE_NOTES_URL}#${note.day}-${hash}`;
 }
 
 function daysBefore(day: string, days: number): string {

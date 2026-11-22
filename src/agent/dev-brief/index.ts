@@ -83,12 +83,12 @@ const defaultDeps: DevBriefDeps = {
   }),
 };
 
-const NOTE_DAY = /#(\d{4}-\d{2}-\d{2})-(\d+)$/;
+const NOTE_DAY = /#(\d{4}-\d{2}-\d{2})-[0-9a-f]{10}$/;
 
-/** Newer first; within a release-notes day, page order (index 0 first). */
+/** Newer first: the note's own day, else when it was crawled. */
 function noteTime(article: Article): number {
   const match = article.url.match(NOTE_DAY);
-  if (match) return Date.parse(match[1]) - Number(match[2]);
+  if (match) return Date.parse(match[1]);
   const crawled = Date.parse(`${article.crawled_at.replace(" ", "T")}Z`);
   return Number.isNaN(crawled) ? 0 : crawled;
 }
