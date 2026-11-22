@@ -2,6 +2,7 @@ import { config } from "../config.js";
 import type { Article, Snippet } from "../knowledge/store.js";
 import { db } from "../knowledge/store.js";
 import { ask } from "../utils/ai.js";
+import { localDayIso } from "../utils/date.js";
 import { sanitizeForPrompt } from "../utils/escape.js";
 import { log } from "../utils/logger.js";
 
@@ -141,7 +142,7 @@ function deriveSummary(markdown: string): string {
 export async function refineEbook(
   options: { today?: string } = {},
 ): Promise<EbookResult> {
-  const today = options.today ?? new Date().toISOString().split("T")[0];
+  const today = options.today ?? localDayIso();
   const current = db.getState(EBOOK_STATE_KEY) ?? SCAFFOLD;
   const articles = selectEbookSources(db.getArticlesSince(2, 300));
   const snippets = db.getSnippets(30);
