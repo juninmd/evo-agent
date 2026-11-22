@@ -4,7 +4,7 @@ import type { RunMode } from "./config.js";
 // `--help` and the README drift test both read from here.
 export const RUN_MODE_SUMMARY: Record<RunMode, string> = {
   DAEMON: "Learn cycle now, then cron: crawl, daily editions, reports, radar",
-  CRAWL: "One crawl + improve cycle, drain the Telegram outbox, exit",
+  CRAWL: "Crawl + improve, drain the outbox, send alerts, read votes, exit",
   DAILY: "Publish one daily edition within the day's budget, exit",
   DAILY_SWEEP: "Fill whatever is missing from today's edition budget, exit",
   RADAR: "Publish the cross-source radar (tables + reading), exit",
@@ -12,6 +12,8 @@ export const RUN_MODE_SUMMARY: Record<RunMode, string> = {
   DEV_TIPS: "Weekly tips from Claude Code, VS Code and OpenCode release notes",
   SKILL_WEEK:
     "Weekly lesson: one hands-on tutorial plus every vetted item, exit",
+  DEV_BRIEF:
+    "Short daily brief: Claude, breaking changes, models, repos, tools, exit",
   WEEKLY: "Publish the weekly report, exit",
   BIWEEKLY: "Publish the biweekly report, exit",
   MONTHLY: "Publish the monthly report, exit",

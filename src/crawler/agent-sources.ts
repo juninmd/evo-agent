@@ -33,6 +33,22 @@ export const AGENT_SOURCES = [
     "github",
     "coding-agent",
   ]),
+  // Claude SDKs: API surface changes land here before blog posts.
+  feed("Anthropic Python SDK Releases", gh("anthropics/anthropic-sdk-python"), [
+    "claude",
+    "anthropic",
+    "sdk",
+  ]),
+  feed(
+    "Anthropic TypeScript SDK Releases",
+    gh("anthropics/anthropic-sdk-typescript"),
+    ["claude", "anthropic", "sdk"],
+  ),
+  feed("Claude Agent SDK Releases", gh("anthropics/claude-agent-sdk-python"), [
+    "claude",
+    "anthropic",
+    "agent-sdk",
+  ]),
   feed("OpenCode Releases", gh("sst/opencode"), ["opencode", "coding-agent"]),
   feed("Cline Releases", gh("cline/cline"), ["cline", "coding-agent"]),
   feed("GitHub Changelog", "https://github.blog/changelog/feed/", [
@@ -112,10 +128,6 @@ export const AGENT_SOURCES = [
     "https://www.oneusefulthing.org/feed",
     ["analysis", "ai"],
   ),
-  feed("Martin Fowler", "https://martinfowler.com/feed.atom", [
-    "engineering",
-    "ai-coding",
-  ]),
   // Curated community: votes filter what HN and Reddit miss.
   feed("Lobsters: AI", "https://lobste.rs/t/ai.rss", ["lobsters", "community"]),
   feed("Lobsters: vibecoding", "https://lobste.rs/t/vibecoding.rss", [

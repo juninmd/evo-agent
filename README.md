@@ -30,7 +30,7 @@ flowchart TD
 
 ## Funcionalidades
 
-- **Coleta multi-fonte**: RSS/HTML, busca por palavra-chave no Google News, SearXNG para Reddit/X.com, Hacker News, TabNews, GitHub Trending, repositórios de skills de agentes (GitHub `topic:agent-skills`, ordenados por estrelas, com README), Hugging Face Daily Papers (ranqueado por votos), modelos em alta no Hugging Face, lançamentos de modelos dos grandes laboratórios (catálogo OpenRouter, últimos 14 dias), release notes de coding agents (Claude Code, Codex, Gemini CLI, Copilot CLI, Cursor, MCP) e análise de sinais da comunidade no Reddit. Itens de feed com mais de 14 dias são ignorados e corpos Atom preenchem snippets vazios
+- **Coleta multi-fonte**: RSS/HTML, busca por palavra-chave no Google News, SearXNG para Reddit/X.com, Hacker News, TabNews, GitHub Trending, repositórios de skills de agentes (GitHub `topic:agent-skills`, ordenados por estrelas, com README), Hugging Face Daily Papers (ranqueado por votos), modelos em alta no Hugging Face, lançamentos de modelos dos grandes laboratórios (catálogo OpenRouter, últimos 14 dias), release notes de coding agents (Claude Code, Codex, Gemini CLI, Copilot CLI, Cursor, MCP), release notes da plataforma Claude (API, Console e SDKs, lidas do Markdown oficial), servidores novos do MCP Registry com repositório público e pacote instalável, histórico diário de estrelas do GitHub Trending (velocidade em 7 dias e data de criação) e análise de sinais da comunidade no Reddit. Itens de feed com mais de 14 dias são ignorados e corpos Atom preenchem snippets vazios
 - **Ciclo de auto-aprimoramento**: o system prompt e as palavras-chave de busca evoluem a partir do conteúdo ingerido
 - **Orquestração confiável**: ciclos sobrepostos são pulados e cada execução fica registrada no SQLite
 - **Pontuação editorial**: recência, engajamento, autoridade da fonte, diversidade e evidência entre fontes definem a seleção
@@ -41,7 +41,8 @@ flowchart TD
 - **Material completo das fontes**: além do resumo, o crawler guarda o corpo de feeds e READMEs em Markdown com os blocos de código (coluna `body`, até 12 mil caracteres) e os links externos de posts do Reddit
 - **Ebook vivo**: manual semanal e refinável de desenvolvimento assistido por IA, publicado no GitHub Pages
 - **Publicação atômica no GitHub Pages**: artigo, layouts e índices entram em um único commit
-- **Páginas descobríveis**: URL canônica, metadados Open Graph/Twitter, feed Atom e sitemap em toda página publicada
+- **Páginas descobríveis**: URL canônica, metadados Open Graph/Twitter, feed Atom e sitemap em toda página publicada, mais feeds por tema em `feeds/claude.xml`, `feeds/modelos.xml` e `feeds/repos.xml`
+- **Feedback no Telegram**: cada destaque do `DEV_BRIEF` tem 👍 / 👎 / já sabia; o `CRAWL` horário lê os votos por `getUpdates` (sem webhook), aceita só cliques do chat configurado e transforma o saldo por fonte num peso que reordena o `DEV_BRIEF` e soma ±1 na nota da `SKILL_WEEK`. Se o bot tiver webhook ativo, o Telegram recusa `getUpdates` e os votos não são lidos
 - **Escape por construção**: títulos e resumos coletados são escapados em HTML nos layouts Jekyll e achatados no front matter YAML
 - **Outbox do Telegram**: entregas falhas são retentadas com backoff exponencial e isoladas em dead-letter; o job horário `CRAWL` drena a fila em produção, e avisos não entregues em 24h são suprimidos em vez de enviados atrasados
 - **Saúde operacional**: logs estruturados, métricas persistentes, alertas de fonte primária e um comando de health legível por máquina
@@ -78,6 +79,7 @@ As variáveis vêm do ambiente ou de um `.env` na raiz (use `.env.example` como 
 | `LITELLM_API_BASE` | Não | `http://litellm.ai.svc.cluster.local:4000/v1` | URL base do LiteLLM; fora do cluster, defina para o seu gateway (ex.: `http://localhost:4000/v1`) |
 | `LITELLM_API_KEY` | Não | `no-key` | Chave de API do LiteLLM |
 | `LITELLM_MODEL` | Não | `cloud/auto` | Modelo primário; `cloud/auto` é a cadeia do LiteLLM que decide o provider |
+| `READER_STACK` | Não | `typescript,nestjs,python,kubernetes,claude code,mcp` | Termos da sua stack, separados por vírgula: dão bônus no ranking do `DEV_BRIEF` e da `SKILL_WEEK` |
 | `SKILL_WEEK_MODEL` | Não | vazio | Modelo tentado primeiro na aula da `SKILL_WEEK`; vazio usa `LITELLM_MODEL` e os fallbacks |
 | `LITELLM_FALLBACK_MODELS` | Não | — | Modelos de fallback (diferentes do primário) separados por vírgula, usados se o primário falhar, estourar o tempo ou vier vazio. A cadeia do `cloud/auto` já roda no LiteLLM |
 | `LITELLM_MAX_OUTPUT_TOKENS` | Não | `12000` | Máximo de tokens de saída por requisição |
@@ -119,12 +121,13 @@ Defina `RUN_MODE` para controlar a execução (`npm start -- --help` imprime est
 | Modo | Comportamento |
 |---|---|
 | `DAEMON` (padrão) | Roda o ciclo de aprendizado na hora e agenda via cron coleta, edições diárias e relatório semanal |
-| `CRAWL` | Um ciclo de coleta + aprimoramento e sai |
+| `CRAWL` | Um ciclo de coleta + aprimoramento, drena o outbox do Telegram, envia os alertas instantâneos (modelo novo, nota de release do Claude, remoção a até 7 dias) e lê os votos do Telegram, e sai |
 | `DAILY` | Gera e publica um artigo diário (preenche o orçamento de edições do dia um horário por vez) e sai |
 | `DAILY_SWEEP` | Publica o que falta do orçamento de edições de hoje, recuperando um horário que falhou antes; não faz nada se o dia está completo |
 | `RADAR` | Publica o radar entre fontes (tabelas determinísticas mais uma leitura escrita pelo modelo, sem portão editorial) e sai |
 | `TECHLEAD` | Publica o digest para tech leads e sai |
 | `SKILL_WEEK` | Publica a "Skill da semana" (aula prática + itens verificados em faixas, Placar e Termômetro) como `skillweek-<data>` e sai; no `DAEMON` roda aos sábados às 10h; falha só quando nenhum item da semana passa no filtro |
+| `DEV_BRIEF` | Publica o "Radar dev" curto do dia como `devbrief-<data>`: O que vai quebrar (deprecações com data), Novidades do Claude (release notes da API, SDKs, Claude Code), Modelos novos (tabela com preço, contexto, pesos e onde rodar), Repositórios em alta (estrelas/dia em 7 dias, novo ou veterano, comando de instalação) e Ferramentas novas (MCP Registry, skills). Envia no Telegram só os 5 destaques, numerados, com botões 👍 / 👎 / já sabia por item, e sai; falha só quando nenhuma seção tem item |
 | `DEV_TIPS` | Transforma as release notes da semana de Claude Code, VS Code e OpenCode em dicas práticas (o que mudou, como usar, boa prática), publicadas como `devtips-<data>`, e sai; falha sem candidatos e cai para um ranking quando a saída do modelo cita algo fora do material |
 | `WEEKLY` | Gera e publica um artigo semanal e sai |
 | `BIWEEKLY` | Gera e publica um relatório quinzenal e sai |

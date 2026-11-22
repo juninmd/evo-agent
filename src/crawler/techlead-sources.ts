@@ -55,4 +55,8 @@ export const TECHLEAD_SOURCES = [
     ["leadership"],
   ),
   feed("LeadDev", "https://leaddev.com/rss.xml", ["leadership"]),
+  feed("Martin Fowler", "https://martinfowler.com/feed.atom", [
+    "engineering",
+    "architecture",
+  ]),
 ];

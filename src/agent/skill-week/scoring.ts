@@ -5,6 +5,7 @@ import {
   isPrimarySource,
   sourceBucket,
 } from "../curation.js";
+import { stackScore } from "../dev-brief/rank.js";
 import { artifactLinks, hasExecutable, isMeasurable } from "./artifacts.js";
 
 /**
@@ -140,12 +141,18 @@ function discardReason(
 export interface ScoreOptions {
   /** Titles and summaries published in the novelty window. */
   recentTopics: string[];
+  /** Reader's stack terms: +1 when the item mentions one. */
+  stack?: string[];
+  /** -1..1 per source from Telegram votes: ±1 past ±0.3. */
+  weights?: Map<string, number>;
 }
+
+const VOTE_THRESHOLD = 0.3;
 
 /**
  * Rubric (0–10): executable +3 (or +2 for a repo/docs link alone), traction
  * +2, transferable +2, new to the
- * reader +2, measurable +1. Discards are returned with their reason so the
+ * reader +2, measurable +1; reader stack +1 and votes ±1, clamped. Discards are returned with their reason so the
  * edition can report what it left out.
  */
 export function scoreArticles(
@@ -209,6 +216,16 @@ export function scoreArticles(
       score += 1;
       reasons.push("mensurável");
     }
+    if (options.stack && stackScore(text, options.stack) > 0) {
+      score += 1;
+      reasons.push("sua stack");
+    }
+    const vote = options.weights?.get(article.source) ?? 0;
+    if (Math.abs(vote) >= VOTE_THRESHOLD) {
+      score += Math.sign(vote);
+      reasons.push(vote > 0 ? "você curte" : "você descarta");
+    }
+    score = Math.max(0, Math.min(10, score));
     items.push({ article, layer, score, executable, artifacts, reasons });
   }
   items.sort((left, right) => right.score - left.score);

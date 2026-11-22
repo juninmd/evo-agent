@@ -66,6 +66,54 @@ export interface CatalogModel {
   created?: number;
   description?: string;
   context_length?: number;
+  /** USD per token, as decimal strings. */
+  pricing?: { prompt?: string; completion?: string };
+  hugging_face_id?: string | null;
+}
+
+export interface ModelCard {
+  id: string;
+  name: string;
+  url: string;
+  /** USD per 1M tokens; null when the catalog has no price. */
+  inputPrice: number | null;
+  outputPrice: number | null;
+  context: number | null;
+  openWeights: boolean;
+  hfUrl: string | null;
+  launchedAt?: number;
+}
+
+function perMillion(raw?: string): number | null {
+  const value = Number(raw);
+  // OpenRouter uses negative prices for router pseudo-models.
+  return raw === undefined || !Number.isFinite(value) || value < 0
+    ? null
+    : Math.round(value * 1_000_000 * 1000) / 1000;
+}
+
+/** Price, context and weights straight from the catalog: no model involved. */
+export function modelCard(model: CatalogModel): ModelCard {
+  const id = model.id ?? "";
+  const hf = model.hugging_face_id ?? "";
+  return {
+    id,
+    name: model.name || id,
+    url: `https://openrouter.ai/${id}`,
+    inputPrice: perMillion(model.pricing?.prompt),
+    outputPrice: perMillion(model.pricing?.completion),
+    context: model.context_length ?? null,
+    openWeights: MODEL_ID.test(hf),
+    hfUrl: MODEL_ID.test(hf) ? `https://huggingface.co/${hf}` : null,
+    launchedAt: model.created,
+  };
+}
+
+export function priceLine(card: ModelCard): string {
+  if (card.inputPrice === null || card.outputPrice === null) return "";
+  return card.inputPrice === 0 && card.outputPrice === 0
+    ? "gratuito na OpenRouter"
+    : `US$ ${card.inputPrice} / ${card.outputPrice} por 1M tokens (entrada/saída)`;
 }
 
 export function rankTrendingModels(
@@ -97,12 +145,12 @@ export function rankTrendingModels(
     }));
 }
 
-export function newModelLaunches(
+export function recentMajorModels(
   models: CatalogModel[],
   now = new Date(),
-  limit = LAUNCH_LIMIT,
-): ModelSignal[] {
-  const cutoff = now.getTime() / 1000 - LAUNCH_WINDOW_DAYS * 86_400;
+  windowDays = LAUNCH_WINDOW_DAYS,
+): CatalogModel[] {
+  const cutoff = now.getTime() / 1000 - windowDays * 86_400;
   return models
     .filter((model) => {
       const id = model.id ?? "";
@@ -112,23 +160,37 @@ export function newModelLaunches(
         (model.created ?? 0) >= cutoff
       );
     })
-    .sort((left, right) => (right.created ?? 0) - (left.created ?? 0))
+    .sort((left, right) => (right.created ?? 0) - (left.created ?? 0));
+}
+
+export function newModelLaunches(
+  models: CatalogModel[],
+  now = new Date(),
+  limit = LAUNCH_LIMIT,
+): ModelSignal[] {
+  return recentMajorModels(models, now)
     .slice(0, limit)
-    .map((model) => ({
-      title: model.name || (model.id as string),
-      url: `https://openrouter.ai/${model.id}`,
-      summary: summarizeSourceContent(
-        [
-          model.context_length
-            ? `${model.context_length} tokens de contexto.`
-            : "",
-          model.description ?? "",
-        ].join(" "),
-        500,
-      ),
-      engagement: 0,
-      launchedAt: model.created,
-    }));
+    .map((model) => {
+      const card = modelCard(model);
+      const price = priceLine(card);
+      return {
+        title: card.name,
+        url: card.url,
+        summary: summarizeSourceContent(
+          [
+            model.context_length
+              ? `${model.context_length} tokens de contexto.`
+              : "",
+            price ? `${price}.` : "",
+            card.openWeights ? "Pesos abertos." : "",
+            model.description ?? "",
+          ].join(" "),
+          500,
+        ),
+        engagement: 0,
+        launchedAt: model.created,
+      };
+    });
 }
 
 function save(source: string, tags: string[], signals: ModelSignal[]): number {

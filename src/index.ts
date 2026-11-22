@@ -21,6 +21,7 @@ import { startApiServer } from "./api/server.js";
 import { config, loadConfig, type RunMode } from "./config.js";
 import { crawlAll } from "./crawler/index.js";
 import { fetchModelCatalog } from "./crawler/model-launches.js";
+import { devBriefCycle, hourlyWatch } from "./dev-watch.js";
 import { recentEvidenceUrls } from "./knowledge/editions.js";
 import { db, getDb } from "./knowledge/store.js";
 import { runModelAlerts } from "./notifier/model-alerts.js";
@@ -374,6 +375,7 @@ const ONE_SHOT_MODES: Partial<Record<RunMode, () => Promise<number>>> = {
       await flushNotificationOutbox().catch((e) =>
         log.error(`Notification outbox failed: ${errMsg(e)}`),
       );
+      await hourlyWatch();
     }
     return 0;
   },
@@ -389,6 +391,7 @@ const ONE_SHOT_MODES: Partial<Record<RunMode, () => Promise<number>>> = {
   TECHLEAD: () => runCycle("techlead", techleadCycle),
   DEV_TIPS: () => runCycle("devtips", devTipsCycle),
   SKILL_WEEK: () => runCycle("skillweek", skillWeekCycle),
+  DEV_BRIEF: () => runCycle("devbrief", devBriefCycle),
   WEEKLY: () => runCycle("weekly", () => reportCycle("weekly")),
   BIWEEKLY: () => runCycle("biweekly", () => reportCycle("biweekly")),
   MONTHLY: () => runCycle("monthly", () => reportCycle("monthly")),

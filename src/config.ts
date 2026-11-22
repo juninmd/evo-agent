@@ -11,6 +11,7 @@ export type RunMode =
   | "TECHLEAD"
   | "DEV_TIPS"
   | "SKILL_WEEK"
+  | "DEV_BRIEF"
   | "WEEKLY"
   | "BIWEEKLY"
   | "MONTHLY"
@@ -31,6 +32,7 @@ const RUN_MODES = new Set<RunMode>([
   "TECHLEAD",
   "DEV_TIPS",
   "SKILL_WEEK",
+  "DEV_BRIEF",
   "WEEKLY",
   "BIWEEKLY",
   "MONTHLY",
@@ -230,6 +232,10 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
     timezone,
     // One edition a day: the weekly lesson carries the depth (SKILL_WEEK).
     dailyEditions: positiveNumber(env, "DAILY_EDITIONS", "1"),
+    // Ranking bonus for what the reader would use tomorrow (DEV_BRIEF, SKILL_WEEK).
+    readerStack: stackList(
+      env.READER_STACK ?? "typescript,nestjs,python,kubernetes,claude code,mcp",
+    ),
     dbPath: env.DB_PATH ?? join(process.cwd(), "data", "knowledge.db"),
     searxngUrl: validUrl(
       env,
@@ -243,6 +249,18 @@ export function loadConfig(env: Env = process.env, validatePublishing = true) {
       model: env.GLINER_MODEL ?? "urchade/gliner_multi-v2.1",
     },
   } as const;
+}
+
+/** Comma list, lowercased, deduped; empty entries dropped. */
+export function stackList(raw: string): string[] {
+  return [
+    ...new Set(
+      raw
+        .split(",")
+        .map((item) => item.trim().toLowerCase())
+        .filter(Boolean),
+    ),
+  ];
 }
 
 loadEnvFile(process.env);

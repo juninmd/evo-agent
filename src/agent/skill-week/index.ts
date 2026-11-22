@@ -1,5 +1,9 @@
 import { config } from "../../config.js";
 import { AGENT_SKILLS_SOURCE } from "../../crawler/agent-skills.js";
+import {
+  feedbackStore,
+  sourceWeights,
+} from "../../knowledge/feedback-store.js";
 import type { Article } from "../../knowledge/store.js";
 import { db } from "../../knowledge/store.js";
 import { ask } from "../../utils/ai.js";
@@ -21,6 +25,8 @@ export const NOVELTY_WINDOW_DAYS = 60;
 export interface SkillWeekDeps {
   load: () => Article[];
   recentTopics: () => string[];
+  /** Reader stack and vote weights; absent in tests means neutral. */
+  preferences?: () => { stack: string[]; weights: Map<string, number> };
   ask: Ask;
   placar: (now: Date) => Promise<string>;
   model?: string;
@@ -37,6 +43,10 @@ const defaultDeps: SkillWeekDeps = {
       .filter((page) => page.period === "skillweek" && page.date >= cutoff)
       .map((page) => `${page.title} ${page.summary}`);
   },
+  preferences: () => ({
+    stack: config.readerStack,
+    weights: sourceWeights(feedbackStore.tallies()),
+  }),
   ask,
   // Optional enrichment: a ranking outage must not cost the lesson.
   placar: (now) =>
@@ -70,6 +80,7 @@ export async function generateSkillWeek(
   const articles = deps.load();
   const { items, discarded } = scoreArticles(articles, {
     recentTopics: deps.recentTopics(),
+    ...deps.preferences?.(),
   });
   const tiers = assignTiers(items, articles);
 
