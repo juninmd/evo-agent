@@ -5,11 +5,15 @@ import type { PublishedArticle } from "../knowledge/store.js";
 import { buildPublicationBatch, commitFiles } from "../publisher/github.js";
 import { buildEbookMarkdown } from "../publisher/site-renderer.js";
 
-function githubClient(options: { failTree?: boolean } = {}) {
+function githubClient(
+  options: { failTree?: boolean; legacyIndexError?: unknown } = {},
+) {
   const updateRef = vi.fn().mockResolvedValue({});
   const client = {
     repos: {
-      getContent: vi.fn().mockRejectedValue({ status: 404 }),
+      getContent: vi
+        .fn()
+        .mockRejectedValue(options.legacyIndexError ?? { status: 404 }),
     },
     git: {
       getRef: vi.fn().mockResolvedValue({ data: { object: { sha: "head" } } }),
@@ -70,6 +74,25 @@ describe("atomic GitHub publication", () => {
         client,
       ),
     ).rejects.toThrow("tree failed");
+
+    expect(updateRef).not.toHaveBeenCalled();
+  });
+
+  it("does not publish when the legacy index probe fails for a reason other than 404", async () => {
+    const { client, updateRef } = githubClient({
+      legacyIndexError: { status: 403, message: "Resource not accessible" },
+    });
+
+    await expect(
+      commitFiles(
+        "owner",
+        "repo",
+        "gh-pages",
+        [{ path: "article.md", content: "article" }],
+        "article: test",
+        client,
+      ),
+    ).rejects.toMatchObject({ status: 403 });
 
     expect(updateRef).not.toHaveBeenCalled();
   });
