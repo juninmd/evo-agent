@@ -133,8 +133,9 @@ export async function commitFiles(
         sha: null as unknown as string,
       });
     }
-  } catch {
-    // Legacy index is already absent.
+  } catch (err) {
+    // Only 404 means the legacy index is already absent; anything else must not pass as success.
+    if ((err as { status?: number }).status !== 404) throw err;
   }
 
   const nextTree = await client.git.createTree({
