@@ -28,7 +28,7 @@ export const SECTION_ORDER: Section[] = [
 
 /** Like plain(), but keeps underscores: API names (billing_policy) must survive. */
 export function clip(text: string, max: number): string {
-  return plain(text.replace(/_/g, "\u0000"), max).replace(/\u0000/g, "_");
+  return plain(text.replace(/_/g, "\ue000"), max).replace(/\ue000/g, "_");
 }
 
 function fence(command: string): string {
