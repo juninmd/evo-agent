@@ -5,7 +5,19 @@
   <subtitle>Artigos e relatorios tecnicos gerados por um agente auto-aprimorante.</subtitle>
   <link rel="self" type="application/atom+xml" href="https://juninmd.github.io/evo-agent/feeds/modelos.xml"/>
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
-  <updated>2026-11-22T00:00:00Z</updated>
+  <updated>2026-11-23T00:00:00Z</updated>
+  <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/devbrief-2026-11-23-devbrief-2026-11-23</id>
+    <title>Radar dev 23/11/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/devbrief-2026-11-23-devbrief-2026-11-23"/>
+    <updated>2026-11-23T00:00:00Z</updated>
+    <summary type="text">5 destaques: Até 30/11/2026: We announced the…; MCP: APICK; Até 30/11/2026: We’ve deprecated fast…; MCP: Agentic Finance Graph; MCP: Himalayas Remote Jobs.</summary>
+    <category term="claude"/>
+    <category term="modelos"/>
+    <category term="repos"/>
+    <category term="ferramentas"/>
+    <category term="radar-dev"/>
+  </entry>
   <entry>
     <id>https://juninmd.github.io/evo-agent/reports/devbrief-2026-11-22-devbrief-2026-11-22</id>
     <title>Radar dev 22/11/2026</title>
@@ -664,22 +676,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-10-25-litellm-corrige-falhas-criticas-e-vercel-traz-melhorias-de-tipo</id>
-    <title>LiteLLM corrige falhas críticas e Vercel traz melhorias de tipo</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-10-25-litellm-corrige-falhas-criticas-e-vercel-traz-melhorias-de-tipo"/>
-    <updated>2026-10-25T00:00:00Z</updated>
-    <summary type="text">Nova versão do LiteLLM soluciona crash de proxy e detecção de custos. Vercel atualiza SDKs com dependências seguras e tipos estáticos, refletindo reforço de segurança e compatibilidade.</summary>
-    <category term="litellm"/>
-    <category term="vercel-ai-sdk"/>
-    <category term="reddit"/>
-    <category term="llm-framework"/>
-    <category term="ai-sdk"/>
-    <category term="sdk"/>
-    <category term="codex"/>
-    <category term="openai"/>
-    <category term="claude"/>
-    <category term="coding"/>
   </entry>
 </feed>
