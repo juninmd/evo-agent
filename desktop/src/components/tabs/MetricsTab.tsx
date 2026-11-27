@@ -6,6 +6,7 @@ import { usePoll } from "../../lib/usePoll";
 import Card from "../Card";
 import EmptyState from "../EmptyState";
 import ErrorBanner from "../ErrorBanner";
+import FilterSelect from "../FilterSelect";
 import Skeleton from "../Skeleton";
 import Sparkline from "../Sparkline";
 import {
@@ -62,20 +63,15 @@ export default function MetricsTab() {
         title={t("metrics.title")}
         hint={t("metrics.hours", { hours })}
         actions={
-          <label className="flex items-center gap-1 text-[11px] text-muted">
-            {t("metrics.window")}
-            <select
-              className="evo-field px-1.5 py-0.5 text-[11px]"
-              value={hours}
-              onChange={(event) => setHours(Number(event.target.value))}
-            >
-              {WINDOWS.map((window) => (
-                <option key={window} value={window}>
-                  {t("metrics.hours", { hours: window })}
-                </option>
-              ))}
-            </select>
-          </label>
+          <FilterSelect
+            label={t("metrics.window")}
+            value={String(hours)}
+            onChange={(value) => setHours(Number(value))}
+            options={WINDOWS.map((window) => ({
+              value: String(window),
+              label: t("metrics.hours", { hours: window }),
+            }))}
+          />
         }
       >
         {summary.error && (
@@ -93,6 +89,9 @@ export default function MetricsTab() {
           <EmptyState message={t("metrics.empty")} />
         ) : (
           <>
+            {/* Fica em <table> local: a linha selecionada muda de cor e o nome e
+                um botao que alterna a serie. `DataTable` nao expoe estado por
+                linha, e trocar por clique na linha perderia o `aria-pressed`. */}
             <table className="w-full border-collapse text-xs">
               <thead className={THEAD}>
                 <tr>

@@ -1,31 +1,37 @@
+import { type BadgeTone, Badge as SonidoBadge } from "@juninmd/sonido";
 import type { ReactNode } from "react";
 
 export type Tone = "neutral" | "ok" | "warn" | "danger" | "info" | "accent";
 
-const TONES: Record<Tone, string> = {
-  neutral: "border-edge bg-hover text-muted",
-  ok: "border-ok/40 bg-ok/10 text-ok",
-  warn: "border-warn/40 bg-warn/10 text-warn",
-  danger: "border-danger/40 bg-danger/10 text-danger",
-  info: "border-info/40 bg-info/10 text-info",
-  accent: "border-accent/40 bg-accent/10 text-accent-text",
+/**
+ * O console fala `ok/warn/info`; o Sonido fala `success/warning/aqua`. O
+ * vocabulario local fica na borda para as telas nao mudarem.
+ */
+const TONES: Record<Tone, BadgeTone> = {
+  neutral: "neutral",
+  ok: "success",
+  warn: "warning",
+  danger: "danger",
+  info: "aqua",
+  accent: "accent",
 };
 
+/** Pilula de status/categoria: `Badge` do Sonido com o tom do console. */
 export default function Badge({
   tone = "neutral",
   title,
+  dot = false,
   children,
 }: {
   tone?: Tone;
   title?: string;
+  /** Ponto de status antes do texto (StatusPill). */
+  dot?: boolean;
   children: ReactNode;
 }) {
   return (
-    <span
-      title={title}
-      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-md border px-1.5 py-0.5 text-[11px] leading-4 ${TONES[tone]}`}
-    >
+    <SonidoBadge tone={TONES[tone]} appearance="soft" dot={dot} title={title}>
       {children}
-    </span>
+    </SonidoBadge>
   );
 }

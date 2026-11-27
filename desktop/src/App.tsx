@@ -1,3 +1,4 @@
+import { Alert } from "@juninmd/sonido";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import AppHeader from "./components/AppHeader";
 import ErrorBanner from "./components/ErrorBanner";
@@ -121,9 +122,7 @@ export default function App() {
         <div className="flex min-h-full flex-col gap-3">
           {!configured ? (
             <>
-              <div className="rounded-lg border border-warn/40 bg-warn/10 px-3 py-2 text-xs text-warn">
-                {t("settings.notConfigured")}
-              </div>
+              <Alert tone="warning" title={t("settings.notConfigured")} />
               <SettingsTab
                 settings={settings}
                 meta={meta.data}

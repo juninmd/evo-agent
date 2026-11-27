@@ -161,6 +161,16 @@ test("o tema claro troca as cores, não só o atributo", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Console do Evo Agent" })).toBeVisible();
 
   await expect(page.locator("html")).toHaveAttribute("data-skin", "claro");
+  // O `data-theme` e a ponte para o Sonido: sem ele o pacote serve o tema
+  // escuro por padrao e o console claro ficaria com componentes escuros.
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  // O acento do console precisa chegar aos tokens `--sn-*` do design system.
+  const accent = await page.evaluate(() =>
+    getComputedStyle(document.documentElement)
+      .getPropertyValue("--sn-color-accent")
+      .trim(),
+  );
+  expect(accent).toBe("#15803d");
   // O token precisa chegar ao fundo: um atributo trocado com a skin antiga
   // deixaria o texto escuro sobre fundo escuro.
   const background = await page.evaluate(

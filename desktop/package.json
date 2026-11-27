@@ -15,6 +15,7 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "@juninmd/sonido": "^2.5.0",
     "@tauri-apps/api": "^2.12.3",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"

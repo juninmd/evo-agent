@@ -1,5 +1,7 @@
+import { Alert, Button } from "@juninmd/sonido";
 import { t } from "../lib/i18n";
 
+/** Erro de leitura: `Alert` de perigo do Sonido com a acao de repetir. */
 export default function ErrorBanner({
   message,
   busy = false,
@@ -10,21 +12,22 @@ export default function ErrorBanner({
   onRetry?: () => void;
 }) {
   return (
-    <div
-      role="alert"
-      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-danger/40 bg-danger/10 px-3 py-2 text-xs text-danger"
+    <Alert
+      tone="danger"
+      action={
+        onRetry ? (
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={onRetry}
+            loading={busy}
+          >
+            {t("common.retry")}
+          </Button>
+        ) : undefined
+      }
     >
-      <span className="min-w-0 break-words">{message}</span>
-      {onRetry && (
-        <button
-          type="button"
-          className="evo-btn shrink-0"
-          onClick={onRetry}
-          disabled={busy}
-        >
-          {t("common.retry")}
-        </button>
-      )}
-    </div>
+      <span className="break-words">{message}</span>
+    </Alert>
   );
 }

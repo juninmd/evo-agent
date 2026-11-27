@@ -30,8 +30,12 @@ export function isSystemLight(): boolean {
   return window.matchMedia(LIGHT_QUERY).matches;
 }
 
+/** A skin e do console; o `data-theme` e o mesmo estado no vocabulario do Sonido. */
 export function applyTheme(theme: ThemeId): void {
-  document.documentElement.dataset.skin = resolveTheme(theme, isSystemLight());
+  const resolved = resolveTheme(theme, isSystemLight());
+  const root = document.documentElement;
+  root.dataset.skin = resolved;
+  root.dataset.theme = resolved === "claro" ? "light" : "dark";
   localStorage.setItem(KEY, theme);
 }
 

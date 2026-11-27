@@ -8,6 +8,7 @@ const TONES: Record<HealthStatus, Tone> = {
   critical: "danger",
 };
 
+/** Saude do agente: `Badge` com o ponto de status do Sonido. */
 export default function StatusPill({
   status,
   reasons = [],
@@ -18,12 +19,9 @@ export default function StatusPill({
   return (
     <Badge
       tone={TONES[status]}
+      dot
       title={reasons.map(healthReasonLabel).join("; ") || undefined}
     >
-      <span
-        aria-hidden="true"
-        className="inline-block size-1.5 rounded-full bg-current"
-      />
       {healthLabel(status)}
     </Badge>
   );

@@ -1,3 +1,4 @@
+import { Button, ConfirmButton, TextField, useToast } from "@juninmd/sonido";
 import { useState } from "react";
 import { api, errText } from "../../lib/api";
 import { formatDateTime, formatDuration, formatNumber } from "../../lib/format";
@@ -79,22 +80,21 @@ export default function SettingsTab({
   onTheme: (theme: ThemeId) => void;
   onSaved: (view: SettingsView) => void;
 }) {
+  const toast = useToast();
   const [baseUrl, setBaseUrl] = useState(settings?.baseUrl ?? "");
   const [token, setToken] = useState("");
-  const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<"save" | "test" | "clear" | null>(null);
 
   /** `null` mantem o token salvo; "" limpa; qualquer texto substitui. */
   async function save(nextToken: string | null, label: string) {
     setBusy(nextToken === "" ? "clear" : "save");
-    setNotice(null);
     setError(null);
     try {
       const view = await api.settingsSave(baseUrl, nextToken);
       onSaved(view);
       setToken("");
-      setNotice(label);
+      toast({ title: label, tone: "success" });
     } catch (cause) {
       setError(errText(cause));
     } finally {
@@ -104,11 +104,10 @@ export default function SettingsTab({
 
   async function test() {
     setBusy("test");
-    setNotice(null);
     setError(null);
     try {
       await api.settingsTest();
-      setNotice(t("settings.testOk"));
+      toast({ title: t("settings.testOk"), tone: "success" });
     } catch (cause) {
       setError(t("settings.testFailed", { error: errText(cause) }));
     } finally {
@@ -129,71 +128,68 @@ export default function SettingsTab({
             void save(token === "" ? null : token, t("settings.saved"));
           }}
         >
-          <label className="flex flex-col gap-1 text-xs text-muted">
-            {t("settings.apiUrl")}
-            <input
-              type="url"
-              inputMode="url"
-              spellCheck={false}
-              className="evo-field px-2 py-1 font-mono text-xs"
-              placeholder="https://evo-agent.exemplo.svc"
-              value={baseUrl}
-              onChange={(event) => setBaseUrl(event.target.value)}
-            />
-            <span className="text-[11px] text-faint">
-              {t("settings.apiUrlHint")}
-            </span>
-          </label>
+          <TextField
+            label={t("settings.apiUrl")}
+            type="url"
+            inputMode="url"
+            spellCheck={false}
+            placeholder="https://evo-agent.exemplo.svc"
+            value={baseUrl}
+            onChange={(event) => setBaseUrl(event.target.value)}
+            hint={t("settings.apiUrlHint")}
+            className="font-mono"
+          />
 
-          <label className="flex flex-col gap-1 text-xs text-muted">
-            {t("settings.token")}
-            <input
-              type="password"
-              autoComplete="off"
-              spellCheck={false}
-              className="evo-field px-2 py-1 font-mono text-xs"
-              placeholder={settings?.hasToken ? "••••••••" : "API_TOKEN"}
-              value={token}
-              onChange={(event) => setToken(event.target.value)}
-            />
-            <span className="text-[11px] text-faint">
-              {settings?.hasToken
+          <TextField
+            label={t("settings.token")}
+            type="password"
+            autoComplete="off"
+            spellCheck={false}
+            placeholder={settings?.hasToken ? "••••••••" : "API_TOKEN"}
+            value={token}
+            onChange={(event) => setToken(event.target.value)}
+            hint={
+              settings?.hasToken
                 ? t("settings.tokenStored")
-                : t("settings.tokenMissing")}
-            </span>
-          </label>
+                : t("settings.tokenMissing")
+            }
+            className="font-mono"
+          />
 
           <div className="flex flex-wrap items-center gap-1.5">
-            <button
+            <Button
               type="submit"
-              className="evo-btn evo-btn-primary"
+              variant="primary"
+              size="sm"
               disabled={busy !== null || baseUrl.trim() === ""}
+              loading={busy === "save"}
             >
               {t("settings.save")}
-            </button>
-            <button
-              type="button"
-              className="evo-btn"
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
               disabled={busy !== null}
+              loading={busy === "test"}
               onClick={() => void test()}
             >
               {t("settings.test")}
-            </button>
+            </Button>
             {settings?.hasToken && (
-              <button
-                type="button"
-                className="evo-btn"
+              <ConfirmButton
+                appearance="inline"
+                className="sn-button sn-button--secondary sn-button--sm"
+                ask={t("settings.clearTokenAsk")}
+                confirmLabel={t("settings.clearToken")}
+                cancelLabel={t("common.cancel")}
                 disabled={busy !== null}
-                onClick={() => void save("", t("settings.tokenMissing"))}
+                onConfirm={() => void save("", t("settings.tokenMissing"))}
               >
                 {t("settings.clearToken")}
-              </button>
+              </ConfirmButton>
             )}
           </div>
 
-          {notice && (
-            <output className="block text-[11px] text-ok">{notice}</output>
-          )}
           {error && <ErrorBanner message={error} />}
         </form>
       </Card>
@@ -213,18 +209,16 @@ export default function SettingsTab({
             className="flex flex-col gap-1.5"
           >
             {THEME_OPTIONS.map((option) => (
-              <button
+              <Button
                 key={option.id}
-                type="button"
+                variant={theme === option.id ? "primary" : "secondary"}
+                size="sm"
                 aria-pressed={theme === option.id}
-                className={`evo-btn justify-start ${
-                  theme === option.id ? "evo-btn-primary" : ""
-                }`}
                 onClick={() => onTheme(option.id)}
+                iconStart={<option.Icon className="size-3.5" />}
               >
-                <option.Icon className="size-3.5" />
                 {option.label()}
-              </button>
+              </Button>
             ))}
           </fieldset>
         </Card>

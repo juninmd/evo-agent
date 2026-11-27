@@ -1,7 +1,9 @@
+import { Button, type Column, DataTable } from "@juninmd/sonido";
 import { useState } from "react";
 import { api } from "../../lib/api";
 import { formatCount, formatDateTime } from "../../lib/format";
 import { promptStatusLabel, t } from "../../lib/i18n";
+import type { PromptVersion } from "../../lib/types";
 import { usePoll } from "../../lib/usePoll";
 import Badge, { type Tone } from "../Badge";
 import Card from "../Card";
@@ -9,17 +11,6 @@ import CopyButton from "../CopyButton";
 import EmptyState from "../EmptyState";
 import ErrorBanner from "../ErrorBanner";
 import Skeleton from "../Skeleton";
-import {
-  CELL,
-  CELL_LAST,
-  CELL_NUM,
-  MONO,
-  ROW,
-  TH,
-  THEAD,
-  TH_LAST,
-  TH_NUM,
-} from "../table";
 
 const TONES: Record<string, Tone> = {
   promoted: "ok",
@@ -43,6 +34,59 @@ export default function PromptsTab() {
 
   const { active, items } = poll.data ?? { active: null, items: [] };
 
+  const columns: Column<PromptVersion>[] = [
+    {
+      key: "id",
+      label: t("cycles.id"),
+      render: (version) => (
+        <span className="font-mono text-[11px] text-faint">{version.id}</span>
+      ),
+    },
+    {
+      key: "score",
+      label: t("prompts.score"),
+      align: "end",
+      render: (version) => (
+        <span className="font-semibold text-fg">{version.score}</span>
+      ),
+    },
+    {
+      key: "status",
+      label: t("cycles.status"),
+      render: (version) => (
+        <Badge tone={TONES[version.status] ?? "neutral"}>
+          {promptStatusLabel(version.status)}
+        </Badge>
+      ),
+    },
+    {
+      key: "chars",
+      label: t("prompts.chars"),
+      align: "end",
+      render: (version) => (
+        <span className="text-muted">{formatCount(version.promptChars)}</span>
+      ),
+    },
+    {
+      key: "created",
+      label: t("prompts.created"),
+      render: (version) => (
+        <span className="whitespace-nowrap text-muted">
+          {formatDateTime(version.createdAt)}
+        </span>
+      ),
+    },
+    {
+      key: "reason",
+      label: t("prompts.reason"),
+      render: (version) => (
+        <span className="line-clamp-2 text-muted" title={version.reason}>
+          {version.reason}
+        </span>
+      ),
+    },
+  ];
+
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <Card
@@ -58,13 +102,13 @@ export default function PromptsTab() {
         actions={
           active && (
             <>
-              <button
-                type="button"
-                className="evo-btn"
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={() => setShowPrompt((value) => !value)}
               >
                 {showPrompt ? t("common.hide") : t("common.show")}
-              </button>
+              </Button>
               <CopyButton text={active.prompt} />
             </>
           )
@@ -92,47 +136,12 @@ export default function PromptsTab() {
           <EmptyState message={t("prompts.none")} />
         ) : (
           <>
-            <table className="w-full border-collapse text-xs">
-              <thead className={THEAD}>
-                <tr>
-                  <th className={TH}>{t("cycles.id")}</th>
-                  <th className={TH_NUM}>{t("prompts.score")}</th>
-                  <th className={TH}>{t("cycles.status")}</th>
-                  <th className={TH_NUM}>{t("prompts.chars")}</th>
-                  <th className={TH}>{t("prompts.created")}</th>
-                  <th className={TH_LAST}>{t("prompts.reason")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((version) => (
-                  <tr key={version.id} className={ROW}>
-                    <td className={`${CELL} evo-num ${MONO} text-faint`}>
-                      {version.id}
-                    </td>
-                    <td className={`${CELL_NUM} evo-num font-semibold text-fg`}>
-                      {version.score}
-                    </td>
-                    <td className={CELL}>
-                      <Badge tone={TONES[version.status] ?? "neutral"}>
-                        {promptStatusLabel(version.status)}
-                      </Badge>
-                    </td>
-                    <td className={`${CELL_NUM} evo-num text-muted`}>
-                      {formatCount(version.promptChars)}
-                    </td>
-                    <td className={`${CELL} whitespace-nowrap text-muted`}>
-                      {formatDateTime(version.createdAt)}
-                    </td>
-                    <td
-                      className={`${CELL_LAST} text-muted`}
-                      title={version.reason}
-                    >
-                      <span className="line-clamp-2">{version.reason}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <DataTable
+              label={t("prompts.versions")}
+              columns={columns}
+              rows={items}
+              rowKey={(version) => String(version.id)}
+            />
             <p className="pt-2 text-[11px] text-faint">
               {t("prompts.rollbackHint")}
             </p>

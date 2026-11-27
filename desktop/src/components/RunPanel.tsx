@@ -1,3 +1,4 @@
+import { Button } from "@juninmd/sonido";
 import { useState } from "react";
 import { api, errText } from "../lib/api";
 import { formatDateTime } from "../lib/format";
@@ -57,16 +58,17 @@ export default function RunPanel({
       ) : (
         <div className="flex flex-wrap gap-1.5">
           {modes.map((mode) => (
-            <button
+            <Button
               key={mode}
-              type="button"
-              className="evo-btn"
+              variant="secondary"
+              size="sm"
               disabled={!enabled || busy !== null}
+              loading={busy === mode}
               onClick={() => void start(mode)}
+              iconStart={<PlayIcon className="size-3" />}
             >
-              <PlayIcon className="size-3" />
               {busy === mode ? t("common.loadingShort") : runModeLabel(mode)}
-            </button>
+            </Button>
           ))}
         </div>
       )}
