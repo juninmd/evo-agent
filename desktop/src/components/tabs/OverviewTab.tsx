@@ -1,3 +1,4 @@
+import { Alert, Button } from "@juninmd/sonido";
 import { formatCount, formatDateTime, formatNumber } from "../../lib/format";
 import { healthReasonLabel, t } from "../../lib/i18n";
 import type { TabId } from "../../lib/tabs";
@@ -106,20 +107,16 @@ export default function OverviewTab({
       )}
 
       {health.reasons.length > 0 && (
-        <section
-          className={`rounded-lg border px-3 py-2 text-xs ${
-            health.status === "critical"
-              ? "border-danger/40 bg-danger/10 text-danger"
-              : "border-warn/40 bg-warn/10 text-warn"
-          }`}
+        <Alert
+          tone={health.status === "critical" ? "danger" : "warning"}
+          title={t("overview.healthReasons")}
         >
-          <h2 className="font-semibold">{t("overview.healthReasons")}</h2>
           <ul className="mt-0.5 list-inside list-disc">
             {health.reasons.map((reason) => (
               <li key={reason}>{healthReasonLabel(reason)}</li>
             ))}
           </ul>
-        </section>
+        </Alert>
       )}
 
       <section aria-label={t("overview.stats")}>
@@ -139,13 +136,13 @@ export default function OverviewTab({
             primary: formatCount(overview.sources.primary),
           })}
           actions={
-            <button
-              type="button"
-              className="evo-btn"
+            <Button
+              variant="secondary"
+              size="sm"
               onClick={() => onOpenTab("sources")}
             >
               {t("overview.viewAll")}
-            </button>
+            </Button>
           }
         >
           <div className="flex flex-wrap gap-1.5">
@@ -189,13 +186,13 @@ export default function OverviewTab({
       <Card
         title={t("overview.latestEditions")}
         actions={
-          <button
-            type="button"
-            className="evo-btn"
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={() => onOpenTab("editions")}
           >
             {t("overview.viewAll")}
-          </button>
+          </Button>
         }
       >
         <EditionTable editions={overview.latestEditions} compact />
@@ -209,13 +206,13 @@ export default function OverviewTab({
             : undefined
         }
         actions={
-          <button
-            type="button"
-            className="evo-btn"
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={() => onOpenTab("cycles")}
           >
             {t("overview.viewAll")}
-          </button>
+          </Button>
         }
       >
         <CycleTable runs={overview.lastCycles} compact />

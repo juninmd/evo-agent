@@ -6,6 +6,7 @@ import { usePoll } from "../../lib/usePoll";
 import Card from "../Card";
 import CycleTable from "../CycleTable";
 import ErrorBanner from "../ErrorBanner";
+import FilterSelect from "../FilterSelect";
 import Skeleton from "../Skeleton";
 
 const LIMITS = [25, 50, 100, 200];
@@ -31,49 +32,36 @@ export default function CyclesTab({ modes }: { modes: string[] }) {
       hint={t("cycles.count", { total: items.length })}
       actions={
         <>
-          <label className="flex items-center gap-1 text-[11px] text-muted">
-            {t("cycles.type")}
-            <select
-              className="evo-field px-1.5 py-0.5 text-[11px]"
-              value={kind}
-              onChange={(event) => setKind(event.target.value)}
-            >
-              <option value="">{t("common.all")}</option>
-              {modes.map((mode) => (
-                <option key={mode} value={mode}>
-                  {runModeLabel(mode)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex items-center gap-1 text-[11px] text-muted">
-            {t("cycles.status")}
-            <select
-              className="evo-field px-1.5 py-0.5 text-[11px]"
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-            >
-              {STATUSES.map((option) => (
-                <option key={option} value={option}>
-                  {option === "" ? t("common.all") : cycleStatusLabel(option)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="flex items-center gap-1 text-[11px] text-muted">
-            {t("editions.limit")}
-            <select
-              className="evo-field px-1.5 py-0.5 text-[11px]"
-              value={limit}
-              onChange={(event) => setLimit(Number(event.target.value))}
-            >
-              {LIMITS.map((option) => (
-                <option key={option} value={option}>
-                  {formatCount(option)}
-                </option>
-              ))}
-            </select>
-          </label>
+          <FilterSelect
+            label={t("cycles.type")}
+            value={kind}
+            onChange={setKind}
+            options={[
+              { value: "", label: t("common.all") },
+              ...modes.map((mode) => ({
+                value: mode,
+                label: runModeLabel(mode),
+              })),
+            ]}
+          />
+          <FilterSelect
+            label={t("cycles.status")}
+            value={status}
+            onChange={setStatus}
+            options={STATUSES.map((option) => ({
+              value: option,
+              label: option === "" ? t("common.all") : cycleStatusLabel(option),
+            }))}
+          />
+          <FilterSelect
+            label={t("editions.limit")}
+            value={String(limit)}
+            onChange={(value) => setLimit(Number(value))}
+            options={LIMITS.map((option) => ({
+              value: String(option),
+              label: formatCount(option),
+            }))}
+          />
         </>
       }
     >

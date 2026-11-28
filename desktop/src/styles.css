@@ -59,6 +59,111 @@
   --color-active: color-mix(in oklab, var(--color-fg) 13%, transparent);
 }
 
+/*
+ * Ponte para o Sonido. Os componentes leem `--sn-*`; aqui elas sao amarradas
+ * aos tokens do console, entao tema claro/escuro, acento e densidade continuam
+ * sendo os do evo-agent. A especificidade `:root:root[data-theme]` vence os
+ * temas do pacote independentemente da ordem em que o CSS chega ao bundle.
+ */
+:root:root,
+:root:root[data-theme] {
+  /* Superficies */
+  --sn-color-bg: var(--color-ink);
+  --sn-color-surface: var(--color-panel);
+  --sn-color-surface-2: color-mix(
+    in oklab,
+    var(--color-panel) 88%,
+    var(--color-fg)
+  );
+  --sn-color-surface-hover: color-mix(
+    in oklab,
+    var(--color-panel) 84%,
+    var(--color-fg)
+  );
+  --sn-color-border: var(--color-edge);
+  --sn-color-border-soft: color-mix(
+    in oklab,
+    var(--color-edge) 65%,
+    var(--color-panel)
+  );
+
+  /* Texto */
+  --sn-color-text: var(--color-fg);
+  --sn-color-text-dim: var(--color-muted);
+  --sn-color-text-faint: var(--color-faint);
+  --sn-color-on-accent: var(--color-on-accent);
+  --sn-color-on-danger: var(--color-on-accent);
+  --sn-color-on-tint: var(--color-on-accent);
+
+  /* Cor com funcao: o acento do console manda. */
+  --sn-color-accent: var(--color-accent);
+  --sn-color-accent-2: var(--color-accent);
+  --sn-color-aqua: var(--color-info);
+  --sn-color-gold: var(--color-warn);
+  --sn-color-success: var(--color-ok);
+  --sn-color-warning: var(--color-warn);
+  --sn-color-danger: var(--color-danger);
+  --sn-color-info: var(--color-info);
+  --sn-gradient: linear-gradient(
+    135deg,
+    var(--color-accent),
+    color-mix(in oklab, var(--color-accent) 68%, var(--color-info))
+  );
+  --sn-gradient-soft: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--color-accent) 14%, transparent),
+    color-mix(in oklab, var(--color-accent) 4%, transparent)
+  );
+  --sn-glass: color-mix(in oklab, var(--color-panel) 62%, transparent);
+  --sn-glass-strong: color-mix(in oklab, var(--color-panel) 94%, transparent);
+  --sn-scrim: color-mix(in oklab, var(--color-ink) 60%, transparent);
+  --sn-glass-fill: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--color-fg) 7%, transparent),
+    color-mix(in oklab, var(--color-fg) 3%, transparent)
+  );
+  --sn-glass-edge: var(--color-edge);
+
+  /* Tipografia e forma do console (denso, 12px de corpo). */
+  --sn-font: ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --sn-font-display: var(--sn-font);
+  --sn-font-mono: ui-monospace, "Cascadia Code", "Segoe UI Mono", monospace;
+  --sn-text-xs: 0.75rem;
+  --sn-text-sm: 0.75rem;
+  --sn-text-md: 0.8125rem;
+  --sn-text-lg: 1.25rem;
+  --sn-radius-sm: 6px;
+  --sn-radius: 8px;
+  --sn-radius-lg: 12px;
+
+  --sn-ring: 0 0 0 4px color-mix(in oklab, var(--color-accent) 28%, transparent);
+  --sn-hit-min: 24px;
+}
+
+/*
+ * Ajustes de densidade. O CSS do Sonido nao usa `@layer`, entao utilitario do
+ * Tailwind nao vence estas propriedades: o ajuste mora aqui, em CSS comum.
+ */
+.evo-card.sn-card {
+  gap: 0;
+}
+
+.evo-empty.sn-empty {
+  border: 0;
+  padding: 1rem 0.5rem;
+}
+
+.evo-empty .sn-empty__title {
+  font-size: 0.875rem;
+  letter-spacing: normal;
+}
+
+/* O numero de atencao ja e um Badge; o involucro da aba nao repete a pilula. */
+.sn-tab__badge:has(> .sn-badge) {
+  background: none;
+  padding: 0;
+}
+
 html,
 body,
 #root {
@@ -85,92 +190,9 @@ body,
 }
 
 @layer components {
-  .evo-field {
-    border: 1px solid var(--color-edge);
-    border-radius: 0.5rem;
-    background: var(--color-ink);
-    color: var(--color-fg);
-    outline: none;
-  }
-  .evo-field::placeholder {
-    color: var(--color-faint);
-  }
-  .evo-field:hover {
-    border-color: var(--color-line);
-  }
-  .evo-field:focus {
-    border-color: var(--color-accent);
-  }
-
-  .evo-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    border: 1px solid var(--color-edge);
-    border-radius: 0.5rem;
-    padding: 0.25rem 0.625rem;
-    background: var(--color-raised);
-    color: var(--color-fg);
-    font-size: 0.75rem;
-    line-height: 1.5rem;
-    transition: background-color 120ms ease-out, border-color 120ms ease-out;
-  }
-  .evo-btn:hover:not(:disabled) {
-    border-color: var(--color-line);
-    background: var(--color-hover);
-  }
-  .evo-btn:active:not(:disabled) {
-    background: var(--color-active);
-  }
-  .evo-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.55;
-  }
-
-  .evo-btn-primary {
-    border-color: var(--color-accent);
-    background: var(--color-accent);
-    color: var(--color-on-accent);
-    font-weight: 600;
-  }
-  .evo-btn-primary:hover:not(:disabled) {
-    border-color: var(--color-accent);
-    background: color-mix(in oklab, var(--color-accent) 85%, var(--color-fg));
-  }
-
-  .evo-card {
-    border: 1px solid var(--color-edge);
-    border-radius: 0.75rem;
-    background: var(--color-panel);
-  }
-
   /* Numeros de tabela alinhados entre linhas. */
   .evo-num {
     font-variant-numeric: tabular-nums;
-  }
-
-  /* Leitura em andamento: uma varredura fina no topo, nunca um spinner central
-     que apaga o painel anterior. */
-  .evo-progress {
-    animation: evo-varredura 1.1s ease-in-out infinite;
-  }
-}
-
-@keyframes evo-varredura {
-  from {
-    transform: translateX(-110%);
-  }
-  to {
-    transform: translateX(410%);
-  }
-}
-
-/* Sem movimento, a barra vira uma linha cheia: o estado continua legivel. */
-@media (prefers-reduced-motion: reduce) {
-  .evo-progress {
-    width: 100%;
-    animation: none;
-    transform: none;
   }
 }
 

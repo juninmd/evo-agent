@@ -1,24 +1,16 @@
+import { Checkbox, type Column, DataTable } from "@juninmd/sonido";
 import { useState } from "react";
 import { api } from "../../lib/api";
 import { formatCount, formatRelative } from "../../lib/format";
 import { t } from "../../lib/i18n";
+import type { SourceView } from "../../lib/types";
 import { usePoll } from "../../lib/usePoll";
 import Badge from "../Badge";
 import Card from "../Card";
 import EmptyState from "../EmptyState";
 import ErrorBanner from "../ErrorBanner";
+import FilterSelect from "../FilterSelect";
 import Skeleton from "../Skeleton";
-import {
-  CELL,
-  CELL_NUM,
-  CELL_NUM_LAST,
-  MONO,
-  ROW,
-  TH,
-  THEAD,
-  TH_NUM,
-  TH_NUM_LAST,
-} from "../table";
 
 const WINDOWS = [1, 3, 7, 30];
 
@@ -36,6 +28,69 @@ export default function SourcesTab() {
   const rows = sources.data?.items ?? [];
   const recent = articles.data?.items ?? [];
 
+  const columns: Column<SourceView>[] = [
+    {
+      key: "source",
+      label: t("sources.source"),
+      render: (item) => (
+        <span
+          className="block max-w-[38ch] truncate text-fg"
+          title={item.source}
+        >
+          {item.source}
+        </span>
+      ),
+    },
+    {
+      key: "primary",
+      label: t("sources.primary"),
+      render: (item) =>
+        item.primary ? (
+          <Badge tone="accent">{t("common.yes")}</Badge>
+        ) : (
+          <span className="text-faint">-</span>
+        ),
+    },
+    {
+      key: "articles",
+      label: t("sources.articles"),
+      align: "end",
+      render: (item) => (
+        <span className="text-muted">{formatCount(item.recentArticles)}</span>
+      ),
+    },
+    {
+      key: "lastSeen",
+      label: t("sources.lastSeen"),
+      render: (item) => (
+        <span className="whitespace-nowrap text-muted">
+          {item.lastSeenAt ? formatRelative(item.lastSeenAt) : "-"}
+        </span>
+      ),
+    },
+    {
+      key: "failures",
+      label: t("sources.failures"),
+      align: "end",
+      render: (item) =>
+        item.consecutiveFailures > 0 ? (
+          <Badge tone="warn">{formatCount(item.consecutiveFailures)}</Badge>
+        ) : (
+          <span className="text-faint">-</span>
+        ),
+    },
+    {
+      key: "skipped",
+      label: t("sources.skipped"),
+      align: "end",
+      render: (item) => (
+        <span className="text-faint">
+          {item.skipRemaining > 0 ? formatCount(item.skipRemaining) : "-"}
+        </span>
+      ),
+    },
+  ];
+
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <Card
@@ -43,20 +98,15 @@ export default function SourcesTab() {
         title={t("sources.health")}
         hint={t("sources.days", { days })}
         actions={
-          <label className="flex items-center gap-1 text-[11px] text-muted">
-            {t("sources.window")}
-            <select
-              className="evo-field px-1.5 py-0.5 text-[11px]"
-              value={days}
-              onChange={(event) => setDays(Number(event.target.value))}
-            >
-              {WINDOWS.map((window) => (
-                <option key={window} value={window}>
-                  {t("sources.days", { days: window })}
-                </option>
-              ))}
-            </select>
-          </label>
+          <FilterSelect
+            label={t("sources.window")}
+            value={String(days)}
+            onChange={(value) => setDays(Number(value))}
+            options={WINDOWS.map((window) => ({
+              value: String(window),
+              label: t("sources.days", { days: window }),
+            }))}
+          />
         }
       >
         {sources.error && (
@@ -73,59 +123,12 @@ export default function SourcesTab() {
         ) : rows.length === 0 ? (
           <EmptyState message={t("sources.empty")} />
         ) : (
-          <table className="w-full border-collapse text-xs">
-            <thead className={THEAD}>
-              <tr>
-                <th className={TH}>{t("sources.source")}</th>
-                <th className={TH}>{t("sources.primary")}</th>
-                <th className={TH_NUM}>{t("sources.articles")}</th>
-                <th className={TH}>{t("sources.lastSeen")}</th>
-                <th className={TH_NUM}>{t("sources.failures")}</th>
-                <th className={TH_NUM_LAST}>{t("sources.skipped")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((item) => (
-                <tr key={item.source} className={ROW}>
-                  <td className={`${CELL} text-fg`}>
-                    <span
-                      className="block max-w-[38ch] truncate"
-                      title={item.source}
-                    >
-                      {item.source}
-                    </span>
-                  </td>
-                  <td className={`${CELL} ${MONO}`}>
-                    {item.primary ? (
-                      <Badge tone="accent">{t("common.yes")}</Badge>
-                    ) : (
-                      <span className="text-faint">—</span>
-                    )}
-                  </td>
-                  <td className={`${CELL_NUM} evo-num text-muted`}>
-                    {formatCount(item.recentArticles)}
-                  </td>
-                  <td className={`${CELL} whitespace-nowrap text-muted`}>
-                    {item.lastSeenAt ? formatRelative(item.lastSeenAt) : "—"}
-                  </td>
-                  <td className={CELL}>
-                    {item.consecutiveFailures > 0 ? (
-                      <Badge tone="warn">
-                        {formatCount(item.consecutiveFailures)}
-                      </Badge>
-                    ) : (
-                      <span className="text-faint">—</span>
-                    )}
-                  </td>
-                  <td className={`${CELL_NUM_LAST} evo-num text-faint`}>
-                    {item.skipRemaining > 0
-                      ? formatCount(item.skipRemaining)
-                      : "—"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <DataTable
+            label={t("sources.health")}
+            columns={columns}
+            rows={rows}
+            rowKey={(item) => item.source}
+          />
         )}
       </Card>
 
@@ -134,14 +137,11 @@ export default function SourcesTab() {
         title={t("sources.recent")}
         hint={t("sources.days", { days })}
         actions={
-          <label className="flex items-center gap-1 text-[11px] text-muted">
-            <input
-              type="checkbox"
-              checked={primaryOnly}
-              onChange={(event) => setPrimaryOnly(event.target.checked)}
-            />
-            {t("common.primaryOnly")}
-          </label>
+          <Checkbox
+            label={t("common.primaryOnly")}
+            checked={primaryOnly}
+            onChange={setPrimaryOnly}
+          />
         }
       >
         {articles.error && (

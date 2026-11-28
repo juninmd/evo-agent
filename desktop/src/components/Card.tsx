@@ -1,8 +1,11 @@
+import { CardBody, CardHeader, Card as SonidoCard } from "@juninmd/sonido";
 import type { ReactNode } from "react";
 
 /**
  * `fill` faz o card ocupar a altura livre da aba e rolar por dentro: sem isso,
  * uma tabela curta deixava metade da janela vazia e a pagina inteira rolava.
+ * O casco e o `Card` do Sonido; o titulo continua `h2` (o `CardTitle` do pacote
+ * sai como `h3` e pularia um nivel de cabecalho dentro do console).
  */
 export default function Card({
   title,
@@ -20,11 +23,13 @@ export default function Card({
   fill?: boolean;
 }) {
   return (
-    <section
+    <SonidoCard
+      surface="solid"
+      padding="none"
       className={`evo-card flex flex-col overflow-hidden ${fill ? "min-h-0 flex-1" : ""} ${className}`}
     >
       {(title || actions) && (
-        <header className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-edge px-3 py-2">
+        <CardHeader className="shrink-0 flex-wrap items-center justify-between gap-2 border-b border-edge px-3 py-2">
           <div className="min-w-0">
             {title && (
               <h2 className="truncate text-sm font-semibold text-fg">
@@ -38,11 +43,13 @@ export default function Card({
               {actions}
             </div>
           )}
-        </header>
+        </CardHeader>
       )}
-      <div className={fill ? "min-h-0 flex-1 overflow-auto px-3 pb-3" : "p-3"}>
+      <CardBody
+        className={fill ? "min-h-0 flex-1 overflow-auto px-3 pb-3" : "p-3"}
+      >
         {children}
-      </div>
-    </section>
+      </CardBody>
+    </SonidoCard>
   );
 }

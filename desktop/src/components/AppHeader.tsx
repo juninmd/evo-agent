@@ -1,3 +1,4 @@
+import { Button, ProgressBar } from "@juninmd/sonido";
 import type { ReactElement } from "react";
 import { formatDateTime, hostOf } from "../lib/format";
 import { t } from "../lib/i18n";
@@ -69,37 +70,41 @@ export default function AppHeader({
             </span>
           )}
 
-          <button
-            type="button"
-            className="evo-btn"
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={onRefresh}
             disabled={loading}
             aria-label={t("app.refresh")}
             title={t("app.refresh")}
+            iconStart={
+              <RefreshIcon
+                className={`size-3.5 ${loading ? "animate-spin" : ""}`}
+              />
+            }
           >
-            <RefreshIcon
-              className={`size-3.5 ${loading ? "animate-spin" : ""}`}
-            />
             <span className="hidden sm:inline">
               {loading ? t("app.refreshing") : t("app.refresh")}
             </span>
-          </button>
+          </Button>
 
-          <button
-            type="button"
-            className="evo-btn"
+          <Button
+            variant="secondary"
+            size="icon"
             onClick={onCycleTheme}
             title={THEME_LABEL[theme]}
             aria-label={`${t("settings.theme")}: ${THEME_LABEL[theme]}`}
           >
             <ThemeIcon className="size-3.5" />
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Barra de atividade: so ocupa espaco enquanto ha leitura em andamento. */}
-      <div aria-hidden="true" className="h-0.5 overflow-hidden">
-        {loading && <div className="evo-progress h-full w-1/3 bg-accent" />}
+      <div className="h-1 overflow-hidden">
+        {loading && (
+          <ProgressBar label={t("app.refreshing")} tone="accent" size="sm" />
+        )}
       </div>
     </header>
   );

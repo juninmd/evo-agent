@@ -7,7 +7,9 @@ import { usePoll } from "../../lib/usePoll";
 import Card from "../Card";
 import EditionDetailPanel from "../EditionDetailPanel";
 import EditionTable from "../EditionTable";
+import EmptyState from "../EmptyState";
 import ErrorBanner from "../ErrorBanner";
+import FilterSelect from "../FilterSelect";
 import Skeleton from "../Skeleton";
 
 const LIMITS = [25, 50, 100, 200];
@@ -25,31 +27,6 @@ const STATUSES: (Edition["notificationStatus"] | "")[] = [
   "dead_letter",
   "suppressed",
 ];
-
-function Select({
-  label,
-  value,
-  onChange,
-  children,
-}: {
-  label: string;
-  value: string | number;
-  onChange: (value: string) => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="flex items-center gap-1 text-[11px] text-muted">
-      {label}
-      <select
-        className="evo-field px-1.5 py-0.5 text-[11px]"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      >
-        {children}
-      </select>
-    </label>
-  );
-}
 
 export default function EditionsTab() {
   const [kind, setKind] = useState("");
@@ -73,41 +50,36 @@ export default function EditionsTab() {
         hint={t("editions.count", { total: items.length })}
         actions={
           <>
-            <Select
+            <FilterSelect
               label={t("editions.filterKind")}
               value={kind}
               onChange={setKind}
-            >
-              {KINDS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {t(option.label)}
-                </option>
-              ))}
-            </Select>
-            <Select
+              options={KINDS.map((option) => ({
+                value: option.value,
+                label: t(option.label),
+              }))}
+            />
+            <FilterSelect
               label={t("editions.filterStatus")}
               value={status}
               onChange={setStatus}
-            >
-              {STATUSES.map((option) => (
-                <option key={option} value={option}>
-                  {option === ""
+              options={STATUSES.map((option) => ({
+                value: option,
+                label:
+                  option === ""
                     ? t("editions.status.all")
-                    : notificationLabel(option)}
-                </option>
-              ))}
-            </Select>
-            <Select
+                    : notificationLabel(option),
+              }))}
+            />
+            <FilterSelect
               label={t("editions.limit")}
-              value={limit}
+              value={String(limit)}
               onChange={(value) => setLimit(Number(value))}
-            >
-              {LIMITS.map((option) => (
-                <option key={option} value={option}>
-                  {formatCount(option)}
-                </option>
-              ))}
-            </Select>
+              options={LIMITS.map((option) => ({
+                value: String(option),
+                label: formatCount(option),
+              }))}
+            />
           </>
         }
       >
@@ -130,8 +102,10 @@ export default function EditionsTab() {
       {openSlug ? (
         <EditionDetailPanel slug={openSlug} onClose={() => setOpenSlug(null)} />
       ) : (
-        <aside className="evo-card hidden items-center justify-center p-4 text-center text-[11px] text-faint lg:flex">
-          {t("editions.selectHint")}
+        <aside className="hidden min-h-0 lg:block">
+          <Card fill className="h-full">
+            <EmptyState message={t("editions.selectHint")} />
+          </Card>
         </aside>
       )}
     </div>
