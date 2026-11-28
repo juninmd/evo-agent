@@ -7,6 +7,18 @@
   <link rel="alternate" href="https://juninmd.github.io/evo-agent/"/>
   <updated>2026-11-28T00:00:00Z</updated>
   <entry>
+    <id>https://juninmd.github.io/evo-agent/reports/skillweek-2026-11-28-skillweek-2026-11-28</id>
+    <title>Laboratório da semana — 28/11/2026</title>
+    <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/skillweek-2026-11-28-skillweek-2026-11-28"/>
+    <updated>2026-11-28T00:00:00Z</updated>
+    <summary type="text">357 itens verificados para experimentar nesta semana.</summary>
+    <category term="skills"/>
+    <category term="agentes"/>
+    <category term="harness"/>
+    <category term="laboratorio"/>
+    <category term="pratica"/>
+  </entry>
+  <entry>
     <id>https://juninmd.github.io/evo-agent/reports/devbrief-2026-11-28-devbrief-2026-11-28</id>
     <title>Radar dev 28/11/2026</title>
     <link rel="alternate" href="https://juninmd.github.io/evo-agent/reports/devbrief-2026-11-28-devbrief-2026-11-28"/>
@@ -600,21 +612,5 @@
     <category term="vendors"/>
     <category term="papers"/>
     <category term="community"/>
-  </entry>
-  <entry>
-    <id>https://juninmd.github.io/evo-agent/articles/2026-11-02-falha-de-uso-de-computador-no-codex-macos-apos-atualizacao-e-consumo-elevado-de-</id>
-    <title>Falha de uso de computador no Codex macOS após atualização e consumo elevado de tokens no pi agent</title>
-    <link rel="alternate" href="https://juninmd.github.io/evo-agent/articles/2026-11-02-falha-de-uso-de-computador-no-codex-macos-apos-atualizacao-e-consumo-elevado-de-"/>
-    <updated>2026-11-02T00:00:00Z</updated>
-    <summary type="text">Relato de regressão do Codex na versão 26.1027.61615 desativa prompts de permissão no macOS; usuário do V2EX compara pi agent com Codex e registra consumo de pelo menos 350 dólares por dia contra até 150 dólares no Codex.</summary>
-    <category term="reddit"/>
-    <category term="v2ex-tech"/>
-    <category term="google-deepmind"/>
-    <category term="codex"/>
-    <category term="openai"/>
-    <category term="claudecode"/>
-    <category term="copilot"/>
-    <category term="v2ex"/>
-    <category term="chinese"/>
   </entry>
 </feed>
